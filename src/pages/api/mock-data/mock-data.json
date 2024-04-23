@@ -1,0 +1,100 @@
+[
+  {
+    "Id": 1,
+    "Name": "VINICIUS RAFAEL",
+    "Position": "GOLEIRO",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "GOLEIRO"
+  },
+  {
+    "Id": 2,
+    "Name": "KAUAN ALMEIDA",
+    "Position": "GOLEIRO",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "FLUMINENSE"
+  },
+  {
+    "Id": 3,
+    "Name": "HICARO",
+    "Position": "ZAGUEIRO",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "FLAMENGO DE GUARULHOS"
+  },
+  {
+    "Id": 4,
+    "Name": "MATEUS ARAUJO",
+    "Position": "ZAGUEIRO",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "EC SÃO BERNARDO"
+  },
+  {
+    "Id": 5,
+    "Name": "BRUNO BARBOSA",
+    "Position": "ZAGUEIRO",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "COSMOPOLITANO"
+  },
+  {
+    "Id": 6,
+    "Name": "KAUÃ MUNIZ",
+    "Position": "LATERAL",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "LATERAL"
+  },
+  {
+    "Id": 7,
+    "Name": "JOÃO PEDRO",
+    "Position": "LATERAL",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "PONTE PRETA"
+  },
+  {
+    "Id": 8,
+    "Name": "PEDRO HENRIQUE",
+    "Position": "LATERAL",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "PALMEIRAS"
+  },
+  {
+    "Id": 9,
+    "Name": "THÉO YUJI",
+    "Position": "MEIA",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "NACIONAL"
+  },
+  {
+    "Id": 10,
+    "Name": "HENRYQUE",
+    "Position": "MEIA",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "EC SÃO BERNARDO"
+  },
+  {
+    "Id": 11,
+    "Name": "EC SÃO BERNARDO",
+    "Position": "MEIA",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "MARINGÁ"
+  },
+  {
+    "Id": 12,
+    "Name": "PAULINHO",
+    "Position": "MEIA",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "JABAǪUARA"
+  },
+  {
+    "Id": 13,
+    "Name": "MATHEUS MONTINI",
+    "Position": "ATACANTE",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "COSMOPOLITANO"
+  },
+  {
+    "Id": 14,
+    "Name": "PEDRINHO LOPES",
+    "Position": "ATACANTE",
+    "DateOfBirth": "2024-04-22T19:01:31.733Z",
+    "CurrentClub": "EC SÃO BERNARDO"
+  }
+]
