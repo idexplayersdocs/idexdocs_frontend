@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import { Pagination } from '@mui/material';
-import data from '../../api/mock-data/mock-data.json';
+import data from '../pages/api/mock-data/mock-data.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { useRouter } from 'next/router';
 
-export default function Table() {
+export default function AthletesList() {
   const [page, setPage] = useState(1);
-  const handleChangePage = (event: any, newPage:number) => {
-    setPage(newPage);
-  };
 
+  const { push } = useRouter();
+  
   const itemsPerPage = 10; 
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const displayedData = data.slice(startIndex, endIndex);
+
+  const handleChangePage = (event: any, newPage:number) => {
+    setPage(newPage);
+  };
+  const handleEditAthlete = (id: number) => {
+    push(`/secure/athletes/${id}`)
+  }
 
   return (
     <>
@@ -31,16 +38,16 @@ export default function Table() {
           </thead>
           <tbody>
             {
-              displayedData.map(item=> (
-                <tr key={item.Id}>
-                  <td className="table-dark">{item.Name}</td>
-                  <td className="table-dark">{item.Position}</td>
-                  <td className="table-dark">{new Date(item.DateOfBirth).toLocaleDateString()}</td>
-                  <td className="table-dark">{item.CurrentClub}</td>
+              displayedData.map(athlete => (
+                <tr key={athlete.Id}>
+                  <td className="table-dark">{athlete.Name}</td>
+                  <td className="table-dark">{athlete.Position}</td>
+                  <td className="table-dark">{new Date(athlete.DateOfBirth).toLocaleDateString()}</td>
+                  <td className="table-dark">{athlete.CurrentClub}</td>
                   <td className="table-dark d-flex justify-content-evenly">
                   {/* <FontAwesomeIcon icon={faTrashCan} style={{color: "#ff0000",}} size='2xl'/> */}
-                  <FontAwesomeIcon icon={faTrashCan} style={{color: "#ff0000",}} size='2xl'/>
-                  <FontAwesomeIcon icon={faEye} size="2xl" style={{color: "#ffffff",}} />
+                  <FontAwesomeIcon icon={faTrashCan} style={{color: "#ff0000", cursor:'pointer'}} size='2xl'/>
+                  <FontAwesomeIcon icon={faEye} size="2xl" style={{color: "#ffffff", cursor:'pointer'}} onClick={() => handleEditAthlete(athlete.Id)}/>
                   </td>
                 </tr>
               ))
