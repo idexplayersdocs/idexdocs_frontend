@@ -120,7 +120,7 @@ button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeLarge.Mui
 
 .force-scrool {
   overflow: auto;
-  width: auto;
+  width: 90%;
 }
 
 textarea {

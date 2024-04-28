@@ -86,7 +86,7 @@ export default function Relationship() {
       <hr />
       <div className='row mt-3'>
         {/* <div className='col-6'>teste</div> */}
-        <div className="col-6 d-flex flex-column align-items-center justify-content-center mb-3 ms-3 force-scrool">
+        <div className="col-md d-flex flex-column align-items-center justify-content-center mb-3 ms-3 force-scrool">
           <Subtitle subtitle='Controle de Suporte' />
           <table className="table table-striped">
             <thead>
@@ -124,8 +124,8 @@ export default function Relationship() {
             />
         }
         </div>
-        <div className='col-6'>
-          <div className='ms-3'>
+        <div className='col-md'>
+          <div className='ms-3 me-3'>
             <Observacoes />
           </div>
         </div>
