@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pagination } from '@mui/material';
-import data from '../pages/api/mock-data/mock-data.json';
+import data from '../pages/api/mock-data/mock-data-athletes-list.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
@@ -20,7 +20,7 @@ export default function AthletesList() {
     setPage(newPage);
   };
   const handleEditAthlete = (id: number) => {
-    push(`/secure/athletes/${id}`)
+    push(`/secure/athletes/${id}/athleteRelationship`)
   }
 
   return (
@@ -45,8 +45,7 @@ export default function AthletesList() {
                   <td className="table-dark">{new Date(athlete.DateOfBirth).toLocaleDateString()}</td>
                   <td className="table-dark">{athlete.CurrentClub}</td>
                   <td className="table-dark d-flex justify-content-evenly">
-                  {/* <FontAwesomeIcon icon={faTrashCan} style={{color: "#ff0000",}} size='2xl'/> */}
-                  <FontAwesomeIcon icon={faTrashCan} style={{color: "#ff0000", cursor:'pointer'}} size='2xl'/>
+                  <FontAwesomeIcon icon={faTrashCan} size='2xl' style={{color: "#ff0000", cursor:'pointer'}}/>
                   <FontAwesomeIcon icon={faEye} size="2xl" style={{color: "#ffffff", cursor:'pointer'}} onClick={() => handleEditAthlete(athlete.Id)}/>
                   </td>
                 </tr>
@@ -54,14 +53,17 @@ export default function AthletesList() {
             }
           </tbody>
         </table>
-        <Pagination 
-          className="pagination-bar"
-          count={Math.ceil(data.length / itemsPerPage)}
-          page={page}
-          onChange={handleChangePage}
-          variant="outlined"
-          size="large"
-        />
+        {
+          data.length > itemsPerPage &&
+            <Pagination 
+              className="pagination-bar"
+              count={Math.ceil(data.length / itemsPerPage)}
+              page={page}
+              onChange={handleChangePage}
+              variant="outlined"
+              size="large"
+            />
+        }
       </div>
     </>
   );

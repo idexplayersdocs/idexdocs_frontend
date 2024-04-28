@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function SideBar() {
   return (
-    <div className="container sidebar__background h-100 ms-2 rounded">
+    <div className="container sidebar__background h-100 ms-2 rounded mb-5">
       <Image
         className="rounded mt-3"
         src="/images/image-user.png"

@@ -1,32 +1,35 @@
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import Link from 'next/link';
 
 export default function Header() {
   return (
     <>
     <div className="d-flex justify-content-between align-items-center m-3">
+    <Link href="/" className="me-auto p-2">
       <Image
-      className="me-auto p-2"
       src="/images/logo-fort-house.png"
       width={105}
-      height={75}
+      height={70}
       alt="company logo"
       />
-
+    </Link>
+    <Link href="/" className="p-2 me-3">
       <Image
-      className="p-2 me-3"
       src="/images/logo-arabe.png"
       width={78}
       height={78}
       alt="company logo"
       />
+    </Link>
+
 
       <FontAwesomeIcon 
       className="p-2"
       icon={faBars} 
       size="2xl"
-      style={{color: "var(--color-line)", cursor: 'pointer'}} 
+      style={{color: "var(--bg-ternary-color)", cursor: 'pointer'}} 
       />
     </div>
     <hr />

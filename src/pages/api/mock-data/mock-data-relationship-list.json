@@ -1,0 +1,112 @@
+[
+  {
+    "Id": 1,
+    "Date":  "2024-04-22T19:01:31.733Z",
+    "ReceptividadeGeralContato": 5,
+    "NivelSatisfacaoEmpresa": 4,
+    "NivelSatisfacaoClube": 4,
+    "AvaliacaoRelacoesFamiliares": 3,
+    "AvaliacaoinfluenciaExternas": 2,
+    "PendenciaAtletaEmpresa": true,
+    "PendenciaEmpresaAtleta": false
+  },
+  {
+    "Id": 2,
+    "Date":  "2024-04-22T19:01:31.733Z",
+    "ReceptividadeGeralContato": 5,
+    "NivelSatisfacaoEmpresa": 4,
+    "NivelSatisfacaoClube": 4,
+    "AvaliacaoRelacoesFamiliares": 3,
+    "AvaliacaoinfluenciaExternas": 2,
+    "PendenciaAtletaEmpresa": true,
+    "PendenciaEmpresaAtleta": true
+  },
+  {
+    "Id": 3,
+    "Date":  "2024-04-22T19:01:31.733Z",
+    "ReceptividadeGeralContato": 5,
+    "NivelSatisfacaoEmpresa": 4,
+    "NivelSatisfacaoClube": 4,
+    "AvaliacaoRelacoesFamiliares": 3,
+    "AvaliacaoinfluenciaExternas": 2,
+    "PendenciaAtletaEmpresa": false,
+    "PendenciaEmpresaAtleta": true
+  },
+  {
+    "Id": 4,
+    "Date":  "2024-04-22T19:01:31.733Z",
+    "ReceptividadeGeralContato": 5,
+    "NivelSatisfacaoEmpresa": 4,
+    "NivelSatisfacaoClube": 4,
+    "AvaliacaoRelacoesFamiliares": 3,
+    "AvaliacaoinfluenciaExternas": 2,
+    "PendenciaAtletaEmpresa": false,
+    "PendenciaEmpresaAtleta": false
+  },
+  {
+    "Id": 5,
+    "Date":  "2024-04-22T19:01:31.733Z",
+    "ReceptividadeGeralContato": 5,
+    "NivelSatisfacaoEmpresa": 4,
+    "NivelSatisfacaoClube": 4,
+    "AvaliacaoRelacoesFamiliares": 3,
+    "AvaliacaoinfluenciaExternas": 2,
+    "PendenciaAtletaEmpresa": true,
+    "PendenciaEmpresaAtleta": false
+  },
+  {
+    "Id": 6,
+    "Date":  "2024-04-22T19:01:31.733Z",
+    "ReceptividadeGeralContato": 5,
+    "NivelSatisfacaoEmpresa": 4,
+    "NivelSatisfacaoClube": 4,
+    "AvaliacaoRelacoesFamiliares": 3,
+    "AvaliacaoinfluenciaExternas": 2,
+    "PendenciaAtletaEmpresa": false,
+    "PendenciaEmpresaAtleta": false
+  },
+  {
+    "Id": 7,
+    "Date":  "2024-04-22T19:01:31.733Z",
+    "ReceptividadeGeralContato": 5,
+    "NivelSatisfacaoEmpresa": 4,
+    "NivelSatisfacaoClube": 4,
+    "AvaliacaoRelacoesFamiliares": 3,
+    "AvaliacaoinfluenciaExternas": 2,
+    "PendenciaAtletaEmpresa": false,
+    "PendenciaEmpresaAtleta": true
+  },
+  {
+    "Id": 8,
+    "Date":  "2024-04-22T19:01:31.733Z",
+    "ReceptividadeGeralContato": 5,
+    "NivelSatisfacaoEmpresa": 4,
+    "NivelSatisfacaoClube": 4,
+    "AvaliacaoRelacoesFamiliares": 3,
+    "AvaliacaoinfluenciaExternas": 2,
+    "PendenciaAtletaEmpresa": true,
+    "PendenciaEmpresaAtleta": true
+  },
+  {
+    "Id": 9,
+    "Date":  "2024-04-22T19:01:31.733Z",
+    "ReceptividadeGeralContato": 5,
+    "NivelSatisfacaoEmpresa": 4,
+    "NivelSatisfacaoClube": 4,
+    "AvaliacaoRelacoesFamiliares": 3,
+    "AvaliacaoinfluenciaExternas": 2,
+    "PendenciaAtletaEmpresa": false,
+    "PendenciaEmpresaAtleta": true
+  },
+  {
+    "Id": 10,
+    "Date":  "2024-04-22T19:01:31.733Z",
+    "ReceptividadeGeralContato": 5,
+    "NivelSatisfacaoEmpresa": 4,
+    "NivelSatisfacaoClube": 4,
+    "AvaliacaoRelacoesFamiliares": 3,
+    "AvaliacaoinfluenciaExternas": 2,
+    "PendenciaAtletaEmpresa": true,
+    "PendenciaEmpresaAtleta": false
+  }
+]

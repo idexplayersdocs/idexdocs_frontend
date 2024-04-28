@@ -1,3 +1,4 @@
+import Relationship from "@/components/Relationship";
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
 import { faMugSaucer } from "@fortawesome/free-solid-svg-icons";
@@ -17,15 +18,9 @@ export default function AthleteDetail() {
           <SideBar />
         </div>
         <div className="col-10">
-          <div className="card h-100" style={{backgroundColor: 'var(--bg-secondary-color)'}}>
-            <div className="main">
-              <p style={{color: 'white'}}>
-              <FontAwesomeIcon icon={faMugSaucer} style={{color: 'white'}} />
-              Aqui vai o detalhe do Atleta
-              </p>
-            </div>
-
-
+          {/* Relacionamento */}
+          <div className="card h-100" style={{backgroundColor: 'var(--bg-secondary-color)', marginRight:'10px'}}>
+              <Relationship />
           </div>
         </div>
       </div>
