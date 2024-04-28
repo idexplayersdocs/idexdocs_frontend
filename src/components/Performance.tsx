@@ -28,7 +28,7 @@ export default function Performance() {
         </div>
       </div>
     </div>
-    <div className="col-6 d-flex flex-column align-items-center justify-content-center mb-3 ms-3 force-scrool mt-5">
+    <div className="col-6 d-flex flex-column align-items-center justify-content-center mb-3 ms-3 force-scrool mt-5" style={{width: 'auto'}}>
           <Subtitle subtitle='Caracteristicas Físicas e Técnicas (Goleiros)' />
           <table className="table table-striped mt-3" style={{marginBottom:'60px'}}>
             <thead>
