@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import dataRalationship from '../pages/api/mock-data/mock-data-relationship-list.json'
 import dataSupportControl from '../pages/api/mock-data/mock-data-support-control.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Pagination } from '@mui/material';
 import Subtitle from './Subtitle';
-import Observacoes from './observacoes';
+import Observacoes from './Observation';
+import AddButton from './AddButton';
 
 export default function Relationship() {
   const [pageRalationship, setPageRalationship] = useState(1);
@@ -34,18 +35,21 @@ export default function Relationship() {
   };
   return (
     <>
+      <div className='text-end mt-3' style={{marginRight:'30px'}}>
+        <AddButton />
+      </div>
       <div className="d-flex flex-column align-items-center justify-content-center mb-3 m-3 force-scrool">
         <table className="table table-striped">
           <thead>
             <tr>
-              <th className="table-dark text-center" scope="col">DATA</th>
-              <th className="table-dark text-center" scope="col">RECEPTIVIDADE GERAL AO CONTATO</th>
-              <th className="table-dark text-center" scope="col">NÍVEL DE SATISFAÇÃO COM A EMPRESA</th>
-              <th className="table-dark text-center" scope="col">NÍVEL DE SATISFAÇÃO COM O CLUBE</th>
-              <th className="table-dark text-center" scope="col">AVALIAÇÃO DE RELAÇÕES FAMILIARES</th>
-              <th className="table-dark text-center" scope="col">AVALIAÇÃO DE INFLUÊNCIA EXTERNAS</th>
-              <th className="table-dark text-center" scope="col">PENDÊNCIAS ENTRE ATLETAS E EMPRESA</th>
-              <th className="table-dark text-center" scope="col">PENDÊNCIAS ENTRE ATLETAS E CLUBE</th>
+              <th className="table-dark text-center" style={{fontSize:'13px'}} scope="col">DATA</th>
+              <th className="table-dark text-center" style={{fontSize:'13px'}} scope="col">RECEPTIVIDADE CONTATO</th>
+              <th className="table-dark text-center" style={{fontSize:'13px'}} scope="col">SATISFAÇÃO EMPRESA</th>
+              <th className="table-dark text-center" style={{fontSize:'13px'}} scope="col">SATISFAÇÃO CLUBE</th>
+              <th className="table-dark text-center" style={{fontSize:'13px'}} scope="col">RELAÇÕES FAMILIARES</th>
+              <th className="table-dark text-center" style={{fontSize:'13px'}} scope="col">INFLUÊNCIA EXTERNAS</th>
+              <th className="table-dark text-center" style={{fontSize:'13px'}} scope="col">PENDÊNCIAS EMPRESA</th>
+              <th className="table-dark text-center" style={{fontSize:'13px'}} scope="col">PENDÊNCIAS CLUBE</th>
             </tr>
           </thead>
           <tbody>
@@ -60,11 +64,11 @@ export default function Relationship() {
                   <td className="table-dark text-center">{relationship.AvaliacaoinfluenciaExternas}</td>
 
                   <td className="table-dark text-center">
-                  <FontAwesomeIcon icon={relationship.PendenciaAtletaEmpresa ? faCheck : faXmark} size='2xl' style={ relationship.PendenciaAtletaEmpresa ? {color: "#15ff00"} : {color: "#ff0000"}}/>
+                  <FontAwesomeIcon icon={relationship.PendenciaAtletaEmpresa ? faCheck : faXmark} size='xl' style={ relationship.PendenciaAtletaEmpresa ? {color: "#15ff00"} : {color: "#ff0000"}}/>
                   </td>
 
                   <td className="table-dark text-center">
-                  <FontAwesomeIcon icon={relationship.PendenciaEmpresaAtleta ? faCheck : faXmark} size='2xl' style={ relationship.PendenciaEmpresaAtleta ? {color: "#15ff00"} : {color: "#ff0000"}}/>
+                  <FontAwesomeIcon icon={relationship.PendenciaEmpresaAtleta ? faCheck : faXmark} size='xl' style={ relationship.PendenciaEmpresaAtleta ? {color: "#15ff00"} : {color: "#ff0000"}}/>
                   </td>
                 </tr>
               ))
@@ -87,26 +91,29 @@ export default function Relationship() {
       <div className='row mt-3'>
         {/* <div className='col-6'>teste</div> */}
         <div className="col-md d-flex flex-column align-items-center justify-content-center mb-3 ms-3 force-scrool">
-          <Subtitle subtitle='Controle de Suporte' />
+          <div className='d-flex justify-content-between align-items-center w-100 p-2'>
+            <div>
+            <Subtitle subtitle='Controle de Suporte' />
+            </div>
+            <AddButton />
+          </div>
           <table className="table table-striped">
             <thead>
               <tr>
-                <th className="table-dark text-center" scope="col">CHUTEIRAS</th>
-                <th className="table-dark text-center" scope="col">LUVAS</th>
-                <th className="table-dark text-center" scope="col">PASSAGENS</th>
-                <th className="table-dark text-center" scope="col">BONUS</th>
-                <th className="table-dark text-center" scope="col">OUTROS</th>
+                <th className="table-dark text-center" scope="col">DATA</th>
+                <th className="table-dark text-center" scope="col">NOME</th>
+                <th className="table-dark text-center" scope="col">QUANTIDADE</th>
+                {/* <th className="table-dark text-center" scope="col">BONUS</th>
+                <th className="table-dark text-center" scope="col">OUTROS</th> */}
               </tr>
             </thead>
             <tbody>
               {
                 displayedSupportControl.map(supportContol => (
                   <tr key={supportContol.Id}>
-                    <td className="table-dark text-center">{new Date(supportContol.FootballBoots).toLocaleDateString()}</td>
-                    <td className="table-dark text-center">{new Date(supportContol.Gloves).toLocaleDateString()}</td>
-                    <td className="table-dark text-center">{new Date(supportContol.Tickets).toLocaleDateString()}</td>
-                    <td className="table-dark text-center">{new Date(supportContol.Bonus).toLocaleDateString()}</td>
-                    <td className="table-dark text-center">{new Date(supportContol.Others).toLocaleDateString()}</td>
+                    <td className="table-dark text-center">{new Date(supportContol.Date).toLocaleDateString()}</td>
+                    <td className="table-dark text-center">{supportContol.Name}</td>
+                    <td className="table-dark text-center">{supportContol.Amount}</td>
                   </tr>
                 ))
               }
@@ -125,8 +132,9 @@ export default function Relationship() {
         }
         </div>
         <div className='col-md'>
-          <div className='ms-3 me-3'>
+          <div className='ms-3 me-3 d-flex flex-column'>
             <Observacoes />
+            <button type="button" className="btn btn-success align-self-end" style={{width:'170px'}}>Salvar Observações</button>
           </div>
         </div>
       </div>

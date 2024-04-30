@@ -1,6 +1,6 @@
 import Subtitle from "./Subtitle";
 
-export default function Observacoes() {
+export default function Observation() {
   return (
     <>
       <label style={{ width: '100%' }}>

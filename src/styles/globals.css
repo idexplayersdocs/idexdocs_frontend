@@ -88,7 +88,7 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiPaginationItem-icon.css-n8417t-
 }
 button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeLarge.MuiPaginationItem-outlined.MuiPaginationItem-circular.Mui-selected.MuiPaginationItem-page.css-ax94ij-MuiButtonBase-root-MuiPaginationItem-root {
   color: var(--text-color-white);
-  background-color: var(--bg-secondary-color);
+  background-color: var(--bg-ternary-color);
 }
 button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeLarge.MuiPaginationItem-outlined.MuiPaginationItem-circular.MuiPaginationItem-page.css-ax94ij-MuiButtonBase-root-MuiPaginationItem-root{
   color: var(--text-color-white);
@@ -108,7 +108,7 @@ button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeLarge.Mui
   hyphens: auto;}
 
 .subtitle-sidebar {
-  font-size: 20px;
+  font-size: 16px;
   color: var(--text-color-subtitle);
   text-transform: uppercase;
   overflow-wrap: break-word;
@@ -158,18 +158,18 @@ textarea {
 }
 
 .nav-link{
-  background-color: var(--bg-secondary-color) !important;
+  background: #474747 !important; 
   border-radius: 10px 10px 0 0 !important;
   color: var(--text-color-white) !important;
   
 }
 .nav-link:hover{
-  border: var(--bg-ternary-color) 1px solid !important;
-  background: var(--bg-ternary-color) !important; 
+  border: var(--bg-secondary-color) 1px solid !important;
+  background: var(--bg-secondary-color) !important; 
 }
 
 a.nav-link.active {
-  background: var(--bg-ternary-color) !important; 
+  background-color: var(--bg-secondary-color) !important;
   border: none !important;
   color: var(--text-color-white) !important;
   border-radius: 10px 10px 0 0;
@@ -191,4 +191,23 @@ a.nav-link.active {
 .custom-tooltip {
   --bs-tooltip-bg: var(--bg-ternary-color);
   --bs-tooltip-color: var(--text-color-white);
+}
+th.table-dark.text-center {
+  background-color: var(--bg-ternary-color) !important; 
+}
+.table-color-custom {
+  background-color: var(--bg-ternary-color) !important; 
+}
+.btn-success {
+  background-color: var(--bg-ternary-color) !important; 
+}
+.btn-success:hover {
+  background-color: #c95c14 !important; 
+}
+
+.table-body {
+  width: 145px
+}
+.table-header{
+  width: 350px
 }
