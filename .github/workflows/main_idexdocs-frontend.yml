@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy Node.js app to Azure Web App - idexdocs-frontend
 
 on:
@@ -11,49 +14,58 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: '18.x'
 
-      - name: Install dependencies
-        run: npm install
+      - name: npm install, build, and test
+        run: |
+          npm install
+          npm run build --if-present
+          npm run test --if-present
 
-      - name: Build project
-        run: npm run build
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
 
-      - name: Archive project
-        uses: actions/upload-artifact@v2
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
         with:
-          name: build-artifact
-          path: .
+          name: node-app
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     environment:
       name: 'Production'
-      url: ${{ secrets.AZURE_WEBAPP_URL }}
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write
+      id-token: write #This is required for requesting the JWT
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
         with:
-          name: build-artifact
-          path: /tmp/build
+          name: node-app
 
-      - name: Deploy to Azure Web App
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+      
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_611B1F8E9DC1433CB4491B9D3ACD80D3 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_06AE72C536644C1298242CC0FB42D375 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E512D5D3128143E29C2FB7A845A77760 }}
+
+      - name: 'Deploy to Azure Web App'
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'idexdocs-frontend'
           slot-name: 'Production'
-          package: /tmp/build
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_611B1F8E9DC1433CB4491B9D3ACD80D3 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_06AE72C536644C1298242CC0FB42D375 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E512D5D3128143E29C2FB7A845A77760 }}
+          package: .
+          
