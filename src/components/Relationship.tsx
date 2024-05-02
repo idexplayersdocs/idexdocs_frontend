@@ -9,7 +9,10 @@ import Subtitle from './Subtitle';
 import Observacoes from './Observation';
 import AddButton from './AddButton';
 
-export default function Relationship() {
+type Props = {
+  athleteData: any
+}
+export default function Relationship({athleteData}: Props) {
   const [pageRalationship, setPageRalationship] = useState(1);
   const [pageSupportControl, setPageSupportControl] = useState(1);
 
@@ -33,6 +36,7 @@ export default function Relationship() {
   const handleChangePageSupportControl= (event: any, newPage:number) => {
     setPageSupportControl(newPage);
   };
+  console.log(athleteData)
   return (
     <>
       <div className='text-end mt-3' style={{marginRight:'30px'}}>

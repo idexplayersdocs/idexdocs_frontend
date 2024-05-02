@@ -1,31 +1,62 @@
 
-import React, { useState } from 'react';
-import dataSupportControl from '../pages/api/mock-data/mock-data-support-control.json'
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Pagination } from '@mui/material';
+import { Box, Modal, Pagination, Typography } from '@mui/material';
 import Subtitle from './Subtitle';
 import data from '../pages/api/mock-data/mock-data-physical-characteristics.json'
 
 import Observacoes from './Observation';
 import { faPlus, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import AddButton from './AddButton';
+import { getAthletes } from '@/pages/api/athletes';
+import HistoryCompetitions from './modal/HistoryCompetitions';
+import ClubHistory from './modal/ClubHistory';
+import Injuries from './modal/Injuries';
+import PhysicalHistory from './modal/PhysicalHistory';
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 1000,
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function Performance() {
+  const [openHistoryCompetitions, setOpenHistoryCompetitions] = React.useState(false);
+  const [openClubHistory, setOpenClubHistory] = React.useState(false);
+  const [openInjuries, setOpenInjuries] = React.useState(false);
+  const [openPhysicalHistory, setOpenPhysicalHistory] = React.useState(false);
 
+  const handleOpenHistoryCompetitions = () => setOpenHistoryCompetitions(true);
+  const handleCloseHistoryCompetitions = () => setOpenHistoryCompetitions(false);
+
+  const handleOpenClubHistory = () => setOpenClubHistory(true);
+  const handleCloseClubHistory = () => setOpenClubHistory(false);
+
+  const handleOpenInjuries = () => setOpenInjuries(true);
+  const handleCloseInjuries = () => setOpenInjuries(false);
+  
+  const handleOpenPhysicalHistory = () => setOpenPhysicalHistory(true);
+  const handleClosePhysicalHistory = () => setOpenPhysicalHistory(false);
 
   return (
     <div className='pe-3'>
     <div className="container text-center mt-4">
       <div className="row">
         <div className="col">
-          <button type="button" className="btn btn-modal-color w-75 mb-3">Histórico de competições</button>
+          <button type="button" className="btn btn-modal-color w-75 mb-3" onClick={handleOpenHistoryCompetitions}>Histórico de competições</button>
           <br />
-          <button type="button" className="btn btn-modal-color w-75">Histórico de Clubes</button>
+          <button type="button" className="btn btn-modal-color w-75" onClick={handleOpenClubHistory}>Histórico de Clubes</button>
         </div>
         <div className="col">
-          <button type="button" className="btn btn-modal-color w-75 mb-3">Histórico de Lesões</button>
+          <button type="button" className="btn btn-modal-color w-75 mb-3" onClick={handleOpenInjuries}>Histórico de Lesões</button>
           <br />
-          <button type="button" className="btn btn-modal-color w-75 ">Histórico Físico</button>
+          <button type="button" className="btn btn-modal-color w-75 " onClick={handleOpenPhysicalHistory}>Histórico Físico</button>
         </div>
       </div>
     </div>
@@ -313,6 +344,47 @@ export default function Performance() {
             <button type="button" className="btn btn-success align-self-end" style={{width:'170px'}}>Salvar Observações</button>
           </div>
         </div>
+          {/* modal */}
+          <Modal
+            open={openHistoryCompetitions}
+            onClose={handleCloseHistoryCompetitions}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <HistoryCompetitions />
+            </Box>
+          </Modal>
+          <Modal
+            open={openClubHistory}
+            onClose={handleCloseClubHistory}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <ClubHistory />
+            </Box>
+          </Modal>
+          <Modal
+            open={openInjuries}
+            onClose={handleCloseInjuries}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Injuries />
+            </Box>
+          </Modal>
+          <Modal
+            open={openPhysicalHistory}
+            onClose={handleClosePhysicalHistory}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <PhysicalHistory />
+            </Box>
+          </Modal>
     </div>
   )
 }

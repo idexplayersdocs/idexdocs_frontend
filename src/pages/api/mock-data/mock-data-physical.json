@@ -1,0 +1,14 @@
+[
+  {
+    "Id": 1,
+    "Clube": "Joinville",
+    "De": "20/04/2023",
+    "Ate": "20/04/2024"
+  },
+  {
+    "Id": 2,
+    "Clube": "Guaratinguetá",
+    "De": "21/05/2024",
+    "Ate": "Atual"
+  }
+]
