@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node server.js",
+    "dev": "next dev",
     "build": "next build",
-    "start": "node server.js"
+    "start": "/home/site/wwwroot/node_modules/next/dist/bin/next",
+    "startLocal" : "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
