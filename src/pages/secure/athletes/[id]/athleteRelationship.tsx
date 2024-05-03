@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import SideBar from '@/components/SideBar';
 import Relationship from '@/components/Relationship';
 import { useRouter } from 'next/router';
-import { getAthleteById } from '@/pages/api/athletes';
+import { getAthleteById } from '@/pages/api/http-service/athletes';
 
 export default function AthleteRelationship() {
   const { query, push, back } = useRouter();

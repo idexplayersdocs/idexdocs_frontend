@@ -5,7 +5,7 @@ import { faMugSaucer } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react";
-import { getAthleteById } from "@/pages/api/athletes";
+import { getAthleteById } from "@/pages/api/http-service/athletes";
 
 export default function AthleteDetail() {
   const { query, push, back } = useRouter();

@@ -8,7 +8,7 @@ import data from '../pages/api/mock-data/mock-data-physical-characteristics.json
 import Observacoes from './Observation';
 import { faPlus, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import AddButton from './AddButton';
-import { getAthletes } from '@/pages/api/athletes';
+import { getAthletes } from '@/pages/api/http-service/athletes';
 import HistoryCompetitions from './modal/HistoryCompetitions';
 import ClubHistory from './modal/ClubHistory';
 import Injuries from './modal/Injuries';

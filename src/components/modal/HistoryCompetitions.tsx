@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faX } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { useRouter } from 'next/router';
-import { getAthletes } from '@/pages/api/athletes';
+import { getAthletes } from '@/pages/api/http-service/athletes';
 import data from '../../pages/api/mock-data/mock-data-history-competitions.json'
 import Title from '../Title';
 import Subtitle from '../Subtitle';

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { useRouter } from 'next/router';
-import { getAthletes } from '@/pages/api/athletes';
+import { getAthletes } from '@/pages/api/http-service/athletes';
 
 interface Athlete {
   id: number;

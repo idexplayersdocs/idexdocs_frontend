@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import Header from '@/components/Header';
 import SideBar from '@/components/SideBar';
 import Performance from '@/components/Performance';
-import { getAthleteById } from '@/pages/api/athletes';
+import { getAthleteById } from '@/pages/api/http-service/athletes';
 
 export default function AthletePerformance() {
   const { query, push, back } = useRouter();
