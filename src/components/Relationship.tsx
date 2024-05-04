@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import dataRalationship from '../pages/api/mock-data/mock-data-relationship-list.json'
 import dataSupportControl from '../pages/api/mock-data/mock-data-support-control.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,13 +8,44 @@ import { Pagination } from '@mui/material';
 import Subtitle from './Subtitle';
 import Observacoes from './Observation';
 import AddButton from './AddButton';
+import { useRouter } from 'next/router';
+import { getAthleteRelationship } from '@/pages/api/http-service/athletes';
 
 type Props = {
-  athleteData: any
+  athleteId: any
 }
-export default function Relationship({athleteData}: Props) {
+export default function Relationship({athleteId}: Props) {
   const [pageRalationship, setPageRalationship] = useState(1);
   const [pageSupportControl, setPageSupportControl] = useState(1);
+
+
+  const { push } = useRouter();
+  const [totalRow, setTotalRow] = useState();
+  const [loading, setLoading] = useState(true); // Estado de carregamento
+  const effectRan = useRef(false);
+  
+  useEffect(():any => {
+    if (!effectRan.current) {
+      const fetchAthletesData = async () => {
+        try {
+          const relationship = await getAthleteRelationship(athleteId);
+          console.log(athleteId)
+          // setTotalRow(relationship.total);
+        } catch (error) {
+          console.error('Error fetching athletes:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchAthletesData();
+    }
+    return () => (effectRan.current = true);
+  }, []);
+
+
+
+
 
   // Ralationship
   const itemsPerPageRalationship = 7; 
@@ -36,7 +67,7 @@ export default function Relationship({athleteData}: Props) {
   const handleChangePageSupportControl= (event: any, newPage:number) => {
     setPageSupportControl(newPage);
   };
-  console.log(athleteData)
+
   return (
     <>
       <div className='text-end mt-3' style={{marginRight:'30px'}}>

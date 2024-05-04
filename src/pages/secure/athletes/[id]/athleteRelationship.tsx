@@ -43,7 +43,7 @@ export default function AthleteRelationship() {
           </li>
         </ul>
           <div className="card athlete-detail-card" style={{backgroundColor: 'var(--bg-secondary-color)', marginRight:'10px'}}>
-              <Relationship athleteData={athlete} />
+              <Relationship athleteId={athleteId} />
           </div>
         </div>
       </div>

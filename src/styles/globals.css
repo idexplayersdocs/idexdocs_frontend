@@ -211,3 +211,17 @@ th.table-dark.text-center {
 .table-header{
   width: 350px
 }
+.input-create {
+ border-radius: 20px;
+}
+.input-date {
+  color-scheme: dark;
+ }
+
+.form-select {
+  border-radius: 20px;
+  background-color: var(--bg-primary-color);
+  color: white;
+  border: 4.7px solid var(--bg-secondary-color);
+  height: 55px;
+}

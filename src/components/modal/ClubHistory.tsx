@@ -9,6 +9,7 @@ import data from '../../pages/api/mock-data/mock-data-clubs.json'
 import Title from '../Title';
 import Subtitle from '../Subtitle';
 import AddButton from '../AddButton';
+import Loading from 'react-loading';
 
 interface Athlete {
   id: number;
@@ -60,9 +61,11 @@ export default function ClubHistory() {
                   </tr>
                 ))
               ) : (
-                <tr>
-                  <td colSpan={5} className="table-dark text-center">Carregando...</td>
-                </tr>
+                // <tr>
+                //   <td colSpan={5} className="table-dark text-center">Carregando...</td>
+                <Loading type='cylon' color="#fff"/>
+
+                // </tr>
               )
             }
           </tbody>

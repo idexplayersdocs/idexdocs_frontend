@@ -37,7 +37,7 @@ export default function AthleteDetail() {
         <div className="col-10">
           {/* Relacionamento */}
           <div className="card h-100" style={{backgroundColor: 'var(--bg-secondary-color)', marginRight:'10px'}}>
-              <Relationship athleteData={athlete}/>
+              <Relationship athleteId={athlete}/>
           </div>
         </div>
       </div>
