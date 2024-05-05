@@ -59,3 +59,16 @@ export const createAthlete = async (athleteData: any) => {
   }
 };
 
+export const uploadImageAthlete = async (IDAtleta: any, file:any) => {
+  try {
+    const response = await axios.post(`${apiURL}/file-upload/atleta/${IDAtleta}`, file);
+    // Se você quiser acessar os dados retornados pelo servidor, pode usar response.data
+    // Por exemplo, console.log(response.data);
+    console.log(response)
+    return response.data;
+  } catch (error) {
+    toast.error('Erro ao criar atleta');
+    console.error('Erro ao criar atleta:', error);
+    throw error;
+  }
+};

@@ -4,9 +4,11 @@ import Title from "../../../components/Title";
 import AthletesList from "../../../components/AthletesList";
 import AddButton from "@/components/AddButton";
 import React, { useState } from "react";
-import { Box, Modal } from "@mui/material";
+import { Box, Button, Modal, styled } from "@mui/material";
 import Subtitle from "@/components/Subtitle";
-import { createAthlete } from "@/pages/api/http-service/athletes";
+import { createAthlete, uploadImageAthlete } from "@/pages/api/http-service/athletes";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Image from "next/image";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -18,11 +20,26 @@ const style = {
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
-  borderRadius: '20px'
+  borderRadius: '20px',
 };
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 export default function Athletes() {
   const [openCreateAthlete, setOpenCreateAthlete] = useState(false);
+  const [formAvatar, setFormAvatar] = useState("/images/image-user.png");
+  const [formImage, setFormImage] = useState();
+
   const [formData, setFormData] = useState({
     nome: '',
     data_nascimento: '',
@@ -39,6 +56,7 @@ export default function Athletes() {
     data_inicio: '',
     data_fim: '',
   });
+
 
   const handleOpenCreateAthlete = () => setOpenCreateAthlete(true);
   const handleCloseCreateAthlete = () => setOpenCreateAthlete(false);
@@ -67,6 +85,8 @@ export default function Athletes() {
     }));
   };
 
+
+
   const handleSalvarClick = async () => {
     const request = {
       ...formData,
@@ -79,6 +99,13 @@ export default function Athletes() {
     try {
       const athletesData = await createAthlete(request);
       console.log(athletesData);
+      console.log(formImage)
+      if(athletesData){
+        if(formImage){
+          const uploadImage = await uploadImageAthlete(athletesData.id, formImage);
+          console.log(uploadImage)
+        }
+      }
       // Faça o que precisar com os dados de atleta salvos
     } catch (error) {
       console.error('Error creating athlete:', error);
@@ -101,6 +128,25 @@ export default function Athletes() {
     }
   };
 
+  const getImageFileObject = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader:any = new FileReader();
+      reader.onload = () => {
+        setFormAvatar(reader.result);
+      };
+      reader.readAsDataURL(file);
+      console.log(file)
+      setFormImage(file)
+    } else {
+      setFormAvatar("/images/image-user.png");
+    }
+  };
+
+  // function runAfterImageDelete(file:any) {
+  //   console.log({ file })
+  // }
+
   return (
     <>
       <Header />
@@ -118,12 +164,33 @@ export default function Athletes() {
         open={openCreateAthlete}
         onClose={handleCloseCreateAthlete}
         aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+        aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Subtitle subtitle="Criação do atleta"/>
           <hr />
-          <div className="d-flex justify-content-between" style={{height:'500px'}}>
+          <div className="d-flex justify-content-start align-items-center mb-3">
+            <Image 
+              className="rounded mt-3 me-3"
+              src={formAvatar}
+              width={90}
+              height={100}
+              alt="Athlete logo"
+              layout=""
+              objectFit="cover"
+            />
+            <Button
+              className="btn-success h-25"
+              component="label"
+              role={undefined}
+              variant="contained"
+              tabIndex={-1}
+              startIcon={<CloudUploadIcon />}
+            >
+              Upload file
+              <VisuallyHiddenInput type="file" onChange={getImageFileObject}/>
+            </Button>
+          </div>
+          <div className="d-flex justify-content-between" style={{height:'420px'}}>
             <div className="w-50 pe-4">
               <div className="input w-100">
                 <Subtitle subtitle="Nome"/>
@@ -172,6 +239,9 @@ export default function Athletes() {
                   <option value={5}>Volante</option>
                   <option value={6}>Zagueiro</option>
                 </select>
+              </div>
+              <div>
+                
               </div>
             </div>
           </div>
