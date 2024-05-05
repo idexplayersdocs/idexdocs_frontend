@@ -9,6 +9,8 @@ import Subtitle from "@/components/Subtitle";
 import { createAthlete, uploadImageAthlete } from "@/pages/api/http-service/athletes";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faX } from "@fortawesome/free-solid-svg-icons";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -38,7 +40,7 @@ const VisuallyHiddenInput = styled('input')({
 export default function Athletes() {
   const [openCreateAthlete, setOpenCreateAthlete] = useState(false);
   const [formAvatar, setFormAvatar] = useState("/images/image-user.png");
-  const [formImage, setFormImage] = useState();
+  const [formImage, setFormImage]:any = useState();
 
   const [formData, setFormData] = useState({
     nome: '',
@@ -59,7 +61,23 @@ export default function Athletes() {
 
 
   const handleOpenCreateAthlete = () => setOpenCreateAthlete(true);
-  const handleCloseCreateAthlete = () => setOpenCreateAthlete(false);
+  const handleCloseCreateAthlete = () => {
+    setOpenCreateAthlete(false)
+    setFormData({
+      nome: '',
+      data_nascimento: '',
+      posicao_id: '',
+    })
+    setFormClube({
+      nome: '',
+      data_inicio: '',
+    })
+    setFormContrato({
+      tipo_id: '',
+      data_inicio: '',
+      data_fim: '',
+    })
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
@@ -94,16 +112,13 @@ export default function Athletes() {
       contrato: formContrato,
     };
 
-    console.log(request);
-
     try {
       const athletesData = await createAthlete(request);
-      console.log(athletesData);
-      console.log(formImage)
       if(athletesData){
         if(formImage){
-          const uploadImage = await uploadImageAthlete(athletesData.id, formImage);
-          console.log(uploadImage)
+          const formData = new FormData();
+          formData.append('image', formImage);
+          const uploadImage = await uploadImageAthlete(athletesData.id, formData);
         }
       }
       // Faça o que precisar com os dados de atleta salvos
@@ -136,7 +151,6 @@ export default function Athletes() {
         setFormAvatar(reader.result);
       };
       reader.readAsDataURL(file);
-      console.log(file)
       setFormImage(file)
     } else {
       setFormAvatar("/images/image-user.png");
@@ -166,7 +180,11 @@ export default function Athletes() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={style}>
-          <Subtitle subtitle="Criação do atleta"/>
+          <div className="d-flex justify-content-between">
+            <Subtitle subtitle="Criação do atleta"/>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateAthlete}
+/>
+          </div>
           <hr />
           <div className="d-flex justify-content-start align-items-center mb-3">
             <Image 
