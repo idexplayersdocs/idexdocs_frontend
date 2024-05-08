@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import SideBar from '@/components/SideBar';
 import Relationship from '@/components/Relationship';
@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { createAthleteRelationship, createSupportControl, getAthleteRelationship, getSupportControl } from '@/pages/api/http-service/relationship';
 import Subtitle from '@/components/Subtitle';
+import { getObservations } from '@/pages/api/http-service/observations';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -38,6 +39,7 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 export default function AthleteRelationship() {
+  const effectRan = useRef(false);
   const { query, push, back } = useRouter();
   const athleteId = query?.id;
 
@@ -51,6 +53,13 @@ export default function AthleteRelationship() {
   const [openCreateSupportControl, setOpenCreateSupportControl] = useState(false);
   const [totalRowRelationship, setTotalRowRelationship] = useState<number>(1);
   const [totalRowSupportControl, setTotalRowSupportControl] = useState<number>(1);
+
+  const [observacao, setObservacao] = useState<any>({
+    atleta_id: athleteId,
+    tipo: 'relacionamento',
+    descricao: ''
+  });
+
 
   const [formDataRelationship, setFormDataRelationship] = useState<any>({
     atleta_id: athleteId,
@@ -74,29 +83,36 @@ export default function AthleteRelationship() {
 
 
   useEffect(() => {
-    const fetchAthletesData = async () => {
-      try {
-        // Atleta
-        const athleteData = await getAthleteById(athleteId);
-        setAthlete(athleteData?.data);
+    if (!effectRan.current) {
 
-        // Relacionamento
-        const relationship = await getAthleteRelationship(athleteId, pageRalationship);
-        setDisplayedDataRelationShip(relationship?.data.data);
-        setTotalRowRelationship(relationship?.data.total);
+      const fetchAthletesData = async () => {
+        try {
+          // Atleta
+          const athleteData = await getAthleteById(athleteId);
+          setAthlete(athleteData?.data);
 
-        // Controle de Suporte
-        const supportContorl = await getSupportControl(athleteId, pageSupportControl);
-        setDisplayedDataSupportControl(supportContorl?.data.data);
-        setTotalRowSupportControl(supportContorl?.data.total);
+          // Relacionamento
+          const relationship = await getAthleteRelationship(athleteId, pageRalationship);
+          setDisplayedDataRelationShip(relationship?.data.data);
+          setTotalRowRelationship(relationship?.data.total);
 
+          // Controle de Suporte
+          const supportContorl = await getSupportControl(athleteId, pageSupportControl);
+          setDisplayedDataSupportControl(supportContorl?.data.data);
+          setTotalRowSupportControl(supportContorl?.data.total);
 
-      } catch (error) {
-        console.error('Error fetching athletes:', error);
-      }
-    };
+          // Observações
+          // const responseObservacoes = await getObservations(athleteId);
+          // console.log(responseObservacoes)
+          // setObservacao(responseObservacoes?.data.data);
 
-    fetchAthletesData();
+        } catch (error) {
+          console.error('Error fetching athletes:', error);
+        }
+      };
+
+      fetchAthletesData();
+    }
   }, [athleteId, pageRalationship, pageSupportControl]);
 
   // Relacionamento
@@ -195,7 +211,8 @@ export default function AthleteRelationship() {
 
   const handleSalvarClickSupportControl = async () => {
     try {
-      formDataSupportControl.preco = parseFloat(formDataSupportControl.preco).toFixed(2)
+      formDataSupportControl['preco'] = parseFloat(formDataSupportControl.preco).toFixed(2)
+      formDataSupportControl['athleteId'] = athleteId
       const response = await createSupportControl(formDataSupportControl);
     } catch (error) {
       console.error('Error:', error);
@@ -209,6 +226,8 @@ export default function AthleteRelationship() {
         data_controle: '',
       });
     }
+    setPageSupportControl(1)
+    await getSupportControl(athleteId, pageSupportControl);
   };
 
   const isFormValidSupportControl= () => {
