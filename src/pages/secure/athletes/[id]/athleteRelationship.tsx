@@ -433,7 +433,7 @@ export default function AthleteRelationship() {
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <div className="d-flex justify-content-between">
-            <Subtitle subtitle="Criar Questionário de relacionamento"/>
+            <Subtitle subtitle="Criar Controle de Suporte"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateSupportControl}
 />
           </div>
