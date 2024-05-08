@@ -1,10 +1,28 @@
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import Loading from "react-loading";
 type Props = {
   athleteData: any
 }
 
 export default function SideBar({athleteData}:any) {
+  const [formAvatar, setFormAvatar]:any = useState<string>();
+  useEffect(()=> {
+    const verificarImagem = async () => {
+      // Se encontrar
+      try{
+        const response = await fetch('/images/image-user.png');
+        setFormAvatar('/images/image-user.png');
+      }
+      // Se não encontrar
+      catch(error){
+        setFormAvatar('/images/image-user.png');
+  
+      }
+    }
+    verificarImagem();
+  },[])
+
   if (!athleteData) {
     return <div className="d-flex justify-content-center align-items-center w-100 h-25" ><Loading type='bars' color="var(--bg-ternary-color)"/></div>
   }
@@ -13,7 +31,7 @@ export default function SideBar({athleteData}:any) {
     <div className="container sidebar__background h-100 ms-2 rounded mb-5 overflow-auto">
       <Image
         className="rounded mt-3"
-        src="/images/image-user.png"
+        src={formAvatar}
         width={200}
         height={250}
         alt="Athlete logo"
@@ -26,7 +44,15 @@ export default function SideBar({athleteData}:any) {
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Posição:</h1>
-        <h2 className="subtitle-sidebar">{athleteData.posicao}</h2>
+        <h2 className="subtitle-sidebar">{athleteData.posicao_primaria ? athleteData.posicao_primaria : 'Não possui'}</h2>
+      </div>
+      <div className="mt-2">
+        <h1 className="title-sidebar">Posição Secundaria:</h1>
+        <h2 className="subtitle-sidebar">{athleteData.posicao_secundaria ? athleteData.posicao_secundaria : 'Não possui'}</h2>
+      </div>
+      <div className="mt-2">
+        <h1 className="title-sidebar">Outra Posição:</h1>
+        <h2 className="subtitle-sidebar">{athleteData.posicao_terciaria ? athleteData.posicao_terciaria : 'Não possui'}</h2>
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Nascimento:</h1>
@@ -34,11 +60,11 @@ export default function SideBar({athleteData}:any) {
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Clube:</h1>
-        <h2 className="subtitle-sidebar">{athleteData.clube_atual ? athleteData.clube_atual : 'Não possui clube'}</h2>
+        <h2 className="subtitle-sidebar">{athleteData.clube_atual ? athleteData.clube_atual : 'Não possui'}</h2>
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Contrato Clube:</h1>
-        <h2 className="subtitle-sidebar">{athleteData.contrato.tipo ? athleteData.contrato.tipo : 'Não possui contrato'}</h2>
+        <h2 className="subtitle-sidebar">{athleteData.contrato.tipo ? athleteData.contrato.tipo : 'Não possui'}</h2>
         <h2 className="subtitle-sidebar">{new Date(athleteData.contrato.data_inicio).toLocaleDateString()} - {new Date(athleteData.contrato.data_termino).toLocaleDateString()}</h2>
       </div>
       {/* <div className="mt-2">

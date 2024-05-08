@@ -15,20 +15,36 @@ interface Athlete {
   clube_atual: string;
 }
 
-export default function AthletesList() {
+export default function AthletesList({ newAthlete }: any) {
   const [page, setPage] = useState(1);
   const { push } = useRouter();
   const [athletes, setAthletes] = useState<Athlete[]>([]);
-  const [totalRow, setTotalRow] = useState();
+  const [totalRow, setTotalRow]: any = useState();
   const [loading, setLoading] = useState(true); // Estado de carregamento
   const effectRan = useRef(false);
 
-  useEffect(():any => {
-    if (!effectRan.current) {
-      const fetchAthletesData = async () => {
+  useEffect(() => {
+    const fetchAthletesData = async () => {
+      try {
+        const athletesData = await getAthletes(page);
+        setAthletes(athletesData.data);
+        setTotalRow(athletesData.total);
+      } catch (error) {
+        console.error('Error fetching athletes:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAthletesData();
+  }, [page]);
+
+  useEffect(() => {
+    if (newAthlete) {
+      const fetchUpdatedAthletesData = async () => {
         try {
-          const athletesData = await getAthletes();
-          setAthletes(athletesData.data);
+          const athletesData = await getAthletes(1);
+          setAthletes((prevAthletes) => [...prevAthletes, newAthlete]);
           setTotalRow(athletesData.total);
         } catch (error) {
           console.error('Error fetching athletes:', error);
@@ -37,28 +53,22 @@ export default function AthletesList() {
         }
       };
 
-      fetchAthletesData();
+      fetchUpdatedAthletesData();
     }
-    return () => (effectRan.current = true);
-  }, []);
-
-  const itemsPerPage = 10;
-  const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const displayedData = athletes.slice(startIndex, endIndex);
-
-  const handleChangePage = (event: any, newPage: number) => {
-    setPage(newPage);
-  };
+  }, [newAthlete]);
 
   const handleEditAthlete = (id: number) => {
     push(`/secure/athletes/${id}/athleteRelationship`);
   };
 
+  const handleChangePage = (event: any, newPage: number) => {
+    setPage(newPage);
+  };
+
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{marginTop:'150px'}}>
-        <Loading type="bars" color="var(--bg-ternary-color)" width={100}/>
+      <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: '150px' }}>
+        <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
       </div>
     );
   }
@@ -86,7 +96,7 @@ export default function AthletesList() {
           </thead>
           <tbody>
             {athletes.length > 0 ? (
-              displayedData.map((athlete) => (
+              athletes.map((athlete) => (
                 <tr key={athlete.id}>
                   <td className="table-dark">{athlete.nome}</td>
                   <td className="table-dark">{athlete.posicao}</td>
@@ -95,11 +105,11 @@ export default function AthletesList() {
                   </td>
                   <td className="table-dark">{athlete.clube_atual}</td>
                   <td className="table-dark d-flex justify-content-evenly">
-                    <FontAwesomeIcon
+                    {/* <FontAwesomeIcon
                       icon={faTrashCan}
                       size="2xl"
                       style={{ color: '#ff0000', cursor: 'pointer' }}
-                    />
+                    /> */}
                     <FontAwesomeIcon
                       icon={faEye}
                       size="2xl"
@@ -118,10 +128,10 @@ export default function AthletesList() {
             )}
           </tbody>
         </table>
-        {athletes.length > itemsPerPage && (
+        {totalRow > 10 && (
           <Pagination
             className="pagination-bar"
-            count={Math.ceil(athletes.length / itemsPerPage)}
+            count={Math.ceil(totalRow / 10)}
             page={page}
             onChange={handleChangePage}
             variant="outlined"

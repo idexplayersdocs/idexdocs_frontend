@@ -225,3 +225,11 @@ th.table-dark.text-center {
   border: 4.7px solid var(--bg-secondary-color);
   height: 55px;
 }
+
+select:invalid {
+  color: gray;
+}
+
+select option[disabled] {
+  color: #999; /* Cor do texto de placeholder */
+}

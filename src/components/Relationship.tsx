@@ -9,7 +9,6 @@ import Subtitle from './Subtitle';
 import Observacoes from './Observation';
 import AddButton from './AddButton';
 import { useRouter } from 'next/router';
-import { getAthleteRelationship } from '@/pages/api/http-service/athletes';
 
 type Props = {
   athleteId: any
@@ -28,8 +27,7 @@ export default function Relationship({athleteId}: Props) {
     if (!effectRan.current) {
       const fetchAthletesData = async () => {
         try {
-          const relationship = await getAthleteRelationship(athleteId);
-          console.log(athleteId)
+          // const relationship = await getAthleteRelationship(athleteId);
           // setTotalRow(relationship.total);
         } catch (error) {
           console.error('Error fetching athletes:', error);
