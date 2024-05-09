@@ -12,6 +12,7 @@ import { faCheck, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { createAthleteRelationship, createSupportControl, getAthleteRelationship, getSupportControl } from '@/pages/api/http-service/relationship';
 import Subtitle from '@/components/Subtitle';
 import { getObservations } from '@/pages/api/http-service/observations';
+import  Performance  from '@/components/Performance'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -38,10 +39,11 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-export default function AthleteRelationship() {
+export default function AthleteDetail() {
   const effectRan = useRef(false);
   const { query, push, back } = useRouter();
   const athleteId = query?.id;
+  const [tabAtual, setTabAtual] = useState<string>('relationship')
 
   const [athlete, setAthlete] = useState<any>();
   const [pageRalationship, setPageRalationship] = useState(1);
@@ -244,6 +246,10 @@ export default function AthleteRelationship() {
     }
   };
 
+  const setTab = (tab: string) => {
+    setTabAtual(tab)
+  }
+
   return (
     <>
       <Header />
@@ -254,12 +260,17 @@ export default function AthleteRelationship() {
         <div className="col-10">
           <ul className="nav nav-tabs">
             <li className="nav-item me-1">
-              <a className="nav-link active" aria-current="page" href={`/secure/athletes/${athleteId}/athleteRelationship`}>Relacionamento</a>
+              <a className={ tabAtual === 'relationship' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('relationship')}>Relacionamento</a>
+              {/* <a className="nav-link active" aria-current="page" href={`/secure/athletes/${athleteId}/athleteRelationship`}>Relacionamento</a> */}
             </li>
             <li className="nav-item">
-              <a className="nav-link" aria-current="page" href={`/secure/athletes/${athleteId}/athletePerformance`}>Desempenho</a>
+              <a className={ tabAtual === 'performance' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('performance')}>Desempenho</a>
+              {/* <a className="nav-link" aria-current="page" href={`/secure/athletes/${athleteId}/athletePerformance`}>Desempenho</a> */}
             </li>
           </ul>
+
+          {
+          tabAtual === 'relationship' ?
           <div className="card athlete-detail-card" style={{ backgroundColor: 'var(--bg-secondary-color)', marginRight: '10px' }}>
             <div className='d-flex justify-content-end mt-3' style={{ marginRight: '30px' }}>
               <div onClick={handleOpenCreateQuestionaryRelationship}>
@@ -367,8 +378,18 @@ export default function AthleteRelationship() {
                 </div>
               </div>
             </div>
-            {/* <Relationship athlete={athlete} /> */}
           </div>
+          
+          : 
+          // Desempenho
+          <div className="card athlete-detail-card" style={{ backgroundColor: 'var(--bg-secondary-color)', marginRight: '10px' }}>
+            <Performance />
+          </div>
+
+          }
+
+          {/* Relationship */}
+          
         </div>
       </div>
 

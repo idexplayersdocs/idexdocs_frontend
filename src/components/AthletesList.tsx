@@ -58,7 +58,7 @@ export default function AthletesList({ newAthlete }: any) {
   }, [newAthlete]);
 
   const handleEditAthlete = (id: number) => {
-    push(`/secure/athletes/${id}/athleteRelationship`);
+    push(`/secure/athletes/${id}/athleteDetail`);
   };
 
   const handleChangePage = (event: any, newPage: number) => {

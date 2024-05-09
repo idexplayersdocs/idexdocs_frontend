@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Modal, Pagination, Typography } from '@mui/material';
 import Subtitle from './Subtitle';
@@ -13,6 +13,7 @@ import HistoryCompetitions from './modal/HistoryCompetitions';
 import ClubHistory from './modal/ClubHistory';
 import Injuries from './modal/Injuries';
 import PhysicalHistory from './modal/PhysicalHistory';
+import { useRouter } from 'next/router';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -27,6 +28,10 @@ const style = {
 };
 
 export default function Performance() {
+  const effectRan = useRef(false);
+  const { query, push, back } = useRouter();
+  const athleteId = query?.id;
+  console.log(athleteId)
   const [openHistoryCompetitions, setOpenHistoryCompetitions] = React.useState(false);
   const [openClubHistory, setOpenClubHistory] = React.useState(false);
   const [openInjuries, setOpenInjuries] = React.useState(false);
