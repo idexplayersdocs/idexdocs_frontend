@@ -157,6 +157,9 @@ export default function AthleteDetail() {
         pendencia_clube: '',
         data_criacao: ''
       });
+      const relationship = await getAthleteRelationship(athleteId, 1);
+      setDisplayedDataRelationShip(relationship?.data.data);
+      setTotalRowRelationship(relationship?.data.total);
     }
   };
 
@@ -227,9 +230,13 @@ export default function AthleteDetail() {
         preco: '',
         data_controle: '',
       });
+      // location.reload();
     }
     setPageSupportControl(1)
-    await getSupportControl(athleteId, pageSupportControl);
+    // await getSupportControl(athleteId, pageSupportControl);
+    const supportControl = await getSupportControl(athleteId, pageSupportControl);
+    setDisplayedDataSupportControl(supportControl?.data.data);
+    setTotalRowSupportControl(supportControl?.data.total);
   };
 
   const isFormValidSupportControl= () => {
@@ -353,7 +360,7 @@ export default function AthleteDetail() {
                           <td className="table-dark text-center">{new Date(supportContol.data_controle).toLocaleDateString()}</td>
                           <td className="table-dark text-center">{supportContol.nome}</td>
                           <td className="table-dark text-center">{supportContol.quantidade}</td>
-                          <td className="table-dark text-center">{supportContol.preco}</td>
+                          <td className="table-dark text-center">R$ {supportContol.preco}</td>
                         </tr>
                       ))
                     }

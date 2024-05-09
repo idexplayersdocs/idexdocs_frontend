@@ -6,7 +6,7 @@ import AddButton from "@/components/AddButton";
 import React, { useState } from "react";
 import { Box, Button, Modal, colors, styled } from "@mui/material";
 import Subtitle from "@/components/Subtitle";
-import { createAthlete, uploadImageAthlete } from "@/pages/api/http-service/athletes";
+import { createAthlete, getAthletes, uploadImageAthlete } from "@/pages/api/http-service/athletes";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -42,6 +42,8 @@ export default function Athletes() {
   const [formAvatar, setFormAvatar] = useState("/images/image-user.png");
   const [formImage, setFormImage]:any = useState();
   const [newAthlere, setNewAthlere]:any = useState();
+  const [athletes, setAthletes] = useState<any[]>([]);
+  const [totalRow, setTotalRow]: any = useState();
 
   const [formData, setFormData] = useState({
     nome: '',
@@ -151,7 +153,10 @@ export default function Athletes() {
       })
     }
     setNewAthlere(false)
-
+    location.reload();
+    const athletesData = await getAthletes(1);
+      setAthletes(athletesData.data);
+      setTotalRow(athletesData.total);
   };
 
   const getImageFileObject = (event: any) => {
