@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { apiURL } from '../api';
+// import { apiURL } from '../api';
+
+const apiURL = 'https://idexdocs-api.azurewebsites.net';
 
 export const getAthleteRelationship = async (athleteId: any, page:number) => {
   if(athleteId){
