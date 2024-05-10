@@ -5,7 +5,9 @@ export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/secure/athletes');
+    const token = localStorage.getItem("token");
+
+    token ? router.push("/secure/athletes") : router.push("/public/login");    
   }, [router]);
   return null
   // return (

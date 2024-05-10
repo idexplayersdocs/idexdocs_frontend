@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Pagination } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { useRouter } from 'next/router';
-import { getAthletes } from '@/pages/api/http-service/athletes';
-import Loading from 'react-loading';
+import { getAthletes } from "@/pages/api/http-service/athletes";
+import { faEye, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Pagination, Modal } from "@mui/material";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import Loading from "react-loading";
 
 interface Athlete {
   id: number;
@@ -30,7 +29,7 @@ export default function AthletesList({ newAthlete }: any) {
         setAthletes(athletesData.data);
         setTotalRow(athletesData.total);
       } catch (error) {
-        console.error('Error fetching athletes:', error);
+        console.error("Error fetching athletes:", error);
       } finally {
         setLoading(false);
       }
@@ -47,7 +46,7 @@ export default function AthletesList({ newAthlete }: any) {
           setAthletes((prevAthletes) => [...prevAthletes, newAthlete]);
           setTotalRow(athletesData.total);
         } catch (error) {
-          console.error('Error fetching athletes:', error);
+          console.error("Error fetching athletes:", error);
         } finally {
           setLoading(false);
         }
@@ -67,7 +66,7 @@ export default function AthletesList({ newAthlete }: any) {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: '150px' }}>
+      <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: "150px" }}>
         <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
       </div>
     );
@@ -92,6 +91,7 @@ export default function AthletesList({ newAthlete }: any) {
                 CLUBE ATUAL
               </th>
               <th className="table-dark"></th>
+              <th className="table-dark"></th>
             </tr>
           </thead>
           <tbody>
@@ -100,9 +100,7 @@ export default function AthletesList({ newAthlete }: any) {
                 <tr key={athlete.id}>
                   <td className="table-dark">{athlete.nome}</td>
                   <td className="table-dark">{athlete.posicao_primaria}</td>
-                  <td className="table-dark">
-                    {new Date(athlete.data_nascimento).toLocaleDateString()}
-                  </td>
+                  <td className="table-dark">{new Date(athlete.data_nascimento).toLocaleDateString()}</td>
                   <td className="table-dark">{athlete.clube_atual}</td>
                   <td className="table-dark d-flex justify-content-evenly">
                     {/* <FontAwesomeIcon
@@ -113,8 +111,16 @@ export default function AthletesList({ newAthlete }: any) {
                     <FontAwesomeIcon
                       icon={faEye}
                       size="2xl"
-                      style={{ color: '#ffffff', cursor: 'pointer' }}
+                      style={{ color: "#ffffff", cursor: "pointer" }}
                       onClick={() => handleEditAthlete(athlete.id)}
+                    />
+                  </td>
+                  <td className="table-dark">
+                    <FontAwesomeIcon
+                      icon={faFilePdf}
+                      style={{ color: "white", cursor: "pointer" }}
+                      size="2xl"
+                      onClick={() => console.log("OK")}
                     />
                   </td>
                 </tr>
@@ -139,6 +145,14 @@ export default function AthletesList({ newAthlete }: any) {
           />
         )}
       </div>
+      <Modal
+        open={true}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        className="border border-danger d-flex align-items-center justify-content-center"
+      >
+        <p>Teste</p>
+      </Modal>
     </>
   );
 }
