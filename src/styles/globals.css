@@ -15,7 +15,7 @@
 body {
   background-color: var(--bg-primary-color);
   font-family: "Roboto", sans-serif;
-  overflow-x: hidden;
+  overflow-x: hidden;  
 }
 hr {
   border-top: 5px solid var(--bg-ternary-color);
