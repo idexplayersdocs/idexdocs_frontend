@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Pagination } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faX } from '@fortawesome/free-solid-svg-icons';
@@ -9,17 +9,43 @@ import data from '../../pages/api/mock-data/mock-data-history-competitions.json'
 import Title from '../Title';
 import Subtitle from '../Subtitle';
 import AddButton from '../AddButton';
+import { getCompetitions } from '@/pages/api/http-service/competitions';
 
-interface Athlete {
-  id: number;
-  nome: string;
-  posicao: string;
-  data_nascimento: string;
-  clube_atual: string;
-}
-
-export default function HistoryCompetitions() {
+export default function HistoryCompetitions({closeModal, athleteId}: any) {
+  const effectRan = useRef(false);
   const [page, setPage] = useState(1);
+  const [totalRow, setTotalRow] = useState(1)
+  const [competitions, setCompetitions] = useState<any>({
+    nome: '',
+    data_competicao: '',
+    jogos_completos: '',
+    jogos_parciais: '',
+    minutagem: '',
+    gols: ''
+  });
+
+
+  const handleCloseModal = () => {
+    closeModal();
+  };
+
+  useEffect(() => {
+    if (!effectRan.current) {
+      const fetchAthletesData = async () => {
+        try {
+          const competitionList = await getCompetitions(athleteId);
+          console.log(competitionList)
+          setCompetitions(competitionList?.data);
+          setTotalRow(competitionList?.total);
+
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+
+      fetchAthletesData();
+    }
+  }, [athleteId]);
 
   const itemsPerPage = 6; 
   const startIndex = (page - 1) * itemsPerPage;
@@ -34,7 +60,7 @@ export default function HistoryCompetitions() {
     <>
     <div className='d-flex justify-content-between'>
       <Subtitle subtitle='Competições'/>
-      <FontAwesomeIcon icon={faX} color='white' size='xl' style={{cursor: 'pointer'}}/>
+      <FontAwesomeIcon icon={faX} color='white' size='xl' style={{cursor: 'pointer'}} onClick={handleCloseModal}/>
     </div>
     <hr />
     <div className='d-flex justify-content-end mb-3'>
@@ -52,10 +78,10 @@ export default function HistoryCompetitions() {
           </thead>
           <tbody>
             {
-              displayedData.length > 0 ? (
-                displayedData.map(competicao => (
-                  <tr key={competicao.Id}>
-                    <td className="table-dark text-center">{competicao.Competicao}</td>
+              competitions.length > 0 ? (
+                Array.isArray(competitions) && competitions.map((competicao, index: number) => (
+                  <tr key={index}>
+                    <td className="table-dark text-center">{competicao.nome}</td>
                     <td className="table-dark text-center">{competicao.JogosCompletos}</td>
                     <td className="table-dark text-center">{competicao.JogosParciais}</td>
                     <td className="table-dark text-center">{competicao.Minutagem}</td>
@@ -63,22 +89,22 @@ export default function HistoryCompetitions() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="table-dark text-center">Carregando...</td>
+                  <td colSpan={5} className="table-dark text-center">Não possui histórico</td>
                 </tr>
               )
             }
           </tbody>
         </table>
         {
-          data.length > itemsPerPage &&
-            <Pagination 
-              className="pagination-bar"
-              count={Math.ceil(data.length / itemsPerPage)}
-              page={page}
-              onChange={handleChangePageCompetitions}
-              variant="outlined"
-              size="large"
-            />
+                totalRow > 7 &&
+                <Pagination
+                  className="pagination-bar"
+                  count={Math.ceil(totalRow / 7)}
+                  page={page}
+                  onChange={handleChangePageCompetitions}
+                  variant="outlined"
+                  size="large"
+                />
         }
       </div>
     </>

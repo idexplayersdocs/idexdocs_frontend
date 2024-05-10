@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { createAthleteRelationship, createSupportControl, getAthleteRelationship, getSupportControl } from '@/pages/api/http-service/relationship';
 import Subtitle from '@/components/Subtitle';
-import { getObservations } from '@/pages/api/http-service/observations';
+import { getObservations, saveObservations } from '@/pages/api/http-service/observations';
 import  Performance  from '@/components/Performance'
 
 const style = {
@@ -56,11 +56,7 @@ export default function AthleteDetail() {
   const [totalRowRelationship, setTotalRowRelationship] = useState<number>(1);
   const [totalRowSupportControl, setTotalRowSupportControl] = useState<number>(1);
 
-  const [observacao, setObservacao] = useState<any>({
-    atleta_id: athleteId,
-    tipo: 'relacionamento',
-    descricao: ''
-  });
+  const [observacao, setObservacao] = useState<string>('');
 
 
   const [formDataRelationship, setFormDataRelationship] = useState<any>({
@@ -104,9 +100,8 @@ export default function AthleteDetail() {
           setTotalRowSupportControl(supportContorl?.data.total);
 
           // Observações
-          // const responseObservacoes = await getObservations(athleteId);
-          // console.log(responseObservacoes)
-          // setObservacao(responseObservacoes?.data.data);
+          const responseObservacoes = await getObservations(athleteId);
+          setObservacao(responseObservacoes?.data.descricao);
 
         } catch (error) {
           console.error('Error fetching athletes:', error);
@@ -257,6 +252,23 @@ export default function AthleteDetail() {
     setTabAtual(tab)
   }
 
+  const handleInputObservation = (event: any) => {
+    setObservacao(event.target.value)
+  };
+
+  const handleSaveObservation = async () => {
+    try {
+      const request = {
+        atleta_id: athleteId,
+        tipo: "relacionamento",
+        descricao: observacao
+      }
+      const response = await saveObservations(request);
+    } catch (error) {
+      console.error('Error:', error);
+    } 
+  };
+
   return (
     <>
       <Header />
@@ -379,9 +391,12 @@ export default function AthleteDetail() {
                 }
               </div>
               <div className='col-md'>
-                <div className='ms-3 me-3 d-flex flex-column'>
-                  <Observacoes />
-                  <button type="button" className="btn btn-success align-self-end" style={{ width: '170px' }}>Salvar Observações</button>
+                <div className='ms-3 me-3 d-flex flex-column mb-3'>
+                  <label style={{ width: '100%' }}>
+                    <Subtitle subtitle='Observações' />
+                    <textarea onChange={handleInputObservation} value={observacao} rows={6} style={{ width: '100%' }}/>
+                  </label>
+                  <button type="button" className="btn btn-success align-self-end" style={{ width: '170px' }} onClick={handleSaveObservation}>Salvar Observações</button>
                 </div>
               </div>
             </div>

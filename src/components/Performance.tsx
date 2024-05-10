@@ -31,6 +31,7 @@ export default function Performance() {
   const effectRan = useRef(false);
   const { query, push, back } = useRouter();
   const athleteId = query?.id;
+  
   console.log(athleteId)
   const [openHistoryCompetitions, setOpenHistoryCompetitions] = React.useState(false);
   const [openClubHistory, setOpenClubHistory] = React.useState(false);
@@ -357,7 +358,7 @@ export default function Performance() {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-              <HistoryCompetitions />
+              <HistoryCompetitions closeModal={handleCloseHistoryCompetitions} athleteId={athleteId}/>
             </Box>
           </Modal>
           <Modal
@@ -367,7 +368,7 @@ export default function Performance() {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-              <ClubHistory />
+              <ClubHistory closeModal={handleCloseClubHistory} athleteId={athleteId}/>
             </Box>
           </Modal>
           <Modal
@@ -377,7 +378,7 @@ export default function Performance() {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-              <Injuries />
+              <Injuries closeModal={handleCloseInjuries} athleteId={athleteId}/>
             </Box>
           </Modal>
           <Modal
@@ -387,7 +388,7 @@ export default function Performance() {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-              <PhysicalHistory />
+              <PhysicalHistory closeModal={handleClosePhysicalHistory} athleteId={athleteId}/>
             </Box>
           </Modal>
     </div>

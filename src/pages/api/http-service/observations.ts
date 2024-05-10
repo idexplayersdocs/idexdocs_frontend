@@ -16,7 +16,7 @@ export const getObservations = async (athleteId: any) => {
   }
 };
 
-export const createObservations = async (request: any) => {
+export const saveObservations = async (request: any) => {
   try {
     const response = await axios.post(`${apiURL}/create/observacao`, request);
     return response.data;
