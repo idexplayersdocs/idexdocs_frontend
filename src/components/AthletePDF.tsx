@@ -23,7 +23,7 @@ const options: Options = {
   },
   // Customize any value passed to the jsPDF instance and html2canvas
   // function. You probably will not need this and things can break,
-  // so use with caution.
+  // so use with caution
 };
 
 type AthletaInfo = {
