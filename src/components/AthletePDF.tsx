@@ -4,6 +4,7 @@ import React from "react";
 import generatePDF, { Margin, Options } from "react-to-pdf";
 import { LoadingOverlay } from "./LoadingOverley";
 import Loading from "react-loading";
+import moment from 'moment';
 
 const options: Options = {
   // default is `save`
@@ -102,7 +103,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                   Posição: <span className="text-uppercase fw-normal">{info.atleta.posicao_primaria}</span>
                 </p>
                 <p className="fw-bold d-flex align-items-center justify-content-between mb-2">
-                  Data de Nascimento: <span className="text-uppercase fw-normal">{info.atleta.data_nascimento}</span>
+                  Data de Nascimento: <span className="text-uppercase fw-normal"> {moment(info.atleta.data_nascimento).format('DD/MM/YYYY')}</span>
                 </p>
                 <p className="fw-bold d-flex align-items-center justify-content-between">
                   Clube Atual: <span className="text-uppercase fw-normal">{info.atleta.clube_atual}</span>
@@ -151,7 +152,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                         <td className="">{x.envergadura}</td>
                         <td className="">{x.peso}</td>
                         <td className="">{x.percentual_gordura}</td>
-                        <td className="">{x.data_criacao}</td>
+                        <td className="">{moment(x.data_criacao).format('DD/MM/YYYY')}</td>
                       </tr>
                     );
                   })}
@@ -235,7 +236,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                         <td className="">{x.criatividade_psi}</td>
                         <td className="">{x.capacidade_decisao_psi}</td>
                         <td className="">{x.competitividade_psi}</td>
-                        <td className="">{x.data_criacao}</td>
+                        <td className="">{moment(x.data_criacao).format('DD/MM/YYYY')}</td>
                       </tr>
                     );
                   })}
@@ -261,7 +262,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                     return (
                       <tr>
                         <td>{x.descricao}</td>
-                        <td>{x.data_lesao}</td>
+                        <td>{moment(x.data_lesao).format('DD/MM/YYYY')}</td>
                       </tr>
                     );
                   })}
@@ -287,8 +288,8 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                     return (
                       <tr>
                         <td>{x.nome}</td>
-                        <td>{x.data_inicio}</td>
-                        <td>{x.data_fim}</td>
+                        <td>{moment(x.data_inicio).format("DD/MM/YYYY")}</td>
+                        <td>{x.data_fim ? moment(x.data_fim).format('DD/MM/YYYY') : "--"}</td>
                       </tr>
                     );
                   })}
