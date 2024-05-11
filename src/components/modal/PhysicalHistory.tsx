@@ -12,6 +12,7 @@ import AddButton from '../AddButton';
 import { createPhysical, getPhysical } from '@/pages/api/http-service/physical';
 import Loading from 'react-loading';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
+import moment from 'moment';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -29,7 +30,8 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
   const effectRan = useRef(false);
   const [openRegisterPhysical, setOpenRegisterPhysical] = useState(false);
   const [page, setPage] = useState(1);
-  const [totalRow, setTotalRow] = useState(1)
+  const [totalRow, setTotalRow] = useState(1);
+  const [loading, setLoading] = useState(true); // Estado de carregamento
   const [physical, setPhysical] = useState<any>({
     atleta_id: athleteId,
     estatura: '',
@@ -41,12 +43,13 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
   });
 
   const [formRegisterPhysical, setFormRegisterPhysical] = useState<any>({
-    "caracteristica": "fisico",
-    "atleta_id": 2,
-    "estatura": 170,
-    "envergadura": 183,
-    "peso": 90,
-    "percentual_gordura": 15.3
+    atleta_id: athleteId,
+    caracteristica: "fisico",
+    estatura: '',
+    envergadura: '',
+    peso: '',
+    percentual_gordura: '',
+    data_avaliacao: ''
   });
 
   const handleCloseModal = () => {
@@ -57,28 +60,33 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
     if (!effectRan.current) {
       const fetchAthletesData = async () => {
         try {
-          const physicalList = await getPhysical(athleteId);
+          const physicalList = await getPhysical(athleteId, page, 'fisico');
           console.log(physicalList)
           setPhysical(physicalList?.data);
           setTotalRow(physicalList?.total);
 
         } catch (error) {
           console.error('Error:', error);
+        } finally {
+          setLoading(false);
         }
       };
 
       fetchAthletesData();
     }
-  }, [athleteId]);
+  }, [athleteId, page]);
 
   const handleOpenRegisterPhysical = () => setOpenRegisterPhysical(true);
   const handleCloseRegisterPhysical = () => {
     setOpenRegisterPhysical(false)
     setFormRegisterPhysical({
       atleta_id: athleteId,
-      nome: '',
-      data_inicio: '',
-      data_fim: ''
+      caracteristica: "fisico",
+      estatura: '',
+      envergadura: '',
+      peso: '',
+      percentual_gordura: '',
+      data_avaliacao: ''
     });
   }
 
@@ -91,21 +99,12 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
   };
 
   const handleSaverRegisterPhysical = async () => {
+    setLoading(true);
     try {
       const response = await createPhysical(formRegisterPhysical);
-
-      const handleCloseRegisterPhysical = () => {
-        setOpenRegisterPhysical(false)
-        setFormRegisterPhysical({
-          atleta_id: athleteId,
-          nome: '',
-          data_inicio: '',
-          data_fim: ''
-        });
-      }
-
+      handleCloseRegisterPhysical();
       setPage(1)
-      const clubList = await getPhysical(athleteId);
+      const clubList = await getPhysical(athleteId, page, 'fisico');
       console.log(clubList)
       setPhysical(clubList?.data);
       setTotalRow(clubList?.total);
@@ -115,23 +114,27 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
-        pauseOnHover: true,
         draggable: true,
         progress: undefined,
         theme: "dark",
         transition: Bounce,
         });
+    } finally {
+      setLoading(false);
     }
   };
-
-  const itemsPerPage = 6; 
-  const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const displayedData = data.slice(startIndex, endIndex);
 
   const handleChangePage = (event: any, newPage:number) => {
     setPage(newPage);
   };
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: '150px' }}>
+        <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -147,8 +150,7 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th className="table-dark text-center" scope="col">Data Criacao</th>
-              <th className="table-dark text-center" scope="col">Data Atualizado</th>
+              <th className="table-dark text-center" scope="col">Data</th>
               <th className="table-dark text-center" scope="col">Estatura</th>
               <th className="table-dark text-center" scope="col">Envergadura</th>
               <th className="table-dark text-center" scope="col">Peso</th>
@@ -160,8 +162,7 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
               physical.length > 0 ? (
                 Array.isArray(physical) && physical.map((caracteristica, index: number) => (
                   <tr key={index}>
-                    <td className="table-dark text-center">{caracteristica.data_criacao}</td>
-                    <td className="table-dark text-center">{caracteristica.data_atualizado}</td>
+                    <td className="table-dark text-center">{moment(caracteristica.data_avaliacao).format('DD/MM/YYYY')}</td>
                     <td className="table-dark text-center">{caracteristica.estatura}</td>
                     <td className="table-dark text-center">{caracteristica.envergadura}</td>
                     <td className="table-dark text-center">{caracteristica.peso}</td>
@@ -169,20 +170,18 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
                   </tr>
                 ))
               ) : (
-                // <tr>
-                //   <td colSpan={5} className="table-dark text-center">Carregando...</td>
-                <Loading type='cylon' color="#fff"/>
-
-                // </tr>
+                <tr>
+                  <td colSpan={5} className="table-dark text-center">Não possui característica</td>
+                </tr>
               )
             }
           </tbody>
         </table>
         {
-          totalRow > itemsPerPage &&
+          totalRow > 6 &&
             <Pagination 
               className="pagination-bar"
-              count={Math.ceil(totalRow / itemsPerPage)}
+              count={Math.ceil(totalRow / 6)}
               page={page}
               onChange={handleChangePage}
               variant="outlined"
@@ -197,37 +196,33 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <div className="d-flex justify-content-between">
-            <Subtitle subtitle="Registrar Clube"/>
+            <Subtitle subtitle="Registrar Característica"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseRegisterPhysical}/>
           </div>
           <hr />
-          <div className="row" style={{height:'350px'}}>
+          <div className="row" style={{height:'250px'}}>
               <div className='col'>
                 <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Criação</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_criacao" style={{height:'45px'}} value={formRegisterPhysical.data_criacao} onChange={handleInputChangeRegisterPhysical}/>
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
+                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_avaliacao" style={{height:'45px'}} value={formRegisterPhysical.data_avaliacao} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Atualizada</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="data_atualizado" style={{height:'45px'}} value={formRegisterPhysical.data_atualizado} onChange={handleInputChangeRegisterPhysical}/>
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Envergadura</label>
+                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="envergadura" style={{height:'45px'}} value={formRegisterPhysical.envergadura} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Estatura</label>
-                      <input type="text" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="estatura" style={{height:'45px'}} value={formRegisterPhysical.estatura} onChange={handleInputChangeRegisterPhysical}/>
+                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="estatura" style={{height:'45px'}} value={formRegisterPhysical.estatura} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
               </div>
               <div className='col'>
-              <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Envergadura</label>
-                      <input type="text" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="envergadura" style={{height:'45px'}} value={formRegisterPhysical.envergadura} onChange={handleInputChangeRegisterPhysical}/>
-                </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Peso</label>
-                      <input type="text" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="peso" style={{height:'45px'}} value={formRegisterPhysical.peso} onChange={handleInputChangeRegisterPhysical}/>
+                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="peso" style={{height:'45px'}} value={formRegisterPhysical.peso} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>% Gordura</label>
-                      <input type="text" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="percentual_gordura" style={{height:'45px'}} value={formRegisterPhysical.percentual_gordura} onChange={handleInputChangeRegisterPhysical}/>
+                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="percentual_gordura" style={{height:'45px'}} value={formRegisterPhysical.percentual_gordura} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
               </div>
             </div>

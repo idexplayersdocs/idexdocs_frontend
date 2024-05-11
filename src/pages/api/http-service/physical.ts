@@ -6,10 +6,10 @@ import 'react-toastify/dist/ReactToastify.css';
 // const apiURL = process.env.NEXT_PUBLIC_API_URL;
 const apiURL = 'https://idexdocs-api.azurewebsites.net';
 
-export const getPhysical = async (athleteId: any) => {
+export const getPhysical = async (athleteId: any, page: number, model: string) => {
   if(athleteId){
     try {
-      const response = await axios.get(`${apiURL}/caracteristica/atleta/${athleteId}`);
+      const response = await axios.get(`${apiURL}/caracteristica/atleta/${athleteId}/?page=${page}&per_page=${6}&model=${model}`);
       return response.data;
     } catch (error) {
       console.error(`Error:`, error);
@@ -20,7 +20,7 @@ export const getPhysical = async (athleteId: any) => {
 
 export const createPhysical = async (request: any) => {
   try {
-    const response = await axios.post(`${apiURL}/caracteristica`, request);
+    const response = await axios.post(`${apiURL}/create/caracteristica`, request);
     // Se você quiser acessar os dados retornados pelo servidor, pode usar response.data
     // Por exemplo, console.log(response.data);
     return response.data;

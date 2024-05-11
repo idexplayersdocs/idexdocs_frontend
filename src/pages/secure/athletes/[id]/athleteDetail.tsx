@@ -13,6 +13,11 @@ import { createAthleteRelationship, createSupportControl, getAthleteRelationship
 import Subtitle from '@/components/Subtitle';
 import { getObservations, saveObservations } from '@/pages/api/http-service/observations';
 import  Performance  from '@/components/Performance'
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import moment from 'moment';
+import Loading from 'react-loading';
+
+moment.locale('pt-br');
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -44,6 +49,7 @@ export default function AthleteDetail() {
   const { query, push, back } = useRouter();
   const athleteId = query?.id;
   const [tabAtual, setTabAtual] = useState<string>('relationship')
+  const [loading, setLoading] = useState(true); // Estado de carregamento
 
   const [athlete, setAthlete] = useState<any>();
   const [pageRalationship, setPageRalationship] = useState(1);
@@ -68,7 +74,7 @@ export default function AthleteDetail() {
     influencias_externas: '',
     pendencia_empresa: '',
     pendencia_clube: '',
-    data_criacao: ''
+    data_avaliacao: ''
   });
 
   const [formDataSupportControl, setFormDataSupportControl] = useState<any>({
@@ -84,27 +90,43 @@ export default function AthleteDetail() {
     if (!effectRan.current) {
 
       const fetchAthletesData = async () => {
-        try {
-          // Atleta
-          const athleteData = await getAthleteById(athleteId);
-          setAthlete(athleteData?.data);
-
-          // Relacionamento
-          const relationship = await getAthleteRelationship(athleteId, pageRalationship);
-          setDisplayedDataRelationShip(relationship?.data.data);
-          setTotalRowRelationship(relationship?.data.total);
-
-          // Controle de Suporte
-          const supportContorl = await getSupportControl(athleteId, pageSupportControl);
-          setDisplayedDataSupportControl(supportContorl?.data.data);
-          setTotalRowSupportControl(supportContorl?.data.total);
-
-          // Observações
-          const responseObservacoes = await getObservations(athleteId);
-          setObservacao(responseObservacoes?.data.descricao);
-
-        } catch (error) {
-          console.error('Error fetching athletes:', error);
+        setLoading(true);
+        if(athleteId){
+          try {
+            // Atleta
+            const athleteData = await getAthleteById(athleteId);
+            setAthlete(athleteData?.data);
+  
+            // Relacionamento
+            const relationship = await getAthleteRelationship(athleteId, pageRalationship);
+            setDisplayedDataRelationShip(relationship?.data.data);
+            setTotalRowRelationship(relationship?.data.total);
+  
+            // Controle de Suporte
+            const supportContorl = await getSupportControl(athleteId, pageSupportControl);
+            setDisplayedDataSupportControl(supportContorl?.data.data);
+            setTotalRowSupportControl(supportContorl?.data.total);
+  
+            // Observações
+            const responseObservacoes = await getObservations(athleteId, 'relacionamento');
+            let observacao = responseObservacoes?.data[responseObservacoes?.data.length - 1]
+            setObservacao(observacao.descricao);
+  
+          } catch (error:any) {
+            toast.error('Dados do atleta temporariamente indisponível', {
+              position: "bottom-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+              transition: Bounce,
+              });
+            console.error('Error fetching athletes:', error);
+          } finally{
+            setLoading(false);
+          }
         }
       };
 
@@ -128,18 +150,16 @@ export default function AthleteDetail() {
       influencias_externas: '',
       pendencia_empresa: '',
       pendencia_clube: '',
-      data_criacao: ''
+      data_avaliacao: ''
     });
   }
 
   const handleSalvarClickRelationShip = async () => {
+    setLoading(true);
     try {
       formDataRelationship['pendencia_empresa'] = formDataRelationship['pendencia_empresa'] == 'true' ? true : false
       formDataRelationship['pendencia_clube'] = formDataRelationship['pendencia_empresa'] == 'true' ? true : false
       const response = await createAthleteRelationship(formDataRelationship);
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
       handleCloseCreateQuestionaryRelationship();
       setFormDataRelationship({
         atleta_id: athleteId,
@@ -150,11 +170,26 @@ export default function AthleteDetail() {
         influencias_externas: '',
         pendencia_empresa: '',
         pendencia_clube: '',
-        data_criacao: ''
+        data_avaliacao: ''
       });
       const relationship = await getAthleteRelationship(athleteId, 1);
       setDisplayedDataRelationShip(relationship?.data.data);
       setTotalRowRelationship(relationship?.data.total);
+
+    } catch (error:any) {
+      console.error('Error:', error);
+      toast.error(error.response.data.errors[0].message, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+        });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -168,7 +203,7 @@ export default function AthleteDetail() {
       (formDataRelationship?.influencias_externas ?? '').trim() !== '' &&
       (formDataRelationship?.pendencia_empresa ?? '').trim() !== '' &&
       (formDataRelationship?.pendencia_clube ?? '').trim() !== '' &&
-      (formDataRelationship?.data_criacao ?? '').trim() !== ''
+      (formDataRelationship?.data_avaliacao ?? '').trim() !== ''
     ) {
       return true;
     } else {
@@ -210,13 +245,11 @@ export default function AthleteDetail() {
   };
 
   const handleSalvarClickSupportControl = async () => {
+    setLoading(true);
     try {
       formDataSupportControl['preco'] = parseFloat(formDataSupportControl.preco).toFixed(2)
       formDataSupportControl['athleteId'] = athleteId
       const response = await createSupportControl(formDataSupportControl);
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
       handleCloseCreateSupportControl();
       setFormDataSupportControl({
         atleta_id: athleteId,
@@ -225,7 +258,20 @@ export default function AthleteDetail() {
         preco: '',
         data_controle: '',
       });
-      // location.reload();
+    } catch (error:any) {
+      console.error('Error:', error);
+      toast.error(error.response.data.errors[0].message, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+        });
+    } finally {
+      setLoading(false);
     }
     setPageSupportControl(1)
     // await getSupportControl(athleteId, pageSupportControl);
@@ -257,6 +303,7 @@ export default function AthleteDetail() {
   };
 
   const handleSaveObservation = async () => {
+    setLoading(true);
     try {
       const request = {
         atleta_id: athleteId,
@@ -264,10 +311,30 @@ export default function AthleteDetail() {
         descricao: observacao
       }
       const response = await saveObservations(request);
-    } catch (error) {
+    } catch (error:any) {
+      toast.error(error.response.data.errors[0].message, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+        });
       console.error('Error:', error);
-    } 
+    } finally{
+      setLoading(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: '150px' }}>
+        <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -316,7 +383,7 @@ export default function AthleteDetail() {
                   {
                       Array.isArray(displayedDataRelationShip) && displayedDataRelationShip.map((relationship: any, index: number) => (
                         <tr key={index}>
-                        <td className="table-dark text-center">{new Date(relationship.data_criacao).toLocaleDateString()}</td>
+                        <td className="table-dark text-center">{moment(relationship.data_avaliacao).format('DD/MM/YYYY')}</td>
                         <td className="table-dark text-center">{relationship.receptividade_contrato}</td>
                         <td className="table-dark text-center">{relationship.satisfacao_empresa}</td>
                         <td className="table-dark text-center">{relationship.satisfacao_clube}</td>
@@ -433,7 +500,7 @@ export default function AthleteDetail() {
               <div className='col'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_criacao" style={{height:'45px'}} value={formDataRelationship.data_criacao} onChange={handleInputChangeRelationship}/>
+                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_avaliacao" style={{height:'45px'}} value={formDataRelationship.data_avaliacao} onChange={handleInputChangeRelationship}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Receptividade Contato</label>
@@ -483,8 +550,9 @@ export default function AthleteDetail() {
             </div>
 
           <div className='ms-3 d-flex flex-column' style={{width: '98%'}}>
-            <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickRelationShip} disabled={!isFormValidRelationship()}>Salvar</button>
+            <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickRelationShip}>Salvar</button>
           </div>
+        <ToastContainer />
         </Box>
       </Modal>
       {/* Controle de Suporte */}
@@ -524,8 +592,10 @@ export default function AthleteDetail() {
           <div className='ms-3 d-flex flex-column' style={{width: '98%'}}>
             <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickSupportControl}>Salvar</button>
           </div>
+        <ToastContainer />
         </Box>
       </Modal>
+      <ToastContainer />
     </>
   )
 }

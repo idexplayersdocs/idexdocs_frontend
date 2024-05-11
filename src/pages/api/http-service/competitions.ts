@@ -6,10 +6,10 @@ import 'react-toastify/dist/ReactToastify.css';
 // const apiURL = process.env.NEXT_PUBLIC_API_URL;
 const apiURL = 'https://idexdocs-api.azurewebsites.net';
 
-export const getCompetitions = async (athleteId: any) => {
+export const getCompetitions = async (athleteId: any, page: number) => {
   if(athleteId){
     try {
-      const response = await axios.get(`${apiURL}/competicao/atleta/${athleteId}`);
+      const response = await axios.get(`${apiURL}/competicao/atleta/${athleteId}?page=${page}&per_page=${6}`);
       return response.data;
     } catch (error) {
       console.error(`Error:`, error);

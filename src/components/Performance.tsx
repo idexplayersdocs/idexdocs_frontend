@@ -32,7 +32,6 @@ export default function Performance() {
   const { query, push, back } = useRouter();
   const athleteId = query?.id;
   
-  console.log(athleteId)
   const [openHistoryCompetitions, setOpenHistoryCompetitions] = React.useState(false);
   const [openClubHistory, setOpenClubHistory] = React.useState(false);
   const [openInjuries, setOpenInjuries] = React.useState(false);

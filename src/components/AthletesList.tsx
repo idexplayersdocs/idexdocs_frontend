@@ -6,6 +6,7 @@ import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { useRouter } from 'next/router';
 import { getAthletes } from '@/pages/api/http-service/athletes';
 import Loading from 'react-loading';
+import moment from 'moment';
 
 interface Athlete {
   id: number;
@@ -101,7 +102,7 @@ export default function AthletesList({ newAthlete }: any) {
                   <td className="table-dark">{athlete.nome}</td>
                   <td className="table-dark">{athlete.posicao_primaria}</td>
                   <td className="table-dark">
-                    {new Date(athlete.data_nascimento).toLocaleDateString()}
+                    {moment(athlete.data_nascimento).format('DD/MM/YYYY')}
                   </td>
                   <td className="table-dark">{athlete.clube_atual}</td>
                   <td className="table-dark d-flex justify-content-evenly">
