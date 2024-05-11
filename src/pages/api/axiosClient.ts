@@ -2,8 +2,14 @@ import axios from "axios";
 import { apiURL } from "./api";
 
 const getToken = (): string | null => {
-  const token = localStorage.getItem("token");
-  return token;
+
+  if(typeof window !== "undefined") {
+
+    const token = localStorage.getItem("token");
+    return token;
+  }
+
+  return null;
 };
 
 export const axiosClient = axios.create({

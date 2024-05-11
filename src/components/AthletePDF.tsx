@@ -37,13 +37,15 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
   const onClickPDF = async (): Promise<void> => {
     setIsLoading(true);
     onLoading(true);
-    try{
-      await generatePDF(pdfRef, options)
-    }finally{
+    try {
+      await generatePDF(pdfRef, options);
+    } finally {
       setIsLoading(false);
       onLoading(false);
     }
   };
+
+  const observacoesDesempenho = info.observacao.filter(x => x.tipo === "desempenho");
 
   return (
     <>
@@ -103,7 +105,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                   Data de Nascimento: <span className="text-uppercase fw-normal">{info.atleta.data_nascimento}</span>
                 </p>
                 <p className="fw-bold d-flex align-items-center justify-content-between">
-                  Clube: <span className="text-uppercase fw-normal">{info.atleta.clube_atual}</span>
+                  Clube Atual: <span className="text-uppercase fw-normal">{info.atleta.clube_atual}</span>
                 </p>
               </div>
               <div>
@@ -127,185 +129,178 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
             <article>
               <div className="border-bottom border-4 border-black mb-3">
                 <p className="fw-bold mb-2 text-uppercase h4">
-                  Características Físicas e Técnicas ({info.atleta.posicao_primaria})
+                  Características Físicas ({info.atleta.posicao_primaria})
                 </p>
               </div>
-              <div className="row">
-                <div className="col-8 d-flex align-items-end flex-wrap mt-5">
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Estatura/Maturação:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Velogicade:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Leitura de jogo/Cobertura ofensiva/contenção:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Desmarques/mobilidade:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Controle de bola/passe para gol:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Capacidade aeróbica:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Finalização:
-                  </p>
-                </div>
-                <div className="col-4 d-flex align-items-start justify-content-center">
-                  <div className="">
-                    <p className="fw-bold text-uppercase">Aval. Incial</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
+              {info.caracteristicas_fisicas.map((x, i) => {
+                return (
+                  <div className="row">
+                    <div className="col-12 d-flex align-items-end flex-wrap mt-5">
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Estatura:
+                        <span className="fw-normal">{x.estatura}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Envergadura:
+                        <span className="fw-normal">{x.envergadura}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Peso:
+                        <span className="fw-normal">{x.peso}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Percentual de Goruda:
+                        <span className="fw-normal">{x.percentual_gordura}</span>
+                      </p>
+                    </div>
                   </div>
-                  <div className="border border-3 mx-3 h-100 border-black rounded"></div>
-                  <div className="">
-                    <p className="fw-bold text-uppercase">Projeção</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                  </div>
-                </div>
-              </div>
-              <div className="ms-4 border border-black w-25 rounded p-2">
-                <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                  Total:
-                </p>
-                <p className="fw-bold d-flex align-items-center justify-content-between  mb-0 text-uppercase w-100">
-                  Média:
-                </p>
-              </div>
+                );
+              })}
             </article>
           </section>
           <section className="mt-4">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
                 <p className="fw-bold mb-2 text-uppercase h4">
-                  Características Técnias Diferencias ({info.atleta.posicao_primaria})
+                  Características da Posição ({info.atleta.posicao_primaria})
                 </p>
               </div>
-              <div className="row">
-                <div className="col-8 d-flex align-items-end flex-wrap mt-5">
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Visão Espacial:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Dribles:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Organização Acções Onfesivas/Dinâmica:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Pisada na Área para finalizar/penetração
-                  </p>
-                </div>
-                <div className="col-4 d-flex align-items-start justify-content-center">
-                  <div className="">
-                    <p className="fw-bold text-uppercase">Aval. Incial</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
+              {info.caracteristicas_posicao.map((x, i) => {
+                return (
+                  <div className="row" key={i}>
+                    <div className="col-12 d-flex align-items-end flex-wrap mt-5">
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Estatura:
+                        <span className="fw-normal">{x.estatura}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Velocidade:
+                        <span className="fw-normal">{x.velocidade}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Um Contra um ofenviso:
+                        <span className="fw-normal">{x.um_contra_um_ofensivo}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Desmarques:
+                        <span className="fw-normal">{x.desmarques}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Controle de Bola:
+                        <span className="fw-normal">{x.controle_bola}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Cruzamentos:
+                        <span className="fw-normal">{x.cruzamentos}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Finzaliação:
+                        <span className="fw-normal">{x.finalizacao}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Visão Espacial:
+                        <span className="fw-normal">{x.visao_espacial}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Domínio Orientado:
+                        <span className="fw-normal">{x.dominio_orientado}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Dribles em Diagonal:
+                        <span className="fw-normal">{x.dribles_em_diagonal}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Leitura de Jogo:
+                        <span className="fw-normal">{x.leitura_jogo}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Reação pós Perda:
+                        <span className="fw-normal">{x.reacao_pos_perda}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Criatividade:
+                        <span className="fw-normal">{x.criatividade}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Capacidade de descição:
+                        <span className="fw-normal">{x.capacidade_decisao}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Inteligência Tática:
+                        <span className="fw-normal">{x.inteligencia_tatica}</span>
+                      </p>
+                      <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                        Competitividade:
+                        <span className="fw-normal">{x.competitividade}</span>
+                      </p>
+                    </div>
                   </div>
-                  <div className="border border-3 mx-3 h-100 border-black rounded"></div>
-                  <div className="">
-                    <p className="fw-bold text-uppercase">Projeção</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                  </div>
-                </div>
-              </div>
-              <div className="ms-4 border border-black w-25 rounded p-2">
-                <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                  Total:
-                </p>
-                <p className="fw-bold d-flex align-items-center justify-content-between  mb-0 text-uppercase w-100">
-                  Média:
-                </p>
-              </div>
+                );
+              })}
             </article>
           </section>
           <section className="mt-4">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">Perfil Psicológico ({info.atleta.posicao_primaria})</p>
+                <p className="fw-bold mb-2 text-uppercase h4">Histórico de Lesões ({info.atleta.posicao_primaria})</p>
               </div>
-              <div className="row">
-                <div className="col-8 d-flex align-items-end flex-wrap mt-5">
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Criativade e improvisação:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Capacidade de decisão:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Confiança/Responsabilidade:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Inteligência Tática/Intuição antecipar ações:
-                  </p>
-                  <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                    Competividade/Coragem/Concentração
-                  </p>
-                </div>
-                <div className="col-4 d-flex align-items-start justify-content-center">
-                  <div className="">
-                    <p className="fw-bold text-uppercase">Aval. Incial</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
+              {info.lesao.map((x, i) => {
+                return (
+                  <div className="row" key={i}>
+                    <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                      Descrição:
+                      <span className="fw-normal">
+                        {" "}
+                        {x.data_lesao} - {x.descricao}
+                      </span>
+                    </p>
                   </div>
-                  <div className="border border-3 mx-3 h-100 border-black rounded"></div>
-                  <div className="">
-                    <p className="fw-bold text-uppercase">Projeção</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                    <p className="text-center mb-1">OK</p>
-                  </div>
-                </div>
-              </div>
-              <div className="ms-4 border border-black w-25 rounded p-2">
-                <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                  Total:
-                </p>
-                <p className="fw-bold d-flex align-items-center justify-content-between  mb-0 text-uppercase w-100">
-                  Média:
-                </p>
-              </div>
+                );
+              })}
             </article>
           </section>
           <section className="mt-4">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">Avaliação Final (Média das médias)</p>
+                <p className="fw-bold mb-2 text-uppercase h4">Histórico de Clubes ({info.atleta.posicao_primaria})</p>
               </div>
-              <p className="text-uppercase">Ações para avaliação final relativa aos dados de projeção:</p>
-              <div className="border border-black w-75 rounded p-1">
-                <p className="mb-1 fw-bold">AF 1 é relativo a ateltas com baixa perspectiva futura</p>
-                <p className="mb-1 fw-bold">AF 1 é relativo a ateltas com baixa perspectiva futura</p>
-                <p className="mb-1 fw-bold">AF 1 é relativo a ateltas com baixa perspectiva futura</p>
-                <p className="mb-1 fw-bold">AF 1 é relativo a ateltas com baixa perspectiva futura</p>
-              </div>
+              {info.clube.map((x, i) => {
+                return (
+                  <div className="row border-bottom border-2 mb-2 border-gray" key={i}>
+                    <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                      Nome:
+                      <span className="fw-normal"> {x.nome}</span>
+                    </p>
+                    <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                      Data de Inicio:
+                      <span className="fw-normal"> {x.data_inicio}</span>
+                    </p>
+                    <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                      Data de Fim:
+                      <span className="fw-normal"> {x.data_fim}</span>
+                    </p>
+                  </div>
+                );
+              })}
             </article>
           </section>
           <section className="mt-5">
-            <p className="fw-bold text-uppercase"> Observações</p>
-            <textarea disabled className="w-100 bg-white border-black " style={{ resize: "none" }}></textarea>
+          <article>
+              <div className="border-bottom border-4 border-black mb-3">
+                <p className="fw-bold mb-2 text-uppercase h4">Observações</p>
+              </div>
+              {observacoesDesempenho.map((x, i) => {
+                return (
+                  <div className="row border-bottom border-2 mb-2 border-gray" key={i}>
+                    <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">                      
+                      <textarea disabled className="w-100 bg-white border-black text-black" style={{ resize: "none" }} value={x.descricao}></textarea>
+                    </p>
+                  </div>
+                );
+              })}
+            </article>
+            {/* <p className="fw-bold text-uppercase"> Observações</p>
+            <textarea disabled className="w-100 bg-white border-black " style={{ resize: "none" }} value={}></textarea> */}
           </section>
         </div>
       )}
