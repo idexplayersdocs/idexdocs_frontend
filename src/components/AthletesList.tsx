@@ -1,12 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Pagination } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { useRouter } from 'next/router';
 import { getAthletes } from '@/pages/api/http-service/athletes';
 import Loading from 'react-loading';
 import moment from 'moment';
+import { faEye, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { Pagination, Modal } from "@mui/material";
+
+import Image from "next/image";
+
+import { PDFInfo } from "@/pages/api/http-service/pdfService";
+import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
+import AthletePDF from './AthletePDF';
 
 interface Athlete {
   id: number;
@@ -22,7 +28,10 @@ export default function AthletesList({ newAthlete }: any) {
   const [athletes, setAthletes] = useState<Athlete[]>([]);
   const [totalRow, setTotalRow]: any = useState();
   const [loading, setLoading] = useState(true); // Estado de carregamento
+  const [loadingPDF, setLoadingPDF] = useState<boolean>(false);
+  const [modalPdfOpen, setModalPdfOpen] = useState<boolean>(false);
   const effectRan = useRef(false);
+  const [atletaInfo, setAtletaInfo] = useState<PDFInfoResponseDTO | null>(null);
 
   useEffect(() => {
     const fetchAthletesData = async () => {
@@ -31,7 +40,7 @@ export default function AthletesList({ newAthlete }: any) {
         setAthletes(athletesData.data);
         setTotalRow(athletesData.total);
       } catch (error) {
-        console.error('Error fetching athletes:', error);
+        console.error("Error fetching athletes:", error);
       } finally {
         setLoading(false);
       }
@@ -48,7 +57,7 @@ export default function AthletesList({ newAthlete }: any) {
           setAthletes((prevAthletes) => [...prevAthletes, newAthlete]);
           setTotalRow(athletesData.total);
         } catch (error) {
-          console.error('Error fetching athletes:', error);
+          console.error("Error fetching athletes:", error);
         } finally {
           setLoading(false);
         }
@@ -66,9 +75,26 @@ export default function AthletesList({ newAthlete }: any) {
     setPage(newPage);
   };
 
+  const handleClickPdf = async (id: number): Promise<void> => {
+    try {
+      const res = await PDFInfo(id);
+      setAtletaInfo(res);
+      setModalPdfOpen(true);
+      console.log(res);
+    } catch (e: unknown) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onLoadingPdf = (isLoadingPDF: boolean) => {
+    // console.log(isLoadingPDF);
+    // setLoadingPDF(isLoadingPDF);
+  };
+
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: '150px' }}>
+      <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: "150px" }}>
         <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
       </div>
     );
@@ -112,12 +138,19 @@ export default function AthletesList({ newAthlete }: any) {
                       style={{ color: '#ff0000', cursor: 'pointer' }}
                     /> */}
                     <FontAwesomeIcon
+                      icon={faFilePdf}
+                      style={{ color: "white", cursor: "pointer" }}
+                      size="2xl"
+                      onClick={() => handleClickPdf(athlete.id)}
+                    />
+                    <FontAwesomeIcon
                       icon={faEye}
                       size="2xl"
-                      style={{ color: '#ffffff', cursor: 'pointer' }}
+                      style={{ color: "#ffffff", cursor: "pointer" }}
                       onClick={() => handleEditAthlete(athlete.id)}
                     />
                   </td>
+
                 </tr>
               ))
             ) : (
@@ -139,6 +172,20 @@ export default function AthletesList({ newAthlete }: any) {
             size="large"
           />
         )}
+        <Modal
+          open={modalPdfOpen}
+          className="d-flex align-items-center justify-content-center"
+          onClose={() => setModalPdfOpen(false)}
+          style={{ border: "none", outline: "none" }}
+        >
+          <div className={`${loadingPDF ? "d-flex align-items-center justify-content-center" : "overflow-y-scroll"} h-75 `} style={{ border: "none", outline: "none" }}>
+            {loadingPDF ? (
+              <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+            ) : (
+              <AthletePDF info={atletaInfo!} onLoading={onLoadingPdf} />
+            )}
+          </div>
+        </Modal>
       </div>
     </>
   );
