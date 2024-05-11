@@ -13,6 +13,8 @@ import AthletePDF from "./AthletePDF";
 import { PDFInfo } from "@/pages/api/http-service/pdfService";
 import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
 
+
+
 interface Athlete {
   id: number;
   nome: string;
@@ -88,7 +90,7 @@ export default function AthletesList({ newAthlete }: any) {
 
   const onLoadingPdf = (isLoadingPDF: boolean) => {
     // console.log(isLoadingPDF);
-    // setLoadingPDF(isLoadingPDF);
+    setLoadingPDF(isLoadingPDF);
   };
 
   if (loading) {
@@ -177,7 +179,7 @@ export default function AthletesList({ newAthlete }: any) {
           onClose={() => setModalPdfOpen(false)}
           style={{ border: "none", outline: "none" }}
         >
-          <div className={`${loadingPDF ? "d-flex align-items-center justify-content-center" : "overflow-y-scroll"} h-75 `} style={{ border: "none", outline: "none" }}>
+          <div className={`${loadingPDF ? "d-flex align-items-center justify-content-center" : ""} h-75 `} style={{ border: "none", outline: "none" }}>
             {loadingPDF ? (
               <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
             ) : (
