@@ -134,7 +134,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
               </div>
               {info.caracteristicas_fisicas.map((x, i) => {
                 return (
-                  <div className="row">
+                  <div className="row" key={i}>
                     <div className="col-12 d-flex align-items-end flex-wrap mt-5">
                       <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
                         Estatura:
