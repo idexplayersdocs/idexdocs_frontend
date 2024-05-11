@@ -53,8 +53,8 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
         <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
       ) : (
         <div
-          className="bg-white pointer rounded-2 p-4 mx-auto overflow-scroll"
-          style={{ cursor: "pointer", width: "95%", maxHeight: "100%" }}
+          className="bg-white pointer rounded-2 p-4 mx-auto"
+          style={{ cursor: "pointer", width: "95%" }}
           onClick={() => onClickPDF()}
           ref={pdfRef}
         >
