@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Loading from "react-loading";
 type Props = {
@@ -7,12 +8,15 @@ type Props = {
 
 export default function SideBar({athleteData}:any) {
   const [formAvatar, setFormAvatar]:any = useState<string>();
+  const { query, push, back } = useRouter();
+  const athleteId = query?.id;
   useEffect(()=> {
     const verificarImagem = async () => {
       // Se encontrar
       try{
-        const response = await fetch('/images/image-user.png');
-        setFormAvatar('/images/image-user.png');
+        const response = await fetch(`https://idexdocsblob.blob.core.windows.net/atleta-perfil/atleta_${athleteId}.jpeg`);
+        console.log(response)
+        setFormAvatar(`https://idexdocsblob.blob.core.windows.net/atleta-perfil/atleta_${athleteId}.jpeg`);
       }
       // Se não encontrar
       catch(error){

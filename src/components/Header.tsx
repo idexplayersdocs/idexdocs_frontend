@@ -13,7 +13,7 @@ export default function Header() {
   const open = Boolean(anchorEl);
   const router = useRouter();
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
