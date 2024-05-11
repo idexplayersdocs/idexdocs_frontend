@@ -1,17 +1,18 @@
-import { getAthletes } from "@/pages/api/http-service/athletes";
+import React, { useEffect, useRef, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { useRouter } from 'next/router';
+import { getAthletes } from '@/pages/api/http-service/athletes';
+import Loading from 'react-loading';
+import moment from 'moment';
 import { faEye, faFilePdf } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Pagination, Modal } from "@mui/material";
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
-import Loading from "react-loading";
 
 import Image from "next/image";
-import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
-import html2canvas from "html2canvas";
-import AthletePDF from "./AthletePDF";
+
 import { PDFInfo } from "@/pages/api/http-service/pdfService";
 import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
+import AthletePDF from './AthletePDF';
 
 
 
@@ -120,7 +121,6 @@ export default function AthletesList({ newAthlete }: any) {
                 CLUBE ATUAL
               </th>
               <th className="table-dark"></th>
-              <th className="table-dark"></th>
             </tr>
           </thead>
           <tbody>
@@ -129,7 +129,9 @@ export default function AthletesList({ newAthlete }: any) {
                 <tr key={athlete.id}>
                   <td className="table-dark">{athlete.nome}</td>
                   <td className="table-dark">{athlete.posicao_primaria}</td>
-                  <td className="table-dark">{new Date(athlete.data_nascimento).toLocaleDateString()}</td>
+                  <td className="table-dark">
+                    {moment(athlete.data_nascimento).format('DD/MM/YYYY')}
+                  </td>
                   <td className="table-dark">{athlete.clube_atual}</td>
                   <td className="table-dark d-flex justify-content-evenly">
                     {/* <FontAwesomeIcon
@@ -138,20 +140,19 @@ export default function AthletesList({ newAthlete }: any) {
                       style={{ color: '#ff0000', cursor: 'pointer' }}
                     /> */}
                     <FontAwesomeIcon
+                      icon={faFilePdf}
+                      style={{ color: "white", cursor: "pointer" }}
+                      size="2xl"
+                      onClick={() => handleClickPdf(athlete.id)}
+                    />
+                    <FontAwesomeIcon
                       icon={faEye}
                       size="2xl"
                       style={{ color: "#ffffff", cursor: "pointer" }}
                       onClick={() => handleEditAthlete(athlete.id)}
                     />
                   </td>
-                  <td className="table-dark">
-                    <FontAwesomeIcon
-                      icon={faFilePdf}
-                      style={{ color: "white", cursor: "pointer" }}
-                      size="2xl"
-                      onClick={() => handleClickPdf(athlete.id)}
-                    />
-                  </td>
+
                 </tr>
               ))
             ) : (
