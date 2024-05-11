@@ -22,7 +22,7 @@ export default function Login() {
     setIsLoading(true);
     try {
       const res = await LoginUser({ email: data.email, password: data.password });
-      console.log(res);
+
       localStorage.setItem("token", res["acess_token"]);
       router.push("/secure/athletes");
     } catch (e: unknown) {

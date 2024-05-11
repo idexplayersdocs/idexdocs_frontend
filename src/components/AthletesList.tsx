@@ -6,6 +6,13 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import Loading from "react-loading";
 
+import Image from "next/image";
+import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
+import html2canvas from "html2canvas";
+import AthletePDF from "./AthletePDF";
+import { PDFInfo } from "@/pages/api/http-service/pdfService";
+import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
+
 interface Athlete {
   id: number;
   nome: string;
@@ -20,7 +27,10 @@ export default function AthletesList({ newAthlete }: any) {
   const [athletes, setAthletes] = useState<Athlete[]>([]);
   const [totalRow, setTotalRow]: any = useState();
   const [loading, setLoading] = useState(true); // Estado de carregamento
+  const [loadingPDF, setLoadingPDF] = useState<boolean>(false);
+  const [modalPdfOpen, setModalPdfOpen] = useState<boolean>(false);
   const effectRan = useRef(false);
+  const [atletaInfo, setAtletaInfo] = useState<PDFInfoResponseDTO | null>(null);
 
   useEffect(() => {
     const fetchAthletesData = async () => {
@@ -62,6 +72,23 @@ export default function AthletesList({ newAthlete }: any) {
 
   const handleChangePage = (event: any, newPage: number) => {
     setPage(newPage);
+  };
+
+  const handleClickPdf = async (id: number): Promise<void> => {
+    try {
+      const res = await PDFInfo(id);
+      setAtletaInfo(res);
+      setModalPdfOpen(true);
+      console.log(res);
+    } catch (e: unknown) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onLoadingPdf = (isLoadingPDF: boolean) => {
+    // console.log(isLoadingPDF);
+    // setLoadingPDF(isLoadingPDF);
   };
 
   if (loading) {
@@ -120,7 +147,7 @@ export default function AthletesList({ newAthlete }: any) {
                       icon={faFilePdf}
                       style={{ color: "white", cursor: "pointer" }}
                       size="2xl"
-                      onClick={() => console.log("OK")}
+                      onClick={() => handleClickPdf(athlete.id)}
                     />
                   </td>
                 </tr>
@@ -144,15 +171,21 @@ export default function AthletesList({ newAthlete }: any) {
             size="large"
           />
         )}
+        <Modal
+          open={modalPdfOpen}
+          className="d-flex align-items-center justify-content-center"
+          onClose={() => setModalPdfOpen(false)}
+          style={{ border: "none", outline: "none" }}
+        >
+          <div className={`${loadingPDF ? "d-flex align-items-center justify-content-center" : "overflow-y-scroll"} h-75 `} style={{ border: "none", outline: "none" }}>
+            {loadingPDF ? (
+              <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+            ) : (
+              <AthletePDF info={atletaInfo!} onLoading={onLoadingPdf} />
+            )}
+          </div>
+        </Modal>
       </div>
-      <Modal
-        open={true}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        className="border border-danger d-flex align-items-center justify-content-center"
-      >
-        <p>Teste</p>
-      </Modal>
     </>
   );
 }
