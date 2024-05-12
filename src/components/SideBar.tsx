@@ -1,3 +1,4 @@
+import moment from "moment";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -14,9 +15,9 @@ export default function SideBar({athleteData}:any) {
     const verificarImagem = async () => {
       // Se encontrar
       try{
-        const response = await fetch(`https://idexdocsblob.blob.core.windows.net/atleta-perfil/atleta_${athleteId}.jpeg`);
-        console.log(response)
-        setFormAvatar(`https://idexdocsblob.blob.core.windows.net/atleta-perfil/atleta_${athleteId}.jpeg`);
+        // const response = await fetch(`https://idexdocsblob.blob.core.windows.net/atleta-perfil/atleta_${athleteId}.jpeg`);
+        // setFormAvatar(`https://idexdocsblob.blob.core.windows.net/atleta-perfil/atleta_${athleteId}.jpeg`);
+        setFormAvatar('/images/image-user.png');
       }
       // Se não encontrar
       catch(error){
@@ -60,7 +61,7 @@ export default function SideBar({athleteData}:any) {
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Nascimento:</h1>
-        <h2 className="subtitle-sidebar">{athleteData.data_nascimento ? new Date(athleteData.data_nascimento).toLocaleDateString() : 'Não cadastrada'}</h2>
+        <h2 className="subtitle-sidebar">{athleteData.data_nascimento ? moment(athleteData.data_nascimento).format('DD/MM/YYYY') : 'Não cadastrada'}</h2>
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Clube:</h1>
@@ -69,7 +70,7 @@ export default function SideBar({athleteData}:any) {
       <div className="mt-2">
         <h1 className="title-sidebar">Contrato Clube:</h1>
         <h2 className="subtitle-sidebar">{athleteData.contrato.tipo ? athleteData.contrato.tipo : 'Não possui'}</h2>
-        <h2 className="subtitle-sidebar">{new Date(athleteData.contrato.data_inicio).toLocaleDateString()} - {new Date(athleteData.contrato.data_termino).toLocaleDateString()}</h2>
+        <h2 className="subtitle-sidebar">{moment(athleteData.contrato.data_inicio).format('DD/MM/YYYY')} - {moment(athleteData.contrato.data_termino).format('DD/MM/YYYY')}</h2>
       </div>
       {/* <div className="mt-2">
         <h1 className="title-sidebar">Contrato:</h1>

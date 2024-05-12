@@ -60,8 +60,7 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
     if (!effectRan.current) {
       const fetchAthletesData = async () => {
         try {
-          const physicalList = await getPhysical(athleteId, page, 'fisico');
-          console.log(physicalList)
+          const physicalList = await getPhysical(athleteId, page, 'fisico', 6);
           setPhysical(physicalList?.data);
           setTotalRow(physicalList?.total);
 
@@ -105,7 +104,6 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
       handleCloseRegisterPhysical();
       setPage(1)
       const clubList = await getPhysical(athleteId, page, 'fisico');
-      console.log(clubList)
       setPhysical(clubList?.data);
       setTotalRow(clubList?.total);
     } catch (error:any) {

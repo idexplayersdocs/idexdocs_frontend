@@ -7,6 +7,7 @@ import React from "react";
 import Loading from "react-loading";
 import { LoginUser } from "@/pages/api/http-service/tokenService";
 import { useRouter } from "next/router";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 
 export default function Login() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -25,8 +26,18 @@ export default function Login() {
 
       localStorage.setItem("token", res["acess_token"]);
       router.push("/secure/athletes");
-    } catch (e: unknown) {
-      throw e;
+    } catch (e: unknown | any) {
+      toast.error(e.response.data.errors[0].message, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+        });
+      // throw e;
     } finally {
       setIsLoading(false);
     }
@@ -54,7 +65,7 @@ export default function Login() {
           >
             <div className="w-100 mb-3">
               <label htmlFor="user" className="d-block text-white mb-1 fw-bold">
-                User
+                E-mail
               </label>
               <input
                 type="text"
@@ -68,7 +79,7 @@ export default function Login() {
             </div>
             <div className="w-100 mb-3">
               <label htmlFor="password" className="text-white d-block mb-1 fw-bold">
-                Password
+                Senha
               </label>
               <input
                 type="password"
@@ -95,6 +106,7 @@ export default function Login() {
           </div>
         ) : null}
       </section>
+      <ToastContainer />
     </>
   );
 }

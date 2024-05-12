@@ -1,7 +1,10 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 
 export default function Search() {
+  const[formFilterAthlete, setFormFilterAthlete] = useState<string>()
+  
   return (
     <>
       <div className="input-group w-50">
