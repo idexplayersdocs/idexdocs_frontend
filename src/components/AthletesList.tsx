@@ -14,6 +14,8 @@ import { PDFInfo } from "@/pages/api/http-service/pdfService";
 import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
 import AthletePDF from './AthletePDF';
 
+
+
 interface Athlete {
   id: number;
   nome: string;
@@ -89,7 +91,7 @@ export default function AthletesList({ newAthlete }: any) {
 
   const onLoadingPdf = (isLoadingPDF: boolean) => {
     // console.log(isLoadingPDF);
-    // setLoadingPDF(isLoadingPDF);
+    setLoadingPDF(isLoadingPDF);
   };
 
   if (loading) {

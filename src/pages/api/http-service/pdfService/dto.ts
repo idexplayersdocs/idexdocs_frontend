@@ -87,24 +87,25 @@ export interface PDFInfoResponseDTO {
   
   export interface CaracteristicasPosicao {
     id: number
-    estatura: number
-    velocidade: number
-    um_contra_um_ofensivo: number
-    desmarques: number
-    controle_bola: number
-    cruzamentos: number
-    finalizacao: number
-    visao_espacial: number
-    dominio_orientado: number
-    dribles_em_diagonal: number
-    leitura_jogo: number
-    reacao_pos_perda: number
-    criatividade: number
-    capacidade_decisao: number
-    inteligencia_tatica: number
-    competitividade: number
+    estatura_fis: number
+    velocidade_fis: number
+    um_contra_um_ofensivo_fis: number
+    desmarques_fis: number
+    controle_bola_fis: number
+    cruzamentos_fis: number
+    finalizacao_fis: number
+    visao_espacial_tec: number
+    dominio_orientado_tec: number
+    dribles_em_diagonal_tec: number
+    leitura_jogo_tec: number
+    reacao_pos_perda_tec: number
+    criatividade_psi: number
+    capacidade_decisao_psi: number
+    inteligencia_tatica_psi: number
+    competitividade_psi: number
     data_criacao: string
     data_atualizado: any
     atleta_id: number
+    data_avaliacao: string;        
   }
   
