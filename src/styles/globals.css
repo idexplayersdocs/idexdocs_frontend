@@ -245,3 +245,12 @@ select option[disabled] {
 .overlay {
   background-color: rgba(0, 0, 0, 0.5);
 }
+
+h3{
+  color: var(--text-color-white);
+  text-transform: uppercase;
+  font-size: 18px;
+  margin-left: 15px;
+  display: flex;
+  align-self: flex-start;
+}

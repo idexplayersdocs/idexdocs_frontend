@@ -147,7 +147,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                 <tbody>
                   {info.caracteristicas_fisicas.map((x, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td className="">{x.estatura}</td>
                         <td className="">{x.envergadura}</td>
                         <td className="">{x.peso}</td>
@@ -219,9 +219,9 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                   </tr>
                 </thead>
                 <tbody>
-                  {info.caracteristicas_posicao.map((x, y) => {
+                  {info.caracteristicas_posicao.map((x, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td className="">{x.estatura_fis}</td>
                         <td className="">{x.velocidade_fis}</td>
                         <td className="">{x.um_contra_um_ofensivo_fis}</td>
@@ -260,7 +260,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                 <tbody>
                   {info.lesao.map((x, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td>{x.descricao}</td>
                         <td>{moment(x.data_lesao).format('DD/MM/YYYY')}</td>
                       </tr>
@@ -286,7 +286,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                 <tbody>
                   {info.clube.map((x, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td>{x.nome}</td>
                         <td>{moment(x.data_inicio).format("DD/MM/YYYY")}</td>
                         <td>{x.data_fim ? moment(x.data_fim).format('DD/MM/YYYY') : "--"}</td>
@@ -317,7 +317,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                 <tbody>
                   {info.competicao.map((x, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td>{x.nome}</td>
                         <td>{x.gols}</td>
                         <td>{x.jogos_completos}</td>

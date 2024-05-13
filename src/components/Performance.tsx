@@ -18,6 +18,7 @@ import Characteristics from './characteristics/characteristics';
 import { getPhysical } from '@/pages/api/http-service/physical';
 import { getObservations, saveObservations } from '@/pages/api/http-service/observations';
 import { Bounce, toast } from 'react-toastify';
+import PerformanceCreation from './modal/PerformanceCreation';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -53,6 +54,7 @@ export default function Performance({athleteData}: any) {
   const [openInjuries, setOpenInjuries] = React.useState(false);
   const [openPhysicalHistory, setOpenPhysicalHistory] = React.useState(false);
   const [openInfo, setOpenInfo] = React.useState(false);
+  const [openPerformanceCreation, setOpenPerformanceCreation] = React.useState(false);
 
   const handleOpenHistoryCompetitions = () => setOpenHistoryCompetitions(true);
   const handleCloseHistoryCompetitions = () => setOpenHistoryCompetitions(false);
@@ -68,6 +70,11 @@ export default function Performance({athleteData}: any) {
   
   const handleOpenPhysicalHistory = () => setOpenPhysicalHistory(true);
   const handleClosePhysicalHistory = () => setOpenPhysicalHistory(false);
+
+
+  const handleOpenPerformanceCreation = () => setOpenPerformanceCreation(true);
+  const handleClosePerformanceCreation = () => setOpenPerformanceCreation(false);
+
   const handleOpenInfo = () => setOpenInfo(true);
   const handleCloseInfo = () => setOpenInfo(false);
   const [dataCharacteristic, setDataCharacteristic] = useState<any>();
@@ -184,7 +191,9 @@ export default function Performance({athleteData}: any) {
             <div className='align-self-end'>
             <Subtitle subtitle='Perfil Físico e Técnico' />
             </div>
-            <AddButton />
+            <div onClick={handleOpenPerformanceCreation}>
+              <AddButton />
+            </div>
           </div>
           <Characteristics dataList={dataCharacteristic} labelList={labelCharacteristic}/>
           <div className='d-flex justify-content-end mb-3 mt-3' style={{width: '99%'}}>
@@ -259,6 +268,16 @@ export default function Performance({athleteData}: any) {
                 <Subtitle subtitle='AF > 3  é relativo a atletas com boa perspectiva futura (à avaliar em médio prazo)'/>
                 <Subtitle subtitle='AF > 4  é relativo a atletas com perspectiva de atleta profissional'/>
               </div>
+            </Box>
+          </Modal>
+          <Modal
+            open={openPerformanceCreation}
+            onClose={handleClosePerformanceCreation}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <PerformanceCreation closeModal={handleClosePerformanceCreation} athleteId={athleteId} dataList={dataCharacteristic} labelList={labelCharacteristic}/>
             </Box>
           </Modal>
     </div>
