@@ -553,7 +553,7 @@ export default function AthleteDetail() {
               </div>
             </div>
 
-          <div className='ms-3 d-flex flex-column' style={{width: '98%'}}>
+          <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
             <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickRelationShip}>Salvar</button>
           </div>
         <ToastContainer />
@@ -593,7 +593,7 @@ export default function AthleteDetail() {
               </div>
             </div>
 
-          <div className='ms-3 d-flex flex-column' style={{width: '98%'}}>
+          <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
             <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickSupportControl}>Salvar</button>
           </div>
         <ToastContainer />
