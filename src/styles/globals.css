@@ -201,11 +201,11 @@ th.table-dark.text-center {
 }
 .btn-success {
   background-color: var(--bg-ternary-color) !important;
-  border: none
+  border: none !important;
 }
 .btn-success:hover {
   background-color: #c95c14 !important;
-  border: none
+  border: none !important;
 }
 
 .table-body {
