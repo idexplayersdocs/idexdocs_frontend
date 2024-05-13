@@ -24,7 +24,7 @@ interface Athlete {
   clube_atual: string;
 }
 
-export default function AthletesList({ newAthlete }: any) {
+export default function AthletesList({ newAthlete, InputFilter }: any) {
   const [page, setPage] = useState(1);
   const { push } = useRouter();
   const [athletes, setAthletes] = useState<Athlete[]>([]);
@@ -93,6 +93,23 @@ export default function AthletesList({ newAthlete }: any) {
     // console.log(isLoadingPDF);
     setLoadingPDF(isLoadingPDF);
   };
+
+  const searchAthlete = () => {
+    const fetchUpdatedAthletesData = async () => {
+      try {
+        const athletesData = await getAthletes(1, InputFilter);
+        setAthletes((prevAthletes) => [...prevAthletes, newAthlete]);
+        setTotalRow(athletesData.total);
+        setPage(1)
+      } catch (error) {
+        console.error("Error fetching athletes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUpdatedAthletesData();
+  }
 
   if (loading) {
     return (

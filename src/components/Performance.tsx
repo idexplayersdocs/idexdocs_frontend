@@ -19,6 +19,21 @@ import { getPhysical } from '@/pages/api/http-service/physical';
 import { getObservations, saveObservations } from '@/pages/api/http-service/observations';
 import { Bounce, toast } from 'react-toastify';
 import PerformanceCreation from './modal/PerformanceCreation';
+import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
+
+const styleCaracteristic = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 1000,
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  height: 650,
+  overflow: 'auto'
+};
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -73,7 +88,29 @@ export default function Performance({athleteData}: any) {
 
 
   const handleOpenPerformanceCreation = () => setOpenPerformanceCreation(true);
-  const handleClosePerformanceCreation = () => setOpenPerformanceCreation(false);
+  const handleClosePerformanceCreation = () => {
+    setOpenPerformanceCreation(false)
+    const fetchAthletesData = async () => {
+      try {
+        const characteristic = await getPhysical(athleteId, 1, athleteData.posicao_primaria);
+        setDataCharacteristic(characteristic?.data);
+
+      }  catch(error: any){
+        toast.error(error.response.data.errors[0].message, {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+          });
+          console.error('Error:', error);
+      }
+    }
+    fetchAthletesData()
+  };
 
   const handleOpenInfo = () => setOpenInfo(true);
   const handleCloseInfo = () => setOpenInfo(false);
@@ -81,42 +118,42 @@ export default function Performance({athleteData}: any) {
   const [labelCharacteristic, setLabelCharacteristic] = useState<any>(() => {
     if (athleteData && athleteData.posicao_primaria.toLowerCase() === 'atacante') {
       return {
-        fisico: ['Data', 'Estatura', 'Velocidade', '1 x 1 Ofensivo', 'Desmarques', 'Controle de Bola', 'Cruzamento', 'Finalização', 'Total', 'Media'],
+        fisico: ['Data', 'Estatura', 'Velocidade', '1 x 1 Ofensivo', 'Desmarques', 'Controle de Bola', 'Cruzamento', 'Finalização', 'Total', 'Média'],
         tecnico: ['Data', 'Visão Espacial', 'Domínio Orientado', 'Dribles em Diagonal', 'Leitura de Jogo', 'Reação Pós Perda', 'Total', 'Média'],
         psicologico: ['Data','Liderança', 'Coragem/Confiança', 'Concetração/Responsabilidade','Controle do Estresse', 'Total', 'Média']
       };
     } 
     else if(athleteData && athleteData.posicao_primaria.toLowerCase() === 'lateral') {
       return {
-        fisico: ['Data', 'Estatura', 'Velocidade', 'Passe Curto', 'Passe Longo', 'Capacidade Aeróbia', 'Fechamento Defensivo', 'Total', 'Media'],
+        fisico: ['Data', 'Estatura', 'Velocidade', 'Passe Curto', 'Passe Longo', 'Capacidade Aeróbia', 'Fechamento Defensivo', 'Total', 'Média'],
         tecnico: ['Data', 'Leitura de Jogo', 'Participação Ofensiva', 'Cruzamento', 'Jogo Aéreo', 'Condução Bola', 'Total', 'Média'],
         psicologico: ['Data','Liderança', 'Confiança', 'Inteligência Tática','Competitividade', 'Total', 'Média']
       };
     }
     else if(athleteData && athleteData.posicao_primaria.toLowerCase() === 'meia') {
       return {
-        fisico: ['Data', 'Estatura', 'Velocidade', 'Leitura de Jogo', 'Desmarques', 'Controle de Bola', 'Capacidade Aeróbia', 'Finalização', 'Total', 'Media'],
+        fisico: ['Data', 'Estatura', 'Velocidade', 'Leitura de Jogo', 'Desmarques', 'Controle de Bola', 'Capacidade Aeróbia', 'Finalização', 'Total', 'Média'],
         tecnico: ['Data', 'Visão Espacial', 'Domíinio Orientado', 'Dribles', 'Organização Ação Ofensiva', 'Pisada na Área para Finalizar', 'Total', 'Média'],
         psicologico: ['Data','Criatividade', 'Capacidade de Decisão', 'Confiança','Inteligência Tática', 'Competitividade', 'Total', 'Média']
       };
     }
     else if(athleteData && athleteData.posicao_primaria.toLowerCase() === 'zagueiro') {
       return {
-        fisico: ['Data', 'Estatura', 'Força', 'Passe Curto', 'Passe Longo', 'Jogo Aéreo', 'Confronto Defensivo', 'Total', 'Media'],
+        fisico: ['Data', 'Estatura', 'Força', 'Passe Curto', 'Passe Longo', 'Jogo Aéreo', 'Confronto Defensivo', 'Total', 'Média'],
         tecnico: ['Data', 'Leitura de Jogo', 'Ambidestria', 'Participação Ofensiva', 'Cabeceio Ofensivo', 'Passe Entre Linhas', 'Total', 'Média'],
         psicologico: ['Data','Liderança', 'Confiança','Inteligência Tática', 'Competitividade', 'Total', 'Média']
       };
     }
     else if(athleteData && athleteData.posicao_primaria.toLowerCase() === 'goleiro') {
       return {
-        fisico: ['Data', 'Perfil', 'Maturação', 'Agilidade', 'Velocidade Membros Superiores', 'Flexibilidade', 'Posicionamento', 'Total', 'Media'],
+        fisico: ['Data', 'Perfil', 'Maturação', 'Agilidade', 'Velocidade Membros Superiores', 'Flexibilidade', 'Posicionamento', 'Total', 'Média'],
         tecnico: ['Data', 'Leitura de Jogo', 'Jogo com Pés', 'Organização da Defesa', 'Domínio Coberturas e Saídas', 'Passe Entre Linhas', 'Total', 'Média'],
         psicologico: ['Data','Liderança', 'Coragem', 'Concentração', 'Controle Estresse', 'Total', 'Média']
       };
     }
     else if(athleteData && athleteData.posicao_primaria.toLowerCase() === 'volante') {
       return {
-        fisico: ['Data', 'Estatura', 'Força', 'Passe Curto', 'Capacidade Aeróbia', 'Dinâmica', 'Visão Espacial', 'Total', 'Media'],
+        fisico: ['Data', 'Estatura', 'Força', 'Passe Curto', 'Capacidade Aeróbia', 'Dinâmica', 'Visão Espacial', 'Total', 'Média'],
         tecnico: ['Data', 'Leitura de Jogo', 'Domínio Orientado', 'Jogo Aéreo Ofensivo', 'Passes Verticais', 'Finalização Média Distância', 'Total', 'Média'],
         psicologico: ['Data','Liderança', 'Confiança','Inteligência Tática', 'Competitividade', 'Total', 'Média']
       };
@@ -276,8 +313,8 @@ export default function Performance({athleteData}: any) {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <Box sx={style}>
-              <PerformanceCreation closeModal={handleClosePerformanceCreation} athleteId={athleteId} dataList={dataCharacteristic} labelList={labelCharacteristic}/>
+            <Box sx={styleCaracteristic}>
+              <PerformanceCreation closeModal={handleClosePerformanceCreation} athleteData={athleteData} dataList={dataCharacteristic} labelList={labelCharacteristic} athleteId={athleteId}/>
             </Box>
           </Modal>
     </div>

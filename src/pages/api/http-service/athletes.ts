@@ -6,9 +6,14 @@ import 'react-toastify/dist/ReactToastify.css';
 // const apiURL = process.env.NEXT_PUBLIC_API_URL;
 const apiURL = 'https://idexdocs-api.azurewebsites.net';
 
-export const getAthletes = async (page:number) => {
+export const getAthletes = async (page:number, athlete: string | null = '') => {
   try {
-    const response = await axios.get(`${apiURL}/atleta?per_page=10&page=${page}`);
+    let url = `${apiURL}/atleta?per_page=10&page=${page}`
+    if(athlete !== ''){
+      url += `atleta=${athlete}`
+    }
+    
+    const response = await axios.get(url);
     return response.data;
   } catch (error) {
     console.error('Error fetching users:', error);

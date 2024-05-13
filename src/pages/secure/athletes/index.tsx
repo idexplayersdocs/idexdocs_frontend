@@ -10,7 +10,7 @@ import { createAthlete, getAthletes, uploadImageAthlete } from "@/pages/api/http
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAsterisk, faX } from "@fortawesome/free-solid-svg-icons";
+import { faAsterisk, faMagnifyingGlass, faX } from "@fortawesome/free-solid-svg-icons";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -44,6 +44,7 @@ export default function Athletes() {
   const [newAthlere, setNewAthlere]:any = useState();
   const [athletes, setAthletes] = useState<any[]>([]);
   const [totalRow, setTotalRow]: any = useState();
+  const [inputFilter, setInputFilter] = useState('');
 
   const [formData, setFormData] = useState({
     nome: '',
@@ -195,19 +196,31 @@ export default function Athletes() {
     }
   };
 
+  
+  const handleInputFilter = (event: any) => {
+    setInputFilter(event.target.value);
+  };
+
+
+
   return (
     <>
       <Header />
       <div className="d-flex justify-content-between align-items-center m-3">
         <Title title="Atletas" />
-        <Search />
+        <div className="input-group w-50">
+          <input type="text" className="form-control bg-dark" placeholder="Search" aria-label="Search" aria-describedby="inputSearch" value={inputFilter} onChange={handleInputFilter} />
+          <span className="input-group-text d-flex justify-content-center" id="inputSearch">
+            <FontAwesomeIcon icon={faMagnifyingGlass} size="lg"/>
+          </span>
+        </div>
       </div>
       <div className="d-flex justify-content-end w-100">
         <div className="me-3" onClick={handleOpenCreateAthlete}>
           <AddButton />
         </div>
       </div>
-      <AthletesList newAthlete={newAthlere}/>
+      <AthletesList newAthlete={newAthlere} inputFilter={inputFilter}/>
       <Modal
         open={openCreateAthlete}
         onClose={handleCloseCreateAthlete}

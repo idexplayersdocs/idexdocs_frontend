@@ -26,25 +26,21 @@ const style = {
   p: 4,
 };
 
-export default function PerformanceCreation({closeModal, athleteId, dataList, labelList}: any) {
+export default function PerformanceCreation({closeModal, athleteData, dataList, labelList, athleteId}: any) {
   const effectRan = useRef(false);
   const [loading, setLoading] = useState(false);
   const [formDataList, setFormDataList] = useState(dataList)
+  const [formDate, setFormDate] = useState<any>('')
 
   const handleCloseModal = () => {
     closeModal();
   };
-  // console.log(labelList)
-  // console.log(dataList)
-
 
   //--Label--//
   // Fisico
-const reorderedKeysLabelFisico = labelList.fisico.filter((item:any) => item !== "Total" && item !== "Media");
-const reorderedKeysLabelTecnico = labelList.tecnico.filter((item:any) => item !== "Total" && item !== "Media");
-
-
-
+  const reorderedKeysLabelFisico = labelList.fisico.filter((item:any) => item !== "Total" && item !== "Média" && item !== "Data");
+  const reorderedKeysLabelTecnico = labelList.tecnico.filter((item:any) => item !== "Total" && item !== "Média" && item !== "Data");
+  const reorderedKeysLabelPsicologico = labelList.psicologico.filter((item:any) => item !== "Total" && item !== "Média" && item !== "Data");
 
   //--Dados--//
   // Fisico
@@ -58,41 +54,154 @@ const reorderedKeysLabelTecnico = labelList.tecnico.filter((item:any) => item !=
     return newItem; 
   });
 
-const reorderedKeysDataFisico: { [key: string]: any } = {
-  ['data_avaliacao']: dataFisico[0]['data_avaliacao'],
-  ...Object.entries(dataFisico[0])
-      .filter(([key]) => key !== 'sum' && key !== 'mean' && key !== 'data_avaliacao')
-      .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
-};
-const [formDataListFisico, setFormDataListFisico] = useState(reorderedKeysDataFisico)
+  const reorderedKeysDataFisico: { [key: string]: any } = {
+    // ['data_avaliacao']: dataFisico[0]['data_avaliacao'],
+    ...Object.entries(dataFisico[0])
+        .filter(([key]) => key !== 'sum' && key !== 'mean' && key !== 'data_avaliacao')
+        .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+  };
+  const [formDataListFisico, setFormDataListFisico] = useState(reorderedKeysDataFisico);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeFisico = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormDataListFisico((prevState: any) => ({
       ...prevState,
       [name]: value,
     }));
-    console.log(formDataListFisico)
   };
 
+  // Tecnico
+  const dataTecnico = dataList.tecnico.map((item: any) => {
+    const newItem = { ...item }; 
+    for (const key in newItem) {
+        if (newItem.hasOwnProperty(key)) {
+            newItem[key] = ''; 
+        }
+    }
+    return newItem; 
+  });
 
+  const reorderedKeysDataTecnico: { [key: string]: any } = {
+    // ['data_avaliacao']: dataTecnico[0]['data_avaliacao'],
+    ...Object.entries(dataTecnico[0])
+        .filter(([key]) => key !== 'sum' && key !== 'mean' && key !== 'data_avaliacao')
+        .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+  };
+  const [formDataListTecnico, setFormDataListTecnico] = useState(reorderedKeysDataTecnico)
+
+    const handleChangeTecnico = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.target;
+      setFormDataListTecnico((prevState: any) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    };
+
+    // Psicologico
+    const dataPsicologico = dataList.psicologico.map((item: any) => {
+      const newItem = { ...item }; 
+      for (const key in newItem) {
+          if (newItem.hasOwnProperty(key)) {
+              newItem[key] = ''; 
+          }
+      }
+      return newItem; 
+    });
+  
+    const reorderedKeysDataPsicologico: { [key: string]: any } = {
+      // ['data_avaliacao']: dataPsicologico[0]['data_avaliacao'],
+      ...Object.entries(dataPsicologico[0])
+          .filter(([key]) => key !== 'sum' && key !== 'mean' && key !== 'data_avaliacao')
+          .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+    };
+    const [formDataListPsicologico, setFormDataListPsicologico] = useState(reorderedKeysDataPsicologico)
+  
+      const handleChangePsicologico = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setFormDataListPsicologico((prevState: any) => ({
+          ...prevState,
+          [name]: value,
+        }));
+      };
+
+    const handleInputDate = (event: any) => {
+      setFormDate(event.target.value)
+    };
 
   const handleSaverRegister = async () => {
     setLoading(true);
     try {
-      console.log(formDataListFisico)
-      // const request = {
-      //   ...formDataListFisico,
-      //   clube: formClube,
-      //   contrato: formContrato,
-      // };
+      
+      const request = {
+        ...formDataListFisico,
+        ...formDataListTecnico,
+        ...formDataListPsicologico,
+        data_avaliacao: formDate,
+        caracteristica: athleteData.posicao_primaria,
+        atleta_id: athleteId
+      };
+      const response = await createPhysical(request);
 
-      // const response = await createPhysical(formRegisterPhysical);
-      // handleCloseRegisterPhysical();
-      // setPage(1)
-      // const clubList = await getPhysical(athleteId, page, 'fisico');
-      // setPhysical(clubList?.data);
-      // setTotalRow(clubList?.total);
+      if(response){
+
+        // Fisico
+        const dataFisico = dataList.fisico.map((item: any) => {
+          const newItem = { ...item }; 
+          for (const key in newItem) {
+              if (newItem.hasOwnProperty(key)) {
+                  newItem[key] = ''; 
+              }
+          }
+          return newItem; 
+        });
+  
+        const reorderedKeysDataFisico: { [key: string]: any } = {
+          ...Object.entries(dataFisico[0])
+              .filter(([key]) => key !== 'sum' && key !== 'mean' && key !== 'data_avaliacao')
+              .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+        };
+        setFormDataListFisico(reorderedKeysDataFisico);
+  
+        // Tecnico
+        const dataTecnico = dataList.tecnico.map((item: any) => {
+          const newItem = { ...item }; 
+          for (const key in newItem) {
+              if (newItem.hasOwnProperty(key)) {
+                  newItem[key] = ''; 
+              }
+          }
+          return newItem; 
+        });
+  
+        const reorderedKeysDataTecnico: { [key: string]: any } = {
+          ...Object.entries(dataTecnico[0])
+              .filter(([key]) => key !== 'sum' && key !== 'mean' && key !== 'data_avaliacao')
+              .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+        };
+        setFormDataListTecnico(reorderedKeysDataTecnico);
+  
+        // Psicologico
+        const dataPsicologico = dataList.psicologico.map((item: any) => {
+          const newItem = { ...item }; 
+          for (const key in newItem) {
+              if (newItem.hasOwnProperty(key)) {
+                  newItem[key] = ''; 
+              }
+          }
+          return newItem; 
+        });
+      
+        const reorderedKeysDataPsicologico: { [key: string]: any } = {
+          ...Object.entries(dataPsicologico[0])
+              .filter(([key]) => key !== 'sum' && key !== 'mean' && key !== 'data_avaliacao')
+              .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
+        };
+        setFormDataListPsicologico(reorderedKeysDataPsicologico);
+  
+  
+        handleCloseModal();
+      }
+
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
         position: "bottom-center",
@@ -127,6 +236,10 @@ const [formDataListFisico, setFormDataListFisico] = useState(reorderedKeysDataFi
         <FontAwesomeIcon icon={faX} color='white' size='xl' style={{cursor: 'pointer'}} onClick={handleCloseModal}/>
       </div>
       <hr />
+      <div className="d-flex flex-column w-25 mt-3 mb-5">
+        <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
+        <input type="date" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="formDate" style={{height:'45px'}} value={formDate} onChange={handleInputDate}/>
+      </div>
       <div className='row' style={{maxHeight: '500px', overflow: 'auto'}}>
       <div className='col' style={{borderRight: '1px solid white'}}>
         <h3>PERFIL FÍSICO E TÉCNICO</h3>
@@ -134,19 +247,52 @@ const [formDataListFisico, setFormDataListFisico] = useState(reorderedKeysDataFi
           <div key={index} className="d-flex flex-column w-100 mt-3">
             <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
             <input 
-              type={Object.keys(formDataListFisico)[index] === 'data_avaliacao' ? 'date' : 'number'} 
+              type="number" 
               className="form-control input-create input-date bg-dark" 
               placeholder={label} 
               name={Object.keys(formDataListFisico)[index]}
               style={{height:'45px'}} 
-              value={formDataListFisico[formDataListFisico[index]]} // Usando o labelMapping para acessar o valor correto em formDataListFisico
-              // value={formDataListFisico[Object.keys(formDataListFisico)[0]]} 
-              onChange={handleChange}
+              value={formDataListFisico[formDataListFisico[index]]}
+              onChange={handleChangeFisico}
             />
           </div>
         ))}
       </div>
-      <div className='ms-3 d-flex flex-column' style={{width: '98%'}}>
+      <div className='col' style={{borderRight: '1px solid white'}}>
+        <h3>PERFIL TÉCNICO DIFERENCIAL</h3>
+        {reorderedKeysLabelTecnico.map((label: any, index: number) => (
+          <div key={index} className="d-flex flex-column w-100 mt-3">
+            <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
+            <input 
+              type="number"  
+              className="form-control input-create input-date bg-dark" 
+              placeholder={label} 
+              name={Object.keys(formDataListTecnico)[index]}
+              style={{height:'45px'}} 
+              value={formDataListTecnico[formDataListTecnico[index]]}
+              onChange={handleChangeTecnico}
+            />
+          </div>
+        ))}
+      </div>
+      <div className='col' style={{borderRight: '1px solid white'}}>
+        <h3>PERFIL PSICOLÓGICO</h3>
+        {reorderedKeysLabelPsicologico.map((label: any, index: number) => (
+          <div key={index} className="d-flex flex-column w-100 mt-3">
+            <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
+            <input 
+              type="number"
+              className="form-control input-create input-date bg-dark" 
+              placeholder={label} 
+              name={Object.keys(formDataListPsicologico)[index]}
+              style={{height:'45px'}} 
+              value={formDataListPsicologico[formDataListPsicologico[index]]}
+              onChange={handleChangePsicologico}
+            />
+          </div>
+        ))}
+      </div>
+      <div className='ms-3 d-flex flex-column mt-3' style={{width: '98%'}}>
         <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaverRegister}>Salvar</button>
         </div>
       </div>
