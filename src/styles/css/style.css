@@ -1,0 +1,256 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+:root {
+  --bg-primary-color: #3c3c3c;
+  --bg-secondary-color: #626262;
+  --bg-ternary-color: #ff781d;
+
+  --text-color-white: white;
+  --text-color-subtitle: #aaaaaa;
+
+  --color-line: white;
+}
+
+body {
+  background-color: var(--bg-primary-color) !important;
+  font-family: "Roboto", sans-serif !important;
+  overflow-x: hidden;
+}
+hr {
+  border-top: 5px solid var(--bg-ternary-color) !important;
+  opacity: 1 !important;
+}
+
+.title {
+  color: var(--text-color-white) !important;
+  text-transform: uppercase !important;
+}
+.subtitle {
+  color: var(--text-color-white) !important;
+  text-transform: uppercase !important;
+  font-size: 20px !important;
+  margin-left: 15px !important;
+  display: flex !important;
+  align-self: flex-start !important;
+}
+
+.bg-dark {
+  background-color: var(--bg-primary-color) !important;
+}
+
+.input-group-text {
+  background-color: var(--bg-secondary-color) !important;
+  border-color: var(--bg-secondary-color) !important;
+  border-radius: 0 20px 20px 0 !important;
+  width: 20% !important;
+  :hover {
+    cursor: pointer !important;
+  }
+}
+
+.form-control {
+  color: var(--text-color-white) !important;
+  height: 55px !important;
+  border-radius: 20px 0 0 20px !important;
+  border: var(--bg-secondary-color) 4px solid !important;
+}
+
+.form-control::-webkit-input-placeholder {
+  color: var(--bg-secondary-color) !important;
+  font-size: larger !important;
+}
+
+.form-control:-moz-placeholder {
+  color: var(--bg-secondary-color) !important;
+  font-size: larger !important;
+}
+
+.form-control::-moz-placeholder {
+  color: var(--bg-secondary-color) !important;
+  font-size: larger !important;
+}
+
+.form-control:-ms-input-placeholder {
+  color: var(--bg-secondary-color) !important;
+  font-size: larger !important;
+}
+.table-dark {
+  background-color: var(--bg-secondary-color) !important;
+}
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-bg-type: var(--bg-primary-color) !important;
+}
+
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiPaginationItem-icon.css-n8417t-MuiSvgIcon-root-MuiPaginationItem-icon {
+  color: var(--text-color-white) !important;
+}
+button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeLarge.MuiPaginationItem-outlined.MuiPaginationItem-circular.Mui-selected.MuiPaginationItem-page.css-ax94ij-MuiButtonBase-root-MuiPaginationItem-root {
+  color: var(--text-color-white) !important;
+  background-color: var(--bg-ternary-color) !important;
+}
+button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeLarge.MuiPaginationItem-outlined.MuiPaginationItem-circular.MuiPaginationItem-page.css-ax94ij-MuiButtonBase-root-MuiPaginationItem-root {
+  color: var(--text-color-white) !important;
+}
+
+.sidebar__background {
+  background-color: var(--bg-secondary-color) !important;
+}
+
+.title-sidebar {
+  font-size: 20px !important;
+  color: var(--text-color-white) !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  -webkit-hyphens: auto !important;
+  -ms-hyphens: auto !important;
+  hyphens: auto !important;
+}
+
+.subtitle-sidebar {
+  font-size: 16px;
+  color: var(--text-color-subtitle) !important;
+  text-transform: uppercase !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  -webkit-hyphens: auto !important;
+  -ms-hyphens: auto !important;
+  hyphens: auto !important;
+}
+
+.force-scrool {
+  overflow: auto !important;
+  width: 97% !important;
+}
+
+textarea {
+  background-color: var(--bg-primary-color) !important;
+  border-radius: 15px !important;
+  padding: 10px !important;
+  color: var(--text-color-white) !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px !important;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey !important;
+  border-radius: 10px !important;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--bg-ternary-color) !important;
+  border-radius: 10px !important;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bg-ternary-color) !important;
+}
+
+.athlete-detail-card {
+  border-radius: 0 10px 10px 10px !important;
+  /* height: 900px !important; */
+}
+
+.nav-link {
+  background: #474747 !important;
+  border-radius: 10px 10px 0 0 !important;
+  color: var(--text-color-white) !important;
+}
+.nav-link:hover {
+  border: var(--bg-secondary-color) 1px solid !important;
+  background: var(--bg-secondary-color) !important;
+}
+
+a.nav-link.active {
+  background-color: var(--bg-secondary-color) !important;
+  border: none !important;
+  color: var(--text-color-white) !important;
+  border-radius: 10px 10px 0 0 !important;
+}
+
+.nav.nav-tabs {
+  border: none !important;
+}
+.btn-modal-color {
+  background-color: var(--bg-primary-color) !important;
+  color: var(--text-color-white) !important;
+  text-transform: uppercase !important;
+  border-radius: 10px !important;
+}
+.btn-modal-color:hover {
+  background: var(--bg-ternary-color) !important;
+}
+
+.custom-tooltip {
+  --bs-tooltip-bg: var(--bg-ternary-color) !important;
+  --bs-tooltip-color: var(--text-color-white) !important;
+}
+th.table-dark.text-center {
+  background-color: var(--bg-ternary-color) !important;
+}
+.table-color-custom {
+  background-color: var(--bg-ternary-color) !important;
+}
+.btn-success {
+  background-color: var(--bg-ternary-color) !important;
+}
+.btn-success:hover {
+  background-color: #c95c14 !important;
+}
+
+.table-body {
+  width: 145px !important;
+}
+.table-header {
+  width: 350px !important;
+}
+.input-create {
+  border-radius: 20px !important;
+}
+.input-date {
+  color-scheme: dark !important;
+}
+
+.form-select {
+  border-radius: 20px !important;
+  background-color: var(--bg-primary-color) !important;
+  color: white;
+  border: 4.7px solid var(--bg-secondary-color) !important;
+  height: 55px !important;
+}
+
+select:invalid {
+  color: gray !important;
+}
+
+select option[disabled] {
+  color: #999 !important; /* Cor do texto de placeholder */
+}
+
+@media print {
+  .hideOnScreen {
+    display: block !important;
+  }
+}
+.hideOnScreen {
+  transform: translateX(200%) !important;
+  margin: 0 auto !important;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+h3{
+  color: var(--text-color-white) !important;
+  text-transform: uppercase !important;
+  font-size: 18px !important;
+  margin-left: 15px !important;
+  display: flex !important;
+  align-self: flex-start !important;
+}
