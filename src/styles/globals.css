@@ -40,6 +40,10 @@ hr {
 .bg-dark-custom {
   background-color: var(--bg-primary-color) !important;
 }
+input.form-control.bg-dark-custom-input {
+  background-color: var(--bg-primary-color) !important;
+  border-right: 0 !important;
+}
 
 .input-group-text {
   background-color: var(--bg-secondary-color) !important;
@@ -251,11 +255,22 @@ select option[disabled] {
   background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
-h3{
+h3 {
   color: var(--text-color-white) !important;
   text-transform: uppercase !important;
   font-size: 18px !important;
   margin-left: 15px !important;
   display: flex !important;
   align-self: flex-start !important;
+}
+
+.clear-input {
+  color: white;
+  border: 4px solid var(--bg-secondary-color) !important;
+  border-left: 0 !important; 
+  background-color: var(--bg-primary-color) !important;
+  width: 10% !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -32,7 +32,8 @@ const styleCaracteristic = {
   boxShadow: 24,
   p: 4,
   height: 650,
-  overflow: 'auto'
+  overflow: 'auto',
+  borderRadius: '20px',
 };
 
 const style = {
@@ -45,6 +46,7 @@ const style = {
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
+  borderRadius: '20px',
 };
 
 const styleInfo = {
@@ -57,6 +59,7 @@ const styleInfo = {
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
+  borderRadius: '20px',
 };
 
 export default function Performance({athleteData}: any) {

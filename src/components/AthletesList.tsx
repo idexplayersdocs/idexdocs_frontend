@@ -24,7 +24,7 @@ interface Athlete {
   clube_atual: string;
 }
 
-export default function AthletesList({ newAthlete, InputFilter }: any) {
+export default function AthletesList({ newAthlete, inputFilter, searchFilter }: any) {
   const [page, setPage] = useState(1);
   const { push } = useRouter();
   const [athletes, setAthletes] = useState<Athlete[]>([]);
@@ -55,7 +55,7 @@ export default function AthletesList({ newAthlete, InputFilter }: any) {
     if (newAthlete) {
       const fetchUpdatedAthletesData = async () => {
         try {
-          const athletesData = await getAthletes(1);
+          const athletesData = await getAthletes(1, inputFilter);
           setAthletes((prevAthletes) => [...prevAthletes, newAthlete]);
           setTotalRow(athletesData.total);
         } catch (error) {
@@ -67,7 +67,7 @@ export default function AthletesList({ newAthlete, InputFilter }: any) {
 
       fetchUpdatedAthletesData();
     }
-  }, [newAthlete]);
+  }, [newAthlete, inputFilter]);
 
   const handleEditAthlete = (id: number) => {
     push(`/secure/athletes/${id}/athleteDetail`);
@@ -82,7 +82,6 @@ export default function AthletesList({ newAthlete, InputFilter }: any) {
       const res = await PDFInfo(id);
       setAtletaInfo(res);
       setModalPdfOpen(true);
-      console.log(res);
     } catch (e: unknown) {
     } finally {
       setLoading(false);
@@ -94,22 +93,38 @@ export default function AthletesList({ newAthlete, InputFilter }: any) {
     setLoadingPDF(isLoadingPDF);
   };
 
-  const searchAthlete = () => {
+  // const searchAthlete = () => {
+  //   const fetchUpdatedAthletesData = async () => {
+  //     try {
+  //       const athletesData = await getAthletes(1, inputFilter); // Passando o filtro para a função getAthletes
+  //       setAthletes(athletesData.data);
+  //       setTotalRow(athletesData.total);
+  //       setPage(1);
+  //     } catch (error) {
+  //       console.error("Error fetching athletes:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchUpdatedAthletesData();
+  // };
+
+  useEffect(() => {
     const fetchUpdatedAthletesData = async () => {
       try {
-        const athletesData = await getAthletes(1, InputFilter);
-        setAthletes((prevAthletes) => [...prevAthletes, newAthlete]);
+        const athletesData = await getAthletes(1, inputFilter); // Passando o filtro para a função getAthletes
+        setAthletes(athletesData.data);
         setTotalRow(athletesData.total);
-        setPage(1)
+        setPage(1);
       } catch (error) {
         console.error("Error fetching athletes:", error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchUpdatedAthletesData();
-  }
+  }, [searchFilter]);
 
   if (loading) {
     return (

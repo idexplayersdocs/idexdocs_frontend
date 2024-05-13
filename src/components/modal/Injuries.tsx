@@ -32,6 +32,7 @@ const style = {
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
+  borderRadius: '20px',
 };
 
 export default function Injuries({closeModal, athleteId}: any) {

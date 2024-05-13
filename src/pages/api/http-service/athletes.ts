@@ -10,7 +10,7 @@ export const getAthletes = async (page:number, athlete: string | null = '') => {
   try {
     let url = `${apiURL}/atleta?per_page=10&page=${page}`
     if(athlete !== ''){
-      url += `atleta=${athlete}`
+      url += `&atleta=${athlete}`
     }
     
     const response = await axios.get(url);

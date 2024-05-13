@@ -44,7 +44,7 @@ export default function Athletes() {
   const [newAthlere, setNewAthlere]:any = useState();
   const [athletes, setAthletes] = useState<any[]>([]);
   const [totalRow, setTotalRow]: any = useState();
-  const [inputFilter, setInputFilter] = useState('');
+  const [inputFilter, setInputFilter]: any = useState('');
 
   const [formData, setFormData] = useState({
     nome: '',
@@ -196,23 +196,34 @@ export default function Athletes() {
     }
   };
 
-  
+
   const handleInputFilter = (event: any) => {
     setInputFilter(event.target.value);
   };
-  const searchFilter = () => {
-    console.log(inputFilter)
-  }
 
+  const [clickCount, setClickCount] = useState(0);
+
+  const handleClick = () => {
+    setClickCount(clickCount + 1);
+  };
+
+  const handleClickClear = () => {
+    setInputFilter('')
+    setClickCount(clickCount + 1);
+  };
+  
   return (
     <>
       <Header />
       <div className="d-flex justify-content-between align-items-center m-3">
         <Title title="Atletas" />
         <div className="input-group w-50">
-          <input type="text" className="form-control bg-dark-custom " placeholder="Search" aria-label="Search" aria-describedby="inputSearch" value={inputFilter} onChange={handleInputFilter} />
-          <span className="input-group-text d-flex justify-content-center" id="inputSearch" onClick={searchFilter}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} size="lg"/>
+          <input type="text" className="form-control bg-dark-custom-input " placeholder="Search" aria-label="Search" aria-describedby="inputSearch" value={inputFilter} onChange={handleInputFilter} />
+            <span className="clear-input" style={{cursor: 'pointer'}} onClick={handleClickClear}>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff",}} />
+            </span>
+          <span className="input-group-text d-flex justify-content-center" id="inputSearch" onClick={handleClick}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" style={{color: "#ffffff",}}/>
           </span>
         </div>
       </div>
@@ -221,7 +232,7 @@ export default function Athletes() {
           <AddButton />
         </div>
       </div>
-      <AthletesList newAthlete={newAthlere} inputFilter={inputFilter}/>
+      <AthletesList newAthlete={newAthlere} inputFilter={inputFilter} searchFilter={clickCount}/>
       <Modal
         open={openCreateAthlete}
         onClose={handleCloseCreateAthlete}
@@ -230,8 +241,7 @@ export default function Athletes() {
         <Box sx={style}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Criação do atleta"/>
-            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateAthlete}
-/>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateAthlete}/>
           </div>
           <hr />
           <div className="d-flex justify-content-between" style={{height:'520px'}}>

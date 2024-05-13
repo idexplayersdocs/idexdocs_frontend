@@ -24,6 +24,7 @@ const style = {
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
+  borderRadius: '20px',
 };
 
 export default function PerformanceCreation({closeModal, athleteData, dataList, labelList, athleteId}: any) {
@@ -299,5 +300,4 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
       <ToastContainer />
     </>
   );
-  
 }

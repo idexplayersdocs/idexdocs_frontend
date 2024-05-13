@@ -347,11 +347,11 @@ export default function AthleteDetail() {
         </div>
         <div className="col-10">
           <ul className="nav nav-tabs">
-            <li className="nav-item me-1">
+            <li className="nav-item me-1" style={{cursor: 'pointer'}}>
               <a className={ tabAtual === 'relationship' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('relationship')}>Relacionamento</a>
               {/* <a className="nav-link active" aria-current="page" href={`/secure/athletes/${athleteId}/athleteRelationship`}>Relacionamento</a> */}
             </li>
-            <li className="nav-item">
+            <li className="nav-item" style={{cursor: 'pointer'}}>
               <a className={ tabAtual === 'performance' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('performance')}>Desempenho</a>
               {/* <a className="nav-link" aria-current="page" href={`/secure/athletes/${athleteId}/athletePerformance`}>Desempenho</a> */}
             </li>

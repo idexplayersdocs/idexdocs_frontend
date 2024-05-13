@@ -25,6 +25,7 @@ const style = {
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
+  borderRadius: '20px',
 };
 
 export default function ClubHistory({closeModal, athleteId}: any) {
@@ -61,6 +62,7 @@ export default function ClubHistory({closeModal, athleteId}: any) {
         setLoading(true);
         try {
           const clubList = await getClub(athleteId, page);
+          console.log(clubList)
           setClub(clubList?.data);
           setTotalRow(clubList?.total);
 
@@ -165,8 +167,8 @@ export default function ClubHistory({closeModal, athleteId}: any) {
                 Array.isArray(club) && club.map((clube, index: number) => (
                   <tr key={index}>
                     <td className="table-dark text-center">{clube.nome}</td>
-                    <td className="table-dark text-center">{moment(clube.data_inicio).format('DD/MM/YYY')}</td>
-                    <td className="table-dark text-center">{clube.data_fim ? clube.data_fim : 'Atual'}</td>
+                    <td className="table-dark text-center">{moment(clube.data_inicio).format('DD/MM/YYYY')}</td>
+                    <td className="table-dark text-center">{clube.data_fim ? moment(clube.data_fim).format('DD/MM/YYYY') : 'Atual'}</td>
                   </tr>
                 ))
               ) : (
