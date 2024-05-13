@@ -186,6 +186,7 @@ export default function Injuries({closeModal, athleteId}: any) {
               onChange={handleChangePageInjuries}
               variant="outlined"
               size="large"
+              sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
             />
         }
       </div>

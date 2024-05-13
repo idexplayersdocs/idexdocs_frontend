@@ -247,6 +247,7 @@ export default function ProfileConfiguration() {
                 onChange={() => {}}
                 variant="outlined"
                 size="large"
+                sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
               />
             )}
           </TabPanel>

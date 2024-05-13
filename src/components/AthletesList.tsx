@@ -13,7 +13,7 @@ import Image from "next/image";
 import { PDFInfo } from "@/pages/api/http-service/pdfService";
 import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
 import AthletePDF from './AthletePDF';
-
+import styles from '@/styles/css/pagination.module.css';
 
 
 interface Athlete {
@@ -189,6 +189,8 @@ export default function AthletesList({ newAthlete, InputFilter }: any) {
             onChange={handleChangePage}
             variant="outlined"
             size="large"
+            sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
+
           />
         )}
         <Modal

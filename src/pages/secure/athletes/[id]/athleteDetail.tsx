@@ -109,8 +109,10 @@ export default function AthleteDetail() {
   
             // Observações
             const responseObservacoes = await getObservations(athleteId, 'relacionamento');
-            let observacao = responseObservacoes?.data[responseObservacoes?.data.length - 1]
-            setObservacao(observacao.descricao);
+            if(responseObservacoes?.data.length > 0){
+              let observacao = responseObservacoes?.data[responseObservacoes?.data.length - 1]
+              setObservacao(observacao.descricao);
+            }
   
           } catch (error:any) {
             toast.error('Dados do atleta temporariamente indisponível', {
@@ -409,6 +411,7 @@ export default function AthleteDetail() {
                   onChange={handleChangePageRalationship}
                   variant="outlined"
                   size="large"
+                  sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
                 />
               }
             </div>
@@ -454,6 +457,7 @@ export default function AthleteDetail() {
                     onChange={handleChangePageSupportControl}
                     variant="outlined"
                     size="large"
+                    sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
                   />
                 }
               </div>

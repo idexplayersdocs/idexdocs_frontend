@@ -81,7 +81,7 @@ hr {
   --bs-table-bg-type: var(--bg-primary-color) !important;
 }
 
-svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiPaginationItem-icon.css-n8417t-MuiSvgIcon-root-MuiPaginationItem-icon {
+/* svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiPaginationItem-icon.css-n8417t-MuiSvgIcon-root-MuiPaginationItem-icon {
   color: var(--text-color-white) !important;
 }
 button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeLarge.MuiPaginationItem-outlined.MuiPaginationItem-circular.Mui-selected.MuiPaginationItem-page.css-ax94ij-MuiButtonBase-root-MuiPaginationItem-root {
@@ -90,7 +90,7 @@ button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeLarge.Mui
 }
 button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeLarge.MuiPaginationItem-outlined.MuiPaginationItem-circular.MuiPaginationItem-page.css-ax94ij-MuiButtonBase-root-MuiPaginationItem-root {
   color: var(--text-color-white) !important;
-}
+} */
 
 .sidebar__background {
   background-color: var(--bg-secondary-color) !important;
