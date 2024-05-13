@@ -203,25 +203,25 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
               <div className='col'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_avaliacao" style={{height:'45px'}} value={formRegisterPhysical.data_avaliacao} onChange={handleInputChangeRegisterPhysical}/>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_avaliacao" style={{height:'45px'}} value={formRegisterPhysical.data_avaliacao} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Envergadura</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="envergadura" style={{height:'45px'}} value={formRegisterPhysical.envergadura} onChange={handleInputChangeRegisterPhysical}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="envergadura" style={{height:'45px'}} value={formRegisterPhysical.envergadura} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Estatura</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="estatura" style={{height:'45px'}} value={formRegisterPhysical.estatura} onChange={handleInputChangeRegisterPhysical}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="estatura" style={{height:'45px'}} value={formRegisterPhysical.estatura} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
               </div>
               <div className='col'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Peso</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="peso" style={{height:'45px'}} value={formRegisterPhysical.peso} onChange={handleInputChangeRegisterPhysical}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="peso" style={{height:'45px'}} value={formRegisterPhysical.peso} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>% Gordura</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="percentual_gordura" style={{height:'45px'}} value={formRegisterPhysical.percentual_gordura} onChange={handleInputChangeRegisterPhysical}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="percentual_gordura" style={{height:'45px'}} value={formRegisterPhysical.percentual_gordura} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
               </div>
             </div>

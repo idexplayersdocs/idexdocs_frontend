@@ -207,7 +207,7 @@ export default function Athletes() {
       <div className="d-flex justify-content-between align-items-center m-3">
         <Title title="Atletas" />
         <div className="input-group w-50">
-          <input type="text" className="form-control bg-dark" placeholder="Search" aria-label="Search" aria-describedby="inputSearch" value={inputFilter} onChange={handleInputFilter} />
+          <input type="text" className="form-control bg-dark-custom " placeholder="Search" aria-label="Search" aria-describedby="inputSearch" value={inputFilter} onChange={handleInputFilter} />
           <span className="input-group-text d-flex justify-content-center" id="inputSearch">
             <FontAwesomeIcon icon={faMagnifyingGlass} size="lg"/>
           </span>
@@ -260,28 +260,28 @@ export default function Athletes() {
                 <label className="ms-3" style={{color: 'white', fontSize: '20px', marginTop:'14px'}}>Nome</label>
                 {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="text" className="form-control input-create bg-dark" placeholder="Digite o nome do atleta" name="nome" value={formData.nome} onChange={handleInputChange} style={{height:'45px'}}/>
+                <input type="text" className="form-control input-create bg-dark-custom " placeholder="Digite o nome do atleta" name="nome" value={formData.nome} onChange={handleInputChange} style={{height:'45px'}}/>
               </div>
               <div className="input w-100 mt-2">
               <div className="d-flex align-items-center">
                 <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data de Nascimento</label>
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_nascimento" value={formData.data_nascimento} onChange={handleInputChange} style={{height:'45px'}}/>
+                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_nascimento" value={formData.data_nascimento} onChange={handleInputChange} style={{height:'45px'}}/>
               </div>
               <div className="input w-100 mt-2">
               <div className="d-flex align-items-center">
                 <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Clube</label>
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="text" className="form-control input-create bg-dark" placeholder="Digite o nome do clube" name="nome" value={formClube.nome} onChange={handleClubeInputChange} style={{height:'45px'}}/>
+                <input type="text" className="form-control input-create bg-dark-custom " placeholder="Digite o nome do clube" name="nome" value={formClube.nome} onChange={handleClubeInputChange} style={{height:'45px'}}/>
               </div>
               <div className="input w-100 mt-2">
               <div className="d-flex align-items-center">
                 <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Início Clube</label>
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_inicio" value={formClube.data_inicio} onChange={handleClubeInputChange} style={{height:'45px'}}/>
+                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_inicio" value={formClube.data_inicio} onChange={handleClubeInputChange} style={{height:'45px'}}/>
               </div>
             </div>
             <div className="w-50 pe-4" style={{marginRight:'-25px'}}>
@@ -303,7 +303,7 @@ export default function Athletes() {
                 <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Início do Contrato</label>
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_inicio" value={formContrato.data_inicio} onChange={handleContratoInputChange} style={{height:'45px', color:'#999'}} onFocus={() => "this.type='date'"} 
+                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_inicio" value={formContrato.data_inicio} onChange={handleContratoInputChange} style={{height:'45px', color:'#999'}} onFocus={() => "this.type='date'"} 
 />
               </div>
               <div className="input w-100 mt-2">
@@ -311,7 +311,7 @@ export default function Athletes() {
                 <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Fim do Contrato</label>
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_fim" value={formContrato.data_fim} onChange={handleContratoInputChange} style={{height:'45px'}}/>
+                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_fim" value={formContrato.data_fim} onChange={handleContratoInputChange} style={{height:'45px'}}/>
               </div>
               <div className="input w-100 mt-2">
                 <div className="d-flex align-items-center">

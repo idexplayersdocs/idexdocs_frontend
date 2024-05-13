@@ -238,7 +238,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
       <hr />
       <div className="d-flex flex-column w-25 mt-3 mb-5">
         <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
-        <input type="date" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="formDate" style={{height:'45px'}} value={formDate} onChange={handleInputDate}/>
+        <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="formDate" style={{height:'45px'}} value={formDate} onChange={handleInputDate}/>
       </div>
       <div className='row' style={{maxHeight: '500px', overflow: 'auto'}}>
       <div className='col' style={{borderRight: '1px solid white'}}>
@@ -248,7 +248,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
             <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
             <input 
               type="number" 
-              className="form-control input-create input-date bg-dark" 
+              className="form-control input-create input-date bg-dark-custom " 
               placeholder={label} 
               name={Object.keys(formDataListFisico)[index]}
               style={{height:'45px'}} 
@@ -265,7 +265,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
             <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
             <input 
               type="number"  
-              className="form-control input-create input-date bg-dark" 
+              className="form-control input-create input-date bg-dark-custom " 
               placeholder={label} 
               name={Object.keys(formDataListTecnico)[index]}
               style={{height:'45px'}} 
@@ -282,7 +282,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
             <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
             <input 
               type="number"
-              className="form-control input-create input-date bg-dark" 
+              className="form-control input-create input-date bg-dark-custom " 
               placeholder={label} 
               name={Object.keys(formDataListPsicologico)[index]}
               style={{height:'45px'}} 

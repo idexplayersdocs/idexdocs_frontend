@@ -109,15 +109,15 @@ export default function ProfileConfiguration() {
               <form>
                 <div>
                   <label className="d-block text-white h4">Nome:</label>
-                  <input type="text" className="form-control input-create bg-dark" />
+                  <input type="text" className="form-control input-create bg-dark-custom " />
                 </div>
                 <div className="mt-4">
                   <label className="d-block text-white h4">Email:</label>
-                  <input type="text" className="form-control input-create bg-dark" />
+                  <input type="text" className="form-control input-create bg-dark-custom " />
                 </div>
                 <div className="mt-4">
                   <label className="d-block text-white h4">Senha:</label>
-                  <input type="password" className="form-control input-create bg-dark" />
+                  <input type="password" className="form-control input-create bg-dark-custom " />
                 </div>
                 <div className="mt-4 d-flex align-items-center justify-content-end">
                   <button className="btn-success btn text-white w-25" type="submit">
@@ -134,7 +134,7 @@ export default function ProfileConfiguration() {
                   <label className="d-block text-white h4">Nome:</label>
                   <input
                     type="text"
-                    className="form-control input-create bg-dark"
+                    className="form-control input-create bg-dark-custom "
                     {...registerCreateUser("nome", {
                       required: true,
                     })}
@@ -145,7 +145,7 @@ export default function ProfileConfiguration() {
                   <label className="d-block text-white h4">Email:</label>
                   <input
                     type="text"
-                    className="form-control input-create bg-dark"
+                    className="form-control input-create bg-dark-custom "
                     {...registerCreateUser("email", {
                       required: true,
                     })}
@@ -156,7 +156,7 @@ export default function ProfileConfiguration() {
                   <label className="d-block text-white h4">Senha:</label>
                   <input
                     type="password"
-                    className="form-control input-create bg-dark"
+                    className="form-control input-create bg-dark-custom "
                     {...registerCreateUser("password", {
                       required: true,
                     })}
@@ -166,7 +166,7 @@ export default function ProfileConfiguration() {
                 <div className="mt-4">
                   <label className="d-block text-white h4">Tipo de usuário:</label>
                   <select
-                    className="form-control input-create bg-dark"
+                    className="form-control input-create bg-dark-custom "
                     {...registerCreateUser("usuario_tipo_id", {
                       required: true,
                     })}

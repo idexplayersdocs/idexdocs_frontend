@@ -34,7 +34,7 @@ hr {
   align-self: flex-start !important;
 }
 
-.bg-dark {
+.bg-dark-custom  {
   background-color: var(--bg-primary-color) !important;
 }
 

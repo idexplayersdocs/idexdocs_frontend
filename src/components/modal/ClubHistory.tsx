@@ -206,7 +206,7 @@ export default function ClubHistory({closeModal, athleteId}: any) {
               <div className=''>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Nome do Clube</label>
-                      <input type="text" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="nome" style={{height:'45px'}} value={formRegisterClub.nome} onChange={handleInputChangeRegisterClub}/>
+                      <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="nome" style={{height:'45px'}} value={formRegisterClub.nome} onChange={handleInputChangeRegisterClub}/>
                 </div>
                 <div className="mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Clube Atual</label>
@@ -228,11 +228,11 @@ export default function ClubHistory({closeModal, athleteId}: any) {
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data de Início</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="data_inicio" style={{height:'45px'}} value={formRegisterClub.data_inicio} onChange={handleInputChangeRegisterClub} />
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_inicio" style={{height:'45px'}} value={formRegisterClub.data_inicio} onChange={handleInputChangeRegisterClub} />
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{formRegisterClub.clube_atual ? 'Data de Término do Clube Anterior': 'Data de Término'}</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="data_fim" style={{height:'45px'}} value={formRegisterClub.data_fim} onChange={handleInputChangeRegisterClub}/>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_fim" style={{height:'45px'}} value={formRegisterClub.data_fim} onChange={handleInputChangeRegisterClub}/>
                 </div>
               </div>
             </div>
