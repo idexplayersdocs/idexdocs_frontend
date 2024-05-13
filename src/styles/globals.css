@@ -34,10 +34,10 @@ hr {
   align-self: flex-start !important;
 }
 
-.bg-dark-custom  {
+.bg-dark {
   background-color: var(--bg-primary-color) !important;
 }
-.bg-dark-custom -custom {
+.bg-dark-custom {
   background-color: var(--bg-primary-color) !important;
 }
 
@@ -201,9 +201,11 @@ th.table-dark.text-center {
 }
 .btn-success {
   background-color: var(--bg-ternary-color) !important;
+  border: none
 }
 .btn-success:hover {
   background-color: #c95c14 !important;
+  border: none
 }
 
 .table-body {

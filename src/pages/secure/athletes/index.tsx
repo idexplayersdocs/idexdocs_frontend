@@ -200,6 +200,9 @@ export default function Athletes() {
   const handleInputFilter = (event: any) => {
     setInputFilter(event.target.value);
   };
+  const searchFilter = () => {
+    console.log(inputFilter)
+  }
 
   return (
     <>
@@ -208,7 +211,7 @@ export default function Athletes() {
         <Title title="Atletas" />
         <div className="input-group w-50">
           <input type="text" className="form-control bg-dark-custom " placeholder="Search" aria-label="Search" aria-describedby="inputSearch" value={inputFilter} onChange={handleInputFilter} />
-          <span className="input-group-text d-flex justify-content-center" id="inputSearch">
+          <span className="input-group-text d-flex justify-content-center" id="inputSearch" onClick={searchFilter}>
             <FontAwesomeIcon icon={faMagnifyingGlass} size="lg"/>
           </span>
         </div>
