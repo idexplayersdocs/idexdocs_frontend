@@ -13,6 +13,8 @@ import Image from "next/image";
 import { PDFInfo } from "@/pages/api/http-service/pdfService";
 import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
 import AthletePDF from './AthletePDF';
+import "@/styles/globals.css";
+
 
 
 
