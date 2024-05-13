@@ -41,8 +41,8 @@ export default function PerformanceCreation({closeModal, athleteId, dataList, la
   //--Label--//
   // Fisico
 const reorderedKeysLabelFisico = labelList.fisico.filter((item:any) => item !== "Total" && item !== "Media");
+const reorderedKeysLabelTecnico = labelList.tecnico.filter((item:any) => item !== "Total" && item !== "Media");
 
-// console.log(reorderedKeysLabelFisico);
 
 
 
@@ -65,12 +65,6 @@ const reorderedKeysDataFisico: { [key: string]: any } = {
       .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
 };
 const [formDataListFisico, setFormDataListFisico] = useState(reorderedKeysDataFisico)
-  // useEffect(() => {
-  //   if (!effectRan.current) {
-  //     setFormDataList(dataList);
-  //     effectRan.current = true;
-  //   }
-  // }, [dataList]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -87,6 +81,11 @@ const [formDataListFisico, setFormDataListFisico] = useState(reorderedKeysDataFi
     setLoading(true);
     try {
       console.log(formDataListFisico)
+      // const request = {
+      //   ...formDataListFisico,
+      //   clube: formClube,
+      //   contrato: formContrato,
+      // };
 
       // const response = await createPhysical(formRegisterPhysical);
       // handleCloseRegisterPhysical();

@@ -47,7 +47,7 @@ export default function AthletePerformance() {
           </li>
         </ul>
           <div className="card athlete-detail-card" style={{backgroundColor: 'var(--bg-secondary-color)', marginRight:'10px'}}>
-              <Performance athleteData={athlete}/>
+              {/* <Performance athleteData={athlete} /> */}
           </div>
         </div>
       </div>
