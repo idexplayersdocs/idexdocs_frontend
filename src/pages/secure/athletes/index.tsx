@@ -201,8 +201,6 @@ export default function Athletes() {
     setInputFilter(event.target.value);
   };
 
-
-
   return (
     <>
       <Header />
