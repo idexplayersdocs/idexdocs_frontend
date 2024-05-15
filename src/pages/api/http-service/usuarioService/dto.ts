@@ -12,8 +12,17 @@ export interface UsuarioResponseDTO {
 }
 
 export interface Usuario {
+  id: number;
   nome: string;
   email: string;
   data_criacao: string;
-  tipo: string;
+  tipo: any;
+}
+
+
+export interface UsuarioUpdateRequestDTO {
+  id: number;
+  nome: string;
+  email: string;
+  usuario_tipo_id: string;
 }

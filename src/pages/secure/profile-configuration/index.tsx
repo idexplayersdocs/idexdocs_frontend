@@ -6,16 +6,25 @@ import Tab from "@mui/material/Tab";
 import React from "react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { UsuarioRequestDTO, UsuarioResponseDTO } from "@/pages/api/http-service/usuarioService/dto";
+import {
+  Usuario,
+  UsuarioRequestDTO,
+  UsuarioResponseDTO,
+  UsuarioUpdateRequestDTO,
+} from "@/pages/api/http-service/usuarioService/dto";
 import { styled } from "@mui/material/styles";
 import { useForm } from "react-hook-form";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { CriarUsuario, Usuarios } from "@/pages/api/http-service/usuarioService";
+import { CriarUsuario, UpdatePassword, UpdateUsuario, Usuarios } from "@/pages/api/http-service/usuarioService";
 import { SnackBar } from "@/components/SnackBar";
 import { LoadingOverlay } from "@/components/LoadingOverley";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPenSquare, faTrash, faX, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { Box, Button, Modal, colors } from "@mui/material";
+import Subtitle from "@/components/Subtitle";
+import { jwtDecode } from "jwt-decode";
+
 
 const StyledTab = styled(Tab)({
   color: "#626262",
@@ -30,6 +39,10 @@ export default function ProfileConfiguration() {
   const [loading, setIsLoading] = React.useState<boolean>(false);
   const [showSnackBar, setShowSnackbar] = React.useState<boolean>(false);
   const [usuarioList, setUsuarioLilst] = React.useState<UsuarioResponseDTO>();
+  const [openModalUpdate, setOpenModalUpdate] = React.useState<boolean>(false);
+  const [updateUserLoading, setUpdateUserLoading] = React.useState<boolean>(false);
+  const [messageSnackBar, setMessageSnackBar] = React.useState<string>("");
+  const [showSnackBarError, setSnackBarError] = React.useState<boolean>(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setTabValue(newValue);
@@ -42,11 +55,28 @@ export default function ProfileConfiguration() {
     formState: { errors: errosUserCreate },
   } = useForm<UsuarioRequestDTO>();
 
+  const {
+    handleSubmit: handleSubmitUpdateUser,
+    register: registerUpdateUser,
+    reset: resetUpdateUser,
+    formState: { errors: errorsUserUpdate },
+    setValue: setValueModal,
+    getValues: getValueModal,
+  } = useForm<UsuarioUpdateRequestDTO>();
+
+  const {
+    register: registerUpdateProfile,
+    setValue: setValueUpdateProfile,
+    handleSubmit: handleSubmitUpdateProfile,
+    formState: { errors: errosUpdateProfile },
+  } = useForm<{ id: number; nome: string; email: string; senha: string; confirmarSenha: string; tipo: string }>();
+
   const onSubmitCreateUser = async (data: UsuarioRequestDTO): Promise<void> => {
     setIsLoading(true);
     try {
       const res = await CriarUsuario(data);
       setShowSnackbar(true);
+      setMessageSnackBar("Usuário criado com sucesso!");
       resetCreateUser();
     } catch (e: unknown) {
     } finally {
@@ -55,7 +85,85 @@ export default function ProfileConfiguration() {
 
     setTimeout(() => {
       setShowSnackbar(false);
-    }, 3000);
+    }, 5000);
+  };
+
+  const onSubmitUpdateUser = async (data: UsuarioUpdateRequestDTO): Promise<void> => {
+    setUpdateUserLoading(true);
+    try {
+      const res = await UpdateUsuario(data);
+      setMessageSnackBar("Usuário Atualizado com sucesso!");
+      setShowSnackbar(true);
+
+      const newListUser = usuarioList;
+      const userModify = newListUser!.data.find((x) => x.id === data.id);
+      userModify!.nome = data.nome;
+      userModify!.email = data.email;
+
+      if (data.usuario_tipo_id === "1") {
+        userModify!.tipo = "admin";
+      }
+
+      if (data.usuario_tipo_id === "2") {
+        userModify!.tipo = "treinador";
+      }
+
+      if (data.usuario_tipo_id === "3") {
+        userModify!.tipo = "externo";
+      }
+
+      setUsuarioLilst({ count: usuarioList!.count, total: usuarioList!.total, data: newListUser!.data! });
+    } catch (e: unknown) {
+      console.log(e);
+    } finally {
+      setUpdateUserLoading(false);
+    }
+
+    setTimeout(() => {
+      setShowSnackbar(false);
+    }, 5000);
+  };
+
+  const onUpdatePerfil = async (data: any) => {
+    setIsLoading(true);
+    try {
+      let tipo = "0";
+
+      if (data.tipo === "admin") {
+        tipo = "1";
+      }
+
+      if (data.tipo === "treinador") {
+        tipo = "2";
+      }
+
+      if (data.tipo === "externo") {
+        tipo = "3";
+      }
+
+      console.log(data);
+
+      const res = await UpdatePassword({ id: data.id, password: data.confirmarSenha, new_password: data.senha });      
+      const resUpdateUser = await UpdateUsuario({
+        email: data.email,
+        id: data.id,
+        nome: data.nome,
+        usuario_tipo_id: tipo,
+      });
+
+      // console.log(resUpdateUser);
+
+    } catch (e) {
+      setMessageSnackBar("Senha anterior inválida. Tente novamente!");
+      setSnackBarError(true);
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+
+    setTimeout(() => {
+      setSnackBarError(false);
+    }, 5000)
   };
 
   const getListUser = async (page: number, perPage: number): Promise<void> => {
@@ -74,14 +182,50 @@ export default function ProfileConfiguration() {
     console.log("DELETAR");
   };
 
-  const onUpdateUser = async (): Promise<void> => {
-    console.log("Atualizar");
+  const handleCloseUpdateModal = () => {
+    setOpenModalUpdate(false);
   };
+
+  const onUpdateUser = async (usuario: Usuario): Promise<void> => {
+    setValueModal("nome", usuario.nome);
+    setValueModal("email", usuario.email);
+
+    switch (usuario.tipo) {
+      case "admin":
+        setValueModal("usuario_tipo_id", "1");
+        break;
+      case "treinador":
+        setValueModal("usuario_tipo_id", "2");
+        break;
+      case "externo":
+        setValueModal("usuario_tipo_id", "3");
+        break;
+    }
+    setValueModal("id", usuario.id);
+    setOpenModalUpdate(true);
+  };
+
+  const setDataUser = (): void => {
+    const token = localStorage.getItem("token");
+    const decoded: any = jwtDecode(token!);
+
+    setValueUpdateProfile("nome", decoded.sub);
+    setValueUpdateProfile("email", decoded.user_name);
+    setValueUpdateProfile("id", decoded.user_id);
+    setValueUpdateProfile("tipo", decoded.roles[0]);
+  };
+
+  const handleChangePage = async (event: any, page: number): Promise<void> => {
+    await getListUser(page, 10);
+  }
+
 
   React.useEffect(() => {
     (async () => {
       await getListUser(1, 10);
     })();
+
+    setDataUser();
   }, []);
 
   return (
@@ -106,18 +250,52 @@ export default function ProfileConfiguration() {
           </TabList>
           <TabPanel value="1">
             <div className="w-75 mx-auto mt-5">
-              <form>
+              <form onSubmit={handleSubmitUpdateProfile(onUpdatePerfil)}>
                 <div>
                   <label className="d-block text-white h4">Nome:</label>
-                  <input type="text" className="form-control input-create bg-dark" />
+                  <input
+                    type="text"
+                    className="form-control input-create bg-dark"
+                    {...registerUpdateProfile("nome", {
+                      required: true,
+                    })}
+                  />
+                  {errosUpdateProfile.nome && <span className="text-danger mt-1 d-block">Nome is required field</span>}
                 </div>
                 <div className="mt-4">
                   <label className="d-block text-white h4">Email:</label>
-                  <input type="text" className="form-control input-create bg-dark" />
+                  <input
+                    type="text"
+                    className="form-control input-create bg-dark"
+                    {...registerUpdateProfile("email", {
+                      required: true,
+                    })}
+                  />
+                  {errosUpdateProfile.email && <span className="text-danger mt-1 d-block">Nome is required field</span>}
                 </div>
                 <div className="mt-4">
-                  <label className="d-block text-white h4">Senha:</label>
-                  <input type="password" className="form-control input-create bg-dark" />
+                  <label className="d-block text-white h4">Senha Anterior:</label>
+                  <input
+                    type="password"
+                    className="form-control input-create bg-dark"
+                    {...registerUpdateProfile("confirmarSenha", {
+                      required: true,
+                    })}
+                  />
+                  {errosUpdateProfile.confirmarSenha && (
+                    <span className="text-danger mt-1 d-block">Nome is required field</span>
+                  )}
+                </div>
+                <div className="mt-4">
+                  <label className="d-block text-white h4">Nova Senha:</label>
+                  <input
+                    type="password"
+                    className="form-control input-create bg-dark"
+                    {...registerUpdateProfile("senha", {
+                      required: true,
+                    })}
+                  />
+                  {errosUpdateProfile.senha && <span className="text-danger mt-1 d-block">Nome is required field</span>}
                 </div>
                 <div className="mt-4 d-flex align-items-center justify-content-end">
                   <button className="btn-success btn text-white w-25" type="submit">
@@ -219,13 +397,7 @@ export default function ProfileConfiguration() {
                           icon={faPenSquare}
                           style={{ color: "white", cursor: "pointer", marginRight: 12 }}
                           size="xl"
-                          onClick={() => onUpdateUser()}
-                        />
-                        <FontAwesomeIcon
-                          icon={faTrash}
-                          style={{ color: "white", cursor: "pointer" }}
-                          size="xl"
-                          onClick={() => onDeleteUser()}
+                          onClick={() => onUpdateUser(user)}
                         />
                       </td>
                     </tr>
@@ -244,15 +416,84 @@ export default function ProfileConfiguration() {
                 className="pagination-bar"
                 count={Math.ceil(usuarioList!.total / 10)}
                 page={page}
-                onChange={() => {}}
+                onChange={handleChangePage}
                 variant="outlined"
                 size="large"
               />
             )}
           </TabPanel>
         </TabContext>
-        {showSnackBar && <SnackBar msg="Usuário criado com sucesso!" open={true} type="success" />}
+        {showSnackBar && <SnackBar msg={messageSnackBar} open={true} type="success" />}
+        {showSnackBarError && <SnackBar msg={messageSnackBar} open={true} type="error" />}
       </div>
+      <Modal open={openModalUpdate} onClose={handleCloseUpdateModal}>
+        <div className="h-100 w-100 d-flex align-items-center justify-content-center">
+          <div className="rounded w-100 p-5 " style={{ maxWidth: "900px", backgroundColor: "#3c3c3c" }}>
+            <div className="d-flex justify-content-between mb-5">
+              <Subtitle subtitle="Edição de usuário" />
+              <FontAwesomeIcon
+                icon={faX}
+                style={{ color: "#ffffff", cursor: "pointer" }}
+                size="xl"
+                onClick={handleCloseUpdateModal}
+              />
+            </div>
+            <form onSubmit={handleSubmitUpdateUser(onSubmitUpdateUser)} style={{ marginLeft: "15px" }}>
+              <div className="mb-4">
+                <label className="d-block text-white h4">Nome:</label>
+                <input
+                  type="text"
+                  className="form-control input-create bg-dark"
+                  {...registerUpdateUser("nome", {
+                    required: true,
+                  })}
+                />
+                {errorsUserUpdate.nome && <span className="text-danger mt-1 d-block">Nome is required field</span>}
+              </div>
+              <div className="mb-4">
+                <label className="d-block text-white h4">Email:</label>
+                <input
+                  type="text"
+                  className="form-control input-create bg-dark"
+                  {...registerUpdateUser("email", {
+                    required: true,
+                  })}
+                />
+                {errorsUserUpdate.email && <span className="text-danger mt-1 d-block">Nome is required field</span>}
+              </div>
+              <div className="mb-4">
+                <label className="d-block text-white h4">Tipo de usuário:</label>
+                <select
+                  className="form-control input-create bg-dark"
+                  defaultValue=""
+                  {...registerUpdateUser("usuario_tipo_id", { required: true })}
+                >
+                  <option value="1">ADMIN</option>
+                  <option value="2">Treinador</option>
+                  <option value="3">Externo</option>
+                </select>
+                {errorsUserUpdate.usuario_tipo_id && (
+                  <span className="text-danger mt-1 d-block">Nome is required field</span>
+                )}
+              </div>
+              <div className="mt-4 d-flex align-items-center justify-content-end">
+                <button
+                  disabled={updateUserLoading}
+                  className="btn-success btn text-white w-25 d-flex align-items-center justify-content-center"
+                  type="submit"
+                >
+                  <p className="mb-0 me-2">Atualizar</p>
+                  {updateUserLoading ? (
+                    <div className="spinner-border spinner-border-sm" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  ) : null}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 }

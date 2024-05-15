@@ -5,6 +5,6 @@ export interface LoginRequestDTO {
 
 
 export interface LoginResponseDTO {
-  "acess_token": string;
+  access_token: string;
   "token_type": string;
 }
