@@ -342,10 +342,10 @@ export default function AthleteDetail() {
     <>
       <Header />
       <div className="row justify-content-start">
-        <div className="col-2">
+        <div className="col-sm-3">
           <SideBar athleteData={athlete} />
         </div>
-        <div className="col-10">
+        <div className="col-sm-9">
           <ul className="nav nav-tabs">
             <li className="nav-item me-1" style={{cursor: 'pointer'}}>
               <a className={ tabAtual === 'relationship' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('relationship')}>Relacionamento</a>
@@ -367,7 +367,7 @@ export default function AthleteDetail() {
               <div>
               </div>
             </div>
-            <div className="d-flex flex-column align-items-center justify-content-center mb-3 m-3 force-scrool">
+            <div className="m-3" style={{maxHeight: '300px', overflow: 'auto'}}>
               <table className="table table-striped">
                 <thead>
                   <tr>
@@ -426,41 +426,43 @@ export default function AthleteDetail() {
                     <AddButton />
                   </div>
                 </div>
-                <table className="table table-striped">
-                  <thead>
-                    <tr>
-                      <th className="table-dark text-center" scope="col">DATA</th>
-                      <th className="table-dark text-center" scope="col">NOME</th>
-                      <th className="table-dark text-center" scope="col">QUANTIDADE</th>
-                      <th className="table-dark text-center" scope="col">PREÇO</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                <div className="w-100 mt-3" style={{maxHeight: '300px', overflow: 'auto'}}>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th className="table-dark text-center" scope="col">DATA</th>
+                        <th className="table-dark text-center" scope="col">NOME</th>
+                        <th className="table-dark text-center" scope="col">QUANTIDADE</th>
+                        <th className="table-dark text-center" scope="col">PREÇO</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        Array.isArray(displayedDataSupportControl) && displayedDataSupportControl.map((supportContol,index) => (
+                          <tr key={index}>
+                            <td className="table-dark text-center">{new Date(supportContol.data_controle).toLocaleDateString()}</td>
+                            <td className="table-dark text-center">{supportContol.nome}</td>
+                            <td className="table-dark text-center">{supportContol.quantidade}</td>
+                            <td className="table-dark text-center">R$ {supportContol.preco}</td>
+                          </tr>
+                        ))
+                      }
+                    </tbody>
+                  </table>
                     {
-                      Array.isArray(displayedDataSupportControl) && displayedDataSupportControl.map((supportContol,index) => (
-                        <tr key={index}>
-                          <td className="table-dark text-center">{new Date(supportContol.data_controle).toLocaleDateString()}</td>
-                          <td className="table-dark text-center">{supportContol.nome}</td>
-                          <td className="table-dark text-center">{supportContol.quantidade}</td>
-                          <td className="table-dark text-center">R$ {supportContol.preco}</td>
-                        </tr>
-                      ))
+                      totalRowSupportControl > 3 &&
+                      <Pagination
+                        className="pagination-bar"
+                        count={Math.ceil(totalRowSupportControl / 3)}
+                        page={pageSupportControl}
+                        onChange={handleChangePageSupportControl}
+                        variant="outlined"
+                        size="large"
+                        sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
+                      />
                     }
-                  </tbody>
-                </table>
-                {
-                  totalRowSupportControl > 3 &&
-                  <Pagination
-                    className="pagination-bar"
-                    count={Math.ceil(totalRowSupportControl / 3)}
-                    page={pageSupportControl}
-                    onChange={handleChangePageSupportControl}
-                    variant="outlined"
-                    size="large"
-                    sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
-                  />
-                }
-              </div>
+                  </div>
+                </div>
               <div className='col-md'>
                 <div className='ms-3 me-3 d-flex flex-column mb-3'>
                   <label style={{ width: '100%' }}>

@@ -3,6 +3,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Loading from "react-loading";
+import SoccerField from "./SoccerField";
+import { getAvatarAthletes } from "@/pages/api/http-service/athletes";
 type Props = {
   athleteData: any
 }
@@ -15,9 +17,10 @@ export default function SideBar({athleteData}:any) {
     const verificarImagem = async () => {
       // Se encontrar
       try{
-        // const response = await fetch(`https://idexdocsblob.blob.core.windows.net/atleta-perfil/atleta_${athleteId}.jpeg`);
+        const response = await getAvatarAthletes(athleteId);
+        console.log(response.blob_url)
         // setFormAvatar(`https://idexdocsblob.blob.core.windows.net/atleta-perfil/atleta_${athleteId}.jpeg`);
-        setFormAvatar('/images/image-user.png');
+        setFormAvatar(response.blob_url);
       }
       // Se não encontrar
       catch(error){
@@ -26,7 +29,7 @@ export default function SideBar({athleteData}:any) {
       }
     }
     verificarImagem();
-  },[])
+  },[athleteId])
 
   if (!athleteData) {
     return <div className="d-flex justify-content-center align-items-center w-100 h-25" ><Loading type='bars' color="var(--bg-ternary-color)"/></div>
@@ -84,6 +87,9 @@ export default function SideBar({athleteData}:any) {
         <h1 className="title-sidebar">Contrato Empresa:</h1>
         <h2 className="subtitle-sidebar">Profissional</h2>
         <h2 className="subtitle-sidebar">29/04/2023 - 29/04/2023</h2>
+      </div>
+      <div className="mt-3">
+        <SoccerField athleteData={athleteData}/>
       </div>
     </div>
   )

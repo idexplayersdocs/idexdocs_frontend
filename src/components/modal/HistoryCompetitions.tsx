@@ -39,7 +39,8 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
     jogos_completos: '',
     jogos_parciais: '',
     minutagem: '',
-    gols: ''
+    gols: '',
+    assistencias: ''
   });
 
   const [formRegisterCompetitions, setFormRegisterCompetitions] = useState<any>({
@@ -49,7 +50,8 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
     jogos_completos: '',
     jogos_parciais: '',
     minutagem: '',
-    gols: ''
+    gols: '',
+    assistencias: ''
   });
 
 
@@ -96,7 +98,8 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
       jogos_completos: '',
       jogos_parciais: '',
       minutagem: '',
-      gols: ''
+      gols: '',
+      assistencias: ''
     });
   }
 
@@ -167,6 +170,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
               <th className="table-dark text-center" scope="col">Jogos Parciais</th>
               <th className="table-dark text-center" scope="col">Minutagem</th>
               <th className="table-dark text-center" scope="col">Gols</th>
+              <th className="table-dark text-center" scope="col">Assistências</th>
             </tr>
           </thead>
           <tbody>
@@ -180,11 +184,12 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
                     <td className="table-dark text-center">{competicao.jogos_parciais}</td>
                     <td className="table-dark text-center">{competicao.minutagem}</td>
                     <td className="table-dark text-center">{competicao.gols}</td>
+                    <td className="table-dark text-center">{competicao.assistencias}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="table-dark text-center">Não possui histórico</td>
+                  <td colSpan={7} className="table-dark text-center">Não possui histórico</td>
                 </tr>
               )
             }
@@ -212,8 +217,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
         <Box sx={style}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Registrar Competição"/>
-            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseRegisterCompetitions}
-/>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseRegisterCompetitions} />
           </div>
           <hr />
           <div className="row" style={{height:'300px'}}>
@@ -230,12 +234,12 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Jogos Completos</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="jogos_completos" style={{height:'45px'}} value={formRegisterCompetitions.jogos_completos} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
-              </div>
-              <div className='col'>
-              <div className="d-flex flex-column w-100 mt-3">
+                <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Jogos Parciais</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="jogos_parciais" style={{height:'45px'}} value={formRegisterCompetitions.jogos_parciais} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
+              </div>
+              <div className='col'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Minutagem</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="minutagem" style={{height:'45px'}} value={formRegisterCompetitions.minutagem} onChange={handleInputChangeRegisterCompetitions}/>
@@ -243,6 +247,10 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Gols</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="gols" style={{height:'45px'}} value={formRegisterCompetitions.gols} onChange={handleInputChangeRegisterCompetitions}/>
+                </div>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Jogos Parciais</label>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="assistencias" style={{height:'45px'}} value={formRegisterCompetitions.assistencias} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
               </div>
             </div>

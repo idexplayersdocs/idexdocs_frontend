@@ -60,3 +60,13 @@ export const uploadImageAthlete = async (IDAtleta: any, file:any) => {
     throw error;
   }
 };
+
+export const getAvatarAthletes = async (athleteId: any) => {
+  try {
+    const response = await axios.get(`${apiURL}/avatar/atleta/${athleteId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+};
