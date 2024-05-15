@@ -296,6 +296,9 @@ img.rounded.mt-3.avatar{
 .menu-hamburguer{
   display: none;
 }
+#basic-menu {
+  position: absolute !important;
+}
 
 @media (max-width: 1000px) {
   .col-lg-2 {
@@ -344,7 +347,6 @@ img.rounded.mt-3.avatar{
     display: block;
   }
   #__next{
-    width: 219%;
+    margin-right: -50px;
   }
-
 }

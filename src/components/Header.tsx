@@ -9,7 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import React from "react";
 import Subtitle from "./Subtitle";
 
-export default function Header({page}: any) {
+export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
@@ -41,7 +41,7 @@ export default function Header({page}: any) {
           {/* <Link href="/">
           </Link> */}
         </div>
-        <div className="d-flex w-100 justify-content-around nav-bar-custom">
+        <div className="d-flex w-100 justify-content-evenly nav-bar-custom">
           {/* <h1>Home</h1> */}
           <Link href="/" style={{textDecoration: 'none'}}>
           <div className="nav-custom">
@@ -85,7 +85,7 @@ export default function Header({page}: any) {
           />
           <Menu
             sx={
-              { mt: "1px", "& .MuiMenu-paper": 
+              { "& .MuiMenu-paper": 
                 { backgroundColor: "var(--bg-secondary-color)", color: 'white' }, 
               }
             }
@@ -96,6 +96,7 @@ export default function Header({page}: any) {
             MenuListProps={{
               "aria-labelledby": "basic-button",
             }}
+
           >
             <MenuItem onClick={() => onClickConfiguration()}>
               <p className="mb-1">
