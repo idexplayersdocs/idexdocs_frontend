@@ -4,12 +4,13 @@
   align-items: center;
   background-image: url('../../public/images/campo.png');
   background-repeat: no-repeat; 
-  background-size: contain; 
+  background-size: cover; 
   background-position: center; 
-  width: 100%;
+  width: 110%;
   height: 0;
   padding-bottom: 56.25%; 
   position: relative;
+  margin-left: -11px;
 }
 
 .field {

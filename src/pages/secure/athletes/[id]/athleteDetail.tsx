@@ -342,10 +342,10 @@ export default function AthleteDetail() {
     <>
       <Header />
       <div className="row justify-content-start">
-        <div className="col-sm-3">
+        <div className="col-lg-2">
           <SideBar athleteData={athlete} />
         </div>
-        <div className="col-sm-9">
+        <div className="col-lg-10">
           <ul className="nav nav-tabs">
             <li className="nav-item me-1" style={{cursor: 'pointer'}}>
               <a className={ tabAtual === 'relationship' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('relationship')}>Relacionamento</a>
