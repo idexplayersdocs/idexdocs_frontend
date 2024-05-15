@@ -343,5 +343,8 @@ img.rounded.mt-3.avatar{
   .menu-hamburguer{
     display: block;
   }
+  #__next{
+    width: 219%;
+  }
 
 }
