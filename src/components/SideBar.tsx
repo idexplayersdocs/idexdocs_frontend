@@ -10,7 +10,7 @@ type Props = {
 }
 
 export default function SideBar({athleteData}:any) {
-  const [formAvatar, setFormAvatar]:any = useState<string>();
+  const [formAvatar, setFormAvatar]:any = useState<any>();
   const { query, push, back } = useRouter();
   const athleteId = query?.id;
   useEffect(()=> {
@@ -19,8 +19,13 @@ export default function SideBar({athleteData}:any) {
       try{
         const response = await getAvatarAthletes(athleteId);
         console.log(response.blob_url)
+        if(response.blob_url){
+          setFormAvatar(response.blob_url);
+        }
+         else {
+          setFormAvatar('/images/image-user.png');
+        }
         // setFormAvatar(`https://idexdocsblob.blob.core.windows.net/atleta-perfil/atleta_${athleteId}.jpeg`);
-        setFormAvatar(response.blob_url);
       }
       // Se não encontrar
       catch(error){

@@ -54,7 +54,8 @@ const styleInfo = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 1000,
+  width: '80% !important',
+  height: '80% !important',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
@@ -214,19 +215,19 @@ export default function Performance({athleteData}: any) {
     <div className='pe-3'>
     <div className="container text-center mt-4">
       <div className="row">
-        <div className="col">
-          <button type="button" className="btn btn-modal-color w-75 mb-3" onClick={handleOpenHistoryCompetitions}>Histórico de competições</button>
+        <div className="col-lg-6 mb-3">
+          <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenHistoryCompetitions}>Histórico de competições</button>
           <br />
-          <button type="button" className="btn btn-modal-color w-75" onClick={handleOpenClubHistory}>Histórico de Clubes</button>
+          <button type="button" className="btn btn-modal-color w-75 w-100" onClick={handleOpenClubHistory}>Histórico de Clubes</button>
         </div>
-        <div className="col">
-          <button type="button" className="btn btn-modal-color w-75 mb-3" onClick={handleOpenInjuries}>Histórico de Lesões</button>
+        <div className="col-lg-6">
+          <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenInjuries}>Histórico de Lesões</button>
           <br />
-          <button type="button" className="btn btn-modal-color w-75 " onClick={handleOpenPhysicalHistory}>Histórico Físico</button>
+          <button type="button" className="btn btn-modal-color w-75 w-100" onClick={handleOpenPhysicalHistory}>Histórico Físico</button>
         </div>
       </div>
     </div>
-    <div className="col-6 d-flex flex-column align-items-center justify-content-center mb-3 ms-3 force-scrool mt-5" style={{width: 'auto'}}>
+    <div className="col-6 d-flex flex-column align-items-center justify-content-center mb-3 ms-2 force-scrool mt-5" style={{width: '100% !important'}}>
           <div className='d-flex justify-content-between w-100' style={{marginBottom: '-5px'}}>
             <div className='align-self-end'>
             <Subtitle subtitle='Perfil Físico e Técnico' />
@@ -241,7 +242,7 @@ export default function Performance({athleteData}: any) {
               <FontAwesomeIcon icon={faQuestion}  size='xl' color='white'/>
             </div>
           </div>
-              <div className='ms-3 d-flex flex-column' style={{width: '98%'}}>
+              <div className='ms-3 d-flex flex-column observacao-performace' style={{width: '98%'}}>
                 <label style={{ width: '100%' }}>
                   <Subtitle subtitle='Observações' />
                   <textarea onChange={handleInputObservation} value={observacao} rows={6} style={{ width: '100%' }}/>

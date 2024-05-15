@@ -16,8 +16,23 @@ import  Performance  from '@/components/Performance'
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
 import Loading from 'react-loading';
+import Image from "next/image";
 
 moment.locale('pt-br');
+
+const styleSidebar = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  height: '100%'
+};
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -59,6 +74,7 @@ export default function AthleteDetail() {
   const [totalPages, setTotalPages] = useState(1);
   const [openCreateQuestionaryRelationship, setOpenCreateQuestionaryRelationship] = useState(false);
   const [openCreateSupportControl, setOpenCreateSupportControl] = useState(false);
+  const [openSideBar, setOpenSideBar] = useState(false);
   const [totalRowRelationship, setTotalRowRelationship] = useState<number>(1);
   const [totalRowSupportControl, setTotalRowSupportControl] = useState<number>(1);
 
@@ -234,6 +250,12 @@ export default function AthleteDetail() {
     });
   }
 
+  // Modal SideBar
+  const handleOpenSideBar = () => setOpenSideBar(true);
+  const handleCloseSideBar = () => {
+    setOpenSideBar(false)
+  }
+
   const handleChangePageSupportControl= (event: any, newPage:number) => {
     setPageSupportControl(newPage);
   };
@@ -341,17 +363,28 @@ export default function AthleteDetail() {
   return (
     <>
       <Header />
-      <div className="row justify-content-start">
+      <div className="row justify-content-start avatar">
+        <div onClick={handleOpenSideBar}>
+          <Image
+          className="rounded mt-3 avatar"
+          src="/images/icon-user.png"
+          width={10}
+          height={10}
+          alt="Athlete logo"
+          layout="responsive"
+          objectFit="cover"
+          />
+        </div>
         <div className="col-lg-2">
           <SideBar athleteData={athlete} />
         </div>
         <div className="col-lg-10">
           <ul className="nav nav-tabs">
-            <li className="nav-item me-1" style={{cursor: 'pointer'}}>
+            <li className="nav-item me-1 menu" style={{cursor: 'pointer'}}>
               <a className={ tabAtual === 'relationship' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('relationship')}>Relacionamento</a>
               {/* <a className="nav-link active" aria-current="page" href={`/secure/athletes/${athleteId}/athleteRelationship`}>Relacionamento</a> */}
             </li>
-            <li className="nav-item" style={{cursor: 'pointer'}}>
+            <li className="nav-item menu" style={{cursor: 'pointer'}}>
               <a className={ tabAtual === 'performance' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('performance')}>Desempenho</a>
               {/* <a className="nav-link" aria-current="page" href={`/secure/athletes/${athleteId}/athletePerformance`}>Desempenho</a> */}
             </li>
@@ -426,7 +459,7 @@ export default function AthleteDetail() {
                     <AddButton />
                   </div>
                 </div>
-                <div className="w-100 mt-3" style={{maxHeight: '300px', overflow: 'auto'}}>
+                <div className="mt-3" style={{maxHeight: '300px', overflow: 'auto', width: '92%', marginLeft: '-20px'}}>
                   <table className="table table-striped">
                     <thead>
                       <tr>
@@ -599,6 +632,16 @@ export default function AthleteDetail() {
             <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickSupportControl}>Salvar</button>
           </div>
         <ToastContainer />
+        </Box>
+      </Modal>
+        {/* SideBar Responsivo */}
+        <Modal
+        open={openSideBar}
+        onClose={handleCloseSideBar}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={styleSidebar}>
+          <SideBar athleteData={athlete} />
         </Box>
       </Modal>
       <ToastContainer />

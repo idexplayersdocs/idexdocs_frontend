@@ -20,6 +20,8 @@
     "@mui/icons-material": "^5.15.16",
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.17",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "@mui/styles": "^5.15.17",
     "@react-pdf/renderer": "^3.4.4",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
@@ -35,7 +37,8 @@
     "react-loading": "^2.0.3",
     "react-router-dom": "^6.23.0",
     "react-to-pdf": "^1.0.1",
-    "react-toastify": "^10.0.5"
+    "react-toastify": "^10.0.5",
+    "styled-components": "^6.1.11"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",

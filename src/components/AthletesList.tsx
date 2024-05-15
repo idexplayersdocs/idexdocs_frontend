@@ -136,7 +136,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
 
   return (
     <>
-      <div className="d-flex flex-column align-items-center justify-content-center mb-3 m-3">
+      <div className="m-3" style={{overflow: 'auto'}}>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -165,19 +165,21 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                     {moment(athlete.data_nascimento).format('DD/MM/YYYY')}
                   </td>
                   <td className="table-dark">{athlete.clube_atual}</td>
-                  <td className="table-dark d-flex justify-content-evenly">
+                  <td className="table-dark text-end">
                     {/* <FontAwesomeIcon
                       icon={faTrashCan}
                       size="2xl"
                       style={{ color: '#ff0000', cursor: 'pointer' }}
                     /> */}
                     <FontAwesomeIcon
+                      className='ms-2 me-2'
                       icon={faFilePdf}
                       style={{ color: "white", cursor: "pointer" }}
                       size="2xl"
                       onClick={() => handleClickPdf(athlete.id)}
                     />
                     <FontAwesomeIcon
+                      className='ms-2 me-2'
                       icon={faEye}
                       size="2xl"
                       style={{ color: "#ffffff", cursor: "pointer" }}
@@ -196,6 +198,8 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
             )}
           </tbody>
         </table>
+      </div>
+      <div className='d-flex justify-content-center'>
         {totalRow > 10 && (
           <Pagination
             className="pagination-bar"
@@ -208,6 +212,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
 
           />
         )}
+      </div>
         <Modal
           open={modalPdfOpen}
           className="d-flex align-items-center justify-content-center"
@@ -222,7 +227,6 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
             )}
           </div>
         </Modal>
-      </div>
     </>
   );
 }

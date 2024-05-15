@@ -7,8 +7,9 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import React from "react";
+import Subtitle from "./Subtitle";
 
-export default function Header() {
+export default function Header({page}: any) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
@@ -35,34 +36,59 @@ export default function Header() {
   return (
     <>
       <div className="d-flex justify-content-between align-items-center m-3">
-        <div className="me-auto p-2">
-          <Link href="/">
-            <FontAwesomeIcon
-              className="me-3"
-              icon={faHouse}
-              size="2xl"
-              style={{ color: "var(--bg-ternary-color)", cursor: "pointer" }}
-            />
+        <div className="p-2">
+          <Image src="/images/logo-fort-house.png" width={118} height={78} alt="company logo" />
+          {/* <Link href="/">
+          </Link> */}
+        </div>
+        <div className="d-flex w-100 justify-content-around nav-bar-custom">
+          {/* <h1>Home</h1> */}
+          <Link href="/" style={{textDecoration: 'none'}}>
+          <div className="nav-custom">
+              <div className="icon-menu">
+                  <div className="icon-menu-content d-flex">
+                      <FontAwesomeIcon icon={faHouse} size="lg" color="white" className="icon-menu" style={{marginTop: '1px', marginRight: '10px'}} />
+                      <h2 style={{color:'white', fontSize: '22px'}}>Home</h2>
+                  </div>
+              </div>
+          </div>
           </Link>
-
-          <Image src="/images/logo-fort-house.png" width={105} height={70} alt="company logo" />
+          <div className="nav-custom">
+              <div className="icon-menu">
+                  <div className="icon-menu-content d-flex">
+                      <FontAwesomeIcon icon={faGear} size="lg" color="white" className="icon-menu" style={{marginTop: '1px', marginRight: '10px'}} />
+                      <h2 style={{color:'white', fontSize: '20px'}}>Configuração</h2>
+                  </div>
+              </div>
+          </div>
+          <div className="nav-custom">
+              <div className="icon-menu">
+                  <div className="icon-menu-content d-flex">
+                      <FontAwesomeIcon icon={faRightFromBracket} size="lg" color="white" className="icon-menu" style={{marginTop: '1px', marginRight: '10px'}} />
+                      <h2 style={{color:'white', fontSize: '20px'}}>Sair</h2>
+                  </div>
+              </div>
+          </div>
         </div>
-
         {/* <Link href="/" className="p-2 me-3"> */}
-        <div className="p-2 me-3">
-          <Image src="/images/logo-arabe.png" width={78} height={78} alt="company logo" />
-        </div>
         {/* </Link> */}
-
-        <div>
+        <div className="d-flex align-items-center">
+          <div className="p-2 me-3">
+            <Image src="/images/logo-arabe.png" width={78} height={78} alt="company logo" />
+          </div>
           <FontAwesomeIcon
-            className="p-2"
+            className="p-2 menu-hamburguer"
             icon={faBars}
             size="2xl"
             style={{ color: "var(--bg-ternary-color)", cursor: "pointer" }}
             onClick={handleClick}
           />
           <Menu
+            sx={
+              { mt: "1px", "& .MuiMenu-paper": 
+                { backgroundColor: "var(--bg-secondary-color)", color: 'white' }, 
+              }
+            }
             id="basic-menu"
             anchorEl={anchorEl}
             open={open}

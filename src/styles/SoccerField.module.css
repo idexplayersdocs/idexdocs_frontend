@@ -6,7 +6,7 @@
   background-repeat: no-repeat; 
   background-size: cover; 
   background-position: center; 
-  width: 110%;
+  width: 105%;
   height: 0;
   padding-bottom: 56.25%; 
   position: relative;
@@ -72,4 +72,9 @@
   left: 43%;
   background-image: url('../../public/images/jogador.png');
   z-index: 1;
+}
+@media (max-width: 1000px) {
+  .container{
+    width: 100%;
+  }
 }

@@ -215,16 +215,20 @@ export default function Athletes() {
   return (
     <>
       <Header />
-      <div className="d-flex justify-content-between align-items-center m-3">
-        <Title title="Atletas" />
-        <div className="input-group w-50">
-          <input type="text" className="form-control bg-dark-custom-input " placeholder="Search" aria-label="Search" aria-describedby="inputSearch" value={inputFilter} onChange={handleInputFilter} />
-            <span className="clear-input" style={{cursor: 'pointer'}} onClick={handleClickClear}>
-            <FontAwesomeIcon icon={faX} style={{color: "#ffffff",}} />
+      <div className="m-3">
+        <div className="row">
+          <div className="col-lg">
+            <Title title="Atletas" />
+          </div>
+          <div className="input-group w-50 col-lg w-100">
+            <input type="text" className="form-control bg-dark-custom-input " placeholder="Search" aria-label="Search" aria-describedby="inputSearch" value={inputFilter} onChange={handleInputFilter} />
+              <span className="clear-input" style={{cursor: 'pointer'}} onClick={handleClickClear}>
+              <FontAwesomeIcon icon={faX} style={{color: "#ffffff",}} />
+              </span>
+            <span className="input-group-text d-flex justify-content-center" id="inputSearch" onClick={handleClick}>
+              <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" style={{color: "#ffffff",}}/>
             </span>
-          <span className="input-group-text d-flex justify-content-center" id="inputSearch" onClick={handleClick}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" style={{color: "#ffffff",}}/>
-          </span>
+          </div>
         </div>
       </div>
       <div className="d-flex justify-content-end w-100">
