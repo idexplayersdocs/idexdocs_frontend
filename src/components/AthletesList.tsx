@@ -182,7 +182,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                       <FontAwesomeIcon className='ms-2 mt-1' icon={faTriangleExclamation} style={{color: "#ff0000",}} />
                   }
                   </td>
-                  <td className="table-dark text-end">
+                  <td className="table-dark text-end" style={{whiteSpace: 'nowrap'}}>
                     {/* <FontAwesomeIcon
                       icon={faTrashCan}
                       size="2xl"
@@ -216,7 +216,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
           </tbody>
         </table>
       </div>
-      <div className='d-flex justify-content-center'>
+      <div className='d-flex justify-content-center pb-5'>
         {totalRow > 10 && (
           <Pagination
             className="pagination-bar"
