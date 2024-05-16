@@ -237,7 +237,7 @@ export default function ProfileConfiguration() {
             centered
             TabIndicatorProps={{
               style: {
-                backgroundColor: "#626262",
+                backgroundColor: "#ff781d",
                 paddingLeft: '5px',
                 paddingRight: '5px'
               },
