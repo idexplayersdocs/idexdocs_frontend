@@ -13,18 +13,21 @@ import { createPhysical, getPhysical } from '@/pages/api/http-service/physical';
 import Loading from 'react-loading';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
+import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
 
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 1000,
+  width: '80%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
   borderRadius: '20px',
+  overflow: 'auto',
+  height: '80%'
 };
 
 export default function PerformanceCreation({closeModal, athleteData, dataList, labelList, athleteId}: any) {
