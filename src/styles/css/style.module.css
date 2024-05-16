@@ -34,15 +34,8 @@ hr {
   align-self: flex-start !important;
 }
 
-.bg-dark {
+.bg-dark-custom  {
   background-color: var(--bg-primary-color) !important;
-}
-.bg-dark-custom {
-  background-color: var(--bg-primary-color) !important;
-}
-input.form-control.bg-dark-custom-input {
-  background-color: var(--bg-primary-color) !important;
-  border-right: 0 !important;
 }
 
 .input-group-text {
@@ -86,6 +79,17 @@ input.form-control.bg-dark-custom-input {
 }
 .table-striped > tbody > tr:nth-of-type(odd) > * {
   --bs-table-bg-type: var(--bg-primary-color) !important;
+}
+
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiPaginationItem-icon.css-n8417t-MuiSvgIcon-root-MuiPaginationItem-icon {
+  color: var(--text-color-white) !important;
+}
+button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeLarge.MuiPaginationItem-outlined.MuiPaginationItem-circular.Mui-selected.MuiPaginationItem-page.css-ax94ij-MuiButtonBase-root-MuiPaginationItem-root {
+  color: var(--text-color-white) !important;
+  background-color: var(--bg-ternary-color) !important;
+}
+button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeLarge.MuiPaginationItem-outlined.MuiPaginationItem-circular.MuiPaginationItem-page.css-ax94ij-MuiButtonBase-root-MuiPaginationItem-root {
+  color: var(--text-color-white) !important;
 }
 
 .sidebar__background {
@@ -194,11 +198,9 @@ th.table-dark.text-center {
 }
 .btn-success {
   background-color: var(--bg-ternary-color) !important;
-  border: none !important;
 }
 .btn-success:hover {
   background-color: #c95c14 !important;
-  border: none !important;
 }
 
 .table-body {
@@ -230,12 +232,6 @@ select option[disabled] {
   color: #999 !important; /* Cor do texto de placeholder */
 }
 
-.nav-bar-custom {
-  display: flex;
-  justify-content: center;
-  gap: 80px;
-
-}
 @media print {
   .hideOnScreen {
     display: block !important;
@@ -247,9 +243,14 @@ select option[disabled] {
 }
 
 .overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
-#pdf, .pdf {
-  display: none;
+h3{
+  color: var(--text-color-white) !important;
+  text-transform: uppercase !important;
+  font-size: 18px !important;
+  margin-left: 15px !important;
+  display: flex !important;
+  align-self: flex-start !important;
 }

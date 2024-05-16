@@ -25,7 +25,7 @@ interface Athlete {
   clube_atual: string;
 }
 
-export default function AthletesList({ newAthlete }: any) {
+export default function AthletesList({ newAthlete, inputFilter, searchFilter }: any) {
   const [page, setPage] = useState(1);
   const { push } = useRouter();
   const [athletes, setAthletes] = useState<Athlete[]>([]);
@@ -62,7 +62,7 @@ export default function AthletesList({ newAthlete }: any) {
     if (newAthlete) {
       const fetchUpdatedAthletesData = async () => {
         try {
-          const athletesData = await getAthletes(1);
+          const athletesData = await getAthletes(1, inputFilter);
           setAthletes((prevAthletes) => [...prevAthletes, newAthlete]);
           setTotalRow(athletesData.total);
         } catch (error) {
@@ -74,7 +74,7 @@ export default function AthletesList({ newAthlete }: any) {
 
       fetchUpdatedAthletesData();
     }
-  }, [newAthlete]);
+  }, [newAthlete, inputFilter]);
 
   const handleEditAthlete = (id: number) => {
     push(`/secure/athletes/${id}/athleteDetail`);
@@ -148,6 +148,39 @@ export default function AthletesList({ newAthlete }: any) {
     setLoadingPDF(isLoadingPDF);
   };
 
+  // const searchAthlete = () => {
+  //   const fetchUpdatedAthletesData = async () => {
+  //     try {
+  //       const athletesData = await getAthletes(1, inputFilter); // Passando o filtro para a função getAthletes
+  //       setAthletes(athletesData.data);
+  //       setTotalRow(athletesData.total);
+  //       setPage(1);
+  //     } catch (error) {
+  //       console.error("Error fetching athletes:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchUpdatedAthletesData();
+  // };
+
+  useEffect(() => {
+    const fetchUpdatedAthletesData = async () => {
+      try {
+        const athletesData = await getAthletes(1, inputFilter); // Passando o filtro para a função getAthletes
+        setAthletes(athletesData.data);
+        setTotalRow(athletesData.total);
+        setPage(1);
+      } catch (error) {
+        console.error("Error fetching athletes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUpdatedAthletesData();
+  }, [searchFilter]);
+
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: "150px" }}>
@@ -185,19 +218,21 @@ export default function AthletesList({ newAthlete }: any) {
                   <td className="table-dark">{athlete.posicao_primaria}</td>
                   <td className="table-dark">{moment(athlete.data_nascimento).format("DD/MM/YYYY")}</td>
                   <td className="table-dark">{athlete.clube_atual}</td>
-                  <td className="table-dark d-flex justify-content-evenly">
+                  <td className="table-dark text-end">
                     {/* <FontAwesomeIcon
                       icon={faTrashCan}
                       size="2xl"
                       style={{ color: '#ff0000', cursor: 'pointer' }}
                     /> */}
                     <FontAwesomeIcon
+                      className='ms-2 me-2'
                       icon={faFilePdf}
                       style={{ color: "white", cursor: "pointer" }}
                       size="2xl"
                       onClick={() => handleClickPdf(athlete.id)}
                     />
                     <FontAwesomeIcon
+                      className='ms-2 me-2'
                       icon={faEye}
                       size="2xl"
                       style={{ color: "#ffffff", cursor: "pointer" }}
@@ -215,6 +250,8 @@ export default function AthletesList({ newAthlete }: any) {
             )}
           </tbody>
         </table>
+      </div>
+      <div className='d-flex justify-content-center'>
         {totalRow > 10 && (
           <Pagination
             className="pagination-bar"
@@ -223,8 +260,11 @@ export default function AthletesList({ newAthlete }: any) {
             onChange={handleChangePage}
             variant="outlined"
             size="large"
+            sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
+
           />
         )}
+      </div>
         <Modal
           open={modalPdfOpen}
           className="d-flex align-items-center justify-content-center"

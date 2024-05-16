@@ -10,7 +10,7 @@ import { createAthlete, getAthletes, uploadImageAthlete } from "@/pages/api/http
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAsterisk, faX } from "@fortawesome/free-solid-svg-icons";
+import { faAsterisk, faMagnifyingGlass, faX } from "@fortawesome/free-solid-svg-icons";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -44,6 +44,7 @@ export default function Athletes() {
   const [newAthlere, setNewAthlere]:any = useState();
   const [athletes, setAthletes] = useState<any[]>([]);
   const [totalRow, setTotalRow]: any = useState();
+  const [inputFilter, setInputFilter]: any = useState('');
 
   const [formData, setFormData] = useState({
     nome: '',
@@ -195,19 +196,47 @@ export default function Athletes() {
     }
   };
 
+
+  const handleInputFilter = (event: any) => {
+    setInputFilter(event.target.value);
+  };
+
+  const [clickCount, setClickCount] = useState(0);
+
+  const handleClick = () => {
+    setClickCount(clickCount + 1);
+  };
+
+  const handleClickClear = () => {
+    setInputFilter('')
+    setClickCount(clickCount + 1);
+  };
+  
   return (
     <>
       <Header />
-      <div className="d-flex justify-content-between align-items-center m-3">
-        <Title title="Atletas" />
-        <Search />
+      <div className="m-3">
+        <div className="row">
+          <div className="col-lg">
+            <Title title="Atletas" />
+          </div>
+          <div className="input-group w-50 col-lg w-100">
+            <input type="text" className="form-control bg-dark-custom-input " placeholder="Search" aria-label="Search" aria-describedby="inputSearch" value={inputFilter} onChange={handleInputFilter} />
+              <span className="clear-input" style={{cursor: 'pointer'}} onClick={handleClickClear}>
+              <FontAwesomeIcon icon={faX} style={{color: "#ffffff",}} />
+              </span>
+            <span className="input-group-text d-flex justify-content-center" id="inputSearch" onClick={handleClick}>
+              <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" style={{color: "#ffffff",}}/>
+            </span>
+          </div>
+        </div>
       </div>
       <div className="d-flex justify-content-end w-100">
         <div className="me-3" onClick={handleOpenCreateAthlete}>
           <AddButton />
         </div>
       </div>
-      <AthletesList newAthlete={newAthlere}/>
+      <AthletesList newAthlete={newAthlere} inputFilter={inputFilter} searchFilter={clickCount}/>
       <Modal
         open={openCreateAthlete}
         onClose={handleCloseCreateAthlete}
@@ -216,8 +245,7 @@ export default function Athletes() {
         <Box sx={style}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Criação do atleta"/>
-            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateAthlete}
-/>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateAthlete}/>
           </div>
           <hr />
           <div className="d-flex justify-content-between" style={{height:'520px'}}>
@@ -249,28 +277,28 @@ export default function Athletes() {
                 <label className="ms-3" style={{color: 'white', fontSize: '20px', marginTop:'14px'}}>Nome</label>
                 {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="text" className="form-control input-create bg-dark" placeholder="Digite o nome do atleta" name="nome" value={formData.nome} onChange={handleInputChange} style={{height:'45px'}}/>
+                <input type="text" className="form-control input-create bg-dark-custom " placeholder="Digite o nome do atleta" name="nome" value={formData.nome} onChange={handleInputChange} style={{height:'45px'}}/>
               </div>
               <div className="input w-100 mt-2">
               <div className="d-flex align-items-center">
                 <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data de Nascimento</label>
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_nascimento" value={formData.data_nascimento} onChange={handleInputChange} style={{height:'45px'}}/>
+                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_nascimento" value={formData.data_nascimento} onChange={handleInputChange} style={{height:'45px'}}/>
               </div>
               <div className="input w-100 mt-2">
               <div className="d-flex align-items-center">
                 <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Clube</label>
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="text" className="form-control input-create bg-dark" placeholder="Digite o nome do clube" name="nome" value={formClube.nome} onChange={handleClubeInputChange} style={{height:'45px'}}/>
+                <input type="text" className="form-control input-create bg-dark-custom " placeholder="Digite o nome do clube" name="nome" value={formClube.nome} onChange={handleClubeInputChange} style={{height:'45px'}}/>
               </div>
               <div className="input w-100 mt-2">
               <div className="d-flex align-items-center">
                 <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Início Clube</label>
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_inicio" value={formClube.data_inicio} onChange={handleClubeInputChange} style={{height:'45px'}}/>
+                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_inicio" value={formClube.data_inicio} onChange={handleClubeInputChange} style={{height:'45px'}}/>
               </div>
             </div>
             <div className="w-50 pe-4" style={{marginRight:'-25px'}}>
@@ -292,7 +320,7 @@ export default function Athletes() {
                 <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Início do Contrato</label>
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_inicio" value={formContrato.data_inicio} onChange={handleContratoInputChange} style={{height:'45px', color:'#999'}} onFocus={() => "this.type='date'"} 
+                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_inicio" value={formContrato.data_inicio} onChange={handleContratoInputChange} style={{height:'45px', color:'#999'}} onFocus={() => "this.type='date'"} 
 />
               </div>
               <div className="input w-100 mt-2">
@@ -300,7 +328,7 @@ export default function Athletes() {
                 <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Fim do Contrato</label>
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
-                <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_fim" value={formContrato.data_fim} onChange={handleContratoInputChange} style={{height:'45px'}}/>
+                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_fim" value={formContrato.data_fim} onChange={handleContratoInputChange} style={{height:'45px'}}/>
               </div>
               <div className="input w-100 mt-2">
                 <div className="d-flex align-items-center">
@@ -352,7 +380,7 @@ export default function Athletes() {
               </div>
             </div>
           </div>
-          <div className='ms-3 d-flex flex-column' style={{width: '98%'}}>
+          <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
             <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClick} disabled={!isFormValid()}>Salvar</button>
           </div>
         </Box>

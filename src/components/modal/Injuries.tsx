@@ -32,6 +32,7 @@ const style = {
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
+  borderRadius: '20px',
 };
 
 export default function Injuries({closeModal, athleteId}: any) {
@@ -186,6 +187,7 @@ export default function Injuries({closeModal, athleteId}: any) {
               onChange={handleChangePageInjuries}
               variant="outlined"
               size="large"
+              sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
             />
         }
       </div>
@@ -204,11 +206,11 @@ export default function Injuries({closeModal, athleteId}: any) {
               <div className=''>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data da Lesão</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="data_lesao" style={{height:'45px'}} value={formRegisterInjuries.data_lesao} onChange={handleInputChangeRegisterInjuries}/>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_lesao" style={{height:'45px'}} value={formRegisterInjuries.data_lesao} onChange={handleInputChangeRegisterInjuries}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Descrição da Lesão</label>
-                      <input type="text" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="descricao" style={{height:'45px'}} value={formRegisterInjuries.descricao} onChange={handleInputChangeRegisterInjuries} />
+                      <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="descricao" style={{height:'45px'}} value={formRegisterInjuries.descricao} onChange={handleInputChangeRegisterInjuries} />
                 </div>
               </div>
             </div>

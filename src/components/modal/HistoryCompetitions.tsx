@@ -15,15 +15,7 @@ import Loading from 'react-loading';
 import moment from 'moment';
 
 const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 1000,
-  bgcolor: 'var(--bg-primary-color)',
-  border: '1px solid var(--color-line)',
-  boxShadow: 24,
-  p: 4,
+
 };
 
 export default function HistoryCompetitions({closeModal, athleteId}: any) {
@@ -38,7 +30,8 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
     jogos_completos: '',
     jogos_parciais: '',
     minutagem: '',
-    gols: ''
+    gols: '',
+    assistencias: ''
   });
 
   const [formRegisterCompetitions, setFormRegisterCompetitions] = useState<any>({
@@ -48,7 +41,8 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
     jogos_completos: '',
     jogos_parciais: '',
     minutagem: '',
-    gols: ''
+    gols: '',
+    assistencias: ''
   });
 
 
@@ -95,7 +89,8 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
       jogos_completos: '',
       jogos_parciais: '',
       minutagem: '',
-      gols: ''
+      gols: '',
+      assistencias: ''
     });
   }
 
@@ -166,6 +161,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
               <th className="table-dark text-center" scope="col">Jogos Parciais</th>
               <th className="table-dark text-center" scope="col">Minutagem</th>
               <th className="table-dark text-center" scope="col">Gols</th>
+              <th className="table-dark text-center" scope="col">Assistências</th>
             </tr>
           </thead>
           <tbody>
@@ -179,11 +175,12 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
                     <td className="table-dark text-center">{competicao.jogos_parciais}</td>
                     <td className="table-dark text-center">{competicao.minutagem}</td>
                     <td className="table-dark text-center">{competicao.gols}</td>
+                    <td className="table-dark text-center">{competicao.assistencias}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="table-dark text-center">Não possui histórico</td>
+                  <td colSpan={7} className="table-dark text-center">Não possui histórico</td>
                 </tr>
               )
             }
@@ -198,6 +195,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
                   onChange={handleChangePageCompetitions}
                   variant="outlined"
                   size="large"
+                  sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
                 />
         }
       </div>
@@ -210,41 +208,44 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
         <Box sx={style}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Registrar Competição"/>
-            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseRegisterCompetitions}
-/>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseRegisterCompetitions} />
           </div>
           <hr />
           <div className="row" style={{height:'300px'}}>
               <div className='col'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Nome</label>
-                      <input type="text" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="nome" style={{height:'45px'}} value={formRegisterCompetitions.nome} onChange={handleInputChangeRegisterCompetitions}/>
+                      <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="nome" style={{height:'45px'}} value={formRegisterCompetitions.nome} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data da Competição</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="data_competicao" style={{height:'45px'}} value={formRegisterCompetitions.data_competicao} onChange={handleInputChangeRegisterCompetitions}/>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_competicao" style={{height:'45px'}} value={formRegisterCompetitions.data_competicao} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Jogos Completos</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="jogos_completos" style={{height:'45px'}} value={formRegisterCompetitions.jogos_completos} onChange={handleInputChangeRegisterCompetitions}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="jogos_completos" style={{height:'45px'}} value={formRegisterCompetitions.jogos_completos} onChange={handleInputChangeRegisterCompetitions}/>
+                </div>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Jogos Parciais</label>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="jogos_parciais" style={{height:'45px'}} value={formRegisterCompetitions.jogos_parciais} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
               </div>
               <div className='col'>
-              <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Jogos Parciais</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="jogos_parciais" style={{height:'45px'}} value={formRegisterCompetitions.jogos_parciais} onChange={handleInputChangeRegisterCompetitions}/>
-                </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Minutagem</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="minutagem" style={{height:'45px'}} value={formRegisterCompetitions.minutagem} onChange={handleInputChangeRegisterCompetitions}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="minutagem" style={{height:'45px'}} value={formRegisterCompetitions.minutagem} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Gols</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="gols" style={{height:'45px'}} value={formRegisterCompetitions.gols} onChange={handleInputChangeRegisterCompetitions}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="gols" style={{height:'45px'}} value={formRegisterCompetitions.gols} onChange={handleInputChangeRegisterCompetitions}/>
+                </div>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Jogos Parciais</label>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="assistencias" style={{height:'45px'}} value={formRegisterCompetitions.assistencias} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
               </div>
             </div>
-          <div className='ms-3 d-flex flex-column' style={{width: '98%'}}>
+          <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
             <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaveRegisterCompetitions}>Salvar</button>
           </div>
           <ToastContainer />

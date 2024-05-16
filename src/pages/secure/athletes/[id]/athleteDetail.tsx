@@ -16,8 +16,23 @@ import  Performance  from '@/components/Performance'
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
 import Loading from 'react-loading';
+import Image from "next/image";
 
 moment.locale('pt-br');
+
+const styleSidebar = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 600,
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  height: '100%'
+};
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -59,6 +74,7 @@ export default function AthleteDetail() {
   const [totalPages, setTotalPages] = useState(1);
   const [openCreateQuestionaryRelationship, setOpenCreateQuestionaryRelationship] = useState(false);
   const [openCreateSupportControl, setOpenCreateSupportControl] = useState(false);
+  const [openSideBar, setOpenSideBar] = useState(false);
   const [totalRowRelationship, setTotalRowRelationship] = useState<number>(1);
   const [totalRowSupportControl, setTotalRowSupportControl] = useState<number>(1);
 
@@ -109,8 +125,10 @@ export default function AthleteDetail() {
   
             // Observações
             const responseObservacoes = await getObservations(athleteId, 'relacionamento');
-            let observacao = responseObservacoes?.data[responseObservacoes?.data.length - 1]
-            setObservacao(observacao.descricao);
+            if(responseObservacoes?.data.length > 0){
+              let observacao = responseObservacoes?.data[responseObservacoes?.data.length - 1]
+              setObservacao(observacao.descricao);
+            }
   
           } catch (error:any) {
             toast.error('Dados do atleta temporariamente indisponível', {
@@ -232,6 +250,12 @@ export default function AthleteDetail() {
     });
   }
 
+  // Modal SideBar
+  const handleOpenSideBar = () => setOpenSideBar(true);
+  const handleCloseSideBar = () => {
+    setOpenSideBar(false)
+  }
+
   const handleChangePageSupportControl= (event: any, newPage:number) => {
     setPageSupportControl(newPage);
   };
@@ -339,17 +363,28 @@ export default function AthleteDetail() {
   return (
     <>
       <Header />
-      <div className="row justify-content-start">
-        <div className="col-2">
+      <div className="row justify-content-start avatar">
+        <div onClick={handleOpenSideBar}>
+          <Image
+          className="rounded mt-3 avatar"
+          src="/images/icon-user.png"
+          width={10}
+          height={10}
+          alt="Athlete logo"
+          layout="responsive"
+          objectFit="cover"
+          />
+        </div>
+        <div className="col-lg-2">
           <SideBar athleteData={athlete} />
         </div>
-        <div className="col-10">
+        <div className="col-lg-10">
           <ul className="nav nav-tabs">
-            <li className="nav-item me-1">
+            <li className="nav-item me-1 menu" style={{cursor: 'pointer'}}>
               <a className={ tabAtual === 'relationship' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('relationship')}>Relacionamento</a>
               {/* <a className="nav-link active" aria-current="page" href={`/secure/athletes/${athleteId}/athleteRelationship`}>Relacionamento</a> */}
             </li>
-            <li className="nav-item">
+            <li className="nav-item menu" style={{cursor: 'pointer'}}>
               <a className={ tabAtual === 'performance' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('performance')}>Desempenho</a>
               {/* <a className="nav-link" aria-current="page" href={`/secure/athletes/${athleteId}/athletePerformance`}>Desempenho</a> */}
             </li>
@@ -365,7 +400,7 @@ export default function AthleteDetail() {
               <div>
               </div>
             </div>
-            <div className="d-flex flex-column align-items-center justify-content-center mb-3 m-3 force-scrool">
+            <div className="m-3" style={{maxHeight: '300px', overflow: 'auto'}}>
               <table className="table table-striped">
                 <thead>
                   <tr>
@@ -409,6 +444,7 @@ export default function AthleteDetail() {
                   onChange={handleChangePageRalationship}
                   variant="outlined"
                   size="large"
+                  sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
                 />
               }
             </div>
@@ -423,40 +459,43 @@ export default function AthleteDetail() {
                     <AddButton />
                   </div>
                 </div>
-                <table className="table table-striped">
-                  <thead>
-                    <tr>
-                      <th className="table-dark text-center" scope="col">DATA</th>
-                      <th className="table-dark text-center" scope="col">NOME</th>
-                      <th className="table-dark text-center" scope="col">QUANTIDADE</th>
-                      <th className="table-dark text-center" scope="col">PREÇO</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                <div className="mt-3" style={{maxHeight: '300px', overflow: 'auto', width: '92%', marginLeft: '-20px'}}>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th className="table-dark text-center" scope="col">DATA</th>
+                        <th className="table-dark text-center" scope="col">NOME</th>
+                        <th className="table-dark text-center" scope="col">QUANTIDADE</th>
+                        <th className="table-dark text-center" scope="col">PREÇO</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        Array.isArray(displayedDataSupportControl) && displayedDataSupportControl.map((supportContol,index) => (
+                          <tr key={index}>
+                            <td className="table-dark text-center">{new Date(supportContol.data_controle).toLocaleDateString()}</td>
+                            <td className="table-dark text-center">{supportContol.nome}</td>
+                            <td className="table-dark text-center">{supportContol.quantidade}</td>
+                            <td className="table-dark text-center">R$ {supportContol.preco}</td>
+                          </tr>
+                        ))
+                      }
+                    </tbody>
+                  </table>
                     {
-                      Array.isArray(displayedDataSupportControl) && displayedDataSupportControl.map((supportContol,index) => (
-                        <tr key={index}>
-                          <td className="table-dark text-center">{new Date(supportContol.data_controle).toLocaleDateString()}</td>
-                          <td className="table-dark text-center">{supportContol.nome}</td>
-                          <td className="table-dark text-center">{supportContol.quantidade}</td>
-                          <td className="table-dark text-center">R$ {supportContol.preco}</td>
-                        </tr>
-                      ))
+                      totalRowSupportControl > 3 &&
+                      <Pagination
+                        className="pagination-bar"
+                        count={Math.ceil(totalRowSupportControl / 3)}
+                        page={pageSupportControl}
+                        onChange={handleChangePageSupportControl}
+                        variant="outlined"
+                        size="large"
+                        sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
+                      />
                     }
-                  </tbody>
-                </table>
-                {
-                  totalRowSupportControl > 3 &&
-                  <Pagination
-                    className="pagination-bar"
-                    count={Math.ceil(totalRowSupportControl / 3)}
-                    page={pageSupportControl}
-                    onChange={handleChangePageSupportControl}
-                    variant="outlined"
-                    size="large"
-                  />
-                }
-              </div>
+                  </div>
+                </div>
               <div className='col-md'>
                 <div className='ms-3 me-3 d-flex flex-column mb-3'>
                   <label style={{ width: '100%' }}>
@@ -472,7 +511,7 @@ export default function AthleteDetail() {
           : 
           // Desempenho
           <div className="card athlete-detail-card" style={{ backgroundColor: 'var(--bg-secondary-color)', marginRight: '10px' }}>
-            <Performance />
+            <Performance athleteData={athlete} />
           </div>
 
           }
@@ -500,56 +539,50 @@ export default function AthleteDetail() {
               <div className='col'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_avaliacao" style={{height:'45px'}} value={formDataRelationship.data_avaliacao} onChange={handleInputChangeRelationship}/>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_avaliacao" style={{height:'45px'}} value={formDataRelationship.data_avaliacao} onChange={handleInputChangeRelationship}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Receptividade Contato</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="receptividade_contrato" style={{height:'45px'}} value={formDataRelationship.receptividade_contrato} onChange={handleInputChangeRelationship}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="receptividade_contrato" style={{height:'45px'}} value={formDataRelationship.receptividade_contrato} onChange={handleInputChangeRelationship}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Satisfação Empresa</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="satisfacao_empresa" style={{height:'45px'}} value={formDataRelationship.satisfacao_empresa} onChange={handleInputChangeRelationship}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="satisfacao_empresa" style={{height:'45px'}} value={formDataRelationship.satisfacao_empresa} onChange={handleInputChangeRelationship}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Satisfação Clube</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="satisfacao_clube" style={{height:'45px'}} value={formDataRelationship.satisfacao_clube} onChange={handleInputChangeRelationship}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="satisfacao_clube" style={{height:'45px'}} value={formDataRelationship.satisfacao_clube} onChange={handleInputChangeRelationship}/>
                 </div>
               </div>
               <div className='col'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Relação Familiares</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="relacao_familiares" style={{height:'45px'}} value={formDataRelationship.relacao_familiares} onChange={handleInputChangeRelationship}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="relacao_familiares" style={{height:'45px'}} value={formDataRelationship.relacao_familiares} onChange={handleInputChangeRelationship}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Influencia Externa</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="influencias_externas" style={{height:'45px'}} value={formDataRelationship.influencias_externas} onChange={handleInputChangeRelationship}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="influencias_externas" style={{height:'45px'}} value={formDataRelationship.influencias_externas} onChange={handleInputChangeRelationship}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
-                  {/* <div className="d-flex align-items-center"> */}
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Pendência Empresa</label>
-                      {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                     <select className="form-select" name="pendencia_empresa" value={formDataRelationship.pendencia_empresa} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.pendencia_empresa ? '#fff' : '#999'}}>
                       <option value="" disabled hidden>Selecione</option>
                       <option value="true" style={{color: '#fff'}}>Sim</option>
                       <option value="false" style={{color: '#fff'}}>Não</option>
                     </select>
-                  {/* </div> */}
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
-                  {/* <div className="d-flex align-items-center"> */}
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Pendência Clube</label>
-                      {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                     <select className="form-select" name="pendencia_clube" value={formDataRelationship.pendencia_clube} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.pendencia_clube ? '#fff' : '#999'}}>
                       <option value="" disabled hidden>Selecione</option>
                       <option value="true" style={{color: '#fff'}}>Sim</option>
                       <option value="false" style={{color: '#fff'}}>Não</option>
                     </select>
-                  {/* </div> */}
                 </div>
               </div>
             </div>
 
-          <div className='ms-3 d-flex flex-column' style={{width: '98%'}}>
+          <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
             <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickRelationShip}>Salvar</button>
           </div>
         <ToastContainer />
@@ -572,27 +605,37 @@ export default function AthleteDetail() {
               <div className=''>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="selecione a data" name="data_controle" style={{height:'45px'}} value={formDataSupportControl.data_controle} onChange={handleInputChangeSupportControl}/>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_controle" style={{height:'45px'}} value={formDataSupportControl.data_controle} onChange={handleInputChangeSupportControl}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Nome</label>
-                      <input type="text" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="nome" style={{height:'45px'}} value={formDataSupportControl.nome} onChange={handleInputChangeSupportControl}/>
+                      <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="nome" style={{height:'45px'}} value={formDataSupportControl.nome} onChange={handleInputChangeSupportControl}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Quantidade</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="quantidade" style={{height:'45px'}} value={formDataSupportControl.quantidade} onChange={handleInputChangeSupportControl}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="quantidade" style={{height:'45px'}} value={formDataSupportControl.quantidade} onChange={handleInputChangeSupportControl}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Preço</label>
-                      <input type="number" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="preco" style={{height:'45px'}} value={formDataSupportControl.preco} onChange={handleInputChangeSupportControl}/>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="preco" style={{height:'45px'}} value={formDataSupportControl.preco} onChange={handleInputChangeSupportControl}/>
                 </div>
               </div>
             </div>
 
-          <div className='ms-3 d-flex flex-column' style={{width: '98%'}}>
+          <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
             <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickSupportControl}>Salvar</button>
           </div>
         <ToastContainer />
+        </Box>
+      </Modal>
+        {/* SideBar Responsivo */}
+        <Modal
+        open={openSideBar}
+        onClose={handleCloseSideBar}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={styleSidebar}>
+          <SideBar athleteData={athlete} />
         </Box>
       </Modal>
       <ToastContainer />

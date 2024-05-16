@@ -1,0 +1,80 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../../public/images/campo.png');
+  background-repeat: no-repeat; 
+  background-size: cover; 
+  background-position: center; 
+  width: 105%;
+  height: 0;
+  padding-bottom: 56.25%; 
+  position: relative;
+  margin-left: -11px;
+}
+
+.field {
+  position: absolute;
+  width: 100%; 
+  height: 100%; 
+}
+
+.goleiro,
+.zagueiro,
+.lateral,
+.meia,
+.volante,
+.atacante {
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 25%; 
+  height: 25%; 
+}
+
+.goleiro {
+  bottom: -30%;
+  left: 43%;
+  background-image: url('../../public/images/goleiro.png');
+  z-index: 5;
+}
+
+.zagueiro {
+  bottom: -10%;
+  left: 43%;
+  background-image: url('../../public/images/jogador.png');
+  z-index: 4;
+}
+
+.lateral {
+  bottom: -1%;
+  left: 60%;
+  background-image: url('../../public/images/jogador.png');
+  z-index: 4;
+}
+
+.meia {
+  bottom: 8%;
+  left: 43%;
+  background-image: url('../../public/images/jogador.png');
+  z-index: 3;
+}
+
+.volante {
+  bottom: 16%;
+  left: 43%;
+  background-image: url('../../public/images/jogador.png');
+  z-index: 2;
+}
+
+.atacante {
+  bottom: 25%;
+  left: 43%;
+  background-image: url('../../public/images/jogador.png');
+  z-index: 1;
+}
+@media (max-width: 1000px) {
+  .container{
+    width: 100%;
+  }
+}

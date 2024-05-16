@@ -1,133 +1,92 @@
-[
-  {
-    "Id": 1,
-    "CaracteristicaFisica": {
-      "Perfil": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": 10,
-        "Apos30Meses": "--"
-      },
-      "Maturacao": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": 10,
-        "Apos30Meses": "--"
-      },
-      "AgilidadeImpulsao": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": 10,
-        "Apos30Meses": "--"
-      },
-      "VelocidadeMembroSuperior": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": 10,
-        "Apos30Meses": "--"
-      },
-      "Flexibilidade": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": 10,
-        "Apos30Meses": "--"
-      },
-      "PsicionamentoOfensivoDefensivo": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": 10,
-        "Apos30Meses": "--"
-      },
-      "Total": 100,
-      "Media": 100
-    },
-    "CaracteristicaTecnicas": {
-      "LeituraJogo": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": "--",
-        "Apos30Meses": "--"
-      },
-      "JogosComPesReposicaoJogo": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": "--",
-        "Apos30Meses": "--"
-      },
-      "OrganizacaoDefesaDominioArea": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": "--",
-        "Apos30Meses": "--"
-      },
-      "DominioCoberturaSaida": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": "--",
-        "Apos30Meses": "--"
-      },
+{
+    "fisico": [
+        {
+          "data_avaliacao": "2024-04-22T19:01:31.733Z",
+          "perfil": "4",
+          "maturacao": "3",
+          "agilidade": "3",
+          "velocidade": "2",
+          "flexibilidade": "1",
+          "posicionamento": "10",
+          "total": "100",
+          "media": "10"
+        },
+        {
+          "data_avaliacao": "2024-04-22T19:01:31.733Z",
+          "perfil": "4",
+          "maturacao": "3",
+          "agilidade": "3",
+          "velocidade": "2",
+          "flexibilidade": "1",
+          "posicionamento": "10",
+          "total": "100",
+          "media": "10"
+        },
+        {
+          "data_avaliacao": "2024-04-22T19:01:31.733Z",
+          "perfil": "4",
+          "maturacao": "3",
+          "agilidade": "3",
+          "velocidade": "2",
+          "flexibilidade": "1",
+          "posicionamento": "10",
+          "total": "100",
+          "media": "10"
+        },
+        {
+          "data_avaliacao": "2024-04-22T19:01:31.733Z",
+          "perfil": "4",
+          "maturacao": "3",
+          "agilidade": "3",
+          "velocidade": "2",
+          "flexibilidade": "1",
+          "posicionamento": "10",
+          "total": "100",
+          "media": "10"
+        },
+        {
+          "data_avaliacao": "2024-04-22T19:01:31.733Z",
+          "perfil": "4",
+          "maturacao": "3",
+          "agilidade": "3",
+          "velocidade": "2",
+          "flexibilidade": "1",
+          "posicionamento": "10",
+          "total": "100",
+          "media": "10"
+        }
       
-      "Total": 100,
-      "Media": 100
-    },
-    "PerfilPsicologico": {
-      "Lideranca": {
-        "Data": "2024-04-22T19:01:31.733Z",
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": "--",
-        "Apos30Meses": "--"
+    ],
+
+    "tecnica": [
+      {
+        "data_avaliacao": "2024-04-22T19:01:31.733Z",
+        "leitura": "4",
+        "reposicao": "3",
+        "organizacao": "2",
+        "dominio": "1",
+        "total": "100",
+        "media": "10"
       },
-      "CoragemConfianca": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": "--",
-        "Apos30Meses": "--"
-      },
-      "ConcentracaoResponsabilidade": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": "--",
-        "Apos30Meses": "--"
-      },
-      "ControleEstresse": {
-        "AvaliacaoInicial": "2024-04-22T19:01:31.733Z",
-        "Apos6Meses": 5,
-        "Apos12Meses": 7,
-        "Apos18Meses": 8,
-        "Apos24Meses": "--",
-        "Apos30Meses": "--"
-      },
-      
-      "Total": 100,
-      "Media": 100
-    },
-    "AvaliacaoFinalMedia": "100"
+      {
+        "data_avaliacao": "2024-04-22T19:01:31.733Z",
+        "leitura": "4",
+        "reposicao": "3",
+        "organizacao": "2",
+        "dominio": "1",
+        "total": "100",
+        "media": "10"
+      }
+    ],
+    "psicologico": [
+      {
+        "data_avaliacao": "2024-04-22T19:01:31.733Z",
+        "lideranca": "4",
+        "coragem": "3",
+        "concentracao": "2",
+        "controle_estresse": "2",
+        "total": "100",
+        "media": "10"
+      }
+    ]
   }
-]

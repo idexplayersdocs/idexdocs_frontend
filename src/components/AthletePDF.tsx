@@ -240,7 +240,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                   </tr>
                 </thead>
                 <tbody>
-                  {info.caracteristicas_posicao.map((x, y) => {
+                  {info.caracteristicas_posicao.map((x, i) => {
                     return (
                       <tr>
                         <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
@@ -336,7 +336,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                 <tbody>
                   {info.competicao.map((x, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td>{x.nome}</td>
                         <td>{x.gols}</td>
                         <td>{x.jogos_completos}</td>

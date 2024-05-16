@@ -25,6 +25,7 @@ const style = {
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
+  borderRadius: '20px',
 };
 
 export default function ClubHistory({closeModal, athleteId}: any) {
@@ -61,6 +62,7 @@ export default function ClubHistory({closeModal, athleteId}: any) {
         setLoading(true);
         try {
           const clubList = await getClub(athleteId, page);
+          console.log(clubList)
           setClub(clubList?.data);
           setTotalRow(clubList?.total);
 
@@ -165,8 +167,8 @@ export default function ClubHistory({closeModal, athleteId}: any) {
                 Array.isArray(club) && club.map((clube, index: number) => (
                   <tr key={index}>
                     <td className="table-dark text-center">{clube.nome}</td>
-                    <td className="table-dark text-center">{moment(clube.data_inicio).format('DD/MM/YYY')}</td>
-                    <td className="table-dark text-center">{clube.data_fim ? clube.data_fim : 'Atual'}</td>
+                    <td className="table-dark text-center">{moment(clube.data_inicio).format('DD/MM/YYYY')}</td>
+                    <td className="table-dark text-center">{clube.data_fim ? moment(clube.data_fim).format('DD/MM/YYYY') : 'Atual'}</td>
                   </tr>
                 ))
               ) : (
@@ -186,6 +188,7 @@ export default function ClubHistory({closeModal, athleteId}: any) {
               onChange={handleChangePage}
               variant="outlined"
               size="large"
+              sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
             />
         }
       </div>
@@ -205,7 +208,7 @@ export default function ClubHistory({closeModal, athleteId}: any) {
               <div className=''>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Nome do Clube</label>
-                      <input type="text" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="nome" style={{height:'45px'}} value={formRegisterClub.nome} onChange={handleInputChangeRegisterClub}/>
+                      <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="nome" style={{height:'45px'}} value={formRegisterClub.nome} onChange={handleInputChangeRegisterClub}/>
                 </div>
                 <div className="mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Clube Atual</label>
@@ -227,11 +230,11 @@ export default function ClubHistory({closeModal, athleteId}: any) {
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data de Início</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="data_inicio" style={{height:'45px'}} value={formRegisterClub.data_inicio} onChange={handleInputChangeRegisterClub} />
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_inicio" style={{height:'45px'}} value={formRegisterClub.data_inicio} onChange={handleInputChangeRegisterClub} />
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{formRegisterClub.clube_atual ? 'Data de Término do Clube Anterior': 'Data de Término'}</label>
-                      <input type="date" className="form-control input-create input-date bg-dark" placeholder="Digite..." name="data_fim" style={{height:'45px'}} value={formRegisterClub.data_fim} onChange={handleInputChangeRegisterClub}/>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_fim" style={{height:'45px'}} value={formRegisterClub.data_fim} onChange={handleInputChangeRegisterClub}/>
                 </div>
               </div>
             </div>
