@@ -654,7 +654,7 @@ export default function AthleteDetail() {
         <Box sx={styleSidebar}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Detalhe do atleta"/>
-            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateSupportControl}/>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseSideBar}/>
           </div>
           <hr />
           <SideBar athleteData={athlete} modal={true}/>
