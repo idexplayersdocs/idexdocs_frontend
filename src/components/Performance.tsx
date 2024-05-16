@@ -31,9 +31,8 @@ const styleCaracteristic = {
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
-  height: 650,
+  height: '80%',
   overflow: 'auto',
-  heigth: '80%',
   borderRadius: '20px',
 };
 
