@@ -29,13 +29,12 @@ export default function AthleteDetail() {
 
   return (
     <>
-    <Header />
+      <Header />
       <div className="row justify-content-start" >
         <div className="col-2">
           <SideBar athleteData={athlete} />
         </div>
         <div className="col-10">
-          {/* Relacionamento */}
           <div className="card h-100" style={{backgroundColor: 'var(--bg-secondary-color)', marginRight:'10px'}}>
               <Relationship />
           </div>

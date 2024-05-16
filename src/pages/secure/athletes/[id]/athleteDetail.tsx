@@ -564,26 +564,20 @@ export default function AthleteDetail() {
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="influencias_externas" style={{height:'45px'}} value={formDataRelationship.influencias_externas} onChange={handleInputChangeRelationship}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
-                  {/* <div className="d-flex align-items-center"> */}
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Pendência Empresa</label>
-                      {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                     <select className="form-select" name="pendencia_empresa" value={formDataRelationship.pendencia_empresa} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.pendencia_empresa ? '#fff' : '#999'}}>
                       <option value="" disabled hidden>Selecione</option>
                       <option value="true" style={{color: '#fff'}}>Sim</option>
                       <option value="false" style={{color: '#fff'}}>Não</option>
                     </select>
-                  {/* </div> */}
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
-                  {/* <div className="d-flex align-items-center"> */}
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Pendência Clube</label>
-                      {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                     <select className="form-select" name="pendencia_clube" value={formDataRelationship.pendencia_clube} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.pendencia_clube ? '#fff' : '#999'}}>
                       <option value="" disabled hidden>Selecione</option>
                       <option value="true" style={{color: '#fff'}}>Sim</option>
                       <option value="false" style={{color: '#fff'}}>Não</option>
                     </select>
-                  {/* </div> */}
                 </div>
               </div>
             </div>

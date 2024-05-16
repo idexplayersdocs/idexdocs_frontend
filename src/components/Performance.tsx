@@ -292,6 +292,7 @@ export default function Performance({athleteData}: any) {
             </Box>
           </Modal>
           <Modal
+            keepMounted 
             open={openInfo}
             onClose={handleCloseInfo}
             aria-labelledby="modal-modal-title"
