@@ -27,7 +27,7 @@ const style = {
   p: 4,
   borderRadius: '20px',
   overflow: 'auto',
-  height: '80%'
+  height: '95%'
 };
 
 export default function PerformanceCreation({closeModal, athleteData, dataList, labelList, athleteId}: any) {

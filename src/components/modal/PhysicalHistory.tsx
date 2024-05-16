@@ -26,7 +26,7 @@ const style = {
   boxShadow: 24,
   p: 4,
   borderRadius: '20px',
-  height: '80%',
+  height: '95%',
   overflow: 'auto'
 };
 
