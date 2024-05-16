@@ -32,13 +32,17 @@ export const UpdateUsuario = async (usuario: UsuarioUpdateRequestDTO) => {
   return data;
 };
 
-
-export const UpdatePassword = async (usuario: {id: number; password: string; new_password: string}) => {
-  const {data} = await axiosClient.put(`/usuario/update/password`, {
+export const UpdatePassword = async (usuario: { id: number; password: string; new_password: string }) => {
+  const { data } = await axiosClient.put(`/usuario/update/password`, {
     id: usuario.id,
     password: usuario.password,
-    new_password: usuario.new_password
+    new_password: usuario.new_password,
   });
 
   return data;
-}
+};
+
+export const GetFotoUsuario = async (userId: number): Promise<{ status: boolean; blob_url: string }> => {
+  const { data } = await axiosClient.get<{ status: boolean; blob_url: string }>(`/avatar/atleta/${userId}`);
+  return data;
+};

@@ -26,27 +26,41 @@ const options: Options = {
   // so use with caution
 };
 
-type AthletaInfo = {
+export type AthletaInfo = {
   info: PDFInfoResponseDTO;
   onLoading: (isLoading: boolean) => void;
+  urlFoto: string;
 };
 
-export default function AthletePDF({ info, onLoading }: AthletaInfo) {
+export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
   const pdfRef = React.useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const onClickPDF = async (): Promise<void> => {
-    setIsLoading(true);
-    onLoading(true);
-    try {
-      await generatePDF(pdfRef, options);
-    } finally {
-      setIsLoading(false);
-      onLoading(false);
-    }
+    // setIsLoading(true);
+    // onLoading(true);
+    // try {
+    //   await generatePDF(pdfRef, options);
+    // } finally {
+    //   setIsLoading(false);
+    //   onLoading(false);
+    // }
   };
 
   const observacoesDesempenho = info.observacao.filter((x) => x.tipo === "desempenho");
+  const clubes = info.clube.sort((a: any, b: any) => {
+    if (!a.data_fim && !b.data_fim) {
+      return 0;
+    }
+    if (!a.data_fim) {
+      return -1;
+    }
+    if (!b.data_fim) {
+      return 1;
+    }
+
+    return b.data_fim - a.data_fim;
+  });
 
   return (
     <>
@@ -82,17 +96,29 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
           </header>
           <section className="row">
             <article className="col-3 border border-black rounded p-2 d-flex align-items-center justify-content-center">
-              <Image
-                objectFit="contain"
-                src="/images/icon-user.png"
-                alt="Logo Fort House"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{ width: "100%", height: "auto", maxWidth: "100%" }}
-              />
+              {urlFoto ? (
+                <Image
+                  objectFit="contain"
+                  src={urlFoto}
+                  alt="Logo Fort House"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  style={{ width: "100%", height: "auto", maxWidth: "100%" }}
+                />
+              ) : (
+                <Image
+                  objectFit="contain"
+                  src="/images/icon-user.png"
+                  alt="Logo Fort House"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  style={{ width: "100%", height: "auto", maxWidth: "100%" }}
+                />
+              )}
             </article>
-            <article className="col-9 ">
+            <article className="col-9">
               <div className="border-bottom border-4 border-black mb-3">
                 <p className="fw-bold mb-2">
                   Nome do Atleta: <span className="text-uppercase fw-normal">{info.atleta.nome}</span>
@@ -113,11 +139,6 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                   Clube Atual: <span className="text-uppercase fw-normal">{info.atleta.clube_atual}</span>
                 </p>
               </div>
-              <div>
-                <p className="fw-bold d-flex align-items-center justify-content-between mb-2">
-                  Competiçãoes andamento: <span className="text-uppercase fw-normal">Copa SP 2024</span>
-                </p>
-              </div>
             </article>
           </section>
           <section className="mt-4">
@@ -130,6 +151,9 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                 <thead className="thead-dark">
                   <tr>
                     <th className="" scope="col">
+                      Data
+                    </th>
+                    <th className="" scope="col">
                       Estatura
                     </th>
                     <th className="" scope="col">
@@ -141,20 +165,17 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                     <th className="" scope="col">
                       Percentual de Gordura
                     </th>
-                    <th className="" scope="col">
-                      Data
-                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {info.caracteristicas_fisicas.map((x, i) => {
                     return (
                       <tr key={i}>
+                        <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
                         <td className="">{x.estatura}</td>
                         <td className="">{x.envergadura}</td>
                         <td className="">{x.peso}</td>
                         <td className="">{x.percentual_gordura}</td>
-                        <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
                       </tr>
                     );
                   })}
@@ -171,6 +192,9 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
               <table className="table" style={{ maxWidth: "100%", width: "100%" }}>
                 <thead>
                   <tr>
+                    <th className="" scope="col" style={{ fontSize: 14 }}>
+                      Data
+                    </th>
                     <th className="" scope="col" style={{ fontSize: 14 }}>
                       Est.
                     </th>
@@ -213,15 +237,13 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                     <th className="" scope="col" style={{ fontSize: 14 }}>
                       Competividade
                     </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Data
-                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {info.caracteristicas_posicao.map((x, i) => {
                     return (
-                      <tr key={i}>
+                      <tr>
+                        <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
                         <td className="">{x.estatura_fis}</td>
                         <td className="">{x.velocidade_fis}</td>
                         <td className="">{x.um_contra_um_ofensivo_fis}</td>
@@ -236,7 +258,6 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                         <td className="">{x.criatividade_psi}</td>
                         <td className="">{x.capacidade_decisao_psi}</td>
                         <td className="">{x.competitividade_psi}</td>
-                        <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
                       </tr>
                     );
                   })}
@@ -253,16 +274,16 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
               <table className="table" style={{ maxWidth: "100%", width: "100%" }}>
                 <thead>
                   <tr>
-                    <th>Descrição</th>
                     <th>Data</th>
+                    <th>Descrição</th>
                   </tr>
                 </thead>
                 <tbody>
                   {info.lesao.map((x, i) => {
                     return (
-                      <tr key={i}>
-                        <td>{x.descricao}</td>
+                      <tr>
                         <td>{moment(x.data_lesao).format("DD/MM/YYYY")}</td>
+                        <td>{x.descricao}</td>
                       </tr>
                     );
                   })}
@@ -278,18 +299,18 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
               <table className="table">
                 <thead>
                   <tr>
-                    <td>Nome</td>
                     <td>Date de Inicio</td>
                     <td>Data de Fim</td>
+                    <td>Nome</td>
                   </tr>
                 </thead>
                 <tbody>
-                  {info.clube.map((x, i) => {
+                  {clubes.map((x, i) => {
                     return (
-                      <tr key={i}>
-                        <td>{x.nome}</td>
+                      <tr>
                         <td>{moment(x.data_inicio).format("DD/MM/YYYY")}</td>
                         <td>{x.data_fim ? moment(x.data_fim).format("DD/MM/YYYY") : "--"}</td>
+                        <td>{x.nome}</td>
                       </tr>
                     );
                   })}
@@ -354,6 +375,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
               <table className="table">
                 <thead>
                   <tr>
+                    <td>Data</td>
                     <td>Receptividade Contrato</td>
                     <td>Satisfação da Empresa</td>
                     <td>Satisfação do Clube</td>
@@ -361,20 +383,20 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                     <td>Influências Externas</td>
                     <td>Pendência Empresa</td>
                     <td>Pendência Clube</td>
-                    <td>Data</td>
                   </tr>
                 </thead>
                 <tbody>
                   {info.relacionamento.map((x, i) => {
                     return (
-                      <tr key={i}>
+                      <tr>
+                        <td>{x.data_criacao ? moment(x.data_criacao).format("DD/MM/YYYY").toString() : "---"}</td>
                         <td>{x.receptividade_contrato}</td>
                         <td>{x.satisfacao_empresa}</td>
+                        <td>{x.satisfacao_clube}</td>
                         <td>{x.relacao_familiares}</td>
                         <td>{x.influencias_externas}</td>
                         <td>{x.pendencia_empresa ? "Sim" : "Não"}</td>
                         <td>{x.pendencia_clube ? "Sim" : "Não"}</td>
-                        <td>{x.data_criacao ? moment(x.data_criacao).format("DD/MM/YYYY").toString() : "---"}</td>
                       </tr>
                     );
                   })}

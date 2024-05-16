@@ -248,7 +248,7 @@ export default function Athletes() {
             <Title title="Atletas" />
           </div>
           <div className="input-group w-50 col-lg w-100">
-            <input type="text" className="form-control bg-dark-custom-input " placeholder="Search" aria-label="Search" aria-describedby="inputSearch" value={inputFilter} onChange={handleInputFilter} />
+            <input type="text" className="form-control bg-dark-custom-input " placeholder="Buscar" aria-label="Search" aria-describedby="inputSearch" value={inputFilter} onChange={handleInputFilter} />
               <span className="clear-input" style={{cursor: 'pointer'}} onClick={handleClickClear}>
               <FontAwesomeIcon icon={faX} style={{color: "#ffffff",}} />
               </span>
