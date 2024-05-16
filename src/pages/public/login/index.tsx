@@ -22,9 +22,8 @@ export default function Login() {
   const onSubmit = async (data: LoginRequestDTO): Promise<void> => {
     setIsLoading(true);
     try {
-      const res = await LoginUser({ email: data.email, password: data.password });
-
-      localStorage.setItem("token", res["acess_token"]);
+      const res = await LoginUser({ email: data.email, password: data.password });      
+      localStorage.setItem("token", res.access_token);      
       router.push("/secure/athletes");
     } catch (e: unknown | any) {
       toast.error(e.response.data.errors[0].message, {
@@ -57,10 +56,10 @@ export default function Login() {
         className={`${styles.bgSectionImage} w-100 min-vh-100 border-primary d-flex align-items-center justify-content-center`}
       >
         <main
-          className={` w-50 rounded-4 px-5 d-flex align-items-center justity-content-center ${styles.cardGlassmorphism}`}
+          className={`rounded-4 px-5 d-flex align-items-center justity-content-center ${styles.cardGlassmorphism}`}
         >
           <form
-            className="w-75 d-flex flex-wrap align-items-center justify-content-center mx-auto"
+            className="w-100 d-flex flex-wrap align-items-center justify-content-center mx-auto"
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="w-100 mb-3">
@@ -91,7 +90,7 @@ export default function Login() {
               />
               {errors.password && <span className="text-danger mt-1 d-block">Password is required field</span>}
             </div>
-            <div className="w-50">
+            <div className="w-100">
               <button className="fw-bol btn bg-success text-white w-100" type="submit">
                 Log in <FontAwesomeIcon icon={faRightToBracket} />
               </button>

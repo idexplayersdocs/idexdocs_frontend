@@ -4,7 +4,7 @@ import React from "react";
 import generatePDF, { Margin, Options } from "react-to-pdf";
 import { LoadingOverlay } from "./LoadingOverley";
 import Loading from "react-loading";
-import moment from 'moment';
+import moment from "moment";
 
 const options: Options = {
   // default is `save`
@@ -103,7 +103,11 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                   Posição: <span className="text-uppercase fw-normal">{info.atleta.posicao_primaria}</span>
                 </p>
                 <p className="fw-bold d-flex align-items-center justify-content-between mb-2">
-                  Data de Nascimento: <span className="text-uppercase fw-normal"> {moment(info.atleta.data_nascimento).format('DD/MM/YYYY')}</span>
+                  Data de Nascimento:{" "}
+                  <span className="text-uppercase fw-normal">
+                    {" "}
+                    {moment(info.atleta.data_nascimento).format("DD/MM/YYYY")}
+                  </span>
                 </p>
                 <p className="fw-bold d-flex align-items-center justify-content-between">
                   Clube Atual: <span className="text-uppercase fw-normal">{info.atleta.clube_atual}</span>
@@ -119,9 +123,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
           <section className="mt-4">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">
-                  Características Físicas ({info.atleta.posicao_primaria})
-                </p>
+                <p className="fw-bold mb-2 text-uppercase h4">PERFIL FÍSICO E TÉCNICO</p>
               </div>
 
               <table className="table">
@@ -152,7 +154,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                         <td className="">{x.envergadura}</td>
                         <td className="">{x.peso}</td>
                         <td className="">{x.percentual_gordura}</td>
-                        <td className="">{moment(x.data_criacao).format('DD/MM/YYYY')}</td>
+                        <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
                       </tr>
                     );
                   })}
@@ -163,9 +165,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
           <section className="mt-4">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">
-                  Características da Posição ({info.atleta.posicao_primaria})
-                </p>
+                <p className="fw-bold mb-2 text-uppercase h4">PERFIL TÉCNICO DIFERENCIAL</p>
               </div>
 
               <table className="table" style={{ maxWidth: "100%", width: "100%" }}>
@@ -236,7 +236,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                         <td className="">{x.criatividade_psi}</td>
                         <td className="">{x.capacidade_decisao_psi}</td>
                         <td className="">{x.competitividade_psi}</td>
-                        <td className="">{moment(x.data_criacao).format('DD/MM/YYYY')}</td>
+                        <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
                       </tr>
                     );
                   })}
@@ -247,7 +247,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
           <section className="mt-4">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">Histórico de Lesões ({info.atleta.posicao_primaria})</p>
+                <p className="fw-bold mb-2 text-uppercase h4">Histórico de Lesões </p>
               </div>
 
               <table className="table" style={{ maxWidth: "100%", width: "100%" }}>
@@ -262,7 +262,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                     return (
                       <tr key={i}>
                         <td>{x.descricao}</td>
-                        <td>{moment(x.data_lesao).format('DD/MM/YYYY')}</td>
+                        <td>{moment(x.data_lesao).format("DD/MM/YYYY")}</td>
                       </tr>
                     );
                   })}
@@ -273,7 +273,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
           <section className="mt-4">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">Histórico de Clubes ({info.atleta.posicao_primaria})</p>
+                <p className="fw-bold mb-2 text-uppercase h4">Histórico de Clubes </p>
               </div>
               <table className="table">
                 <thead>
@@ -289,7 +289,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                       <tr key={i}>
                         <td>{x.nome}</td>
                         <td>{moment(x.data_inicio).format("DD/MM/YYYY")}</td>
-                        <td>{x.data_fim ? moment(x.data_fim).format('DD/MM/YYYY') : "--"}</td>
+                        <td>{x.data_fim ? moment(x.data_fim).format("DD/MM/YYYY") : "--"}</td>
                       </tr>
                     );
                   })}
@@ -300,9 +300,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
           <section className="mt-4">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">
-                  Histórico de competição ({info.atleta.posicao_primaria})
-                </p>
+                <p className="fw-bold mb-2 text-uppercase h4">Histórico de competição</p>
               </div>
               <table className="table">
                 <thead>
@@ -351,22 +349,54 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
           <section className="mt-5">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
+                <p className="fw-bold mb-2 text-uppercase h4">Relacionamento</p>
+              </div>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <td>Receptividade Contrato</td>
+                    <td>Satisfação da Empresa</td>
+                    <td>Satisfação do Clube</td>
+                    <td>Relação Familiares</td>
+                    <td>Influências Externas</td>
+                    <td>Pendência Empresa</td>
+                    <td>Pendência Clube</td>
+                    <td>Data</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {info.relacionamento.map((x, i) => {
+                    return (
+                      <tr>
+                        <td>{x.receptividade_contrato}</td>
+                        <td>{x.satisfacao_empresa}</td>
+                        <td>{x.relacao_familiares}</td>
+                        <td>{x.influencias_externas}</td>
+                        <td>{x.pendencia_empresa ? "Sim" : "Não"}</td>
+                        <td>{x.pendencia_clube ? "Sim" : "Não"}</td>
+                        <td>{x.data_criacao ? moment(x.data_criacao).format("DD/MM/YYYY").toString() : "---"}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </article>
+          </section>
+          <section className="mt-5">
+            <article>
+              <div className="border-bottom border-4 border-black mb-3">
                 <p className="fw-bold mb-2 text-uppercase h4">Observações</p>
               </div>
-              {observacoesDesempenho.map((x, i) => {
-                return (
-                  <div className="row border-bottom border-2 mb-2 border-gray" key={i}>
-                    <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                      <textarea
-                        disabled
-                        className="w-100 bg-white border-black text-black"
-                        style={{ resize: "none" }}
-                        value={x.descricao}
-                      ></textarea>
-                    </p>
-                  </div>
-                );
-              })}
+              <div className="row border-bottom border-2 mb-2 border-gray">
+                <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                  <textarea
+                    disabled
+                    className="w-100 bg-white border-black text-black"
+                    style={{ resize: "none" }}
+                    value={observacoesDesempenho[observacoesDesempenho.length - 1].descricao}
+                  ></textarea>
+                </p>
+              </div>
             </article>
             {/* <p className="fw-bold text-uppercase"> Observações</p>
             <textarea disabled className="w-100 bg-white border-black " style={{ resize: "none" }} value={}></textarea> */}
