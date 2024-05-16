@@ -25,7 +25,6 @@ import { Box, Button, Modal, colors } from "@mui/material";
 import Subtitle from "@/components/Subtitle";
 import { jwtDecode } from "jwt-decode";
 
-
 const StyledTab = styled(Tab)({
   color: "#626262",
   "&.Mui-selected": {
@@ -143,7 +142,7 @@ export default function ProfileConfiguration() {
 
       console.log(data);
 
-      const res = await UpdatePassword({ id: data.id, password: data.confirmarSenha, new_password: data.senha });      
+      const res = await UpdatePassword({ id: data.id, password: data.confirmarSenha, new_password: data.senha });
       const resUpdateUser = await UpdateUsuario({
         email: data.email,
         id: data.id,
@@ -152,7 +151,6 @@ export default function ProfileConfiguration() {
       });
 
       // console.log(resUpdateUser);
-
     } catch (e) {
       setMessageSnackBar("Senha anterior inválida. Tente novamente!");
       setSnackBarError(true);
@@ -163,7 +161,7 @@ export default function ProfileConfiguration() {
 
     setTimeout(() => {
       setSnackBarError(false);
-    }, 5000)
+    }, 5000);
   };
 
   const getListUser = async (page: number, perPage: number): Promise<void> => {
@@ -217,8 +215,7 @@ export default function ProfileConfiguration() {
 
   const handleChangePage = async (event: any, page: number): Promise<void> => {
     await getListUser(page, 10);
-  }
-
+  };
 
   React.useEffect(() => {
     (async () => {
@@ -232,7 +229,7 @@ export default function ProfileConfiguration() {
     <>
       <Header />
       <LoadingOverlay isLoading={loading} />
-      <div className="w-75 mx-auto">
+      <div className="w-100 mx-auto px-4">
         <TabContext value={tabValue}>
           <TabList
             onChange={handleChange}
@@ -241,6 +238,8 @@ export default function ProfileConfiguration() {
             TabIndicatorProps={{
               style: {
                 backgroundColor: "#626262",
+                paddingLeft: '5px',
+                paddingRight: '5px'
               },
             }}
           >
@@ -249,7 +248,7 @@ export default function ProfileConfiguration() {
             <StyledTab label="Editar Usuários" value="3" />
           </TabList>
           <TabPanel value="1">
-            <div className="w-75 mx-auto mt-5">
+            <div className="w-100 mx-auto mt-5 px-2">
               <form onSubmit={handleSubmitUpdateProfile(onUpdatePerfil)}>
                 <div>
                   <label className="d-block text-white h4">Nome:</label>
@@ -306,7 +305,7 @@ export default function ProfileConfiguration() {
             </div>
           </TabPanel>
           <TabPanel value="2">
-            <div className="w-75 mx-auto mt-5">
+            <div className="w-100 mx-auto mt-5">
               <form onSubmit={handleSubmitCreateUser(onSubmitCreateUser)}>
                 <div>
                   <label className="d-block text-white h4">Nome:</label>
@@ -366,61 +365,54 @@ export default function ProfileConfiguration() {
             </div>
           </TabPanel>
           <TabPanel value="3">
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th className="table-dark" scope="col">
-                    NOME
-                  </th>
-                  <th className="table-dark" scope="col">
-                    EMAIL
-                  </th>
-                  <th className="table-dark" scope="col">
-                    DATA DE CRIAÇÃO
-                  </th>
-                  <th className="table-dark" scope="col">
-                    TIPO
-                  </th>
-                  <th className="table-dark"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {usuarioList?.data ? (
-                  usuarioList.data.map((user, i) => (
-                    <tr key={i}>
-                      <td className="table-dark">{user.nome}</td>
-                      <td className="table-dark">{user.email}</td>
-                      <td className="table-dark">{new Date(user.data_criacao).toLocaleDateString()}</td>
-                      <td className="table-dark">{user.tipo}</td>
-                      <td className="table-dark">
-                        <FontAwesomeIcon
-                          icon={faPenSquare}
-                          style={{ color: "white", cursor: "pointer", marginRight: 12 }}
-                          size="xl"
-                          onClick={() => onUpdateUser(user)}
-                        />
+            <div className="overflow-x-auto">
+              <table className="table table-striped">
+                <thead>
+                  <tr>
+                    <th className="table-dark" scope="col">
+                      NOME
+                    </th>
+                    <th className="table-dark" scope="col">
+                      EMAIL
+                    </th>
+                    <th className="table-dark" scope="col">
+                      DATA DE CRIAÇÃO
+                    </th>
+                    <th className="table-dark" scope="col">
+                      TIPO
+                    </th>
+                    <th className="table-dark"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {usuarioList?.data ? (
+                    usuarioList.data.map((user, i) => (
+                      <tr key={i}>
+                        <td className="table-dark">{user.nome}</td>
+                        <td className="table-dark">{user.email}</td>
+                        <td className="table-dark">{new Date(user.data_criacao).toLocaleDateString()}</td>
+                        <td className="table-dark">{user.tipo}</td>
+                        <td className="table-dark">
+                          <FontAwesomeIcon
+                            icon={faPenSquare}
+                            style={{ color: "white", cursor: "pointer", marginRight: 12 }}
+                            size="xl"
+                            onClick={() => onUpdateUser(user)}
+                          />
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="table-dark text-center">
+                        Lista de atletas vazia
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={5} className="table-dark text-center">
-                      Lista de atletas vazia
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-            {usuarioList && usuarioList.total > 10 && (
-              <Pagination
-                className="pagination-bar"
-                count={Math.ceil(usuarioList!.total / 10)}
-                page={page}
-                onChange={handleChangePage}
-                variant="outlined"
-                size="large"
-              />
-            )}
+                  )}
+                </tbody>
+              </table>
+            </div>
+           
           </TabPanel>
         </TabContext>
         {showSnackBar && <SnackBar msg={messageSnackBar} open={true} type="success" />}

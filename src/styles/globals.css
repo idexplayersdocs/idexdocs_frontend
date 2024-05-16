@@ -245,3 +245,7 @@ select option[disabled] {
 .overlay {
   background-color: rgba(0, 0, 0, 0.5);
 }
+
+#pdf, .pdf {
+  display: none;
+}
