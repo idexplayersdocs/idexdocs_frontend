@@ -15,16 +15,7 @@ import Loading from 'react-loading';
 import moment from 'moment';
 
 const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 1000,
-  bgcolor: 'var(--bg-primary-color)',
-  border: '1px solid var(--color-line)',
-  boxShadow: 24,
-  p: 4,
-  borderRadius: '20px',
+
 };
 
 export default function HistoryCompetitions({closeModal, athleteId}: any) {

@@ -253,17 +253,6 @@ export default function ProfileConfiguration() {
               <form onSubmit={handleSubmitUpdateProfile(onUpdatePerfil)}>
                 <div>
                   <label className="d-block text-white h4">Nome:</label>
-<<<<<<< HEAD
-                  <input type="text" className="form-control input-create bg-dark-custom " />
-                </div>
-                <div className="mt-4">
-                  <label className="d-block text-white h4">Email:</label>
-                  <input type="text" className="form-control input-create bg-dark-custom " />
-                </div>
-                <div className="mt-4">
-                  <label className="d-block text-white h4">Senha:</label>
-                  <input type="password" className="form-control input-create bg-dark-custom " />
-=======
                   <input
                     type="text"
                     className="form-control input-create bg-dark"
@@ -307,7 +296,6 @@ export default function ProfileConfiguration() {
                     })}
                   />
                   {errosUpdateProfile.senha && <span className="text-danger mt-1 d-block">Nome is required field</span>}
->>>>>>> vittor_daniel
                 </div>
                 <div className="mt-4 d-flex align-items-center justify-content-end">
                   <button className="btn-success btn text-white w-25" type="submit">

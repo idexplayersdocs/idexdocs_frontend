@@ -367,7 +367,7 @@ export default function AthletePDF({ info, onLoading }: AthletaInfo) {
                 <tbody>
                   {info.relacionamento.map((x, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td>{x.receptividade_contrato}</td>
                         <td>{x.satisfacao_empresa}</td>
                         <td>{x.relacao_familiares}</td>
