@@ -11,18 +11,22 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAsterisk, faMagnifyingGlass, faX } from "@fortawesome/free-solid-svg-icons";
+import { overflow } from "html2canvas/dist/types/css/property-descriptors/overflow";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 700,
+  width: '80%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
   borderRadius: '20px',
+  height: '80%',
+  overflow: 'auto'
 };
 
 const VisuallyHiddenInput = styled('input')({
@@ -59,8 +63,13 @@ export default function Athletes() {
     data_inicio: '',
   });
 
-  const [formContrato, setFormContrato] = useState({
+  const [formContratoClube, setFormContratoClube] = useState({
     tipo_id: '',
+    data_inicio: '',
+    data_fim: '',
+  });
+
+  const [formContratoEmpresa, setFormContratoEmpresa] = useState({
     data_inicio: '',
     data_fim: '',
   });
@@ -80,8 +89,12 @@ export default function Athletes() {
       nome: '',
       data_inicio: '',
     })
-    setFormContrato({
+    setFormContratoClube({
       tipo_id: '',
+      data_inicio: '',
+      data_fim: '',
+    })
+    setFormContratoEmpresa({
       data_inicio: '',
       data_fim: '',
     })
@@ -104,9 +117,17 @@ export default function Athletes() {
     }));
   };
 
-  const handleContratoInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleContratoClubeInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormContrato(prevState => ({
+    setFormContratoClube(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleContratoEmpresaInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    setFormContratoEmpresa(prevState => ({
       ...prevState,
       [name]: value,
     }));
@@ -118,47 +139,51 @@ export default function Athletes() {
     const request = {
       ...formData,
       clube: formClube,
-      contrato: formContrato,
+      contrato_clube: formContratoClube,
+      contrato_empresa: formContratoEmpresa,
     };
     try {
-      const athletesData = await createAthlete(request);
-      if(athletesData){
+      const newAthletesData = await createAthlete(request);
+      if(newAthletesData){
         setNewAthlere(true)
 
         if(formImage){
           const formData = new FormData();
           formData.append('image', formImage);
-          const uploadImage = await uploadImageAthlete(athletesData.id, formData);
+          const uploadImage = await uploadImageAthlete(newAthletesData.id, formData);
+
+          handleCloseCreateAthlete();
+          setFormData({
+            nome: '',
+            data_nascimento: '',
+            posicao_primaria: '',
+            posicao_secundaria: '',
+            posicao_terciaria: ''
+          })
+          setFormClube({
+            nome: '',
+            data_inicio: '',
+          })
+          setFormContratoClube({
+            tipo_id: '',
+            data_inicio: '',
+            data_fim: '',
+          })
+          setFormContratoEmpresa({
+            data_inicio: '',
+            data_fim: '',
+          })
         }
-      }
-      // Faça o que precisar com os dados de atleta salvos
-    } catch (error) {
-      console.error('Error creating athlete:', error);
-    } finally {
-      handleCloseCreateAthlete();
-      setFormData({
-        nome: '',
-        data_nascimento: '',
-        posicao_primaria: '',
-        posicao_secundaria: '',
-        posicao_terciaria: ''
-      })
-      setFormClube({
-        nome: '',
-        data_inicio: '',
-      })
-      setFormContrato({
-        tipo_id: '',
-        data_inicio: '',
-        data_fim: '',
-      })
+        setNewAthlere(false)
+        location.reload();
+        const athletesData = await getAthletes(1);
+          setAthletes(athletesData.data);
+          setTotalRow(athletesData.total);
+        }
+
+    } catch (error: any) {
     }
-    setNewAthlere(false)
-    location.reload();
-    const athletesData = await getAthletes(1);
-      setAthletes(athletesData.data);
-      setTotalRow(athletesData.total);
-  };
+  }
 
   const getImageFileObject = (event: any) => {
     const file = event.target.files[0];
@@ -186,9 +211,11 @@ export default function Athletes() {
       formData.posicao_primaria.trim() !== '' &&
       formClube.nome.trim() !== '' &&
       formClube.data_inicio.trim() !== '' &&
-      formContrato.tipo_id.trim() !== '' &&
-      formContrato.data_inicio.trim() !== '' &&
-      formContrato.data_fim.trim() !== ''
+      formContratoClube.tipo_id.trim() !== '' &&
+      formContratoClube.data_inicio.trim() !== '' &&
+      formContratoClube.data_fim.trim() !== '' &&
+      formContratoEmpresa.data_inicio.trim() !== '' &&
+      formContratoEmpresa.data_fim.trim() !== ''
     ) {
       return true; // Todos os campos estão preenchidos
     } else {
@@ -248,8 +275,15 @@ export default function Athletes() {
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateAthlete}/>
           </div>
           <hr />
-          <div className="d-flex justify-content-between" style={{height:'520px'}}>
-            <div className="w-50 pe-4">
+          <div className="row" style={{height:'520px'}}>
+
+
+
+
+
+
+
+            <div className="col-md-6">
                 <div className="d-flex justify-content-start align-items-center mb-3">
                 <Image 
                   className="rounded mt-3 me-3"
@@ -285,50 +319,6 @@ export default function Athletes() {
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
                 <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_nascimento" value={formData.data_nascimento} onChange={handleInputChange} style={{height:'45px'}}/>
-              </div>
-              <div className="input w-100 mt-2">
-              <div className="d-flex align-items-center">
-                <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Clube</label>
-                  {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
-                </div>
-                <input type="text" className="form-control input-create bg-dark-custom " placeholder="Digite o nome do clube" name="nome" value={formClube.nome} onChange={handleClubeInputChange} style={{height:'45px'}}/>
-              </div>
-              <div className="input w-100 mt-2">
-              <div className="d-flex align-items-center">
-                <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Início Clube</label>
-                  {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
-                </div>
-                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_inicio" value={formClube.data_inicio} onChange={handleClubeInputChange} style={{height:'45px'}}/>
-              </div>
-            </div>
-            <div className="w-50 pe-4" style={{marginRight:'-25px'}}>
-              <div className="input w-100">
-              <div className="d-flex align-items-center">
-                <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Contrato</label>
-                  {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
-                </div>
-                <select className="form-select" name="tipo_id" value={formContrato.tipo_id} onChange={handleContratoInputChange} style={{height:'45px', color: formContrato.tipo_id ? '#fff' : '#999'}}>
-                  <option value="" disabled hidden>Selecione</option>
-                  <option value={1} style={{color: '#fff'}}>Profissional</option>
-                  <option value={2} style={{color: '#fff'}}>Amador</option>
-                  <option value={3} style={{color: '#fff'}}>Temporário</option>
-                  <option value={4} style={{color: '#fff'}}>Nenhum</option>
-                </select>
-              </div>
-              <div className="input w-100 mt-2">
-              <div className="d-flex align-items-center">
-                <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Início do Contrato</label>
-                  {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
-                </div>
-                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_inicio" value={formContrato.data_inicio} onChange={handleContratoInputChange} style={{height:'45px', color:'#999'}} onFocus={() => "this.type='date'"} 
-/>
-              </div>
-              <div className="input w-100 mt-2">
-              <div className="d-flex align-items-center">
-                <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Fim do Contrato</label>
-                  {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
-                </div>
-                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_fim" value={formContrato.data_fim} onChange={handleContratoInputChange} style={{height:'45px'}}/>
               </div>
               <div className="input w-100 mt-2">
                 <div className="d-flex align-items-center">
@@ -376,15 +366,74 @@ export default function Athletes() {
                   <option value="zagueiro" style={{color: '#fff'}}>Zagueiro</option>
                 </select>
               </div>
-              <div>
+            </div>
+
+
+
+
+
+
+
+
+
+            <div className="col-md-6" style={{marginRight:'-25px'}}>
+            <div className="input w-100 mt-2">
+              <div className="d-flex align-items-center">
+                <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Clube</label>
+                  {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
+                </div>
+                <input type="text" className="form-control input-create bg-dark-custom " placeholder="Digite o nome do clube" name="nome" value={formClube.nome} onChange={handleClubeInputChange} style={{height:'45px'}}/>
+              </div>
+              <div className="input w-100 mt-2">
+              <div className="d-flex align-items-center">
+                <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Contrato Clube</label>
+                  {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
+                </div>
+                <select className="form-select" name="tipo_id" value={formContratoClube.tipo_id} onChange={handleContratoClubeInputChange} style={{height:'45px', color: formContratoClube.tipo_id ? '#fff' : '#999'}}>
+                  <option value="" disabled hidden>Selecione</option>
+                  <option value={1} style={{color: '#fff'}}>Profissional</option>
+                  <option value={2} style={{color: '#fff'}}>Amador</option>
+                  <option value={3} style={{color: '#fff'}}>Temporário</option>
+                  <option value={4} style={{color: '#fff'}}>Nenhum</option>
+                </select>
+              </div>
+              <div className="input w-100 mt-2">
+                <div className="d-flex align-items-center">
+                  </div>
+                  <div className="d-flex justify-content-start gap-3">
+                    <div className="w-50">
+                      <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Início</label>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_inicio" value={formContratoClube.data_inicio} onChange={handleContratoClubeInputChange} style={{height:'45px', color:'#999'}} onFocus={() => "this.type='date'"} />
+                    </div>
+                    <div className="w-50">
+                      <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Fim</label>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_fim" value={formContratoClube.data_fim} onChange={handleContratoClubeInputChange} style={{height:'45px'}}/>
+                    </div>
+                  </div>
+              </div>
+              <label className="ms-3 mt-2" style={{color: 'white', fontSize: '20px'}}>Contrato Empresa</label>
+              <div className="input w-100 mt-2">
+                <div className="d-flex align-items-center">
+                  </div>
+                  <div className="d-flex justify-content-start gap-3">
+                    <div className="w-50">
+                      <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Início</label>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_inicio" value={formContratoEmpresa.data_inicio} onChange={handleContratoEmpresaInputChange} style={{height:'45px', color:'#999'}} onFocus={() => "this.type='date'"} />
+                    </div>
+                    <div className="w-50">
+                      <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Fim</label>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_fim" value={formContratoEmpresa.data_fim} onChange={handleContratoEmpresaInputChange} style={{height:'45px'}}/>
+                    </div>
+                  </div>
               </div>
             </div>
-          </div>
-          <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
-            <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClick} disabled={!isFormValid()}>Salvar</button>
+            <div className='ms-3 d-flex flex-column mt-3 pb-3' style={{width: '98%'}}>
+              <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClick} >Salvar</button>
+            </div>
           </div>
         </Box>
       </Modal>
+      <ToastContainer />
     </>
   );
 }

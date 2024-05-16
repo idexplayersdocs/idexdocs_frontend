@@ -13,6 +13,7 @@ import { createInjuries, getInjuries } from '@/pages/api/http-service/injuries';
 import Loading from 'react-loading';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
+import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
 
 interface Athlete {
   id: number;
@@ -27,12 +28,14 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 1000,
+  width: '80%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
   borderRadius: '20px',
+  height: '80%',
+  overflow: 'auto'
 };
 
 export default function Injuries({closeModal, athleteId}: any) {
@@ -152,7 +155,7 @@ export default function Injuries({closeModal, athleteId}: any) {
     <div className='d-flex justify-content-end mb-3' onClick={handleOpenRegisterInjuries}>
       <AddButton />
     </div>
-      <div className="d-flex flex-column align-items-center justify-content-center mb-3">
+      <div className="m-3" style={{overflow: 'auto'}}>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -203,7 +206,7 @@ export default function Injuries({closeModal, athleteId}: any) {
           </div>
           <hr />
           <div className="row" style={{height:'250px'}}>
-              <div className=''>
+              <div className='col-md'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data da Lesão</label>
                       <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_lesao" style={{height:'45px'}} value={formRegisterInjuries.data_lesao} onChange={handleInputChangeRegisterInjuries}/>

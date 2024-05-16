@@ -13,18 +13,21 @@ import { createPhysical, getPhysical } from '@/pages/api/http-service/physical';
 import Loading from 'react-loading';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
+import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
 
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 1000,
+  width: '80%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
   borderRadius: '20px',
+  height: '80%',
+  overflow: 'auto'
 };
 
 export default function PhysicalHistory({closeModal, athleteId}: any) {
@@ -145,7 +148,7 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
     <div className='d-flex justify-content-end mb-3' onClick={handleOpenRegisterPhysical}>
       <AddButton />
     </div>
-    <div className="d-flex flex-column align-items-center justify-content-center mb-3">
+    <div className="m-3" style={{overflow: 'auto'}}>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -201,7 +204,7 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
           </div>
           <hr />
           <div className="row" style={{height:'250px'}}>
-              <div className='col'>
+              <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
                       <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_avaliacao" style={{height:'45px'}} value={formRegisterPhysical.data_avaliacao} onChange={handleInputChangeRegisterPhysical}/>
@@ -215,7 +218,7 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="estatura" style={{height:'45px'}} value={formRegisterPhysical.estatura} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
               </div>
-              <div className='col'>
+              <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Peso</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="peso" style={{height:'45px'}} value={formRegisterPhysical.peso} onChange={handleInputChangeRegisterPhysical}/>
@@ -225,10 +228,10 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="percentual_gordura" style={{height:'45px'}} value={formRegisterPhysical.percentual_gordura} onChange={handleInputChangeRegisterPhysical}/>
                 </div>
               </div>
+              <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
+                <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaverRegisterPhysical}>Salvar</button>
+              </div>
             </div>
-          <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
-            <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaverRegisterPhysical}>Salvar</button>
-          </div>
           <ToastContainer />
         </Box>
       </Modal>

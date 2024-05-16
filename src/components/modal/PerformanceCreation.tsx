@@ -219,9 +219,6 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
     }
   };
 
-
-
-
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: '150px' }}>
@@ -237,12 +234,14 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
         <FontAwesomeIcon icon={faX} color='white' size='xl' style={{cursor: 'pointer'}} onClick={handleCloseModal}/>
       </div>
       <hr />
-      <div className="d-flex flex-column w-25 mt-3 mb-5">
-        <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
-        <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="formDate" style={{height:'45px'}} value={formDate} onChange={handleInputDate}/>
+      <div className='row'>
+        <div className="d-flex flex-column col-md-6 mt-3 mb-5">
+          <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
+          <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="formDate" style={{height:'45px'}} value={formDate} onChange={handleInputDate}/>
+        </div>
       </div>
-      <div className='row' style={{maxHeight: '500px', overflow: 'auto'}}>
-      <div className='col' style={{borderRight: '1px solid white'}}>
+      <div className='row'>
+      <div className='col-md-4 mb-5'>
         <h3>PERFIL FÍSICO E TÉCNICO</h3>
         {reorderedKeysLabelFisico.map((label: any, index: number) => (
           <div key={index} className="d-flex flex-column w-100 mt-3">
@@ -259,7 +258,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
           </div>
         ))}
       </div>
-      <div className='col' style={{borderRight: '1px solid white'}}>
+      <div className='col-md-4 mb-5'>
         <h3>PERFIL TÉCNICO DIFERENCIAL</h3>
         {reorderedKeysLabelTecnico.map((label: any, index: number) => (
           <div key={index} className="d-flex flex-column w-100 mt-3">
@@ -276,7 +275,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
           </div>
         ))}
       </div>
-      <div className='col' style={{borderRight: '1px solid white'}}>
+      <div className='col-md-4'>
         <h3>PERFIL PSICOLÓGICO</h3>
         {reorderedKeysLabelPsicologico.map((label: any, index: number) => (
           <div key={index} className="d-flex flex-column w-100 mt-3">

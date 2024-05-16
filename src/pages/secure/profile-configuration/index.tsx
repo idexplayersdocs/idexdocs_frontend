@@ -171,7 +171,6 @@ export default function ProfileConfiguration() {
     try {
       const res = await Usuarios(page, perPage);
       setUsuarioLilst(res);
-      console.log(res);
     } catch (e: unknown) {
     } finally {
       setIsLoading(false);

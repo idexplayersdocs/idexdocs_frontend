@@ -35,7 +35,7 @@ export default function AthletePerformance() {
     <Header />
       <div className="row justify-content-start" >
         <div className="col-2">
-          <SideBar athleteData={athlete} />
+          <SideBar athleteData={athlete}  modal={false} />
         </div>
         <div className="col-10">
         <ul className="nav nav-tabs">

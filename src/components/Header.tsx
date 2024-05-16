@@ -42,7 +42,7 @@ export default function Header() {
     <>
       <div className="d-flex justify-content-between align-items-center m-3">
         <div className="p-2">
-          <Image src="/images/logo-fort-house.png" width={118} height={78} alt="company logo" style={{marginLeft: '50px'}}/>
+          <Image src="/images/logo-fort-house.png" width={118} height={78} alt="company logo"/>
         </div>
         <div className="w-100 justify-content-evenly nav-bar-custom">
           <Link href="/" style={{textDecoration: 'none'}}>
@@ -76,7 +76,8 @@ export default function Header() {
           <div className="p-2 me-3">
             <Image src="/images/logo-arabe.png" width={78} height={78} alt="company logo" />
           </div>
-          <Dropdown className="container-menu-nav">
+          <Dropdown className="container-menu-nav" align={{ lg: 'start' }}
+>
             <Dropdown.Toggle variant="link" id="dropdown-basic" style={{color:'var(--bg-primary-color)'}}>
               <FontAwesomeIcon icon={faBars} size="2xl" style={{ color: "var(--bg-ternary-color)", cursor: "pointer" }} />
             </Dropdown.Toggle>

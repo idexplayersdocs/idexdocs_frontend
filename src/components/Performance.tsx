@@ -26,13 +26,14 @@ const styleCaracteristic = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 1000,
+  width: '80%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
   height: 650,
   overflow: 'auto',
+  heigth: '80%',
   borderRadius: '20px',
 };
 
@@ -41,12 +42,14 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 1000,
+  width: '80%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
   borderRadius: '20px',
+  height: '80%',
+  overflow: 'auto'
 };
 
 const styleInfo = {
@@ -54,13 +57,15 @@ const styleInfo = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80% !important',
-  height: '80% !important',
+  width: '80%',
+  height: 'auto',
+  maxHeight: '80%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
   borderRadius: '20px',
+  overflow: 'auto'
 };
 
 export default function Performance({athleteData}: any) {
@@ -124,7 +129,7 @@ export default function Performance({athleteData}: any) {
       return {
         fisico: ['Data', 'Estatura', 'Velocidade', '1 x 1 Ofensivo', 'Desmarques', 'Controle de Bola', 'Cruzamento', 'Finalização', 'Total', 'Média'],
         tecnico: ['Data', 'Visão Espacial', 'Domínio Orientado', 'Dribles em Diagonal', 'Leitura de Jogo', 'Reação Pós Perda', 'Total', 'Média'],
-        psicologico: ['Data','Liderança', 'Coragem/Confiança', 'Concetração/Responsabilidade','Controle do Estresse', 'Total', 'Média']
+        psicologico: ['Data','Liderança', 'Coragem/Confiança', 'Concetração / Responsabilidade','Controle do Estresse', 'Total', 'Média']
       };
     } 
     else if(athleteData && athleteData.posicao_primaria.toLowerCase() === 'lateral') {
@@ -287,7 +292,7 @@ export default function Performance({athleteData}: any) {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <Box sx={styleInfo}>
+            <Box sx={style}>
               <PhysicalHistory closeModal={handleClosePhysicalHistory} athleteId={athleteId}/>
             </Box>
           </Modal>
@@ -298,7 +303,7 @@ export default function Performance({athleteData}: any) {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <Box sx={style}>
+            <Box sx={styleInfo}>
               <div className='d-flex justify-content-between'>
                 <Subtitle subtitle='AÇÕES PARA AVALIAÇÃO FINAL RELATIVA AOS DADOS DE PROJEÇÃO:'/>
                 <FontAwesomeIcon icon={faX} color='white' size='xl' style={{cursor: 'pointer'}} onClick={handleCloseInfo}/>

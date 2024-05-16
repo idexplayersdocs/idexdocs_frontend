@@ -15,7 +15,18 @@ import Loading from 'react-loading';
 import moment from 'moment';
 
 const style = {
-
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '80%',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  height: '80%',
+  overflow: 'auto'
 };
 
 export default function HistoryCompetitions({closeModal, athleteId}: any) {
@@ -151,7 +162,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
     <div className='d-flex justify-content-end mb-3' onClick={handleOpenRegisterCompetitions}>
       <AddButton />
     </div>
-      <div className="d-flex flex-column align-items-center justify-content-center mb-3">
+      <div className="m-3" style={{overflow: 'auto'}}>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -212,7 +223,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
           </div>
           <hr />
           <div className="row" style={{height:'300px'}}>
-              <div className='col'>
+              <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Nome</label>
                       <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="nome" style={{height:'45px'}} value={formRegisterCompetitions.nome} onChange={handleInputChangeRegisterCompetitions}/>
@@ -230,7 +241,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="jogos_parciais" style={{height:'45px'}} value={formRegisterCompetitions.jogos_parciais} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
               </div>
-              <div className='col'>
+              <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Minutagem</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="minutagem" style={{height:'45px'}} value={formRegisterCompetitions.minutagem} onChange={handleInputChangeRegisterCompetitions}/>
@@ -244,10 +255,10 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="assistencias" style={{height:'45px'}} value={formRegisterCompetitions.assistencias} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
               </div>
+              <div className='ms-3 d-flex flex-column mt-3' style={{width: '98%'}}>
+                <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaveRegisterCompetitions}>Salvar</button>
+              </div>
             </div>
-          <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
-            <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaveRegisterCompetitions}>Salvar</button>
-          </div>
           <ToastContainer />
         </Box>
       </Modal>

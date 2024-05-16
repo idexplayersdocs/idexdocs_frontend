@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { getAthletes } from '@/pages/api/http-service/athletes';
 import Loading from 'react-loading';
 import moment from 'moment';
-import { faEye, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faFilePdf, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { Pagination, Modal } from "@mui/material";
 
 import Image from "next/image";
@@ -22,6 +22,7 @@ interface Athlete {
   posicao_primaria: string;
   data_nascimento: string;
   clube_atual: string;
+  data_proxima_avaliacao_relacionamento: any
 }
 
 export default function AthletesList({ newAthlete, inputFilter, searchFilter }: any) {
@@ -89,7 +90,6 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   };
 
   const onLoadingPdf = (isLoadingPDF: boolean) => {
-    // console.log(isLoadingPDF);
     setLoadingPDF(isLoadingPDF);
   };
 
@@ -110,10 +110,18 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   //   fetchUpdatedAthletesData();
   // };
 
+  const validLabelDate = (dataAvaliacao: string) => {
+    const currentDate = moment().startOf('day');
+    const nextEvaluationDate = moment(dataAvaliacao).startOf('day');
+    // const nextEvaluationDate = moment('2024-05-06').startOf('day');
+    // Comparação das datas
+    return currentDate.isAfter(nextEvaluationDate);
+};
+
   useEffect(() => {
     const fetchUpdatedAthletesData = async () => {
       try {
-        const athletesData = await getAthletes(1, inputFilter); // Passando o filtro para a função getAthletes
+        const athletesData = await getAthletes(1, inputFilter);
         setAthletes(athletesData.data);
         setTotalRow(athletesData.total);
         setPage(1);
@@ -140,31 +148,40 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
         <table className="table table-striped">
           <thead>
             <tr>
-              <th className="table-dark" scope="col">
+              <th className="table-dark text-center" scope="col">
                 NOME
               </th>
-              <th className="table-dark" scope="col">
+              <th className="table-dark text-center" scope="col">
                 POSIÇÃO
               </th>
-              <th className="table-dark" scope="col">
+              <th className="table-dark text-center" scope="col">
                 D.NASCIMENTO
               </th>
-              <th className="table-dark" scope="col">
-                CLUBE ATUAL
+              <th className="table-dark text-center" scope="col">
+                CLUBE
               </th>
-              <th className="table-dark"></th>
+              <th className="table-dark text-center" scope="col">
+                AVAL. RELACIONAMENTO
+              </th>
+              <th className="table-dark text-center"></th>
             </tr>
           </thead>
           <tbody>
             {athletes.length > 0 ? (
               athletes.map((athlete) => (
                 <tr key={athlete.id}>
-                  <td className="table-dark">{athlete.nome}</td>
-                  <td className="table-dark">{athlete.posicao_primaria}</td>
-                  <td className="table-dark">
+                  <td className="table-dark text-center">{athlete.nome}</td>
+                  <td className="table-dark text-center">{athlete.posicao_primaria}</td>
+                  <td className="table-dark text-center">
                     {moment(athlete.data_nascimento).format('DD/MM/YYYY')}
                   </td>
-                  <td className="table-dark">{athlete.clube_atual}</td>
+                  <td className="table-dark text-center">{athlete.clube_atual}</td>
+                  <td className={`table-dark text-center ${validLabelDate(athlete.data_proxima_avaliacao_relacionamento) ? 'text-danger' : ''}`} >{athlete.data_proxima_avaliacao_relacionamento ? moment(athlete.data_proxima_avaliacao_relacionamento).format('DD/MM/YYYY') : 'Não Avaliado'}
+                  {
+                    validLabelDate(athlete.data_proxima_avaliacao_relacionamento) &&
+                      <FontAwesomeIcon className='ms-2 mt-1' icon={faTriangleExclamation} style={{color: "#ff0000",}} />
+                  }
+                  </td>
                   <td className="table-dark text-end">
                     {/* <FontAwesomeIcon
                       icon={faTrashCan}

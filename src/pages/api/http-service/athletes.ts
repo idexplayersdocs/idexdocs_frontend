@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import { apiURL } from '../api';
 
@@ -28,9 +28,16 @@ export const getAthleteById = async (athleteId: any) => {
       // toast.success('sucesso')
       return response.data;
     } catch (error) {
-      toast.error('erro');
-      console.error(`Error fetching user with ID ${athleteId}:`, error);
-      throw error;
+      toast.error('Erro na lista de atletas', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        transition: Bounce,
+        });
     }
   }
 };
@@ -38,12 +45,19 @@ export const getAthleteById = async (athleteId: any) => {
 export const createAthlete = async (athleteData: any) => {
   try {
     const response = await axios.post(`${apiURL}/create/atleta`, athleteData);
-    // Se você quiser acessar os dados retornados pelo servidor, pode usar response.data
-    // Por exemplo, console.log(response.data);
     return response.data;
   } catch (error) {
-    toast.error('Erro ao criar atleta');
-    console.error('Erro ao criar atleta:', error);
+    toast.error('Erro ao criar atleta', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+      transition: Bounce,
+      });
+
     throw error;
   }
 };
@@ -55,8 +69,16 @@ export const uploadImageAthlete = async (IDAtleta: any, file:any) => {
     // Por exemplo, console.log(response.data);
     return response.data;
   } catch (error) {
-    toast.error('Erro ao criar atleta');
-    console.error('Erro ao criar atleta:', error);
+    toast.error('Erro no anexo da imagem', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+      transition: Bounce,
+      });
     throw error;
   }
 };

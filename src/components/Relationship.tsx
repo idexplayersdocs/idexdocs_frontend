@@ -18,12 +18,14 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 700,
+  width: '80%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
   borderRadius: '20px',
+  height: '80%',
+  overflow: 'auto'
 };
 
 type Props = {
@@ -235,7 +237,7 @@ export default function Relationship() {
       <Header />
       <div className="row justify-content-start">
         <div className="col-2">
-          <SideBar athleteData={athleteId} />
+          <SideBar athleteData={athleteId} modal={false}/>
         </div>
         <div className="col-10">
           <ul className="nav nav-tabs">
@@ -375,7 +377,7 @@ export default function Relationship() {
           </div>
           <hr />
           <div className="row" style={{height:'400px'}}>
-              <div className='col'>
+              <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
                       <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_criacao" style={{height:'45px'}} value={formDataRelationship.data_criacao} onChange={handleInputChangeRelationship}/>
@@ -393,7 +395,7 @@ export default function Relationship() {
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="satisfacao_clube" style={{height:'45px'}} value={formDataRelationship.satisfacao_clube} onChange={handleInputChangeRelationship}/>
                 </div>
               </div>
-              <div className='col'>
+              <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Relação Familiares</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="relacao_familiares" style={{height:'45px'}} value={formDataRelationship.relacao_familiares} onChange={handleInputChangeRelationship}/>

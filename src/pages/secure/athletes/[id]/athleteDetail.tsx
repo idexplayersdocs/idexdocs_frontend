@@ -17,6 +17,7 @@ import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
 import Loading from 'react-loading';
 import Image from "next/image";
+import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
 
 moment.locale('pt-br');
 
@@ -25,13 +26,15 @@ const styleSidebar = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'var(--bg-primary-color)',
+  width: '80%',
+  bgcolor: 'var(--bg-secondary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
   borderRadius: '20px',
-  height: '100%'
+  height: '95%',
+  overflow: 'auto',
+  overflowX: 'hidden'
 };
 
 const style = {
@@ -39,12 +42,15 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 700,
+  width: '80%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
   borderRadius: '20px',
+  heigth: '80%',
+  overflow: 'auto'
+
 };
 
 const VisuallyHiddenInput = styled('input')({
@@ -376,7 +382,7 @@ export default function AthleteDetail() {
           />
         </div>
         <div className="col-lg-2">
-          <SideBar athleteData={athlete} />
+          <SideBar athleteData={athlete} modal={false} />
         </div>
         <div className="col-lg-10">
           <ul className="nav nav-tabs">
@@ -415,7 +421,7 @@ export default function AthleteDetail() {
                   </tr>
                 </thead>
                 <tbody>
-                  {
+                  {displayedDataRelationShip.length > 0 ? (
                       Array.isArray(displayedDataRelationShip) && displayedDataRelationShip.map((relationship: any, index: number) => (
                         <tr key={index}>
                         <td className="table-dark text-center">{moment(relationship.data_avaliacao).format('DD/MM/YYYY')}</td>
@@ -432,7 +438,12 @@ export default function AthleteDetail() {
                         </td>
                       </tr>
                     ))
-                  }
+                  ) : (
+                    <tr>
+                      <td colSpan={8} className="table-dark text-center">Não possui relacionamento</td>
+                    </tr>
+                  )
+                  } 
                 </tbody>
               </table>
               {
@@ -471,6 +482,7 @@ export default function AthleteDetail() {
                     </thead>
                     <tbody>
                       {
+                        displayedDataSupportControl.length > 0 ? (
                         Array.isArray(displayedDataSupportControl) && displayedDataSupportControl.map((supportContol,index) => (
                           <tr key={index}>
                             <td className="table-dark text-center">{new Date(supportContol.data_controle).toLocaleDateString()}</td>
@@ -479,6 +491,11 @@ export default function AthleteDetail() {
                             <td className="table-dark text-center">R$ {supportContol.preco}</td>
                           </tr>
                         ))
+                      ) : (
+                        <tr>
+                          <td colSpan={8} className="table-dark text-center">Lista vazia</td>
+                        </tr>
+                        )
                       }
                     </tbody>
                   </table>
@@ -536,7 +553,7 @@ export default function AthleteDetail() {
           </div>
           <hr />
           <div className="row" style={{height:'400px'}}>
-              <div className='col'>
+              <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
                       <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_avaliacao" style={{height:'45px'}} value={formDataRelationship.data_avaliacao} onChange={handleInputChangeRelationship}/>
@@ -554,7 +571,7 @@ export default function AthleteDetail() {
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="satisfacao_clube" style={{height:'45px'}} value={formDataRelationship.satisfacao_clube} onChange={handleInputChangeRelationship}/>
                 </div>
               </div>
-              <div className='col'>
+              <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Relação Familiares</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="relacao_familiares" style={{height:'45px'}} value={formDataRelationship.relacao_familiares} onChange={handleInputChangeRelationship}/>
@@ -580,11 +597,11 @@ export default function AthleteDetail() {
                     </select>
                 </div>
               </div>
-            </div>
-
-          <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
+          <div className='ms-3 d-flex flex-column mt-3' style={{width: '98%'}}>
             <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickRelationShip}>Salvar</button>
           </div>
+            </div>
+
         <ToastContainer />
         </Box>
       </Modal>
@@ -635,7 +652,12 @@ export default function AthleteDetail() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={styleSidebar}>
-          <SideBar athleteData={athlete} />
+          <div className="d-flex justify-content-between">
+            <Subtitle subtitle="Detalhe do atleta"/>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateSupportControl}/>
+          </div>
+          <hr />
+          <SideBar athleteData={athlete} modal={true}/>
         </Box>
       </Modal>
       <ToastContainer />
