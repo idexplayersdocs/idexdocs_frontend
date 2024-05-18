@@ -149,6 +149,7 @@ textarea {
 
 .athlete-detail-card {
   border-radius: 0 10px 10px 10px !important;
+  border-top: 1px solid var(--bg-secondary-color);
   /* height: 900px !important; */
 }
 
@@ -328,6 +329,18 @@ h3 {
     width: 24px;
     height: 24px;
   }
+
+.MuiBox-root.css-qtcm63{
+  padding: 20px !important;  
+}
+
+.danger-date {
+  color: red !important;
+}
+.margin-edit-athlete {
+  margin-top: 159px !important;
+}
+
   @media (max-width: 1000px) {
     .col-lg-2 {
       display: none;
@@ -371,7 +384,27 @@ h3 {
     .nav.nav-tabs{
       margin-left: 23px;
     }
+    .container-avatar .edit-icon {
+      top: 90%;
+      left: 90%;
+      padding: 30px;
+    }
+    .container-avatar .edit-icon svg {
+      width: 50px;
+      height: 50px;
+    }
   }
+  @media (max-width: 770px) {
+    .margin-edit-athlete {
+      margin-top: 0 !important;
+    }
+    .container-avatar .edit-icon {
+      top: 85%;
+      left: 85%;
+      padding: 30px;
+    }
+  }
+
   @media (max-width: 700px) {
     h1.title-sidebar{
       font-size: 26px !important;
@@ -380,11 +413,26 @@ h3 {
       font-size: 20px;
     }
   }
+  
   @media (max-width: 600px) {
     h1.title-sidebar{
       font-size: 20px !important;
     }
     .subtitle-sidebar{
       font-size: 15px;
+    }
+    .MuiBox-root.css-qtcm63{
+      padding: 12px !important;  
+    }
+  }
+  @media (max-width: 400px) {
+    .container-avatar .edit-icon {
+      top: 85%;
+      left: 85%;
+      padding: 15px;
+    }
+    .container-avatar .edit-icon svg {
+      width: 24px;
+      height: 24px;
     }
   }

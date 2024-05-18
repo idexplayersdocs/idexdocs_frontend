@@ -92,3 +92,23 @@ export const getAvatarAthletes = async (athleteId: any) => {
     throw error;
   }
 };
+
+export const editAthlete = async (athleteData: any, athleteId: any) => {
+  try {
+    const response = await axios.put(`${apiURL}/update/atleta/${athleteId}`, athleteData);
+    return response.data;
+  } catch (error) {
+    toast.error('Erro ao criar atleta', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+      transition: Bounce,
+      });
+
+    throw error;
+  }
+};

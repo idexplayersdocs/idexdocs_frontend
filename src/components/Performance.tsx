@@ -26,7 +26,7 @@ const styleCaracteristic = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
+  width: '95%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
@@ -41,7 +41,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
+  width: '95%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
@@ -56,7 +56,7 @@ const styleInfo = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
+  width: '95%',
   height: 'auto',
   maxHeight: '80%',
   bgcolor: 'var(--bg-primary-color)',
@@ -309,10 +309,10 @@ export default function Performance({athleteData}: any) {
               </div>
               <hr />
               <div>
-                <Subtitle subtitle='AF > 1  é relativo a atletas com baixa perspectiva futura (à liberar)'/>
-                <Subtitle subtitle='AF > 2  é relativo a atletas com média perspectiva futura (à avaliar em curto prazo)'/>
-                <Subtitle subtitle='AF > 3  é relativo a atletas com boa perspectiva futura (à avaliar em médio prazo)'/>
-                <Subtitle subtitle='AF > 4  é relativo a atletas com perspectiva de atleta profissional'/>
+                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 1  é relativo a atletas com baixa perspectiva futura (à liberar)</h2>
+                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 1  é relativo a atletas com baixa perspectiva futura (à liberar)</h2>
+                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 3  é relativo a atletas com boa perspectiva futura (à avaliar em médio prazo)</h2>
+                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 4  é relativo a atletas com perspectiva de atleta profissional</h2>
               </div>
             </Box>
           </Modal>

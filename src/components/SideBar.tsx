@@ -6,13 +6,46 @@ import Loading from "react-loading";
 import SoccerField from "./SoccerField";
 import { getAvatarAthletes } from "@/pages/api/http-service/athletes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTriangleExclamation, faX } from "@fortawesome/free-solid-svg-icons";
+import { Box, Button, Modal, Pagination, colors, styled } from "@mui/material";
+import Subtitle from "./Subtitle";
+import EditAthlete from "./EditAthlete";
+
+
 type Props = {
   athleteData: any
 }
 
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '95%',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  height: '95%',
+  overflow: 'auto'
+};
+
 export default function SideBar({athleteData, modal}:any) {
   const { query, push, back } = useRouter();
+  const [openEditAthlete, setOpenEditAthlete] = useState(false);
+
+  const validLabelDate = (dataAvaliacao: string) => {
+    const currentDate = moment().startOf('day');
+    const nextEvaluationDate = moment(dataAvaliacao).startOf('day');
+    // const nextEvaluationDate = moment('2024-05-06').startOf('day');
+    // Comparação das datas
+    return currentDate.isAfter(nextEvaluationDate);
+};
+const handleOpenEditAthlete = () => setOpenEditAthlete(true);
+const handleCloseSideBar = () => {
+  setOpenEditAthlete(false)
+}
 
   if (!athleteData) {
     return <div className="d-flex justify-content-center align-items-center w-100 h-25" ><Loading type='bars' color="var(--bg-ternary-color)"/></div>
@@ -30,7 +63,7 @@ export default function SideBar({athleteData, modal}:any) {
           layout="responsive"
           objectFit="cover"
         />
-        <div className="edit-icon">
+        <div className="edit-icon" onClick={handleOpenEditAthlete}>
           <FontAwesomeIcon icon={faPenToSquare} />
         </div>
       </div>
@@ -58,27 +91,39 @@ export default function SideBar({athleteData, modal}:any) {
         <h1 className="title-sidebar">Clube:</h1>
         <h2 className="subtitle-sidebar">{athleteData.clube_atual ? athleteData.clube_atual : 'Não possui'}</h2>
       </div>
-      <div className="mt-2">
-        <h1 className="title-sidebar">Contrato Clube:</h1>
-        <h2 className="subtitle-sidebar">{athleteData.contrato_clube.tipo ? athleteData.contrato_clube.tipo : 'Não possui'}</h2>
-        <h2 className="subtitle-sidebar">{moment(athleteData.contrato_clube.data_inicio).format('DD/MM/YYYY')} - {moment(athleteData.contrato_clube.data_termino).format('DD/MM/YYYY')}</h2>
-      </div>
-      {/* <div className="mt-2">
-        <h1 className="title-sidebar">Contrato:</h1>
-        <h2 className="subtitle-sidebar">Profissional</h2>
-      </div>
-      <div className="mt-2">
-        <h1 className="title-sidebar">Período</h1>
-        <h2 className="subtitle-sidebar">29/04/2023 - 29/04/2023</h2>
-      </div> */}
-      <div className="mt-2">
-        <h1 className="title-sidebar">Contrato Empresa:</h1>
-        <h2 className="subtitle-sidebar">Profissional</h2>
-        <h2 className="subtitle-sidebar">29/04/2023 - 29/04/2023</h2>
-      </div>
+      <h1 className="title-sidebar mt-3">Contratos:</h1>
+      {
+        Array.isArray(athleteData.contratos) && athleteData.contratos.map((contrato: any, index: number) => (
+          <div className="mt-2" key={index}>
+            <h1 className="title-sidebar">{contrato.tipo}</h1>
+            {/* <h2 className="subtitle-sidebar">{moment(contrato.data_inicio).format('DD/MM/YYYY')} - {moment(contrato.data_termino).format('DD/MM/YYYY')}</h2> */}
+            <h2 className={`subtitle-sidebar " ${validLabelDate(contrato.data_expiracao) ? 'danger-date' : ''}`}>{moment(contrato.data_inicio).format('DD/MM/YYYY')} - {moment(contrato.data_termino).format('DD/MM/YYYY')}
+            {
+              validLabelDate(contrato.data_expiracao) &&
+              <FontAwesomeIcon className='ms-2 mt-1' icon={faTriangleExclamation} style={{color: "#ff0000",}} />
+            }
+            </h2>
+          </div>
+        ))
+      }
       <div className="mt-3">
         <SoccerField athleteData={athleteData}/>
       </div>
+      <Modal
+        open={openEditAthlete}
+        onClose={handleCloseSideBar}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={style}>
+          <div className="d-flex justify-content-between">
+            <Subtitle subtitle="Editar do atleta"/>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseSideBar}/>
+          </div>
+          <hr />
+          {/* <SideBar athleteData={athlete} modal={true}/> */}
+          <EditAthlete athleteData={athleteData} />
+        </Box>
+      </Modal>
     </div>
   )
 }

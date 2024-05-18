@@ -19,14 +19,14 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
+  width: '95%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
   borderRadius: '20px',
   height: '95%',
-  overflow: 'auto'
+  overflow: 'auto',
 };
 
 const VisuallyHiddenInput = styled('input')({
@@ -276,13 +276,6 @@ export default function Athletes() {
           </div>
           <hr />
           <div className="row" style={{height:'520px'}}>
-
-
-
-
-
-
-
             <div className="col-md-6">
                 <div className="d-flex justify-content-start align-items-center mb-3">
                 <Image 
@@ -367,15 +360,6 @@ export default function Athletes() {
                 </select>
               </div>
             </div>
-
-
-
-
-
-
-
-
-
             <div className="col-md-6" style={{marginRight:'-25px'}}>
             <div className="input w-100 mt-2">
               <div className="d-flex align-items-center">

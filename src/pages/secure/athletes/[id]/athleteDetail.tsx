@@ -18,6 +18,7 @@ import moment from 'moment';
 import Loading from 'react-loading';
 import Image from "next/image";
 import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
+import { jwtDecode } from 'jwt-decode';
 
 moment.locale('pt-br');
 
@@ -26,7 +27,7 @@ const styleSidebar = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
+  width: '95%',
   bgcolor: 'var(--bg-secondary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
@@ -42,7 +43,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
+  width: '95%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
@@ -50,7 +51,6 @@ const style = {
   borderRadius: '20px',
   height: '95%',
   overflow: 'auto'
-
 };
 
 const VisuallyHiddenInput = styled('input')({
@@ -83,6 +83,24 @@ export default function AthleteDetail() {
   const [openSideBar, setOpenSideBar] = useState(false);
   const [totalRowRelationship, setTotalRowRelationship] = useState<number>(1);
   const [totalRowSupportControl, setTotalRowSupportControl] = useState<number>(1);
+  const [permissions, setPermissions] = useState<any>({
+    relationship: false,
+    performance: false
+  });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const decoded: any = jwtDecode(token!);
+    if (token) {
+      setPermissions({
+        relationship: decoded.permissions.includes("create_relacionamento"),
+        performance: decoded.permissions.includes("create_desempenho")
+      });
+    }
+    if(!decoded.permissions.includes("create_relacionamento")){
+      setTabAtual('performance')
+    }
+  }, []);
 
   const [observacao, setObservacao] = useState<string>('');
 
@@ -386,14 +404,20 @@ export default function AthleteDetail() {
         </div>
         <div className="col-lg-10">
           <ul className="nav nav-tabs">
-            <li className="nav-item me-1 menu" style={{cursor: 'pointer'}}>
-              <a className={ tabAtual === 'relationship' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('relationship')}>Relacionamento</a>
-              {/* <a className="nav-link active" aria-current="page" href={`/secure/athletes/${athleteId}/athleteRelationship`}>Relacionamento</a> */}
-            </li>
-            <li className="nav-item menu" style={{cursor: 'pointer'}}>
-              <a className={ tabAtual === 'performance' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('performance')}>Desempenho</a>
-              {/* <a className="nav-link" aria-current="page" href={`/secure/athletes/${athleteId}/athletePerformance`}>Desempenho</a> */}
-            </li>
+            {
+              permissions.relationship === true && (
+                <li className="nav-item me-1 menu" style={{cursor: 'pointer'}}>
+                  <a className={ tabAtual === 'relationship' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('relationship')}>Relacionamento</a>
+                  {/* <a className="nav-link active" aria-current="page" href={`/secure/athletes/${athleteId}/athleteRelationship`}>Relacionamento</a> */}
+                </li>
+              )}
+            {
+              permissions.performance && (
+              <li className="nav-item menu" style={{cursor: 'pointer'}}>
+                <a className={ tabAtual === 'performance' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('performance')}>Desempenho</a>
+                {/* <a className="nav-link" aria-current="page" href={`/secure/athletes/${athleteId}/athletePerformance`}>Desempenho</a> */}
+              </li>
+              )}
           </ul>
 
           {

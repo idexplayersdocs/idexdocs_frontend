@@ -21,7 +21,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '80%',
+  width: '95%',
   bgcolor: 'var(--bg-primary-color)',
   border: '1px solid var(--color-line)',
   boxShadow: 24,
@@ -155,7 +155,7 @@ export default function ClubHistory({closeModal, athleteId}: any) {
     <div className='d-flex justify-content-end mb-3' onClick={handleOpenRegisterClub}>
       <AddButton />
     </div>
-      <div className="m-3" style={{overflow: 'auto'}}>
+      <div className="" style={{overflow: 'auto'}}>
         <table className="table table-striped">
           <thead>
             <tr>
