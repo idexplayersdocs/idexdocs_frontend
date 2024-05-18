@@ -254,7 +254,7 @@ export default function ProfileConfiguration() {
                   <label className="d-block text-white h4">Nome:</label>
                   <input
                     type="text"
-                    className="form-control input-create bg-dark"
+                    className="form-control input-create bg-dark-custom"
                     {...registerUpdateProfile("nome", {
                       required: true,
                     })}
@@ -265,7 +265,7 @@ export default function ProfileConfiguration() {
                   <label className="d-block text-white h4">Email:</label>
                   <input
                     type="text"
-                    className="form-control input-create bg-dark"
+                    className="form-control input-create bg-dark-custom"
                     {...registerUpdateProfile("email", {
                       required: true,
                     })}
@@ -276,7 +276,7 @@ export default function ProfileConfiguration() {
                   <label className="d-block text-white h4">Senha Anterior:</label>
                   <input
                     type="password"
-                    className="form-control input-create bg-dark"
+                    className="form-control input-create bg-dark-custom"
                     {...registerUpdateProfile("confirmarSenha", {
                       required: true,
                     })}
@@ -289,7 +289,7 @@ export default function ProfileConfiguration() {
                   <label className="d-block text-white h4">Nova Senha:</label>
                   <input
                     type="password"
-                    className="form-control input-create bg-dark"
+                    className="form-control input-create bg-dark-custom"
                     {...registerUpdateProfile("senha", {
                       required: true,
                     })}
