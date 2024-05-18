@@ -231,6 +231,7 @@ export default function ProfileConfiguration() {
       <div className="w-100 mx-auto px-4">
         <TabContext value={tabValue}>
           <TabList
+            className="row"
             onChange={handleChange}
             aria-label="lab API tabs example"
             centered
@@ -242,9 +243,9 @@ export default function ProfileConfiguration() {
               },
             }}
           >
-            <StyledTab label="Editar Perfil" value="1" />
-            <StyledTab label="Criar Usuários" value="2" />
-            <StyledTab label="Editar Usuários" value="3" />
+            <StyledTab className="col" label="Editar Perfil" value="1" />
+            <StyledTab className="col" label="Criar Usuários" value="2" />
+            <StyledTab className="col" label="Editar Usuários" value="3" />
           </TabList>
           <TabPanel value="1">
             <div className="w-100 mx-auto mt-5 px-2">
@@ -296,7 +297,7 @@ export default function ProfileConfiguration() {
                   {errosUpdateProfile.senha && <span className="text-danger mt-1 d-block">Nome is required field</span>}
                 </div>
                 <div className="mt-4 d-flex align-items-center justify-content-end">
-                  <button className="btn-success btn text-white w-25" type="submit">
+                  <button className="btn-success btn text-white" type="submit">
                     Atualizar
                   </button>
                 </div>
@@ -356,7 +357,7 @@ export default function ProfileConfiguration() {
                   )}
                 </div>
                 <div className="mt-4 d-flex align-items-center justify-content-end">
-                  <button className="btn-success btn text-white w-25" type="submit">
+                  <button className="btn-success btn text-white" type="submit">
                     Criar
                   </button>
                 </div>
@@ -368,30 +369,30 @@ export default function ProfileConfiguration() {
               <table className="table table-striped">
                 <thead>
                   <tr>
-                    <th className="table-dark" scope="col">
+                    <th className="table-dark text-center" scope="col">
                       NOME
                     </th>
-                    <th className="table-dark" scope="col">
+                    <th className="table-dark text-center" scope="col">
                       EMAIL
                     </th>
-                    <th className="table-dark" scope="col">
+                    <th className="table-dark text-center" scope="col">
                       DATA DE CRIAÇÃO
                     </th>
-                    <th className="table-dark" scope="col">
+                    <th className="table-dark text-center" scope="col">
                       TIPO
                     </th>
-                    <th className="table-dark"></th>
+                    <th className="table-dark text-center"></th>
                   </tr>
                 </thead>
                 <tbody>
                   {usuarioList?.data ? (
                     usuarioList.data.map((user, i) => (
                       <tr key={i}>
-                        <td className="table-dark">{user.nome}</td>
-                        <td className="table-dark">{user.email}</td>
-                        <td className="table-dark">{new Date(user.data_criacao).toLocaleDateString()}</td>
-                        <td className="table-dark">{user.tipo}</td>
-                        <td className="table-dark">
+                        <td className="table-dark text-center">{user.nome}</td>
+                        <td className="table-dark text-center">{user.email}</td>
+                        <td className="table-dark text-center">{new Date(user.data_criacao).toLocaleDateString()}</td>
+                        <td className="table-dark text-center">{user.tipo}</td>
+                        <td className="table-dark text-center">
                           <FontAwesomeIcon
                             icon={faPenSquare}
                             style={{ color: "white", cursor: "pointer", marginRight: 12 }}
@@ -404,7 +405,7 @@ export default function ProfileConfiguration() {
                   ) : (
                     <tr>
                       <td colSpan={5} className="table-dark text-center">
-                        Lista de atletas vazia
+                        Lista de usuários vazia
                       </td>
                     </tr>
                   )}
@@ -419,7 +420,7 @@ export default function ProfileConfiguration() {
       </div>
       <Modal open={openModalUpdate} onClose={handleCloseUpdateModal}>
         <div className="h-100 w-100 d-flex align-items-center justify-content-center">
-          <div className="rounded w-100 p-5 " style={{ maxWidth: "900px", backgroundColor: "#3c3c3c" }}>
+          <div className="rounded p-3 pt-3 " style={{ maxWidth: "900px", backgroundColor: "#3c3c3c", width: '95%', height: '95%', overflow: 'auto' }}>
             <div className="d-flex justify-content-between mb-5">
               <Subtitle subtitle="Edição de usuário" />
               <FontAwesomeIcon
@@ -429,6 +430,7 @@ export default function ProfileConfiguration() {
                 onClick={handleCloseUpdateModal}
               />
             </div>
+            <hr style={{marginTop: '-25px'}}/>
             <form onSubmit={handleSubmitUpdateUser(onSubmitUpdateUser)} style={{ marginLeft: "15px" }}>
               <div className="mb-4">
                 <label className="d-block text-white h4">Nome:</label>
@@ -473,7 +475,7 @@ export default function ProfileConfiguration() {
                   className="btn-success btn text-white w-25 d-flex align-items-center justify-content-center"
                   type="submit"
                 >
-                  <p className="mb-0 me-2">Atualizar</p>
+                  <p className="mb-0">Atualizar</p>
                   {updateUserLoading ? (
                     <div className="spinner-border spinner-border-sm" role="status">
                       <span className="visually-hidden">Loading...</span>
