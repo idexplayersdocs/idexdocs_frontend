@@ -242,7 +242,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                 <tbody>
                   {info.caracteristicas_posicao.map((x, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
                         <td className="">{x.estatura_fis}</td>
                         <td className="">{x.velocidade_fis}</td>
@@ -281,7 +281,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                 <tbody>
                   {info.lesao.map((x, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td>{moment(x.data_lesao).format("DD/MM/YYYY")}</td>
                         <td>{x.descricao}</td>
                       </tr>
@@ -307,7 +307,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                 <tbody>
                   {clubes.map((x, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td>{moment(x.data_inicio).format("DD/MM/YYYY")}</td>
                         <td>{x.data_fim ? moment(x.data_fim).format("DD/MM/YYYY") : "--"}</td>
                         <td>{x.nome}</td>
@@ -388,7 +388,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                 <tbody>
                   {info.relacionamento.map((x, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td>{x.data_criacao ? moment(x.data_criacao).format("DD/MM/YYYY").toString() : "---"}</td>
                         <td>{x.receptividade_contrato}</td>
                         <td>{x.satisfacao_empresa}</td>
