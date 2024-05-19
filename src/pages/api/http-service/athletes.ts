@@ -98,7 +98,7 @@ export const editAthlete = async (athleteData: any, athleteId: any) => {
     const response = await axios.put(`${apiURL}/update/atleta/${athleteId}`, athleteData);
     return response.data;
   } catch (error) {
-    toast.error('Erro ao criar atleta', {
+    toast.error('Erro ao editar o atleta', {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,

@@ -152,7 +152,7 @@ export default function ProfileConfiguration() {
 
       // console.log(resUpdateUser);
     } catch (e) {
-      setMessageSnackBar("Senha anterior inválida. Tente novamente!");
+      setMessageSnackBar("Senha atual inválida. Tente novamente!");
       setSnackBarError(true);
       console.log(e);
     } finally {
@@ -206,8 +206,8 @@ export default function ProfileConfiguration() {
     const token = localStorage.getItem("token");
     const decoded: any = jwtDecode(token!);
 
-    setValueUpdateProfile("nome", decoded.sub);
-    setValueUpdateProfile("email", decoded.user_name);
+    setValueUpdateProfile("nome", decoded.user_name);
+    setValueUpdateProfile("email", decoded.sub);
     setValueUpdateProfile("id", decoded.user_id);
     setValueUpdateProfile("tipo", decoded.roles[0]);
   };
@@ -273,7 +273,7 @@ export default function ProfileConfiguration() {
                   {errosUpdateProfile.email && <span className="text-danger mt-1 d-block">Nome is required field</span>}
                 </div>
                 <div className="mt-4">
-                  <label className="d-block text-white h4">Senha Anterior:</label>
+                  <label className="d-block text-white h4">Senha Atual:</label>
                   <input
                     type="password"
                     className="form-control input-create bg-dark-custom"

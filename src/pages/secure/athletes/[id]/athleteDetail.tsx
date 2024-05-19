@@ -149,14 +149,15 @@ export default function AthleteDetail() {
   
             // Observações
             const responseObservacoes = await getObservations(athleteId, 'relacionamento');
-            if(responseObservacoes?.data.length > 0){
-              let observacao = responseObservacoes?.data[responseObservacoes?.data.length - 1]
-              setObservacao(observacao.descricao);
+            console.log(responseObservacoes)
+            if(responseObservacoes.data){
+              // let observacao = responseObservacoes?.data[responseObservacoes?.data]
+              setObservacao(responseObservacoes.data.descricao);
             }
   
           } catch (error:any) {
             toast.error('Dados do atleta temporariamente indisponível', {
-              position: "bottom-center",
+              position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
               closeOnClick: true,
@@ -221,7 +222,7 @@ export default function AthleteDetail() {
     } catch (error:any) {
       console.error('Error:', error);
       toast.error(error.response.data.errors[0].message, {
-        position: "bottom-center",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -309,7 +310,7 @@ export default function AthleteDetail() {
     } catch (error:any) {
       console.error('Error:', error);
       toast.error(error.response.data.errors[0].message, {
-        position: "bottom-center",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -361,7 +362,7 @@ export default function AthleteDetail() {
       const response = await saveObservations(request);
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
-        position: "bottom-center",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -435,7 +436,7 @@ export default function AthleteDetail() {
                 <thead>
                   <tr>
                     <th className="table-dark text-center" style={{ fontSize: '13px' }} scope="col">DATA</th>
-                    <th className="table-dark text-center" style={{ fontSize: '13px' }} scope="col">RECEPTIVIDADE CONTATO</th>
+                    <th className="table-dark text-center" style={{ fontSize: '13px' }} scope="col">RECEPTIVIDADE CONTRATO</th>
                     <th className="table-dark text-center" style={{ fontSize: '13px' }} scope="col">SATISFAÇÃO EMPRESA</th>
                     <th className="table-dark text-center" style={{ fontSize: '13px' }} scope="col">SATISFAÇÃO CLUBE</th>
                     <th className="table-dark text-center" style={{ fontSize: '13px' }} scope="col">RELAÇÕES FAMILIARES</th>
@@ -498,10 +499,10 @@ export default function AthleteDetail() {
                   <table className="table table-striped">
                     <thead>
                       <tr>
-                        <th className="table-dark text-center" scope="col">DATA</th>
-                        <th className="table-dark text-center" scope="col">NOME</th>
-                        <th className="table-dark text-center" scope="col">QUANTIDADE</th>
-                        <th className="table-dark text-center" scope="col">PREÇO</th>
+                        <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>DATA</th>
+                        <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>NOME</th>
+                        <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>QUANTIDADE</th>
+                        <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>PREÇO</th>
                       </tr>
                     </thead>
                     <tbody>

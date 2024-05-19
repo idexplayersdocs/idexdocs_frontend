@@ -72,7 +72,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
         } catch (error:any) {
           console.error('Error:', error);
           toast.error(error.response.data.errors[0].message, {
-            position: "bottom-center",
+            position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -126,7 +126,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
       setTotalRow(clubCompetitions?.total);
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
-        position: "bottom-center",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,

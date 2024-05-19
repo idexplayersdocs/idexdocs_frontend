@@ -43,7 +43,7 @@ export default function SideBar({athleteData, modal}:any) {
     return currentDate.isAfter(nextEvaluationDate);
 };
 const handleOpenEditAthlete = () => setOpenEditAthlete(true);
-const handleCloseSideBar = () => {
+const handleCloseEditAthlete = () => {
   setOpenEditAthlete(false)
 }
 
@@ -111,17 +111,17 @@ const handleCloseSideBar = () => {
       </div>
       <Modal
         open={openEditAthlete}
-        onClose={handleCloseSideBar}
+        onClose={handleCloseEditAthlete}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Editar do atleta"/>
-            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseSideBar}/>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseEditAthlete}/>
           </div>
           <hr />
           {/* <SideBar athleteData={athlete} modal={true}/> */}
-          <EditAthlete athleteData={athleteData} />
+          <EditAthlete athleteData={athleteData} closeModal={handleCloseEditAthlete}/>
         </Box>
       </Modal>
     </div>

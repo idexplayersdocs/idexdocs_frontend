@@ -7,6 +7,7 @@ import { Box, Button, Modal, colors, styled } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { createAthlete, editAthlete, uploadImageAthlete } from "@/pages/api/http-service/athletes";
 import { useRouter } from "next/router";
+import { ToastContainer } from "react-toastify";
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -20,7 +21,7 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-export default function EditAthlete({athleteData}: any) {
+export default function EditAthlete({athleteData, closeModal}: any) {
   const { query, push, back } = useRouter();
   const athleteId = query?.id;
   const [formAvatar, setFormAvatar] = useState(athleteData.blob_url ? athleteData.blob_url : "/images/image-user.png");
@@ -64,18 +65,22 @@ export default function EditAthlete({athleteData}: any) {
     try {
       const newAthletesData = await editAthlete(formData, athleteId);
       if(newAthletesData){
-
         if(formImage){
           const formData = new FormData();
           formData.append('image', formImage);
           const uploadImage = await uploadImageAthlete(newAthletesData.id, formData);
-          handleCloseCreateAthlete();
         }
       }
+      // handleCloseCreateAthlete();
+      handleCloseModal();
     } catch (error: any) {
       console.log(error)
     }
   }
+
+  const handleCloseModal = () => {
+    closeModal();
+  };
 
 
   return (
@@ -166,7 +171,7 @@ export default function EditAthlete({athleteData}: any) {
             <div className="d-flex align-items-center">
                 <label className="ms-3 mt-2" style={{color: 'white', fontSize: '20px'}}>Ativo</label>
                 </div>
-                <select className="form-select" name="ativo" value={formData.ativo} onChange={handleInputChange} style={{height:'45px'}}>
+                <select className="form-select" name="ativo" value={formData.ativo ? 'true' : 'false'} onChange={handleInputChange} style={{height:'45px'}}>
                 {/* <option value="" disabled hidden>Selecione</option> */}
                   <option value='true' style={{color: '#fff'}}>Sim</option>
                   <option value="false" style={{color: '#fff'}}>Não</option>
@@ -177,6 +182,7 @@ export default function EditAthlete({athleteData}: any) {
           <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClick} >Salvar</button>
         </div>
       </div>
+      <ToastContainer />
     </>
   )
 }

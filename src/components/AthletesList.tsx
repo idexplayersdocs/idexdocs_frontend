@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { getAthletes } from '@/pages/api/http-service/athletes';
 import Loading from 'react-loading';
 import moment from 'moment';
-import { faEye, faFilePdf, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faEye, faFilePdf, faTriangleExclamation, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Pagination, Modal } from "@mui/material";
 
 import Image from "next/image";
@@ -25,7 +25,8 @@ interface Athlete {
   posicao_primaria: string;
   data_nascimento: string;
   clube_atual: string;
-  data_proxima_avaliacao_relacionamento: any
+  data_proxima_avaliacao_relacionamento: any;
+  ativo: boolean
 }
 
 const options: Options = {
@@ -111,32 +112,31 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
     try {
       const res = await PDFInfo(id);
       const foto = await GetFotoUsuario(id);
-      console.log(foto);
 
       setInfoPdf(res);
       setUrlFoto(foto.blob_url);
       setLoading(true);
 
-      const obsDesempenho = res.observacao.filter((x) => x.descricao === "desempenho");
+      const obsDesempenho: any = res.observacao.filter((x) => x.descricao === "desempenho");
 
-      if (!obsDesempenho.length) {
+      if (obsDesempenho.data) {
         setObservacaoDesempenho("Sem observações para desempenho...");
       }
 
-      if (obsDesempenho.length) {
-        const lastObs = obsDesempenho[obsDesempenho.length - 1].descricao;
-        setObservacaoDesempenho(lastObs);
+      if (obsDesempenho.data) {
+        // const lastObs = obsDesempenho[obsDesempenho.length - 1].descricao;
+        setObservacaoDesempenho(obsDesempenho.data.descricao);
       }
 
-      const obsRelacionamento = res.observacao.filter((x) => x.descricao === "relacionamento");
+      const obsRelacionamento: any = res.observacao.filter((x) => x.descricao === "relacionamento");
 
-      if (!obsDesempenho.length) {
+      if (!obsRelacionamento.data) {
         setObservacaoRelacionamento("Sem observações para relacionamento...");
       }
 
-      if (obsDesempenho.length) {
-        const lastObs = obsRelacionamento[obsRelacionamento.length - 1].descricao;
-        setObservacaoDesempenho(lastObs);
+      if (obsRelacionamento.data) {
+        // const lastObs = obsRelacionamento[obsRelacionamento.length - 1].descricao;
+        setObservacaoDesempenho(obsDesempenho.data.descricao);
       }
 
       const clubes = res.clube.sort((a: any, b: any) => {
@@ -257,6 +257,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
               <th className="table-dark text-center" scope="col">
                 AVAL. RELACIONAMENTO
               </th>
+              <th className="table-dark text-center">ATIVO</th>
               <th className="table-dark text-center"></th>
             </tr>
           </thead>
@@ -275,6 +276,9 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                     validLabelDate(athlete.data_proxima_avaliacao_relacionamento) &&
                       <FontAwesomeIcon className='ms-2 mt-1' icon={faTriangleExclamation} style={{color: "#ff0000",}} />
                   }
+                  </td>
+                  <td className="table-dark text-center">
+                    <FontAwesomeIcon icon={athlete.ativo ? faCheck : faXmark} size='xl' style={athlete.ativo? { color: "#15ff00" } : { color: "#ff0000" }} />
                   </td>
                   <td className="table-dark text-end" style={{whiteSpace: 'nowrap'}}>
                     {/* <FontAwesomeIcon
