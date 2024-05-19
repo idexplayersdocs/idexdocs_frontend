@@ -238,7 +238,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
 
   return (
     <>
-      <div className="d-flex flex-column align-items-center justify-content-center mb-3 m-3 overflow-auto">
+      <div className="w-100 mt-3 mb-3" style={{overflow: 'auto'}}>
         <table className="table table-striped">
           <thead>
             <tr>
