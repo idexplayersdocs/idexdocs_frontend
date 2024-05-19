@@ -112,7 +112,7 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
       setTotalRow(clubList?.total);
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
-        position: "bottom-center",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,

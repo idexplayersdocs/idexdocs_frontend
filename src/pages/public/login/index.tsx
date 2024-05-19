@@ -27,7 +27,7 @@ export default function Login() {
       router.push("/secure/athletes");
     } catch (e: unknown | any) {
       toast.error(e.response.data.errors[0].message, {
-        position: "bottom-center",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,

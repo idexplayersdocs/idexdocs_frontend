@@ -20,6 +20,7 @@ import { getObservations, saveObservations } from '@/pages/api/http-service/obse
 import { Bounce, toast } from 'react-toastify';
 import PerformanceCreation from './modal/PerformanceCreation';
 import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
+import ContractHistory from './modal/ContractHistory';
 
 const styleCaracteristic = {
   position: 'absolute' as 'absolute',
@@ -75,6 +76,7 @@ export default function Performance({athleteData}: any) {
   const [openHistoryCompetitions, setOpenHistoryCompetitions] = React.useState(false);
   const [openClubHistory, setOpenClubHistory] = React.useState(false);
   const [openInjuries, setOpenInjuries] = React.useState(false);
+  const [openContractHistory, setOpenContractHistory] = React.useState(false);
   const [openPhysicalHistory, setOpenPhysicalHistory] = React.useState(false);
   const [openInfo, setOpenInfo] = React.useState(false);
   const [openPerformanceCreation, setOpenPerformanceCreation] = React.useState(false);
@@ -87,6 +89,9 @@ export default function Performance({athleteData}: any) {
 
   const handleOpenInjuries = () => setOpenInjuries(true);
   const handleCloseInjuries = () => setOpenInjuries(false);
+
+  const handleOpenContractHistory = () => setOpenContractHistory(true);
+  const handleCloseContractHistory = () => setOpenContractHistory(false);
 
   const [observacao, setObservacao] = useState<string>('');
 
@@ -105,7 +110,7 @@ export default function Performance({athleteData}: any) {
 
       }  catch(error: any){
         toast.error(error.response.data.errors[0].message, {
-          position: "bottom-center",
+          position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -176,8 +181,10 @@ export default function Performance({athleteData}: any) {
 
         // Observações
         const responseObservacoes = await getObservations(athleteId, 'desempenho');
-        let observacao = responseObservacoes?.data[responseObservacoes?.data.length - 1]
-        setObservacao(observacao.descricao);
+        // let observacao = responseObservacoes?.data[responseObservacoes?.data.length - 1]
+        if(responseObservacoes.data){
+          setObservacao(responseObservacoes.data.descricao);
+        }
       } catch (error) {
         console.error('Error', error);
       }
@@ -200,7 +207,7 @@ export default function Performance({athleteData}: any) {
       const response = await saveObservations(request);
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
-        position: "bottom-center",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -222,7 +229,9 @@ export default function Performance({athleteData}: any) {
         <div className="col-lg-6 mb-3">
           <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenHistoryCompetitions}>Histórico de competições</button>
           <br />
-          <button type="button" className="btn btn-modal-color w-75 w-100" onClick={handleOpenClubHistory}>Histórico de Clubes</button>
+          <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenClubHistory}>Histórico de Clubes</button>
+          <br />
+          <button type="button" className="btn btn-modal-color w-75 w-100" onClick={handleOpenContractHistory}>Histórico de Contratos</button>
         </div>
         <div className="col-lg-6">
           <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenInjuries}>Histórico de Lesões</button>
@@ -324,6 +333,16 @@ export default function Performance({athleteData}: any) {
           >
             <Box sx={styleCaracteristic}>
               <PerformanceCreation closeModal={handleClosePerformanceCreation} athleteData={athleteData} dataList={dataCharacteristic} labelList={labelCharacteristic} athleteId={athleteId}/>
+            </Box>
+          </Modal>
+          <Modal
+            open={openContractHistory}
+            onClose={handleCloseContractHistory}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <ContractHistory closeModal={handleCloseContractHistory} athleteId={athleteId}/>
             </Box>
           </Modal>
     </div>

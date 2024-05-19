@@ -67,7 +67,7 @@ export default function Injuries({closeModal, athleteId}: any) {
         } catch (error:any) {
           console.error('Error:', error);
           toast.error(error.response.data.errors[0].message, {
-            position: "bottom-center",
+            position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -115,7 +115,7 @@ export default function Injuries({closeModal, athleteId}: any) {
       setTotalRow(InjuriesList?.total);
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
-        position: "bottom-center",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,

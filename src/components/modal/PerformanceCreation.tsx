@@ -208,7 +208,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
 
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
-        position: "bottom-center",
+        position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
