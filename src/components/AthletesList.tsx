@@ -376,7 +376,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
               sizes="100vw"
               style={{ width: 200, height: "auto", maxWidth: "100%" }}
             />
-            <h1 className="fw-bold h3  text-dark text-center">Relatório desempenho com atletas representados</h1>
+            <h1 className="fw-bold h1  text-dark text-center">Relatório desempenho com atletas representados</h1>
             <Image
               objectFit="contain"
               src="/images/logo-arabe.png"
