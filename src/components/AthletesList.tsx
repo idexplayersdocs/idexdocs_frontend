@@ -104,7 +104,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   }, [newAthlete, inputFilter]);
 
   useEffect(() => {
-    console.log(pdfRef);
+    // console.log(pdfRef);
   }, []);
 
   const handleEditAthlete = (id: number) => {
@@ -126,7 +126,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
     try {
       const res = await PDFInfo(id);
       const foto = await GetFotoUsuario(id);
-      console.log(res);
+      // console.log(res);
 
       setInfoPdf(res);
       setUrlFoto(foto.blob_url);
@@ -193,7 +193,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
       element.classList.add("pdf");
       setLoading(false);
     } catch (e: unknown) {
-      console.log(e);
+      // console.log(e);
     } finally {
       setLoading(false);
     }
@@ -308,13 +308,13 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                       style={athlete.ativo ? { color: "#15ff00" } : { color: "#ff0000" }}
                     />
                   </td>
-                  <td className="table-dark text-end d-flex" style={{ whiteSpace: "nowrap" }}>
+                  <td className="table-dark text-end" style={{ whiteSpace: "nowrap" }}>
                     {/* <FontAwesomeIcon
                       icon={faTrashCan}
                       size="2xl"
                       style={{ color: '#ff0000', cursor: 'pointer' }}
                     /> */}
-                    <div onClick={() => handleClickPdf(athlete.id)} ref={btnPdfRef}>
+                    <div onClick={() => handleClickPdf(athlete.id)} ref={btnPdfRef} className="me-2" style={{ display: "inline-block" }}>
                       <FontAwesomeIcon
                         className="ms-2 me-2"
                         icon={faFilePdf}
@@ -322,13 +322,15 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                         size="2xl"
                       />
                     </div>
-                    <FontAwesomeIcon
-                      className="ms-2 me-2"
-                      icon={faEye}
-                      size="2xl"
-                      style={{ color: "#ffffff", cursor: "pointer" }}
-                      onClick={() => handleEditAthlete(athlete.id)}
-                    />
+                    <div style={{ display: "inline-block" }}>
+                      <FontAwesomeIcon
+                        className="ms-2 me-2"
+                        icon={faEye}
+                        size="2xl"
+                        style={{ color: "#ffffff", cursor: "pointer" }}
+                        onClick={() => handleEditAthlete(athlete.id)}
+                      />
+                    </div>
                   </td>
                 </tr>
               ))

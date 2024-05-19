@@ -65,7 +65,6 @@ export default function ClubHistory({closeModal, athleteId}: any) {
         setLoading(true);
         try {
           const clubList = await getClub(athleteId, page);
-          console.log(clubList)
           setClub(clubList?.data);
           setTotalRow(clubList?.total);
 

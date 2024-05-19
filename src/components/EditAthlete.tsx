@@ -37,7 +37,6 @@ export default function EditAthlete({athleteData, closeModal}: any) {
     posicao_terciaria: athleteData.posicao_terciaria ? athleteData.posicao_terciaria : '',
     ativo: athleteData.ativo ? athleteData.ativo : '',
   });
-  console.log(athleteData)
 
   const getImageFileObject = (event: any) => {
     const file = event.target.files[0];

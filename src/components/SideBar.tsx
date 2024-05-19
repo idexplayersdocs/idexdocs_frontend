@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Loading from "react-loading";
 import SoccerField from "./SoccerField";
-import { getAvatarAthletes } from "@/pages/api/http-service/athletes";
+import { getAthleteById, getAvatarAthletes } from "@/pages/api/http-service/athletes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTriangleExclamation, faX } from "@fortawesome/free-solid-svg-icons";
 import { Box, Button, Modal, Pagination, colors, styled } from "@mui/material";
@@ -33,8 +33,8 @@ const style = {
 
 export default function SideBar({athleteData, modal}:any) {
   const { query, push, back } = useRouter();
+  const athleteId = query?.id;
   const [openEditAthlete, setOpenEditAthlete] = useState(false);
-
   const validLabelDate = (dataAvaliacao: string) => {
     const currentDate = moment().startOf('day');
     const nextEvaluationDate = moment(dataAvaliacao).startOf('day');
@@ -43,9 +43,14 @@ export default function SideBar({athleteData, modal}:any) {
     return currentDate.isAfter(nextEvaluationDate);
 };
 const handleOpenEditAthlete = () => setOpenEditAthlete(true);
-const handleCloseEditAthlete = () => {
+const handleCloseEditAthlete = () => {setOpenEditAthlete(false)}
+
+const handleCloseEditAthleteUpdate = () => {
   setOpenEditAthlete(false)
+  location.reload();
 }
+
+
 
   if (!athleteData) {
     return <div className="d-flex justify-content-center align-items-center w-100 h-25" ><Loading type='bars' color="var(--bg-ternary-color)"/></div>
@@ -121,7 +126,7 @@ const handleCloseEditAthlete = () => {
           </div>
           <hr />
           {/* <SideBar athleteData={athlete} modal={true}/> */}
-          <EditAthlete athleteData={athleteData} closeModal={handleCloseEditAthlete}/>
+          <EditAthlete athleteData={athleteData} closeModal={handleCloseEditAthleteUpdate}/>
         </Box>
       </Modal>
     </div>

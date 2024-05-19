@@ -149,7 +149,6 @@ export default function AthleteDetail() {
   
             // Observações
             const responseObservacoes = await getObservations(athleteId, 'relacionamento');
-            console.log(responseObservacoes)
             if(responseObservacoes.data){
               // let observacao = responseObservacoes?.data[responseObservacoes?.data]
               setObservacao(responseObservacoes.data.descricao);
