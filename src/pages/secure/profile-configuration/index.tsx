@@ -462,7 +462,7 @@ export default function ProfileConfiguration() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={5} className="table-dark text-center">
+                      <td colSpan={6} className="table-dark text-center">
                         Lista de usuários vazia
                       </td>
                     </tr>
