@@ -13,15 +13,15 @@ import {
   UsuarioUpdateRequestDTO,
 } from "@/pages/api/http-service/usuarioService/dto";
 import { styled } from "@mui/material/styles";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { CriarUsuario, UpdatePassword, UpdateUsuario, Usuarios } from "@/pages/api/http-service/usuarioService";
 import { SnackBar } from "@/components/SnackBar";
 import { LoadingOverlay } from "@/components/LoadingOverley";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenSquare, faTrash, faX, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { Box, Button, Modal, colors } from "@mui/material";
+import { faPenSquare, faTrash, faX, faSpinner, faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { Box, Button, Checkbox, Modal, colors } from "@mui/material";
 import Subtitle from "@/components/Subtitle";
 import { jwtDecode } from "jwt-decode";
 
@@ -52,6 +52,8 @@ export default function ProfileConfiguration() {
     register: registerCreateUser,
     reset: resetCreateUser,
     formState: { errors: errosUserCreate },
+    control: controlCreateUser,
+    setValue: setValueCreateUser,
   } = useForm<UsuarioRequestDTO>();
 
   const {
@@ -88,6 +90,7 @@ export default function ProfileConfiguration() {
   };
 
   const onSubmitUpdateUser = async (data: UsuarioUpdateRequestDTO): Promise<void> => {
+    console.log(data);
     setUpdateUserLoading(true);
     try {
       const res = await UpdateUsuario(data);
@@ -140,14 +143,14 @@ export default function ProfileConfiguration() {
         tipo = "3";
       }
 
-      console.log(data);
-
       const res = await UpdatePassword({ id: data.id, password: data.confirmarSenha, new_password: data.senha });
       const resUpdateUser = await UpdateUsuario({
         email: data.email,
         id: data.id,
         nome: data.nome,
         usuario_tipo_id: tipo,
+        create_desempenho: false,
+        create_relacionamento: false,
       });
 
       // console.log(resUpdateUser);
@@ -186,6 +189,11 @@ export default function ProfileConfiguration() {
   const onUpdateUser = async (usuario: Usuario): Promise<void> => {
     setValueModal("nome", usuario.nome);
     setValueModal("email", usuario.email);
+
+    if (usuario.permissoes) {
+      setValueModal("create_desempenho", usuario.permissoes.create_relacionamento);
+      setValueModal("create_relacionamento", usuario.permissoes.create_relacionamento);
+    }
 
     switch (usuario.tipo) {
       case "admin":
@@ -238,8 +246,8 @@ export default function ProfileConfiguration() {
             TabIndicatorProps={{
               style: {
                 backgroundColor: "#ff781d",
-                paddingLeft: '5px',
-                paddingRight: '5px'
+                paddingLeft: "5px",
+                paddingRight: "5px",
               },
             }}
           >
@@ -356,6 +364,36 @@ export default function ProfileConfiguration() {
                     <span className="text-danger mt-1 d-block">Tipo de usuário is required field</span>
                   )}
                 </div>
+                <div className="mt-4 d-flex align-items-center">
+                  <Checkbox
+                    color="success"
+                    name="clube_atual"
+                    onChange={(e) => setValueCreateUser("create_relacionamento", e.target.checked)}
+                    // checked={formRegisterClub.clube_atual}
+                    sx={{
+                      color: "var(--bg-ternary-color)",
+                      "&.Mui-checked": {
+                        color: "var(--bg-ternary-color)",
+                      },
+                    }}
+                  />
+                  <p className="text-white mb-0">Acesso a tela de relacionamento</p>
+                </div>
+                <div className="mt-1 d-flex align-items-center">
+                  <Checkbox
+                    color="success"
+                    onChange={(e) => setValueCreateUser("create_desempenho", e.target.checked)}
+                    name="clube_atual"
+                    sx={{
+                      color: "var(--bg-ternary-color)",
+                      "&.Mui-checked": {
+                        color: "var(--bg-ternary-color)",
+                      },
+                    }}
+                  />
+
+                  <p className="text-white mb-0">Acesso a tela de desempenho</p>
+                </div>
                 <div className="mt-4 d-flex align-items-center justify-content-end">
                   <button className="btn-success btn text-white" type="submit">
                     Criar
@@ -381,6 +419,12 @@ export default function ProfileConfiguration() {
                     <th className="table-dark text-center" scope="col">
                       TIPO
                     </th>
+                    <th className="table-dark text-center" scope="col">
+                      DESEMEPENHO
+                    </th>
+                    <th className="table-dark text-center" scope="col">
+                      RELACIONAMENTO
+                    </th>
                     <th className="table-dark text-center"></th>
                   </tr>
                 </thead>
@@ -392,6 +436,20 @@ export default function ProfileConfiguration() {
                         <td className="table-dark text-center">{user.email}</td>
                         <td className="table-dark text-center">{new Date(user.data_criacao).toLocaleDateString()}</td>
                         <td className="table-dark text-center">{user.tipo}</td>
+                        <td className="table-dark text-center">
+                          <FontAwesomeIcon
+                            icon={user.permissoes?.create_desempenho ? faCheck : faXmark}
+                            size="xl"
+                            style={user.permissoes?.create_desempenho ? { color: "#15ff00" } : { color: "#ff0000" }}
+                          />
+                        </td>
+                        <td className="table-dark text-center">
+                          <FontAwesomeIcon
+                            icon={user.permissoes?.create_relacionamento ? faCheck : faXmark}
+                            size="xl"
+                            style={user.permissoes?.create_relacionamento ? { color: "#15ff00" } : { color: "#ff0000" }}
+                          />
+                        </td>
                         <td className="table-dark text-center">
                           <FontAwesomeIcon
                             icon={faPenSquare}
@@ -412,7 +470,6 @@ export default function ProfileConfiguration() {
                 </tbody>
               </table>
             </div>
-           
           </TabPanel>
         </TabContext>
         {showSnackBar && <SnackBar msg={messageSnackBar} open={true} type="success" />}
@@ -420,7 +477,10 @@ export default function ProfileConfiguration() {
       </div>
       <Modal open={openModalUpdate} onClose={handleCloseUpdateModal}>
         <div className="h-100 w-100 d-flex align-items-center justify-content-center">
-          <div className="rounded p-3 pt-3 " style={{ maxWidth: "900px", backgroundColor: "#3c3c3c", width: '95%', height: '95%', overflow: 'auto' }}>
+          <div
+            className="rounded p-3 pt-3 "
+            style={{ maxWidth: "900px", backgroundColor: "#3c3c3c", width: "95%", height: "95%", overflow: "auto" }}
+          >
             <div className="d-flex justify-content-between mb-5">
               <Subtitle subtitle="Edição de usuário" />
               <FontAwesomeIcon
@@ -430,7 +490,7 @@ export default function ProfileConfiguration() {
                 onClick={handleCloseUpdateModal}
               />
             </div>
-            <hr style={{marginTop: '-25px'}}/>
+            <hr style={{ marginTop: "-25px" }} />
             <form onSubmit={handleSubmitUpdateUser(onSubmitUpdateUser)} style={{ marginLeft: "15px" }}>
               <div className="mb-4">
                 <label className="d-block text-white h4">Nome:</label>
@@ -482,6 +542,37 @@ export default function ProfileConfiguration() {
                     </div>
                   ) : null}
                 </button>
+              </div>
+              <div className="mt-4 d-flex align-items-center">
+                <Checkbox
+                  color="success"
+                  name="clube_atual"
+                  onChange={(e) => setValueModal("create_relacionamento", e.target.checked)}
+                  checked={getValueModal("create_relacionamento")}
+                  sx={{
+                    color: "var(--bg-ternary-color)",
+                    "&.Mui-checked": {
+                      color: "var(--bg-ternary-color)",
+                    },
+                  }}
+                />
+                <p className="text-white mb-0">Acesso a tela de relacionamento</p>
+              </div>
+              <div className="mt-1 d-flex align-items-center">
+                <Checkbox
+                  color="success"
+                  onChange={(e) => setValueModal("create_desempenho", e.target.checked)}
+                  name="clube_atual"
+                  checked={getValueModal("create_desempenho")}
+                  sx={{
+                    color: "var(--bg-ternary-color)",
+                    "&.Mui-checked": {
+                      color: "var(--bg-ternary-color)",
+                    },
+                  }}
+                />
+
+                <p className="text-white mb-0">Acesso a tela de desempenho</p>
               </div>
             </form>
           </div>

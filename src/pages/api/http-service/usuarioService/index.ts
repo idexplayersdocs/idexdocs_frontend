@@ -2,12 +2,23 @@ import { axiosClient } from "../../axiosClient";
 import { UsuarioRequestDTO, UsuarioResponseDTO, UsuarioUpdateRequestDTO } from "./dto";
 import queryString from "query-string";
 
-export const CriarUsuario = async ({ email, nome, password, usuario_tipo_id }: UsuarioRequestDTO) => {
+export const CriarUsuario = async ({
+  email,
+  nome,
+  password,
+  usuario_tipo_id,
+  create_desempenho,
+  create_relacionamento,
+}: UsuarioRequestDTO) => {
   const { data } = await axiosClient.post("/usuario/create", {
     nome,
     password,
     email,
     usuario_tipo_id,
+    permissoes: {
+      create_relacionamento: create_relacionamento ? create_relacionamento : false,
+      create_desempenho: create_desempenho ? create_desempenho : false,
+    },
   });
 
   return data;
@@ -27,6 +38,10 @@ export const UpdateUsuario = async (usuario: UsuarioUpdateRequestDTO) => {
     nome: usuario.nome,
     email: usuario.email,
     usuario_tipo_id: usuario.usuario_tipo_id,
+    permissoes: {
+      create_relacionamento: usuario.create_relacionamento ? usuario.create_relacionamento : false,
+      create_desempenho: usuario.create_desempenho ? usuario.create_desempenho : false,
+    },
   });
 
   return data;

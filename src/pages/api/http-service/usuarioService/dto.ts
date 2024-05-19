@@ -3,6 +3,8 @@ export interface UsuarioRequestDTO {
   email: string;
   password: string;
   usuario_tipo_id: string;
+  create_relacionamento: boolean;
+  create_desempenho: boolean;
 }
 
 export interface UsuarioResponseDTO {
@@ -17,6 +19,10 @@ export interface Usuario {
   email: string;
   data_criacao: string;
   tipo: any;
+  permissoes: {
+    create_relacionamento: boolean;
+    create_desempenho: boolean;
+  }
 }
 
 
@@ -25,4 +31,7 @@ export interface UsuarioUpdateRequestDTO {
   nome: string;
   email: string;
   usuario_tipo_id: string;
+  create_relacionamento: boolean;
+  create_desempenho: boolean;
+  
 }

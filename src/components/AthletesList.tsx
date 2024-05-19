@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { useRouter } from 'next/router';
-import { getAthletes } from '@/pages/api/http-service/athletes';
-import Loading from 'react-loading';
-import moment from 'moment';
+import React, { useEffect, useRef, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { useRouter } from "next/router";
+import { getAthletes } from "@/pages/api/http-service/athletes";
+import Loading from "react-loading";
+import moment from "moment";
 import { faEye, faFilePdf, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { Pagination, Modal } from "@mui/material";
 
@@ -25,7 +25,7 @@ interface Athlete {
   posicao_primaria: string;
   data_nascimento: string;
   clube_atual: string;
-  data_proxima_avaliacao_relacionamento: any
+  data_proxima_avaliacao_relacionamento: any;
 }
 
 const options: Options = {
@@ -111,7 +111,6 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
     try {
       const res = await PDFInfo(id);
       const foto = await GetFotoUsuario(id);
-      console.log(foto);
 
       setInfoPdf(res);
       setUrlFoto(foto.blob_url);
@@ -205,12 +204,12 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   // };
 
   const validLabelDate = (dataAvaliacao: string) => {
-    const currentDate = moment().startOf('day');
-    const nextEvaluationDate = moment(dataAvaliacao).startOf('day');
+    const currentDate = moment().startOf("day");
+    const nextEvaluationDate = moment(dataAvaliacao).startOf("day");
     // const nextEvaluationDate = moment('2024-05-06').startOf('day');
     // Comparação das datas
     return currentDate.isAfter(nextEvaluationDate);
-};
+  };
 
   useEffect(() => {
     const fetchUpdatedAthletesData = async () => {
@@ -266,17 +265,25 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                 <tr key={athlete.id}>
                   <td className="table-dark text-center">{athlete.nome}</td>
                   <td className="table-dark text-center">{athlete.posicao_primaria}</td>
-                  <td className="table-dark text-center">
-                    {moment(athlete.data_nascimento).format('DD/MM/YYYY')}
-                  </td>
+                  <td className="table-dark text-center">{moment(athlete.data_nascimento).format("DD/MM/YYYY")}</td>
                   <td className="table-dark text-center">{athlete.clube_atual}</td>
-                  <td className={`table-dark text-center ${validLabelDate(athlete.data_proxima_avaliacao_relacionamento) ? 'text-danger' : ''}`} >{athlete.data_proxima_avaliacao_relacionamento ? moment(athlete.data_proxima_avaliacao_relacionamento).format('DD/MM/YYYY') : 'Não Avaliado'}
-                  {
-                    validLabelDate(athlete.data_proxima_avaliacao_relacionamento) &&
-                      <FontAwesomeIcon className='ms-2 mt-1' icon={faTriangleExclamation} style={{color: "#ff0000",}} />
-                  }
+                  <td
+                    className={`table-dark text-center ${
+                      validLabelDate(athlete.data_proxima_avaliacao_relacionamento) ? "text-danger" : ""
+                    }`}
+                  >
+                    {athlete.data_proxima_avaliacao_relacionamento
+                      ? moment(athlete.data_proxima_avaliacao_relacionamento).format("DD/MM/YYYY")
+                      : "Não Avaliado"}
+                    {validLabelDate(athlete.data_proxima_avaliacao_relacionamento) && (
+                      <FontAwesomeIcon
+                        className="ms-2 mt-1"
+                        icon={faTriangleExclamation}
+                        style={{ color: "#ff0000" }}
+                      />
+                    )}
                   </td>
-                  <td className="table-dark text-end" style={{whiteSpace: 'nowrap'}}>
+                  <td className="table-dark text-end" style={{ whiteSpace: "nowrap" }}>
                     {/* <FontAwesomeIcon
                       icon={faTrashCan}
                       size="2xl"
@@ -309,7 +316,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
           </tbody>
         </table>
       </div>
-      <div className='d-flex justify-content-center pb-5'>
+      <div className="d-flex justify-content-center pb-5">
         {totalRow > 10 && (
           <Pagination
             className="pagination-bar"
@@ -377,13 +384,12 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                 />
               )}
             </article>
-            <article className="col-9">
+            <article className="col-6">
+              <div className="border-bottom border-4 border-black mb-3"></div>
               <div className="border-bottom border-4 border-black mb-3">
                 <p className="fw-bold mb-2">
                   Nome do Atleta: <span className="text-uppercase fw-normal">{infoPdf!.atleta.nome}</span>
                 </p>
-              </div>
-              <div className="border-bottom border-4 border-black mb-3">
                 <p className="fw-bold d-flex align-items-center justify-content-between mb-2">
                   Posição: <span className="text-uppercase fw-normal">{infoPdf!.atleta.posicao_primaria}</span>
                 </p>
@@ -398,8 +404,10 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                   Clube Atual: <span className="text-uppercase fw-normal">{infoPdf!.atleta.clube_atual}</span>
                 </p>
               </div>
-              <div className="p-1 d-flex align-items-center justify-content-end w-100">
-                <div className="w-25">
+            </article>
+            <article className="col-3 ">
+              <div className="p-1 d-flex align-items-center justify-content-end w-100 ">
+                <div className="w-100">
                   <SoccerField
                     athleteData={{
                       posicao_primaria: infoPdf.atleta.posicao_primaria,
