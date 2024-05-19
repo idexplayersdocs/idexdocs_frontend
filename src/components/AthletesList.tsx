@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { useRouter } from 'next/router';
-import { getAthletes } from '@/pages/api/http-service/athletes';
-import Loading from 'react-loading';
-import moment from 'moment';
+import React, { useEffect, useRef, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { useRouter } from "next/router";
+import { getAthletes } from "@/pages/api/http-service/athletes";
+import Loading from "react-loading";
+import moment from "moment";
 import { faCheck, faEye, faFilePdf, faTriangleExclamation, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Pagination, Modal } from "@mui/material";
 
@@ -26,12 +26,13 @@ interface Athlete {
   data_nascimento: string;
   clube_atual: string;
   data_proxima_avaliacao_relacionamento: any;
-  ativo: boolean
+  ativo: boolean;
 }
 
 const options: Options = {
   // default is `save`
   method: "open",
+
   // default is Resolution.MEDIUM = 3, which should be enough, higher values
   // increases the image quality but also the size of the PDF, so be careful
   // using values higher than 10 when having multiple pages generated, it
@@ -64,7 +65,9 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   const [observacaoDesempenho, setObservacaoDesempenho] = useState<string>();
   const [observacaoRelacionamento, setObservacaoRelacionamento] = useState<string>();
   const [clubes, setClubes] = useState<any>([]);
+  const [firstClick, setFirstClick] = useState<boolean>(true);
   const pdfRef = useRef<any>();
+  const btnPdfRef = useRef<any>();
 
   useEffect(() => {
     const fetchAthletesData = async () => {
@@ -100,6 +103,10 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
     }
   }, [newAthlete, inputFilter]);
 
+  useEffect(() => {
+    console.log(pdfRef);
+  }, []);
+
   const handleEditAthlete = (id: number) => {
     push(`/secure/athletes/${id}/athleteDetail`);
   };
@@ -109,35 +116,43 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   };
 
   const handleClickPdf = async (id: number): Promise<void> => {
+    if (firstClick) {
+      btnPdfRef.current.click();
+      btnPdfRef.current.click();
+
+      setFirstClick(false);
+    }
+
     try {
       const res = await PDFInfo(id);
       const foto = await GetFotoUsuario(id);
+      console.log(res);
 
       setInfoPdf(res);
       setUrlFoto(foto.blob_url);
       setLoading(true);
 
-      const obsDesempenho: any = res.observacao.filter((x) => x.descricao === "desempenho");
+      // const obsDesempenho: any = res.observacao.filter((x) => x.descricao === "desempenho");
 
-      if (obsDesempenho.data) {
-        setObservacaoDesempenho("Sem observações para desempenho...");
-      }
+      // if (obsDesempenho.data) {
+      //   setObservacaoDesempenho("Sem observações para desempenho...");
+      // }
 
-      if (obsDesempenho.data) {
-        // const lastObs = obsDesempenho[obsDesempenho.length - 1].descricao;
-        setObservacaoDesempenho(obsDesempenho.data.descricao);
-      }
+      // if (obsDesempenho.data) {
+      //   // const lastObs = obsDesempenho[obsDesempenho.length - 1].descricao;
+      //   setObservacaoDesempenho(obsDesempenho.data.descricao);
+      // }
 
-      const obsRelacionamento: any = res.observacao.filter((x) => x.descricao === "relacionamento");
+      // const obsRelacionamento: any = res.observacao.filter((x) => x.descricao === "relacionamento");
 
-      if (!obsRelacionamento.data) {
-        setObservacaoRelacionamento("Sem observações para relacionamento...");
-      }
+      // if (!obsRelacionamento.data) {
+      //   setObservacaoRelacionamento("Sem observações para relacionamento...");
+      // }
 
-      if (obsRelacionamento.data) {
-        // const lastObs = obsRelacionamento[obsRelacionamento.length - 1].descricao;
-        setObservacaoDesempenho(obsDesempenho.data.descricao);
-      }
+      // if (obsRelacionamento.data) {
+      //   // const lastObs = obsRelacionamento[obsRelacionamento.length - 1].descricao;
+      //   setObservacaoDesempenho(obsDesempenho.data.descricao);
+      // }
 
       const clubes = res.clube.sort((a: any, b: any) => {
         if (!a.data_fim && !b.data_fim) {
@@ -175,9 +190,10 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
 
       await generatePDF(pdfRef, options);
 
-      // element.classList.add("pdf");
+      element.classList.add("pdf");
       setLoading(false);
     } catch (e: unknown) {
+      console.log(e);
     } finally {
       setLoading(false);
     }
@@ -238,7 +254,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
 
   return (
     <>
-      <div className="w-100 mt-3 mb-3" style={{overflow: 'auto'}}>
+      <div className="w-100 mt-3 mb-3" style={{ overflow: "auto" }}>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -286,21 +302,26 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                     )}
                   </td>
                   <td className="table-dark text-center">
-                    <FontAwesomeIcon icon={athlete.ativo ? faCheck : faXmark} size='xl' style={athlete.ativo? { color: "#15ff00" } : { color: "#ff0000" }} />
+                    <FontAwesomeIcon
+                      icon={athlete.ativo ? faCheck : faXmark}
+                      size="xl"
+                      style={athlete.ativo ? { color: "#15ff00" } : { color: "#ff0000" }}
+                    />
                   </td>
-                  <td className="table-dark text-end" style={{whiteSpace: 'nowrap'}}>
+                  <td className="table-dark text-end d-flex" style={{ whiteSpace: "nowrap" }}>
                     {/* <FontAwesomeIcon
                       icon={faTrashCan}
                       size="2xl"
                       style={{ color: '#ff0000', cursor: 'pointer' }}
                     /> */}
-                    <FontAwesomeIcon
-                      className="ms-2 me-2"
-                      icon={faFilePdf}
-                      style={{ color: "white", cursor: "pointer" }}
-                      size="2xl"
-                      onClick={() => handleClickPdf(athlete.id)}
-                    />
+                    <div onClick={() => handleClickPdf(athlete.id)} ref={btnPdfRef}>
+                      <FontAwesomeIcon
+                        className="ms-2 me-2"
+                        icon={faFilePdf}
+                        style={{ color: "white", cursor: "pointer" }}
+                        size="2xl"
+                      />
+                    </div>
                     <FontAwesomeIcon
                       className="ms-2 me-2"
                       icon={faEye}
@@ -343,6 +364,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
           className="bg-white pointer rounded-2 p-4 mx-auto pdf"
           style={{ cursor: "pointer", width: "95%" }}
           ref={pdfRef}
+          id="pdfRef"
         >
           <header className="d-flex align-items-center justify-content-center">
             <Image
@@ -392,20 +414,20 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
             <article className="col-6">
               <div className="border-bottom border-4 border-black mb-3"></div>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2">
+                <p className="fw-bold  h2 mb-3 d-flex align-items-center justify-content-between">
                   Nome do Atleta: <span className="text-uppercase fw-normal">{infoPdf!.atleta.nome}</span>
                 </p>
-                <p className="fw-bold d-flex align-items-center justify-content-between mb-2">
+                <p className="fw-bold  h2 mb-3 d-flex align-items-center justify-content-between">
                   Posição: <span className="text-uppercase fw-normal">{infoPdf!.atleta.posicao_primaria}</span>
                 </p>
-                <p className="fw-bold d-flex align-items-center justify-content-between mb-2">
+                <p className="fw-bold  h2 mb-3 d-flex align-items-center justify-content-between">
                   Data de Nascimento:{" "}
                   <span className="text-uppercase fw-normal">
                     {" "}
                     {moment(infoPdf!.atleta.data_nascimento).format("DD/MM/YYYY")}
                   </span>
                 </p>
-                <p className="fw-bold d-flex align-items-center justify-content-between">
+                <p className="fw-bold mb-3 h2 mb-3 d-flex align-items-center justify-content-between">
                   Clube Atual: <span className="text-uppercase fw-normal">{infoPdf!.atleta.clube_atual}</span>
                 </p>
               </div>
@@ -424,28 +446,28 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
               </div>
             </article>
           </section>
-          <section className="mt-4">
+          <section className="mt-5">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">PERFIL FÍSICO E TÉCNICO</p>
+                <p className="fw-bold mb-2 text-uppercase h1">PERFIL FÍSICO E TÉCNICO</p>
               </div>
 
               <table className="table">
                 <thead className="thead-dark">
                   <tr>
-                    <th className="" scope="col">
+                    <th className="h1" scope="col">
                       Data
                     </th>
-                    <th className="" scope="col">
+                    <th className="h1" scope="col">
                       Estatura
                     </th>
-                    <th className="" scope="col">
+                    <th className="h1" scope="col">
                       Envergadura
                     </th>
-                    <th className="" scope="col">
+                    <th className="h1" scope="col">
                       Peso
                     </th>
-                    <th className="" scope="col">
+                    <th className="h1" scope="col">
                       Percentual de Gordura
                     </th>
                   </tr>
@@ -454,93 +476,11 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                   {infoPdf!.caracteristicas_fisicas.map((x, i) => {
                     return (
                       <tr key={i}>
-                        <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
-                        <td className="">{x.estatura}</td>
-                        <td className="">{x.envergadura}</td>
-                        <td className="">{x.peso}</td>
-                        <td className="">{x.percentual_gordura}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </article>
-          </section>
-          <section className="mt-4">
-            <article>
-              <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">PERFIL TÉCNICO DIFERENCIAL</p>
-              </div>
-
-              <table className="table" style={{ maxWidth: "100%", width: "100%" }}>
-                <thead>
-                  <tr>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Data
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Est.
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Veloci.
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      1x1
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Desmarq.
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Ctrl de Bola
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Cruzamen.
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Finzali.
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Vis Espacial.
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Dom Orien.
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Dribles
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Leit. De Jogo
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Criativi.
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Capac. De Descição
-                    </th>
-                    <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Competividade
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {infoPdf!.caracteristicas_posicao.map((x, y) => {
-                    return (
-                      <tr key={y}>
-                        <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
-                        <td className="">{x.estatura_fis}</td>
-                        <td className="">{x.velocidade_fis}</td>
-                        <td className="">{x.um_contra_um_ofensivo_fis}</td>
-                        <td className="">{x.desmarques_fis}</td>
-                        <td className="">{x.controle_bola_fis}</td>
-                        <td className="">{x.cruzamentos_fis}</td>
-                        <td className="">{x.finalizacao_fis}</td>
-                        <td className="">{x.visao_espacial_tec}</td>
-                        <td className="">{x.dominio_orientado_tec}</td>
-                        <td className="">{x.dribles_em_diagonal_tec}</td>
-                        <td className="">{x.leitura_jogo_tec}</td>
-                        <td className="">{x.criatividade_psi}</td>
-                        <td className="">{x.capacidade_decisao_psi}</td>
-                        <td className="">{x.competitividade_psi}</td>
+                        <td className="h2">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
+                        <td className="h2">{x.estatura}</td>
+                        <td className="h2">{x.envergadura}</td>
+                        <td className="h2">{x.peso}</td>
+                        <td className="h2">{x.percentual_gordura}</td>
                       </tr>
                     );
                   })}
@@ -551,41 +491,105 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
           <section className="mt-5">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">Observações de Desempenho</p>
-              </div>
-              <div className="row border-bottom border-2 mb-2 border-gray">
-                <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                  <textarea
-                    disabled
-                    className="w-100 bg-white border-black text-black"
-                    style={{ resize: "none" }}
-                    value={observacaoDesempenho}
-                  ></textarea>
-                </p>
-              </div>
-            </article>
-            {/* <p className="fw-bold text-uppercase"> Observações</p>
-            <textarea disabled className="w-100 bg-white border-black " style={{ resize: "none" }} value={}></textarea> */}
-          </section>
-          <section className="mt-4">
-            <article>
-              <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">Histórico de Lesões </p>
+                <p className="fw-bold mb-2 text-uppercase h1">PERFIL TÉCNICO DIFERENCIAL</p>
               </div>
 
               <table className="table" style={{ maxWidth: "100%", width: "100%" }}>
                 <thead>
                   <tr>
-                    <th>Data</th>
-                    <th>Descrição</th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Data
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Est.
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Veloci.
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      1x1
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Desmarq.
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Ctrl de Bola
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Cruzamen.
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Finzali.
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Vis Espacial.
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Dom Orien.
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Dribles
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Leit. De Jogo
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Criativi.
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Capac. De Descição
+                    </th>
+                    <th className="" scope="col" style={{ fontSize: 30 }}>
+                      Competividade
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {infoPdf!.caracteristicas_posicao.map((x, y) => {
+                    return (
+                      <tr key={y}>
+                        <td style={{fontSize: 25}}>{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
+                        <td style={{fontSize: 25}}>{x.estatura_fis}</td>
+                        <td style={{fontSize: 25}}>{x.velocidade_fis}</td>
+                        <td style={{fontSize: 25}}>{x.um_contra_um_ofensivo_fis}</td>
+                        <td style={{fontSize: 25}}>{x.desmarques_fis}</td>
+                        <td style={{fontSize: 25}}>{x.controle_bola_fis}</td>
+                        <td style={{fontSize: 25}}>{x.cruzamentos_fis}</td>
+                        <td style={{fontSize: 25}}>{x.finalizacao_fis}</td>
+                        <td style={{fontSize: 25}}>{x.visao_espacial_tec}</td>
+                        <td style={{fontSize: 25}}>{x.dominio_orientado_tec}</td>
+                        <td style={{fontSize: 25}}>{x.dribles_em_diagonal_tec}</td>
+                        <td style={{fontSize: 25}}>{x.leitura_jogo_tec}</td>
+                        <td style={{fontSize: 25}}>{x.criatividade_psi}</td>
+                        <td style={{fontSize: 25}}>{x.capacidade_decisao_psi}</td>
+                        <td style={{fontSize: 25}}>{x.competitividade_psi}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </article>
+          </section>
+
+          <section className="mt-4">
+            <article>
+              <div className="border-bottom border-4 border-black mb-3">
+                <p className="fw-bold mb-2 text-uppercase h1">Histórico de Lesões </p>
+              </div>
+
+              <table className="table" style={{ maxWidth: "100%", width: "100%" }}>
+                <thead>
+                  <tr>
+                    <th className="h1">Data</th>
+                    <th className="h1">Descrição</th>
                   </tr>
                 </thead>
                 <tbody>
                   {infoPdf!.lesao.map((x, i) => {
                     return (
                       <tr key={i}>
-                        <td>{moment(x.data_lesao).format("DD/MM/YYYY")}</td>
-                        <td>{x.descricao}</td>
+                        <td className="h2">{moment(x.data_lesao).format("DD/MM/YYYY")}</td>
+                        <td className="h2">{x.descricao}</td>
                       </tr>
                     );
                   })}
@@ -596,23 +600,23 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
           <section className="mt-4">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">Histórico de Clubes </p>
+                <p className="fw-bold mb-2 text-uppercase h1">Histórico de Clubes </p>
               </div>
               <table className="table">
                 <thead>
                   <tr>
-                    <td>Date de Inicio</td>
-                    <td>Data de Fim</td>
-                    <td>Nome</td>
+                    <td className="h1">Date de Inicio</td>
+                    <td className="h1">Data de Fim</td>
+                    <td className="h1">Nome</td>
                   </tr>
                 </thead>
                 <tbody>
                   {clubes.map((x: any, i: number) => {
                     return (
                       <tr key={i}>
-                        <td>{moment(x.data_inicio).format("DD/MM/YYYY")}</td>
-                        <td>{x.data_fim ? moment(x.data_fim).format("DD/MM/YYYY") : "--"}</td>
-                        <td>{x.nome}</td>
+                        <td className="h2">{moment(x.data_inicio).format("DD/MM/YYYY")}</td>
+                        <td className="h2">{x.data_fim ? moment(x.data_fim).format("DD/MM/YYYY") : "--"}</td>
+                        <td className="h2">{x.nome}</td>
                       </tr>
                     );
                   })}
@@ -620,30 +624,30 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
               </table>
             </article>
           </section>
-          <section className="mt-4">
+          <section className="mt-10">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">Histórico de competição</p>
+                <p className="fw-bold mb-2 text-uppercase h1">Histórico de competição</p>
               </div>
               <table className="table">
                 <thead>
                   <tr>
-                    <td>Nome</td>
-                    <td>Gols</td>
-                    <td>Jogos Completos</td>
-                    <td>Jogos Parciais</td>
-                    <td>Minutagem</td>
+                    <td className="h1">Nome</td>
+                    <td className="h1">Gols</td>
+                    <td className="h1">Jogos Completos</td>
+                    <td className="h1">Jogos Parciais</td>
+                    <td className="h1">Minutagem</td>
                   </tr>
                 </thead>
                 <tbody>
                   {infoPdf!.competicao.map((x, i: number) => {
                     return (
                       <tr key={i}>
-                        <td>{x.nome}</td>
-                        <td>{x.gols}</td>
-                        <td>{x.jogos_completos}</td>
-                        <td>{x.jogos_parciais}</td>
-                        <td>{x.minutagem}</td>
+                        <td className="h2">{x.nome}</td>
+                        <td className="h2">{x.gols}</td>
+                        <td className="h2">{x.jogos_completos}</td>
+                        <td className="h2">{x.jogos_parciais}</td>
+                        <td className="h2">{x.minutagem}</td>
                       </tr>
                     );
                   })}
@@ -672,33 +676,54 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
           <section className="mt-5">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">Relacionamento</p>
+                <p className="fw-bold mb-2 text-uppercase h1">Observações de Desempenho</p>
+              </div>
+              <div className="row border-bottom border-2 mb-2 border-gray">
+                <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
+                  <textarea
+                    disabled
+                    className="w-100 bg-white border-black text-black"
+                    style={{ resize: "none" }}
+                    value={observacaoDesempenho}
+                  ></textarea>
+                </p>
+              </div>
+            </article>
+            {/* <p className="fw-bold text-uppercase"> Observações</p>
+            <textarea disabled className="w-100 bg-white border-black " style={{ resize: "none" }} value={}></textarea> */}
+          </section>
+          <section className="mt-5">
+            <article>
+              <div className="border-bottom border-4 border-black mb-3">
+                <p className="fw-bold mb-2 text-uppercase h1">Relacionamento</p>
               </div>
               <table className="table">
                 <thead>
                   <tr>
-                    <td>Data</td>
-                    <td>Receptividade Contrato</td>
-                    <td>Satisfação da Empresa</td>
-                    <td>Satisfação do Clube</td>
-                    <td>Relação Familiares</td>
-                    <td>Influências Externas</td>
-                    <td>Pendência Empresa</td>
-                    <td>Pendência Clube</td>
+                    <td className="h1">Data</td>
+                    <td className="h1">Receptividade Contrato</td>
+                    <td className="h1">Satisfação da Empresa</td>
+                    <td className="h1">Satisfação do Clube</td>
+                    <td className="h1">Relação Familiares</td>
+                    <td className="h1">Influências Externas</td>
+                    <td className="h1">Pendência Empresa</td>
+                    <td className="h1">Pendência Clube</td>
                   </tr>
                 </thead>
                 <tbody>
                   {infoPdf!.relacionamento.map((x, i) => {
                     return (
                       <tr key={i}>
-                        <td>{x.data_criacao ? moment(x.data_criacao).format("DD/MM/YYYY").toString() : "---"}</td>
-                        <td>{x.receptividade_contrato}</td>
-                        <td>{x.satisfacao_empresa}</td>
-                        <td>{x.satisfacao_clube}</td>
-                        <td>{x.relacao_familiares}</td>
-                        <td>{x.influencias_externas}</td>
-                        <td>{x.pendencia_empresa ? "Sim" : "Não"}</td>
-                        <td>{x.pendencia_clube ? "Sim" : "Não"}</td>
+                        <td className="h1">
+                          {x.data_criacao ? moment(x.data_criacao).format("DD/MM/YYYY").toString() : "---"}
+                        </td>
+                        <td className="h2">{x.receptividade_contrato}</td>
+                        <td className="h2">{x.satisfacao_empresa}</td>
+                        <td className="h2">{x.satisfacao_clube}</td>
+                        <td className="h2">{x.relacao_familiares}</td>
+                        <td className="h2">{x.influencias_externas}</td>
+                        <td className="h2">{x.pendencia_empresa ? "Sim" : "Não"}</td>
+                        <td className="h2">{x.pendencia_clube ? "Sim" : "Não"}</td>
                       </tr>
                     );
                   })}
@@ -709,7 +734,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
           <section className="mt-5">
             <article>
               <div className="border-bottom border-4 border-black mb-3">
-                <p className="fw-bold mb-2 text-uppercase h4">Observações de Relacionamento</p>
+                <p className="fw-bold mb-2 text-uppercase h1">Observações de Relacionamento</p>
               </div>
               <div className="row border-bottom border-2 mb-2 border-gray">
                 <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
