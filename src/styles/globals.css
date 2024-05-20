@@ -353,6 +353,11 @@ h3 {
 .danger-date {
   color: red !important;
 }
+
+.margin-button {
+  margin-right: 20px !important;
+}
+
 .margin-edit-athlete {
   margin-top: 159px !important;
 }
@@ -408,6 +413,9 @@ h3 {
     .container-avatar .edit-icon svg {
       width: 50px;
       height: 50px;
+    }
+    .margin-button {
+      margin-right: 0 !important;
     }
   }
   @media (max-width: 770px) {

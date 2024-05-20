@@ -490,7 +490,7 @@ export default function AthleteDetail() {
                   <div>
                     <Subtitle subtitle='Controle de Suporte' />
                   </div>
-                  <div onClick={handleOpenCreateSupportControl}>
+                  <div onClick={handleOpenCreateSupportControl} className='margin-button'>
                     <AddButton />
                   </div>
                 </div>
