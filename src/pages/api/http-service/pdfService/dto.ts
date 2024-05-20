@@ -4,6 +4,7 @@ export interface PDFInfoResponseDTO {
   lesao: Lesao[]
   controle: Controle[]
   competicao: Competicao[]
+  observacao: any
   observacao_desempenho: {
     id: number;
     tipo: string;

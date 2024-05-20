@@ -32,7 +32,7 @@ export type AthletaInfo = {
   urlFoto: string;
 };
 
-export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo | any) {
+export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
   const pdfRef = React.useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
