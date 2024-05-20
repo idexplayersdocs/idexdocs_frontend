@@ -354,8 +354,12 @@ h3 {
   color: red !important;
 }
 
-.margin-button {
-  margin-right: 20px !important;
+.margin-button-control-support {
+  margin-right: 13px !important;
+}
+
+.margin-button-control-relationship {
+  margin-right: -14px !important;
 }
 
 .margin-edit-athlete {
@@ -414,8 +418,8 @@ h3 {
       width: 50px;
       height: 50px;
     }
-    .margin-button {
-      margin-right: 0 !important;
+    .margin-button-control-support {
+      margin-right: -10px !important;
     }
   }
   @media (max-width: 770px) {
@@ -426,6 +430,9 @@ h3 {
       top: 85%;
       left: 85%;
       padding: 30px;
+    }
+    .margin-button-control-support {
+      margin-right: -3px !important;
     }
   }
 
@@ -448,6 +455,9 @@ h3 {
     .MuiBox-root.css-qtcm63{
       padding: 12px !important;  
     }
+    .margin-button-control-support {
+      margin-right: -9px !important;
+    }
   }
   @media (max-width: 400px) {
     .container-avatar .edit-icon {
@@ -458,5 +468,8 @@ h3 {
     .container-avatar .edit-icon svg {
       width: 24px;
       height: 24px;
+    }
+    .margin-button-control-support {
+      margin-right: -13px !important;
     }
   }

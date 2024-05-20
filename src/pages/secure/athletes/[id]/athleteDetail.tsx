@@ -424,7 +424,7 @@ export default function AthleteDetail() {
           tabAtual === 'relationship' ?
           <div className="card athlete-detail-card" style={{ backgroundColor: 'var(--bg-secondary-color)', marginRight: '10px' }}>
             <div className='d-flex justify-content-end mt-3' style={{ marginRight: '30px' }}>
-              <div onClick={handleOpenCreateQuestionaryRelationship}>
+              <div onClick={handleOpenCreateQuestionaryRelationship} className='margin-button-control-relationship'>
                 <AddButton />
               </div>
               <div>
@@ -490,11 +490,11 @@ export default function AthleteDetail() {
                   <div>
                     <Subtitle subtitle='Controle de Suporte' />
                   </div>
-                  <div onClick={handleOpenCreateSupportControl} className='margin-button'>
+                  <div onClick={handleOpenCreateSupportControl} className='margin-button-control-support'>
                     <AddButton />
                   </div>
                 </div>
-                <div className="mt-3" style={{maxHeight: '300px', overflow: 'auto', width: '92%', marginLeft: '-20px'}}>
+                <div className="mt-3" style={{maxHeight: '300px', overflow: 'auto', width: '95%', marginLeft: '-20px'}}>
                   <table className="table table-striped">
                     <thead>
                       <tr>
