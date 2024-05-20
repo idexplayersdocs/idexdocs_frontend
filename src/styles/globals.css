@@ -149,6 +149,7 @@ textarea {
 
 .athlete-detail-card {
   border-radius: 0 10px 10px 10px !important;
+  border-top: 1px solid var(--bg-secondary-color);
   /* height: 900px !important; */
 }
 
@@ -247,9 +248,193 @@ select option[disabled] {
 }
 
 .overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
 #pdf, .pdf {
-  display: none;
+  display: none;  
+  /* visibility: hidden; */
+  /* width: 100%; */
 }
+
+h3 {
+  color: var(--text-color-white) !important;
+  text-transform: uppercase !important;
+  font-size: 18px !important;
+  margin-left: 15px !important;
+  display: flex !important;
+  align-self: flex-start !important;
+}
+
+/* #pdf, .pdf {
+  display: none;
+} */
+
+  .clear-input {
+    color: white;
+    border: 4px solid var(--bg-secondary-color) !important;
+    border-left: 0 !important;
+    background-color: var(--bg-primary-color) !important;
+    width: 10% !important;
+    height: 55px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #inputSearch{
+    height: 55px !important;
+  }
+  img.rounded.mt-3.avatar{
+    display: none;
+    display: none;
+  }
+  .nav-custom{
+    cursor: pointer;
+  }
+  .nav-custom .icon-menu-content:hover svg,
+  .nav-custom .icon-menu-content:hover h2 {
+      color: var(--bg-ternary-color) !important;
+  }
+  .container-menu-nav{
+    visibility: hidden;
+  }
+  .menu-item:hover {
+    background-color: var(--bg-secondary-color);
+  }
+  .menu-item-text:hover{
+    color: var(--bg-ternary-color) !important;
+  }
+  /* .menu {
+    border-bottom: 1px solid var(--bg-secondary-color);
+  } */
+  .container-avatar{
+    cursor: pointer;
+  }
+  .container-avatar {
+    position: relative;
+  }
+  .container-avatar .edit-icon {
+    position: absolute;
+    top: 85%;
+    left: 85%;
+    transform: translate(-50%, -50%);
+    display: block;
+    color: white;
+    background-color: rgba(66, 66, 66, 0.6);
+    border-radius: 50%;
+    padding: 10px;
+  }
+  .container-avatar:hover .edit-icon {
+    background-color: rgba(182, 182, 182, 0.6);
+  }
+  .container-avatar .edit-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+.MuiBox-root.css-qtcm63{
+  padding: 20px !important;  
+}
+
+.danger-date {
+  color: red !important;
+}
+.margin-edit-athlete {
+  margin-top: 159px !important;
+}
+
+  @media (max-width: 1000px) {
+    .col-lg-2 {
+      display: none;
+    }
+    h1.title-sidebar{
+      font-size: 30px !important;
+    }
+    .subtitle-sidebar{
+      font-size: 26px;
+    }
+    img.rounded.mt-3.avatar {
+      margin-left: 10px;
+      width: 60px !important;
+      height: auto !important;
+      margin-bottom: 50px;
+      display: flex;
+      position: fixed;
+      z-index: 10;
+      bottom: -30px;
+      left: 10px;
+    }
+    button.btn.btn-success.align-self-end {
+      margin-bottom: 10px !important;
+      margin-top: 10px !important;
+    }
+    .d-flex.justify-content-between.align-items-center.w-100.p-2{
+      margin-left: -45px;
+    }
+    .observacao-performace{
+      margin-left: 5px !important;
+    }
+    .nav-bar-custom{
+      display:none
+    }
+    .container-menu-nav{
+      visibility: visible;
+    }
+    .athlete-detail-card {
+      margin-left: 23px;
+    }
+    .nav.nav-tabs{
+      margin-left: 23px;
+    }
+    .container-avatar .edit-icon {
+      top: 90%;
+      left: 90%;
+      padding: 30px;
+    }
+    .container-avatar .edit-icon svg {
+      width: 50px;
+      height: 50px;
+    }
+  }
+  @media (max-width: 770px) {
+    .margin-edit-athlete {
+      margin-top: 0 !important;
+    }
+    .container-avatar .edit-icon {
+      top: 85%;
+      left: 85%;
+      padding: 30px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    h1.title-sidebar{
+      font-size: 26px !important;
+    }
+    .subtitle-sidebar{
+      font-size: 20px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    h1.title-sidebar{
+      font-size: 20px !important;
+    }
+    .subtitle-sidebar{
+      font-size: 15px;
+    }
+    .MuiBox-root.css-qtcm63{
+      padding: 12px !important;  
+    }
+  }
+  @media (max-width: 400px) {
+    .container-avatar .edit-icon {
+      top: 85%;
+      left: 85%;
+      padding: 15px;
+    }
+    .container-avatar .edit-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
