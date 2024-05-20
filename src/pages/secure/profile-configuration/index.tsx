@@ -42,6 +42,7 @@ export default function ProfileConfiguration() {
   const [updateUserLoading, setUpdateUserLoading] = React.useState<boolean>(false);
   const [messageSnackBar, setMessageSnackBar] = React.useState<string>("");
   const [showSnackBarError, setSnackBarError] = React.useState<boolean>(false);
+  const [role, setRole] = React.useState<string>("");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setTabValue(newValue);
@@ -140,8 +141,6 @@ export default function ProfileConfiguration() {
         tipo = "3";
       }
 
-      console.log(data);
-
       const res = await UpdatePassword({ id: data.id, password: data.confirmarSenha, new_password: data.senha });
       const resUpdateUser = await UpdateUsuario({
         email: data.email,
@@ -210,6 +209,10 @@ export default function ProfileConfiguration() {
     setValueUpdateProfile("email", decoded.sub);
     setValueUpdateProfile("id", decoded.user_id);
     setValueUpdateProfile("tipo", decoded.roles[0]);
+
+    // setRole(decoded.roles[0]);
+    console.log(decoded);
+
   };
 
   const handleChangePage = async (event: any, page: number): Promise<void> => {
@@ -243,9 +246,9 @@ export default function ProfileConfiguration() {
               },
             }}
           >
-            <StyledTab className="col" label="Editar Perfil" value="1" />
-            <StyledTab className="col" label="Criar Usuários" value="2" />
-            <StyledTab className="col" label="Editar Usuários" value="3" />
+            <StyledTab label="Editar Perfil" value="1" />
+            {role === "admin" ? <StyledTab label="Criar Usuários" value="2" /> : null}
+            {role === "admin" ? <StyledTab label="Editar Usuários" value="3" /> : null}
           </TabList>
           <TabPanel value="1">
             <div className="w-100 mx-auto mt-5 px-2">
