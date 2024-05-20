@@ -368,7 +368,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                 width={0}
                 height={0}
                 sizes="100vw"
-                style={{ width: "100%", height: "auto", maxWidth: "100%" }}
+                style={{ width: "100%", height: "auto", maxWidth: "100%", objectFit: "contain" }}
               />
             ) : (
               <Image
@@ -377,7 +377,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                 width={0}
                 height={0}
                 sizes="100vw"
-                style={{ width: "100%", height: "auto", maxWidth: "100%" }}
+                style={{ width: "100%", height: "auto", maxWidth: "100%", objectFit: "contain" }}
               />
             )}
           </article>
