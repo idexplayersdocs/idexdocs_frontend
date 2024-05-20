@@ -252,6 +252,21 @@ select option[disabled] {
 }
 
 #pdf, .pdf {
+  display: none;  
+  /* visibility: hidden; */
+  /* width: 100%; */
+}
+
+h3 {
+  color: var(--text-color-white) !important;
+  text-transform: uppercase !important;
+  font-size: 18px !important;
+  margin-left: 15px !important;
+  display: flex !important;
+  align-self: flex-start !important;
+}
+
+/* #pdf, .pdf {
   display: none;
 }
 
@@ -267,6 +282,7 @@ h3 {
 #pdf, .pdf {
   display: none;
 }
+} */
 
   .clear-input {
     color: white;
