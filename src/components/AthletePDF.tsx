@@ -27,7 +27,7 @@ const options: Options = {
 };
 
 export type AthletaInfo = {
-  info: PDFInfoResponseDTO;
+  info: PDFInfoResponseDTO | any;
   onLoading: (isLoading: boolean) => void;
   urlFoto: string;
 };
