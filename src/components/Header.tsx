@@ -10,12 +10,16 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import React from "react";
 
 import Subtitle from "./Subtitle";
+import { jwtDecode } from "jwt-decode";
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
 
+  const token = localStorage.getItem("token");
+  const decoded: any = jwtDecode(token!);
+  
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
@@ -40,6 +44,9 @@ export default function Header() {
 
   return (
     <>
+      <div className="mt-3 ms-3">
+        <h2 style={{color:'white', fontSize: '20px'}}>Olá! <span className="ms-2" style={{color: "var(--bg-ternary-color)"}}>{decoded.user_name}</span></h2>
+      </div>
       <div className="d-flex justify-content-between align-items-center m-3">
         <div className="p-2">
           <Image src="/images/logo-fort-house.png" width={118} height={78} alt="company logo"/>

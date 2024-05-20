@@ -378,7 +378,7 @@ export default function Athletes() {
                   <option value={1} style={{color: '#fff'}}>Profissional</option>
                   <option value={2} style={{color: '#fff'}}>Amador</option>
                   <option value={3} style={{color: '#fff'}}>Temporário</option>
-                  <option value={4} style={{color: '#fff'}}>Nenhum</option>
+                  {/* <option value={4} style={{color: '#fff'}}>Nenhum</option> */}
                 </select>
               </div>
               <div className="input w-100 mt-2">
