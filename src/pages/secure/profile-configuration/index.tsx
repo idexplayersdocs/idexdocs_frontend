@@ -425,7 +425,7 @@ export default function ProfileConfiguration() {
                       TIPO
                     </th>
                     <th className="table-dark text-center" scope="col">
-                      DESEMEPENHO
+                      DESEMPENHO
                     </th>
                     <th className="table-dark text-center" scope="col">
                       RELACIONAMENTO
