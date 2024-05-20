@@ -77,9 +77,14 @@ export default function ProfileConfiguration() {
     setIsLoading(true);
     try {
       const res = await CriarUsuario(data);
-      setShowSnackbar(true);
-      setMessageSnackBar("Usuário criado com sucesso!");
-      resetCreateUser();
+      if(res){
+        setShowSnackbar(true);
+        setMessageSnackBar("Usuário criado com sucesso!");
+        resetCreateUser();
+        setPage(1)
+        const res = await Usuarios(1, 10);
+        setUsuarioLilst(res);
+      }
     } catch (e: unknown) {
     } finally {
       setIsLoading(false);
@@ -221,8 +226,6 @@ export default function ProfileConfiguration() {
     setValueUpdateProfile("tipo", decoded.roles[0]);
 
     setRole(decoded.roles[0]);
-    console.log(decoded.roles[0]);
-
 
   };
 

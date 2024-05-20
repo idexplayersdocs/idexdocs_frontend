@@ -14,11 +14,21 @@ import { jwtDecode } from "jwt-decode";
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [decoded, setDecoded] = React.useState<any>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
-
-  const token = localStorage.getItem("token");
-  const decoded: any = jwtDecode(token!);
+  
+  // const token: any = localStorage.getItem("token");
+  // const decoded: any = jwtDecode(token!);
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        setDecoded(decodedToken);
+      }
+    }
+  }, []);
   
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -45,7 +55,7 @@ export default function Header() {
   return (
     <>
       <div className="mt-3 ms-3">
-        <h2 style={{color:'white', fontSize: '20px'}}>Olá! <span className="ms-2" style={{color: "var(--bg-ternary-color)"}}>{decoded.user_name}</span></h2>
+        <h2 style={{color:'white', fontSize: '20px'}}>Olá! <span className="ms-2" style={{color: "var(--bg-ternary-color)"}}>{decoded?.user_name}</span></h2>
       </div>
       <div className="d-flex justify-content-between align-items-center m-3">
         <div className="p-2">
