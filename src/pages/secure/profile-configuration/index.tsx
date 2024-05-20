@@ -220,8 +220,9 @@ export default function ProfileConfiguration() {
     setValueUpdateProfile("id", decoded.user_id);
     setValueUpdateProfile("tipo", decoded.roles[0]);
 
-    // setRole(decoded.roles[0]);
-    console.log(decoded);
+    setRole(decoded.roles[0]);
+    console.log(decoded.roles[0]);
+
 
   };
 

@@ -32,7 +32,7 @@ export type AthletaInfo = {
   urlFoto: string;
 };
 
-export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
+export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo | any) {
   const pdfRef = React.useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -47,7 +47,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
     // }
   };
 
-  const observacoesDesempenho = info.observacao.filter((x) => x.tipo === "desempenho");
+  const observacoesDesempenho = info.observacao.filter((x: any) => x.tipo === "desempenho");
   const clubes = info.clube.sort((a: any, b: any) => {
     if (!a.data_fim && !b.data_fim) {
       return 0;
@@ -168,7 +168,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                   </tr>
                 </thead>
                 <tbody>
-                  {info.caracteristicas_fisicas.map((x, i) => {
+                  {info.caracteristicas_fisicas.map((x: any, i: number) => {
                     return (
                       <tr key={i}>
                         <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
@@ -240,7 +240,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                   </tr>
                 </thead>
                 <tbody>
-                  {info.caracteristicas_posicao.map((x, i) => {
+                  {info.caracteristicas_posicao.map((x: any, i: number) => {
                     return (
                       <tr key={i}>
                         <td className="">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
@@ -279,7 +279,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                   </tr>
                 </thead>
                 <tbody>
-                  {info.lesao.map((x, i) => {
+                  {info.lesao.map((x: any, i: number) => {
                     return (
                       <tr key={i}>
                         <td>{moment(x.data_lesao).format("DD/MM/YYYY")}</td>
@@ -305,7 +305,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                   </tr>
                 </thead>
                 <tbody>
-                  {clubes.map((x, i) => {
+                  {clubes.map((x: any, i: number) => {
                     return (
                       <tr key={i}>
                         <td>{moment(x.data_inicio).format("DD/MM/YYYY")}</td>
@@ -334,7 +334,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                   </tr>
                 </thead>
                 <tbody>
-                  {info.competicao.map((x, i) => {
+                  {info.competicao.map((x: any, i: number) => {
                     return (
                       <tr key={i}>
                         <td>{x.nome}</td>
@@ -386,7 +386,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                   </tr>
                 </thead>
                 <tbody>
-                  {info.relacionamento.map((x, i) => {
+                  {info.relacionamento.map((x: any, i: number) => {
                     return (
                       <tr key={i}>
                         <td>{x.data_criacao ? moment(x.data_criacao).format("DD/MM/YYYY").toString() : "---"}</td>
