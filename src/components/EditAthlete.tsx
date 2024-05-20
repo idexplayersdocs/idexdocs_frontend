@@ -172,8 +172,8 @@ export default function EditAthlete({athleteData, closeModal}: any) {
                 </div>
                 <select className="form-select" name="ativo" value={formData.ativo ? 'true' : 'false'} onChange={handleInputChange} style={{height:'45px'}}>
                 {/* <option value="" disabled hidden>Selecione</option> */}
-                  <option value='true' style={{color: '#fff'}}>Sim</option>
-                  <option value="false" style={{color: '#fff'}}>Não</option>
+                  <option value='true' style={{color: '#fff !important'}}>Sim</option>
+                  <option value="false" style={{color: '#fff !important'}}>Não</option>
                 </select>
             </div>
           </div>

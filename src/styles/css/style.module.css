@@ -219,7 +219,7 @@ th.table-dark.text-center {
 .form-select {
   border-radius: 20px !important;
   background-color: var(--bg-primary-color) !important;
-  color: white;
+  color: white !important;
   border: 4.7px solid var(--bg-secondary-color) !important;
   height: 55px !important;
 }
