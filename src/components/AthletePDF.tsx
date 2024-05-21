@@ -232,7 +232,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                       Criativi.
                     </th>
                     <th className="" scope="col" style={{ fontSize: 14 }}>
-                      Capac. De Descição
+                      Capac. De Decisão
                     </th>
                     <th className="" scope="col" style={{ fontSize: 14 }}>
                       Competividade

@@ -514,7 +514,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                     Criativi.
                   </th>
                   <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Capac. De Descição
+                    Capac. De Decisão
                   </th>
                   <th className="" scope="col" style={{ fontSize: 30 }}>
                     Competividade
