@@ -494,7 +494,7 @@ export default function AthleteDetail() {
                     <AddButton />
                   </div>
                 </div>
-                <div className="mt-3" style={{maxHeight: '300px', overflow: 'auto', width: '95%', marginLeft: '-20px'}}>
+                <div className="mt-3 table-custom-control" style={{maxHeight: '300px', overflow: 'auto', width: '95%'}}>
                   <table className="table table-striped">
                     <thead>
                       <tr>

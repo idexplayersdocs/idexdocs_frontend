@@ -54,7 +54,7 @@ export default function Header() {
 
   return (
     <>
-      <div className="mt-3 ms-3">
+      <div className="mt-4 text-center">
         <h2 style={{color:'white', fontSize: '20px'}}>Olá! <span className="ms-2" style={{color: "var(--bg-ternary-color)"}}>{decoded?.user_name}</span></h2>
       </div>
       <div className="d-flex justify-content-between align-items-center m-3">

@@ -260,9 +260,9 @@ export default function ProfileConfiguration() {
               },
             }}
           >
-            <StyledTab label="Editar Perfil" value="1" />
-            {role === "admin" ? <StyledTab label="Criar Usuários" value="2" /> : null}
-            {role === "admin" ? <StyledTab label="Editar Usuários" value="3" /> : null}
+            <StyledTab className="col" label="Editar Perfil" value="1" />
+            {role === "admin" ? <StyledTab className="col" label="Criar Usuários" value="2" /> : null}
+            {role === "admin" ? <StyledTab className="col" label="Editar Usuários" value="3" /> : null}
           </TabList>
           <TabPanel value="1">
             <div className="w-100 mx-auto mt-5 px-2">
@@ -287,7 +287,7 @@ export default function ProfileConfiguration() {
                       required: true,
                     })}
                   />
-                  {errosUpdateProfile.email && <span className="text-danger mt-1 d-block">Nome is required field</span>}
+                  {errosUpdateProfile.email && <span className="text-danger mt-1 d-block">Email is required field</span>}
                 </div>
                 <div className="mt-4">
                   <label className="d-block text-white h4">Senha Atual:</label>
@@ -299,7 +299,7 @@ export default function ProfileConfiguration() {
                     })}
                   />
                   {errosUpdateProfile.confirmarSenha && (
-                    <span className="text-danger mt-1 d-block">Nome is required field</span>
+                    <span className="text-danger mt-1 d-block">Senha is required field</span>
                   )}
                 </div>
                 <div className="mt-4">
@@ -311,7 +311,7 @@ export default function ProfileConfiguration() {
                       required: true,
                     })}
                   />
-                  {errosUpdateProfile.senha && <span className="text-danger mt-1 d-block">Nome is required field</span>}
+                  {errosUpdateProfile.senha && <span className="text-danger mt-1 d-block">Senha is required field</span>}
                 </div>
                 <div className="mt-4 d-flex align-items-center justify-content-end">
                   <button className="btn-success btn text-white" type="submit">
@@ -365,7 +365,7 @@ export default function ProfileConfiguration() {
                       required: true,
                     })}
                   >
-                    <option value="1">ADMIN</option>
+                    <option value="1">Administrativo</option>
                     <option value="2">Treinador</option>
                     <option value="3">Externo</option>
                   </select>
@@ -505,7 +505,7 @@ export default function ProfileConfiguration() {
                 <label className="d-block text-white h4">Nome:</label>
                 <input
                   type="text"
-                  className="form-control input-create bg-dark"
+                  className="form-control input-create bg-dark bg-dark-custom"
                   {...registerUpdateUser("nome", {
                     required: true,
                   })}
@@ -516,21 +516,21 @@ export default function ProfileConfiguration() {
                 <label className="d-block text-white h4">Email:</label>
                 <input
                   type="text"
-                  className="form-control input-create bg-dark"
+                  className="form-control input-create bg-dark bg-dark-custom"
                   {...registerUpdateUser("email", {
                     required: true,
                   })}
                 />
-                {errorsUserUpdate.email && <span className="text-danger mt-1 d-block">Nome is required field</span>}
+                {errorsUserUpdate.email && <span className="text-danger mt-1 d-block">Email is required field</span>}
               </div>
               <div className="mb-4">
                 <label className="d-block text-white h4">Tipo de usuário:</label>
                 <select
-                  className="form-control input-create bg-dark"
+                  className="form-control input-create bg-dark bg-dark-custom"
                   defaultValue=""
                   {...registerUpdateUser("usuario_tipo_id", { required: true })}
                 >
-                  <option value="1">ADMIN</option>
+                  <option value="1">Administrativo</option>
                   <option value="2">Treinador</option>
                   <option value="3">Externo</option>
                 </select>
