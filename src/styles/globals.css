@@ -117,6 +117,10 @@ input.form-control.bg-dark-custom-input {
   overflow: auto !important;
   width: 97% !important;
 }
+.table-performance-responsive {
+  width: 98.3% !important;
+  overflow: auto !important;
+}
 
 textarea {
   background-color: var(--bg-primary-color) !important;
@@ -428,6 +432,11 @@ h3 {
       margin-left: -18px !important;
     }
   }
+  @media (max-width: 800px) {
+    .table-performance-responsive {
+      width: 97.8% !important;
+    }
+  }
   @media (max-width: 770px) {
     .margin-edit-athlete {
       margin-top: 0 !important;
@@ -464,6 +473,9 @@ h3 {
     .margin-button-control-support {
       margin-right: -9px !important;
     }
+    .table-performance-responsive {
+      width: 96.5% !important;
+    }
   }
 
   @media (max-width: 400px) {
@@ -478,6 +490,9 @@ h3 {
     }
     .margin-button-control-support {
       margin-right: -13px !important;
+    }
+    .table-performance-responsive {
+      width: 95% !important;
     }
   }
 

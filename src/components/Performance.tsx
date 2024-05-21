@@ -223,24 +223,24 @@ export default function Performance({athleteData}: any) {
 
 
   return (
-    <div className='pe-3'>
+    <div className=''>
     <div className="container text-center mt-4">
       <div className="row">
-        <div className="col-lg-6 mb-3">
+        <div className="col-lg-6 mb-3 pe-4">
           <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenHistoryCompetitions}>Histórico de competições</button>
           <br />
           <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenClubHistory}>Histórico de Clubes</button>
           <br />
           <button type="button" className="btn btn-modal-color w-75 w-100" onClick={handleOpenContractHistory}>Histórico de Contratos</button>
         </div>
-        <div className="col-lg-6">
+        <div className="col-lg-6 pe-4">
           <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenInjuries}>Histórico de Lesões</button>
           <br />
           <button type="button" className="btn btn-modal-color w-75 w-100" onClick={handleOpenPhysicalHistory}>Histórico Físico</button>
         </div>
       </div>
     </div>
-    <div className="col-6 d-flex flex-column align-items-center justify-content-center mb-3 ms-2 force-scrool mt-5" style={{width: '100% !important'}}>
+    <div className="col-6 d-flex flex-column align-items-center justify-content-center mb-3 ms-2 mt-5 table-performance-responsive">
           <div className='d-flex justify-content-between w-100' style={{marginBottom: '-5px'}}>
             <div className='align-self-end'>
             <Subtitle subtitle='Perfil Físico e Técnico' />
