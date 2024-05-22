@@ -331,7 +331,7 @@ export default function ContractHistory({closeModal, athleteId}: any) {
                       {/* <textarea className='input-create bg-dark-custom' onChange={handleInputChangeRegisterContractHistory} value={formRegisterContractHistory.observacao} rows={6} style={{ width: '100%', height: '100px !important', border: 'var(--bg-secondary-color) 4px solid ' }}/> */}
                 </div>
               <div className='ms-3 d-flex flex-column mt-3' style={{width: '98%'}}>
-                <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaveRegisterContractHistory}>Salvar</button>
+                <button type="button" className="btn btn-success align-self-end save-contract" style={{width:'auto'}} onClick={handleSaveRegisterContractHistory}>Salvar</button>
               </div>
             </div>
           <ToastContainer />

@@ -491,6 +491,9 @@ h3 {
     .table-performance-responsive {
       width: 96.5% !important;
     }
+    .save-contract {
+      margin-right: 5px;
+    }
   }
 
   @media (max-width: 400px) {
