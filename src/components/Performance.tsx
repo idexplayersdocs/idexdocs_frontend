@@ -226,7 +226,7 @@ export default function Performance({athleteData}: any) {
     <div className=''>
     <div className="container text-center mt-4">
       <div className="row">
-        <div className="col-lg-6 mb-3 pe-4">
+        <div className="col-lg-6 pe-4">
           <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenHistoryCompetitions}>Histórico de competições</button>
           <br />
           <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenClubHistory}>Histórico de Clubes</button>
