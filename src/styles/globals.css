@@ -241,6 +241,12 @@ select option[disabled] {
   gap: 80px;
 
 }
+
+.modal-contrato {
+  margin-right: 25% !important;
+  margin-left: 25% !important;
+}
+
 @media print {
   .hideOnScreen {
     display: block !important;
@@ -431,6 +437,11 @@ h3 {
     .table-custom-control{
       margin-left: -18px !important;
     }
+    .modal-contrato {
+      margin-right: 3% !important;
+      margin-left: 3% !important;
+    }
+
   }
   @media (max-width: 800px) {
     .table-performance-responsive {

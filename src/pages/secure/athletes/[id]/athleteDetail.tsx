@@ -428,8 +428,8 @@ export default function AthleteDetail() {
           tabAtual === 'relationship' ?
           <div className="card athlete-detail-card" style={{ backgroundColor: 'var(--bg-secondary-color)', marginRight: '10px' }}>
 
-            <div className='mt-5 d-flex justify-content-center row' style={{marginRight: '21px', marginLeft: '17px'}}>
-              <button type="button" className="btn btn-modal-color w-100" onClick={handleOpenContractHistory}>Histórico de Contratos</button>
+            <div className='mt-5 d-flex justify-content-center modal-contrato'>
+              <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenContractHistory}>Histórico de Contratos</button>
             </div>
 
             <div className='d-flex justify-content-end mt-3' style={{ marginRight: '30px' }}>
