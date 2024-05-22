@@ -19,6 +19,7 @@ import Loading from 'react-loading';
 import Image from "next/image";
 import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
 import { jwtDecode } from 'jwt-decode';
+import ContractHistory from '@/components/modal/ContractHistory';
 
 moment.locale('pt-br');
 
@@ -376,6 +377,10 @@ export default function AthleteDetail() {
     }
   };
 
+  const [openContractHistory, setOpenContractHistory] = React.useState(false);
+  const handleOpenContractHistory = () => setOpenContractHistory(true);
+  const handleCloseContractHistory = () => setOpenContractHistory(false);
+
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: '150px' }}>
@@ -419,10 +424,14 @@ export default function AthleteDetail() {
               </li>
               )}
           </ul>
-
           {
           tabAtual === 'relationship' ?
           <div className="card athlete-detail-card" style={{ backgroundColor: 'var(--bg-secondary-color)', marginRight: '10px' }}>
+
+            <div className='mt-5 d-flex justify-content-center row' style={{marginRight: '21px', marginLeft: '17px'}}>
+              <button type="button" className="btn btn-modal-color w-100" onClick={handleOpenContractHistory}>Histórico de Contratos</button>
+            </div>
+
             <div className='d-flex justify-content-end mt-3' style={{ marginRight: '30px' }}>
               <div onClick={handleOpenCreateQuestionaryRelationship} className='margin-button-control-relationship'>
                 <AddButton />
@@ -682,6 +691,15 @@ export default function AthleteDetail() {
           </div>
           <hr />
           <SideBar athleteData={athlete} modal={true}/>
+        </Box>
+      </Modal>
+      <Modal
+        open={openContractHistory}
+        onClose={handleCloseContractHistory}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={style}>
+          <ContractHistory closeModal={handleCloseContractHistory} athleteId={athleteId}/>
         </Box>
       </Modal>
       <ToastContainer />

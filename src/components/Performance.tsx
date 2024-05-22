@@ -231,7 +231,7 @@ export default function Performance({athleteData}: any) {
           <br />
           <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenClubHistory}>Histórico de Clubes</button>
           <br />
-          <button type="button" className="btn btn-modal-color w-75 w-100" onClick={handleOpenContractHistory}>Histórico de Contratos</button>
+          {/* <button type="button" className="btn btn-modal-color w-75 w-100" onClick={handleOpenContractHistory}>Histórico de Contratos</button> */}
         </div>
         <div className="col-lg-6 pe-4">
           <button type="button" className="btn btn-modal-color w-75 mb-3 w-100" onClick={handleOpenInjuries}>Histórico de Lesões</button>
