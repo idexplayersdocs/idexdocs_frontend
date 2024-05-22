@@ -438,8 +438,8 @@ h3 {
       margin-left: -18px !important;
     }
     .modal-contrato {
-      margin-right: 3% !important;
-      margin-left: 3% !important;
+      margin-right: 10% !important;
+      margin-left: 10% !important;
     }
 
   }
@@ -459,6 +459,10 @@ h3 {
     }
     .margin-button-control-support {
       margin-right: -3px !important;
+    }
+    .modal-contrato {
+      margin-right: 3% !important;
+      margin-left: 3% !important;
     }
   }
 
