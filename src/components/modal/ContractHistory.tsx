@@ -319,10 +319,10 @@ export default function ContractHistory({closeModal, athleteId}: any) {
                     <option value="" disabled hidden>Selecione</option>
                     <option value={1} style={{color: '#fff'}}>Imagem</option>
                     <option value={2} style={{color: '#fff'}}>Agenciamento</option>
+                    <option value={6} style={{color: '#fff'}}>Garantias</option>
                     <option value={3} style={{color: '#fff'}}>Profissional</option>
                     <option value={4} style={{color: '#fff'}}>Amador</option>
                     <option value={5} style={{color: '#fff'}}>Formação</option>
-                    <option value={6} style={{color: '#fff'}}>Empresa</option>
                   </select>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
