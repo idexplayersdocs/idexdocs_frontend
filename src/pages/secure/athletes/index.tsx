@@ -64,14 +64,15 @@ export default function Athletes() {
   });
 
   const [formContratoClube, setFormContratoClube] = useState({
-    tipo_id: '',
+    contrato_sub_tipo_id: '',
     data_inicio: '',
-    data_fim: '',
+    data_termino: '',
   });
 
   const [formContratoEmpresa, setFormContratoEmpresa] = useState({
+    contrato_sub_tipo_id: '',
     data_inicio: '',
-    data_fim: '',
+    data_termino: '',
   });
 
 
@@ -90,13 +91,14 @@ export default function Athletes() {
       data_inicio: '',
     })
     setFormContratoClube({
-      tipo_id: '',
+      contrato_sub_tipo_id: '',
       data_inicio: '',
-      data_fim: '',
+      data_termino: '',
     })
     setFormContratoEmpresa({
+      contrato_sub_tipo_id: '',
       data_inicio: '',
-      data_fim: '',
+      data_termino: '',
     })
     setFormAvatar("/images/image-user.png")
   };
@@ -165,13 +167,14 @@ export default function Athletes() {
             data_inicio: '',
           })
           setFormContratoClube({
-            tipo_id: '',
+            contrato_sub_tipo_id: '',
             data_inicio: '',
-            data_fim: '',
+            data_termino: '',
           })
           setFormContratoEmpresa({
+            contrato_sub_tipo_id: '',
             data_inicio: '',
-            data_fim: '',
+            data_termino: '',
           })
         }
         setNewAthlere(false)
@@ -211,11 +214,12 @@ export default function Athletes() {
       formData.posicao_primaria.trim() !== '' &&
       formClube.nome.trim() !== '' &&
       formClube.data_inicio.trim() !== '' &&
-      formContratoClube.tipo_id.trim() !== '' &&
+      formContratoClube.contrato_sub_tipo_id.trim() !== '' &&
       formContratoClube.data_inicio.trim() !== '' &&
-      formContratoClube.data_fim.trim() !== '' &&
+      formContratoClube.data_termino.trim() !== '' &&
+      formContratoEmpresa.contrato_sub_tipo_id.trim() !== '' &&
       formContratoEmpresa.data_inicio.trim() !== '' &&
-      formContratoEmpresa.data_fim.trim() !== ''
+      formContratoEmpresa.data_termino.trim() !== ''
     ) {
       return true; // Todos os campos estão preenchidos
     } else {
@@ -368,18 +372,24 @@ export default function Athletes() {
                 </div>
                 <input type="text" className="form-control input-create bg-dark-custom " placeholder="Digite o nome do clube" name="nome" value={formClube.nome} onChange={handleClubeInputChange} style={{height:'45px'}}/>
               </div>
+              <div className="d-flex justify-content-start gap-3 mt-2">
+                    <div className="w-100">
+                      <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Inicio no Clube</label>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_inicio" value={formClube.data_inicio} onChange={handleClubeInputChange} style={{height:'45px', color:'#999'}} onFocus={() => "this.type='date'"} />
+                    </div>
+                  </div>
               <div className="input w-100 mt-2">
-              <div className="d-flex align-items-center">
-                <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Contrato Clube</label>
-                  {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
-                </div>
-                <select className="form-select" name="tipo_id" value={formContratoClube.tipo_id} onChange={handleContratoClubeInputChange} style={{height:'45px', color: formContratoClube.tipo_id ? '#fff' : '#999'}}>
-                  <option value="" disabled hidden>Selecione</option>
-                  <option value={1} style={{color: '#fff'}}>Profissional</option>
-                  <option value={2} style={{color: '#fff'}}>Amador</option>
-                  <option value={3} style={{color: '#fff'}}>Temporário</option>
-                  {/* <option value={4} style={{color: '#fff'}}>Nenhum</option> */}
-                </select>
+                <div className="d-flex align-items-center">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Contrato Clube</label>
+                    {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
+                  </div>
+                  <select className="form-select" name="contrato_sub_tipo_id" value={formContratoClube.contrato_sub_tipo_id} onChange={handleContratoClubeInputChange} style={{height:'45px', color: formContratoClube.contrato_sub_tipo_id ? '#fff' : '#999'}}>
+                    <option value="" disabled hidden>Selecione</option>
+                    <option value={1} style={{color: '#fff'}}>Profissional</option>
+                    <option value={2} style={{color: '#fff'}}>Amador</option>
+                    <option value={3} style={{color: '#fff'}}>Temporário</option>
+                    {/* <option value={4} style={{color: '#fff'}}>Nenhum</option> */}
+                  </select>
               </div>
               <div className="input w-100 mt-2">
                 <div className="d-flex align-items-center">
@@ -391,11 +401,26 @@ export default function Athletes() {
                     </div>
                     <div className="w-50">
                       <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Fim</label>
-                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_fim" value={formContratoClube.data_fim} onChange={handleContratoClubeInputChange} style={{height:'45px'}}/>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_termino" value={formContratoClube.data_termino} onChange={handleContratoClubeInputChange} style={{height:'45px'}}/>
                     </div>
                   </div>
               </div>
-              <label className="ms-3 mt-2" style={{color: 'white', fontSize: '20px'}}>Contrato Empresa</label>
+              {/* <label className="ms-3 mt-2" style={{color: 'white', fontSize: '20px'}}>Contrato Empresa</label> */}
+              <div className="input w-100 mt-2">
+                <div className="d-flex align-items-center">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Contrato Empresa</label>
+                    {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
+                  </div>
+                  <select className="form-select" name="contrato_sub_tipo_id" value={formContratoEmpresa.contrato_sub_tipo_id} onChange={handleContratoEmpresaInputChange} style={{height:'45px', color: formContratoEmpresa.contrato_sub_tipo_id ? '#fff' : '#999'}}>
+                    <option value="" disabled hidden>Selecione</option>
+                    <option value={1} style={{color: '#fff'}}>Imagem</option>
+                    <option value={2} style={{color: '#fff'}}>Agenciamento</option>
+                    <option value={6} style={{color: '#fff'}}>Garantias</option>
+                    <option value={7} style={{color: '#fff'}}>Material esportivo</option>
+                    <option value={8} style={{color: '#fff'}}>Publicidade</option>
+                    {/* <option value={4} style={{color: '#fff'}}>Nenhum</option> */}
+                  </select>
+              </div>
               <div className="input w-100 mt-2">
                 <div className="d-flex align-items-center">
                   </div>
@@ -406,7 +431,7 @@ export default function Athletes() {
                     </div>
                     <div className="w-50">
                       <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Fim</label>
-                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_fim" value={formContratoEmpresa.data_fim} onChange={handleContratoEmpresaInputChange} style={{height:'45px'}}/>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_termino" value={formContratoEmpresa.data_termino} onChange={handleContratoEmpresaInputChange} style={{height:'45px'}}/>
                     </div>
                   </div>
               </div>

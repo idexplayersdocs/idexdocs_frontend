@@ -131,44 +131,44 @@ export default function Performance({athleteData}: any) {
   const [labelCharacteristic, setLabelCharacteristic] = useState<any>(() => {
     if (athleteData && athleteData.posicao_primaria.toLowerCase() === 'atacante') {
       return {
-        fisico: ['Data', 'Estatura', 'Velocidade', '1 x 1 Ofensivo', 'Desmarques', 'Controle de Bola', 'Cruzamento', 'Finalização', 'Total', 'Média'],
-        tecnico: ['Data', 'Visão Espacial', 'Domínio Orientado', 'Dribles em Diagonal', 'Leitura de Jogo', 'Reação Pós Perda', 'Total', 'Média'],
-        psicologico: ['Data','Liderança', 'Coragem/Confiança', 'Concetração / Responsabilidade','Controle do Estresse', 'Total', 'Média']
+        fisico: ['Data', 'Estatura / Maturação', 'Velocidade / Aceleração Curta Distância', '1 x 1 Ofensivo', 'Desmarques / Mobilidade', 'Controle de Bola', 'Cruzamento / Passes para Gol', 'Finalização', 'Total', 'Média'],
+        tecnico: ['Data', 'Visão Espacial', 'Domínio Orientado / Ambidestria', 'Dribles em Diagonal (Direção à Baliza)', 'Leitura de Jogo', 'Reação Pós Perda', 'Total', 'Média'],
+        psicologico: ['Data','Criatividade / Improvisação', 'Capacidade de Decisão / Confiança / Extroversão', 'Inteligência Tática / Intuição Antecipar Ações','Competitividade / Coragem / Concentração', 'Total', 'Média']
       };
     } 
     else if(athleteData && athleteData.posicao_primaria.toLowerCase() === 'lateral') {
       return {
-        fisico: ['Data', 'Estatura', 'Velocidade', 'Passe Curto', 'Passe Longo', 'Capacidade Aeróbia', 'Fechamento Defensivo', 'Total', 'Média'],
-        tecnico: ['Data', 'Leitura de Jogo', 'Participação Ofensiva', 'Cruzamento', 'Jogo Aéreo', 'Condução Bola', 'Total', 'Média'],
-        psicologico: ['Data','Liderança', 'Confiança', 'Inteligência Tática','Competitividade', 'Total', 'Média']
+        fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Passe Curto', 'Passe Longo', 'Capacidade Aeróbica', 'Fechamento Defensivo / Contenção', 'Total', 'Média'],
+        tecnico: ['Data', 'Leitura de Jogo / Amplitude Organizacional', 'Participação Ofensiva / Penetração / Mobilidade', 'Cruzamento / 1 x 1 Ofencivo', 'Jogo Aéreo', 'Condução de Bola em Velocidade', 'Total', 'Média'],
+        psicologico: ['Data','Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade', 'Inteligência Tática / Intuição Ent. Ação Advers.','Competitividade', 'Total', 'Média']
       };
     }
     else if(athleteData && athleteData.posicao_primaria.toLowerCase() === 'meia') {
       return {
-        fisico: ['Data', 'Estatura', 'Velocidade', 'Leitura de Jogo', 'Desmarques', 'Controle de Bola', 'Capacidade Aeróbia', 'Finalização', 'Total', 'Média'],
-        tecnico: ['Data', 'Visão Espacial', 'Domíinio Orientado', 'Dribles', 'Organização Ação Ofensiva', 'Pisada na Área para Finalizar', 'Total', 'Média'],
-        psicologico: ['Data','Criatividade', 'Capacidade de Decisão', 'Confiança','Inteligência Tática', 'Competitividade', 'Total', 'Média']
+        fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Leitura de Jogo / Cobertura Ofensiva / Contenção', 'Desmarques / Mobilidade', 'Controle de Bola / Passe para Gol', 'Capacidade Aeróbica', 'Finalização', 'Total', 'Média'],
+        tecnico: ['Data', 'Visão Espacial', 'Domíinio Orientado / Ambidestria', 'Dribles', 'Organização Ação Ofensiva / Dinâmica', 'Pisada na Área para Finalizar / Penetração', 'Total', 'Média'],
+        psicologico: ['Data','Criatividade e Improvisação', 'Capacidade de Decisão', 'Confiança / Responsabilidade','Inteligência Tática / Intuição Antecipar Ações', 'Competitividade / Coragem / Concentração', 'Total', 'Média']
       };
     }
     else if(athleteData && athleteData.posicao_primaria.toLowerCase() === 'zagueiro') {
       return {
-        fisico: ['Data', 'Estatura', 'Força', 'Passe Curto', 'Passe Longo', 'Jogo Aéreo', 'Confronto Defensivo', 'Total', 'Média'],
-        tecnico: ['Data', 'Leitura de Jogo', 'Ambidestria', 'Participação Ofensiva', 'Cabeceio Ofensivo', 'Passe Entre Linhas', 'Total', 'Média'],
-        psicologico: ['Data','Liderança', 'Confiança','Inteligência Tática', 'Competitividade', 'Total', 'Média']
+        fisico: ['Data', 'Estatura / Maturação', 'Força / Recuperação / Cobertura', 'Passe Curto', 'Passe Longo', 'Jogo Aéreo', 'Confronto Defensivo 1 x 1 / Contenção', 'Total', 'Média'],
+        tecnico: ['Data', 'Leitura de Jogo / Organização Defensiva', 'Ambidestria', 'Participação Ofensiva / Penetração / Mobilidade', 'Cabeceio Ofensivo', 'Passe Entre Linhas / Passe Longo Diagonal', 'Total', 'Média'],
+        psicologico: ['Data','Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade','Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade', 'Total', 'Média']
       };
     }
     else if(athleteData && athleteData.posicao_primaria.toLowerCase() === 'goleiro') {
       return {
-        fisico: ['Data', 'Perfil', 'Maturação', 'Agilidade', 'Velocidade Membros Superiores', 'Flexibilidade', 'Posicionamento', 'Total', 'Média'],
-        tecnico: ['Data', 'Leitura de Jogo', 'Jogo com Pés', 'Organização da Defesa', 'Domínio Coberturas e Saídas', 'Passe Entre Linhas', 'Total', 'Média'],
-        psicologico: ['Data','Liderança', 'Coragem', 'Concentração', 'Controle Estresse', 'Total', 'Média']
+        fisico: ['Data', 'Perfil', 'Maturação', 'Agilidade / Impulsão', 'Velocidade Membros Superiores', 'Flexibilidade', 'Posicionamento Ofensivo e Defensivo', 'Total', 'Média'],
+        tecnico: ['Data', 'Leitura de Jogo', 'Jogo com os Pés / Reposição de Jogo', 'Organização da Defesa / Domínio da Área', 'Domínio Coberturas e Saídas', 'Total', 'Média'],
+        psicologico: ['Data','Liderança', 'Coragem / Confiança', 'Concentração / Responsabilidade', 'Controle de Estresse', 'Total', 'Média']
       };
     }
     else if(athleteData && athleteData.posicao_primaria.toLowerCase() === 'volante') {
       return {
-        fisico: ['Data', 'Estatura', 'Força', 'Passe Curto', 'Capacidade Aeróbia', 'Dinâmica', 'Visão Espacial', 'Total', 'Média'],
-        tecnico: ['Data', 'Leitura de Jogo', 'Domínio Orientado', 'Jogo Aéreo Ofensivo', 'Passes Verticais', 'Finalização Média Distância', 'Total', 'Média'],
-        psicologico: ['Data','Liderança', 'Confiança','Inteligência Tática', 'Competitividade', 'Total', 'Média']
+        fisico: ['Data', 'Estatura / Maturação', 'Força / Desarmes / Contenção', 'Passe Curto', 'Capacidade Aeróbica', 'Dinâmica / Mobilidade / Penetração', 'Visão Espacial / Mudança de Corredores', 'Total', 'Média'],
+        tecnico: ['Data', 'Leitura de Jogo / Coberturas / Espaço', 'Domínio Orientado / Ambidestria', 'Jogo Aéreo Ofensivo / Defensivo', 'Passes Verticais', 'Finalização de Média Distância', 'Total', 'Média'],
+        psicologico: ['Data','Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade','Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade / Coragem / Conventração', 'Total', 'Média']
       };
     }
   });
@@ -318,10 +318,10 @@ export default function Performance({athleteData}: any) {
               </div>
               <hr />
               <div>
-                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 1  é relativo a atletas com baixa perspectiva futura (à liberar)</h2>
-                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 1  é relativo a atletas com baixa perspectiva futura (à liberar)</h2>
-                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 3  é relativo a atletas com boa perspectiva futura (à avaliar em médio prazo)</h2>
-                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 4  é relativo a atletas com perspectiva de atleta profissional</h2>
+                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 1 é relativo a atletas com baixa perspectiva futura (à liberar)</h2>
+                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 2 é relativo a atletas com média perspectiva futura (à avaliar em curto prazo).</h2>
+                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 3 é relativo a atletas com boa perspectiva futura (à avaliar em médio prazo)</h2>
+                <h2 style={{color: 'white', fontSize: '18px'}}>AF &gt; 4 é relativo a atletas com perspectiva de atleta profissional</h2>
               </div>
             </Box>
           </Modal>

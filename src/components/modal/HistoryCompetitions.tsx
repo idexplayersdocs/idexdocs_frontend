@@ -251,7 +251,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="gols" style={{height:'45px'}} value={formRegisterCompetitions.gols} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Jogos Parciais</label>
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Assistências</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="assistencias" style={{height:'45px'}} value={formRegisterCompetitions.assistencias} onChange={handleInputChangeRegisterCompetitions}/>
                 </div>
               </div>

@@ -247,6 +247,10 @@ select option[disabled] {
   margin-left: 25% !important;
 }
 
+td.table-dark.text-center.table-custom {
+  background-color: var(--bg-primary-color) !important;
+}
+
 @media print {
   .hideOnScreen {
     display: block !important;
@@ -379,6 +383,10 @@ h3 {
   margin-left: -26px !important;
 }
 
+.media-das-medias{
+  width: 50% !important;
+}
+
   @media (max-width: 1000px) {
     .col-lg-2 {
       display: none;
@@ -473,6 +481,9 @@ h3 {
     .subtitle-sidebar{
       font-size: 20px;
     }
+    .media-das-medias{
+      width: 75% !important;
+    }
   }
   
   @media (max-width: 600px) {
@@ -523,5 +534,9 @@ h3 {
     .container-avatar .edit-icon {
       top: 80% !important;
       left: 80% !important;
+    }
+
+    .media-das-medias{
+      width: 100% !important;
     }
   }

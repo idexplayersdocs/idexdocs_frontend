@@ -21,7 +21,11 @@ export default function Characteristics({dataList, labelList}: any) {
                 <tr key={index}>
                   {reorderedKeys.map((key: string, idx: number) => (
                     <td key={idx} className="table-dark text-center">
-                      {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') : data[key]}
+                      {/* {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') : data[key]} */}
+                      {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') 
+                        : key === 'mean' ? parseFloat(data[key]).toFixed(2) 
+                        : data[key]
+                      }
                     </td>
                   ))}
                 </tr>
@@ -57,7 +61,11 @@ export default function Characteristics({dataList, labelList}: any) {
                 <tr key={index}>
                   {reorderedKeys.map((key: string, idx: number) => (
                     <td key={idx} className="table-dark text-center">
-                      {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') : data[key]}
+                      {/* {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') : data[key]} */}
+                      {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') 
+                        : key === 'mean' ? parseFloat(data[key]).toFixed(2) 
+                        : data[key]
+                      }
                     </td>
                   ))}
                 </tr>
@@ -93,7 +101,11 @@ export default function Characteristics({dataList, labelList}: any) {
                 <tr key={index}>
                   {reorderedKeys.map((key: string, idx: number) => (
                     <td key={idx} className="table-dark text-center">
-                      {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') : data[key]}
+                      {/* {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') : data[key]} */}
+                      {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') 
+                        : key === 'mean' ? parseFloat(data[key]).toFixed(2) 
+                        : data[key]
+                      }
                     </td>
                   ))}
                 </tr>
@@ -108,6 +120,32 @@ export default function Characteristics({dataList, labelList}: any) {
           )}
         </tbody>
       </table>
+      </div>
+      <div className="mt-5 align-self-start media-das-medias" style={{maxHeight: '300px', overflow: 'auto'}}>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th className="table-dark text-center">Data</th>
+                <th className="table-dark text-center">Média Geral</th>
+              </tr>
+            </thead>
+            <tbody>
+            {dataList && dataList.total_mean && Object.keys(dataList.total_mean).length > 0 ? (
+              Object.entries(dataList.total_mean).map(([key, value], index) => (
+                <tr key={index}>
+                  <td className="table-dark text-center">{moment(key).format('DD/MM/YYYY')}</td>
+                  <td className="table-dark text-center">{value as number}</td>
+                </tr>
+              ))
+              ) : (
+                <tr>
+                  <td colSpan={2} className="table-dark text-center">
+                    Lista vazia
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
     </div>
     </>
   )

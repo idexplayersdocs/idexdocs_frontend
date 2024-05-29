@@ -20,6 +20,7 @@ import Image from "next/image";
 import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
 import { jwtDecode } from 'jwt-decode';
 import ContractHistory from '@/components/modal/ContractHistory';
+import { Midia } from '@/components/Midia';
 
 moment.locale('pt-br');
 
@@ -78,6 +79,7 @@ export default function AthleteDetail() {
   const [pageSupportControl, setPageSupportControl] = useState(1);
   const [displayedDataRelationShip, setDisplayedDataRelationShip] = useState<any>([]);
   const [displayedDataSupportControl, setDisplayedDataSupportControl] = useState<any>([]);
+  const [displayedTotalValueSupportControl, setDisplayedTotalValueSupportControl] = useState<any>();
   const [totalPages, setTotalPages] = useState(1);
   const [openCreateQuestionaryRelationship, setOpenCreateQuestionaryRelationship] = useState(false);
   const [openCreateSupportControl, setOpenCreateSupportControl] = useState(false);
@@ -144,9 +146,13 @@ export default function AthleteDetail() {
             setTotalRowRelationship(relationship?.data.total);
   
             // Controle de Suporte
-            const supportContorl = await getSupportControl(athleteId, pageSupportControl);
-            setDisplayedDataSupportControl(supportContorl?.data.data);
-            setTotalRowSupportControl(supportContorl?.data.total);
+            const supportControl = await getSupportControl(athleteId, pageSupportControl);
+            setDisplayedDataSupportControl(supportControl?.data.data.controles);
+            setDisplayedTotalValueSupportControl(supportControl?.data.data.total.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}));
+
+
+
+            setTotalRowSupportControl(supportControl?.data.total);
   
             // Observações
             const responseObservacoes = await getObservations(athleteId, 'relacionamento');
@@ -413,19 +419,20 @@ export default function AthleteDetail() {
               permissions.relationship === true && (
                 <li className="nav-item me-1 menu" style={{cursor: 'pointer'}}>
                   <a className={ tabAtual === 'relationship' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('relationship')}>Relacionamento</a>
-                  {/* <a className="nav-link active" aria-current="page" href={`/secure/athletes/${athleteId}/athleteRelationship`}>Relacionamento</a> */}
                 </li>
               )}
             {
               permissions.performance && (
-              <li className="nav-item menu" style={{cursor: 'pointer'}}>
+              <li className="nav-item me-1 menu" style={{cursor: 'pointer'}}>
                 <a className={ tabAtual === 'performance' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('performance')}>Desempenho</a>
-                {/* <a className="nav-link" aria-current="page" href={`/secure/athletes/${athleteId}/athletePerformance`}>Desempenho</a> */}
               </li>
               )}
+              <li className="nav-item menu" style={{cursor: 'pointer'}}>
+                <a className={ tabAtual === 'midia' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('midia')}>Imagem / Vídeo</a>
+              </li>
           </ul>
           {
-          tabAtual === 'relationship' ?
+          tabAtual === 'relationship' &&
           <div className="card athlete-detail-card" style={{ backgroundColor: 'var(--bg-secondary-color)', marginRight: '10px' }}>
 
             <div className='mt-5 d-flex justify-content-center modal-contrato'>
@@ -464,10 +471,10 @@ export default function AthleteDetail() {
                         <td className="table-dark text-center">{relationship.relacao_familiares}</td>
                         <td className="table-dark text-center">{relationship.influencias_externas}</td>
                         <td className="table-dark text-center">
-                          <FontAwesomeIcon icon={relationship.pendencia_empresa ? faCheck : faXmark} size='xl' style={relationship.pendencia_empresa ? { color: "#15ff00" } : { color: "#ff0000" }} />
+                          <FontAwesomeIcon icon={relationship.pendencia_empresa ? faCheck : faXmark} size='xl' style={relationship.pendencia_empresa ? { color: "#ff0000" } : { color: "#15ff00" }} />
                         </td>
                         <td className="table-dark text-center">
-                          <FontAwesomeIcon icon={relationship.pendencia_clube ? faCheck : faXmark} size='xl' style={relationship.pendencia_clube ? { color: "#15ff00" } : { color: "#ff0000" }} />
+                          <FontAwesomeIcon icon={relationship.pendencia_clube ? faCheck : faXmark} size='xl' style={relationship.pendencia_clube ? { color: "#ff0000" } : { color: "#15ff00" }} />
                         </td>
                       </tr>
                     ))
@@ -521,7 +528,8 @@ export default function AthleteDetail() {
                             <td className="table-dark text-center">{new Date(supportContol.data_controle).toLocaleDateString()}</td>
                             <td className="table-dark text-center">{supportContol.nome}</td>
                             <td className="table-dark text-center">{supportContol.quantidade}</td>
-                            <td className="table-dark text-center">R$ {supportContol.preco}</td>
+                            {/* <td className="table-dark text-center">R$ {supportContol.preco}</td> */}
+                            <td className="table-dark text-center">{supportContol.preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
                           </tr>
                         ))
                       ) : (
@@ -532,6 +540,15 @@ export default function AthleteDetail() {
                       }
                     </tbody>
                   </table>
+                  <table>
+                    <tbody className="table table-striped">
+                      <tr>
+                        <th className="table-dark text-center p-2">Total</th>
+                        <td className="table-dark text-center table-custom p-2">{displayedTotalValueSupportControl}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div className='d-flex justify-content-center mt-3'>
                     {
                       totalRowSupportControl > 3 &&
                       <Pagination
@@ -545,6 +562,7 @@ export default function AthleteDetail() {
                       />
                     }
                   </div>
+                  </div>
                 </div>
               <div className='col-md'>
                 <div className='ms-3 me-3 d-flex flex-column mb-3'>
@@ -557,13 +575,21 @@ export default function AthleteDetail() {
               </div>
             </div>
           </div>
-          
-          : 
+
+          }
+          {
+          tabAtual === 'performance' &&
           // Desempenho
           <div className="card athlete-detail-card" style={{ backgroundColor: 'var(--bg-secondary-color)', marginRight: '10px' }}>
             <Performance athleteData={athlete} />
           </div>
+          }
 
+          {
+            tabAtual === 'midia' &&
+            <div className="card athlete-detail-card" style={{ backgroundColor: 'var(--bg-secondary-color)', marginRight: '10px' }}>
+            <Midia />
+          </div>
           }
 
           {/* Relationship */}
@@ -591,30 +617,89 @@ export default function AthleteDetail() {
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
                       <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_avaliacao" style={{height:'45px'}} value={formDataRelationship.data_avaliacao} onChange={handleInputChangeRelationship}/>
                 </div>
-                <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Receptividade Contato</label>
+                {/* <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Receptividade Contrato</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="receptividade_contrato" style={{height:'45px'}} value={formDataRelationship.receptividade_contrato} onChange={handleInputChangeRelationship}/>
-                </div>
+                </div> */}
                 <div className="d-flex flex-column w-100 mt-3">
+                    <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Receptividade Contrato</label>
+                    <select className="form-select" name="receptividade_contrato" value={formDataRelationship.receptividade_contrato} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.receptividade_contrato ? '#fff' : '#999'}}>
+                      <option value={0} style={{color: '#fff'}}>0</option>
+                      <option value={1} style={{color: '#fff'}}>1</option>
+                      <option value={2} style={{color: '#fff'}}>2</option>
+                      <option value={3} style={{color: '#fff'}}>3</option>
+                      <option value={4} style={{color: '#fff'}}>4</option>
+                      <option value={5} style={{color: '#fff'}}>5</option>
+                    </select>
+                </div>
+
+
+                {/* <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Satisfação Empresa</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="satisfacao_empresa" style={{height:'45px'}} value={formDataRelationship.satisfacao_empresa} onChange={handleInputChangeRelationship}/>
-                </div>
+                </div> */}
+
                 <div className="d-flex flex-column w-100 mt-3">
+                    <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Satisfação Empresa</label>
+                    <select className="form-select" name="satisfacao_empresa" value={formDataRelationship.satisfacao_empresa} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.satisfacao_empresa ? '#fff' : '#999'}}>
+                      <option value={0} style={{color: '#fff'}}>0</option>
+                      <option value={1} style={{color: '#fff'}}>1</option>
+                      <option value={2} style={{color: '#fff'}}>2</option>
+                      <option value={3} style={{color: '#fff'}}>3</option>
+                      <option value={4} style={{color: '#fff'}}>4</option>
+                      <option value={5} style={{color: '#fff'}}>5</option>
+                    </select>
+                </div>
+
+                {/* <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Satisfação Clube</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="satisfacao_clube" style={{height:'45px'}} value={formDataRelationship.satisfacao_clube} onChange={handleInputChangeRelationship}/>
+                </div> */}
+                <div className="d-flex flex-column w-100 mt-3">
+                    <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Satisfação Clube</label>
+                    <select className="form-select" name="satisfacao_clube" value={formDataRelationship.satisfacao_clube} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.satisfacao_clube ? '#fff' : '#999'}}>
+                      <option value={0} style={{color: '#fff'}}>0</option>
+                      <option value={1} style={{color: '#fff'}}>1</option>
+                      <option value={2} style={{color: '#fff'}}>2</option>
+                      <option value={3} style={{color: '#fff'}}>3</option>
+                      <option value={4} style={{color: '#fff'}}>4</option>
+                      <option value={5} style={{color: '#fff'}}>5</option>
+                    </select>
                 </div>
               </div>
               <div className='col-md-6'>
-                <div className="d-flex flex-column w-100 mt-3">
+                {/* <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Relação Familiares</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="relacao_familiares" style={{height:'45px'}} value={formDataRelationship.relacao_familiares} onChange={handleInputChangeRelationship}/>
+                </div> */}
+              <div className="d-flex flex-column w-100 mt-3">
+                    <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Relação Familiares</label>
+                    <select className="form-select" name="relacao_familiares" value={formDataRelationship.relacao_familiares} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.relacao_familiares ? '#fff' : '#999'}}>
+                      <option value={0} style={{color: '#fff'}}>0</option>
+                      <option value={1} style={{color: '#fff'}}>1</option>
+                      <option value={2} style={{color: '#fff'}}>2</option>
+                      <option value={3} style={{color: '#fff'}}>3</option>
+                      <option value={4} style={{color: '#fff'}}>4</option>
+                      <option value={5} style={{color: '#fff'}}>5</option>
+                    </select>
                 </div>
-                <div className="d-flex flex-column w-100 mt-3">
+                {/* <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Influencia Externa</label>
                       <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="influencias_externas" style={{height:'45px'}} value={formDataRelationship.influencias_externas} onChange={handleInputChangeRelationship}/>
+                </div> */}
+                <div className="d-flex flex-column w-100 mt-3">
+                    <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Influencia Externa</label>
+                    <select className="form-select" name="influencias_externas" value={formDataRelationship.influencias_externas} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.influencias_externas ? '#fff' : '#999'}}>
+                      <option value={0} style={{color: '#fff'}}>0</option>
+                      <option value={1} style={{color: '#fff'}}>1</option>
+                      <option value={2} style={{color: '#fff'}}>2</option>
+                      <option value={3} style={{color: '#fff'}}>3</option>
+                      <option value={4} style={{color: '#fff'}}>4</option>
+                      <option value={5} style={{color: '#fff'}}>5</option>
+                    </select>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
-                    <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Pendência Empresa</label>
+                    <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Pendências Empresa</label>
                     <select className="form-select" name="pendencia_empresa" value={formDataRelationship.pendencia_empresa} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.pendencia_empresa ? '#fff' : '#999'}}>
                       <option value="" disabled hidden>Selecione</option>
                       <option value="true" style={{color: '#fff'}}>Sim</option>

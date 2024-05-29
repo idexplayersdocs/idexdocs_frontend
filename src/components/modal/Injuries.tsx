@@ -162,6 +162,7 @@ export default function Injuries({closeModal, athleteId}: any) {
               <th className="table-dark text-center" scope="col">Data</th>
               {/* <th className="table-dark text-center" scope="col">Lesão</th> */}
               <th className="table-dark text-center" scope="col">Descrição</th>
+              <th className="table-dark text-center" scope="col">Data de retorno</th>
             </tr>
           </thead>
           <tbody>
@@ -171,6 +172,7 @@ export default function Injuries({closeModal, athleteId}: any) {
                   <tr key={index}>
                     <td className="table-dark text-center">{moment(competicao.data_lesao).format('DD/MM/YYYY')}</td>
                     <td className="table-dark text-center">{competicao.descricao}</td>
+                    <td className="table-dark text-center">{moment(competicao.data_retorno).format('DD/MM/YYYY')}</td>
                   </tr>
                 ))
               ) : (

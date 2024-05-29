@@ -120,7 +120,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
     };
     const [formDataListPsicologico, setFormDataListPsicologico] = useState(reorderedKeysDataPsicologico)
   
-      const handleChangePsicologico = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const handleChangePsicologico = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = event.target;
         setFormDataListPsicologico((prevState: any) => ({
           ...prevState,
@@ -233,7 +233,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
   return (
     <>
       <div className='d-flex justify-content-between'>
-        <Subtitle subtitle='Criar Caracteristicas'/>
+        <Subtitle subtitle='Criar Características'/>
         <FontAwesomeIcon icon={faX} color='white' size='xl' style={{cursor: 'pointer'}} onClick={handleCloseModal}/>
       </div>
       <hr />
@@ -249,16 +249,27 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
         {reorderedKeysLabelFisico.map((label: any, index: number) => (
           <div key={index} className="d-flex flex-column w-100 mt-3">
             <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
-            <input 
-              type="number" 
-              className="form-control input-create input-date bg-dark-custom " 
-              placeholder={label} 
-              name={Object.keys(formDataListFisico)[index]}
-              style={{height:'45px'}} 
-              value={formDataListFisico[formDataListFisico[index]]}
-              onChange={handleChangeFisico}
-            />
+            <select className="form-select" name={Object.keys(formDataListFisico)[index]} value={formDataListFisico[formDataListFisico[index]]} onChange={handleChangePsicologico} style={{height:'45px', color: formDataListFisico[formDataListFisico[index]] ? '#fff' : '#999'}}>
+              <option value={0} style={{color: '#fff'}}>0</option>
+              <option value={1} style={{color: '#fff'}}>1</option>
+              <option value={2} style={{color: '#fff'}}>2</option>
+              <option value={3} style={{color: '#fff'}}>3</option>
+              <option value={4} style={{color: '#fff'}}>4</option>
+              <option value={5} style={{color: '#fff'}}>5</option>
+            </select>
           </div>
+          // <div key={index} className="d-flex flex-column w-100 mt-3">
+          //   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
+          //   <input 
+          //     type="number" 
+          //     className="form-control input-create input-date bg-dark-custom " 
+          //     placeholder={label} 
+          //     name={Object.keys(formDataListFisico)[index]}
+          //     style={{height:'45px'}} 
+          //     value={formDataListFisico[formDataListFisico[index]]}
+          //     onChange={handleChangeFisico}
+          //   />
+          // </div>
         ))}
       </div>
       <div className='col-md-4 mb-5'>
@@ -266,33 +277,61 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
         {reorderedKeysLabelTecnico.map((label: any, index: number) => (
           <div key={index} className="d-flex flex-column w-100 mt-3">
             <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
-            <input 
-              type="number"  
-              className="form-control input-create input-date bg-dark-custom " 
-              placeholder={label} 
-              name={Object.keys(formDataListTecnico)[index]}
-              style={{height:'45px'}} 
-              value={formDataListTecnico[formDataListTecnico[index]]}
-              onChange={handleChangeTecnico}
-            />
+            <select className="form-select" name={Object.keys(formDataListTecnico)[index]} value={formDataListTecnico[formDataListTecnico[index]]} onChange={handleChangePsicologico} style={{height:'45px', color: formDataListTecnico[formDataListTecnico[index]] ? '#fff' : '#999'}}>
+              <option value={0} style={{color: '#fff'}}>0</option>
+              <option value={1} style={{color: '#fff'}}>1</option>
+              <option value={2} style={{color: '#fff'}}>2</option>
+              <option value={3} style={{color: '#fff'}}>3</option>
+              <option value={4} style={{color: '#fff'}}>4</option>
+              <option value={5} style={{color: '#fff'}}>5</option>
+            </select>
           </div>
+          // <div key={index} className="d-flex flex-column w-100 mt-3">
+          //   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
+          //   <input 
+          //     type="number"  
+          //     className="form-control input-create input-date bg-dark-custom " 
+          //     placeholder={label} 
+          //     name={Object.keys(formDataListTecnico)[index]}
+          //     style={{height:'45px'}} 
+          //     value={formDataListTecnico[formDataListTecnico[index]]}
+          //     onChange={handleChangeTecnico}
+          //   />
+          // </div>
         ))}
       </div>
       <div className='col-md-4'>
         <h3>PERFIL PSICOLÓGICO</h3>
         {reorderedKeysLabelPsicologico.map((label: any, index: number) => (
+
           <div key={index} className="d-flex flex-column w-100 mt-3">
             <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
-            <input 
-              type="number"
-              className="form-control input-create input-date bg-dark-custom " 
-              placeholder={label} 
-              name={Object.keys(formDataListPsicologico)[index]}
-              style={{height:'45px'}} 
-              value={formDataListPsicologico[formDataListPsicologico[index]]}
-              onChange={handleChangePsicologico}
-            />
+            <select className="form-select" name={Object.keys(formDataListPsicologico)[index]} value={formDataListPsicologico[formDataListPsicologico[index]]} onChange={handleChangePsicologico} style={{height:'45px', color: formDataListPsicologico[formDataListPsicologico[index]] ? '#fff' : '#999'}}>
+              <option value={0} style={{color: '#fff'}}>0</option>
+              <option value={1} style={{color: '#fff'}}>1</option>
+              <option value={2} style={{color: '#fff'}}>2</option>
+              <option value={3} style={{color: '#fff'}}>3</option>
+              <option value={4} style={{color: '#fff'}}>4</option>
+              <option value={5} style={{color: '#fff'}}>5</option>
+            </select>
           </div>
+
+
+          // <div key={index} className="d-flex flex-column w-100 mt-3">
+          //   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>{label}</label>
+          //   <input 
+          //     type="number"
+          //     className="form-control input-create input-date bg-dark-custom " 
+          //     placeholder={label} 
+          //     name={Object.keys(formDataListPsicologico)[index]}
+          //     style={{height:'45px'}} 
+          //     value={formDataListPsicologico[formDataListPsicologico[index]]}
+          //     onChange={handleChangePsicologico}
+          //   />
+          // </div>
+
+
+
         ))}
       </div>
       <div className='ms-3 d-flex flex-column mt-3' style={{width: '98%'}}>
