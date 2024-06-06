@@ -3,10 +3,7 @@ import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import { apiURL } from '../api';
 
-// const apiURL = process.env.NEXT_PUBLIC_API_URL;
-const apiURL = 'https://idexdocs-api.azurewebsites.net';
-
-
+const apiURL = process.env.API_URL || 'https://idexdocs-api.azurewebsites.net';
 
 export const getGalleryById = async (athleteId: any) => {
   if(athleteId){
