@@ -1,1 +1,1 @@
-export const apiURL = "https://idexdocs-api.azurewebsites.net"
+// export const apiURL = "https://idexdocs-api.azurewebsites.net"

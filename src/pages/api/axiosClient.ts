@@ -1,5 +1,7 @@
 import axios from "axios";
-import { apiURL } from "./api";
+// import { apiURL } from "./api";
+
+const apiURL = process.env.API_URL;
 
 const getToken = (): string | null => {
 
