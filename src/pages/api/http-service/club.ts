@@ -3,7 +3,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import { apiURL } from '../api';
 
-const apiURL = process.env.API_URL || 'https://idexdocs-api.azurewebsites.net';
+const apiURL = process.env.API_URL;
+
 export const getClub = async (athleteId: any, page: number) => {
   if(athleteId){
     try {
