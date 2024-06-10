@@ -311,7 +311,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={5} className="table-dark text-center">
+                    <td colSpan={10} className="table-dark text-center">
                       Lista de atletas vazia
                     </td>
                   </tr>

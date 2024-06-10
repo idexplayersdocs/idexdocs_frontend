@@ -5,6 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // const apiURL = process.env.NEXT_PUBLIC_API_URL;
 const apiURL = 'https://idexdocs-api.azurewebsites.net';
+const tokenLocal = window.localStorage.getItem('token');
+
 
 export const getAthletes = async (page:number, athlete: string | null = '') => {
   try {
@@ -13,7 +15,12 @@ export const getAthletes = async (page:number, athlete: string | null = '') => {
       url += `&atleta=${athlete}`
     }
     
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${tokenLocal}`
+      }
+    });
+
     return response.data;
   } catch (error) {
     console.error('Error fetching users:', error);
