@@ -1,10 +1,7 @@
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import { apiURL } from '../api';
 
-// const apiURL = process.env.NEXT_PUBLIC_API_URL;
-const apiURL = 'https://idexdocs-api.azurewebsites.net';
+const apiURL = process.env.API_URL;
 
 export const getInjuries = async (athleteId: any, page:number) => {
   if(athleteId){
