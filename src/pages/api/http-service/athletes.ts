@@ -4,17 +4,21 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // const apiURL = process.env.NEXT_PUBLIC_API_URL;
 // const apiURL = 'https://idexdocs-api.azurewebsites.net';
-const tokenLocal = window.localStorage.getItem('token');
 
 const apiURL = process.env.API_URL;
 
 export const getAthletes = async (page:number, athlete: string | null = '') => {
   try {
-    let url = `${apiURL}/atleta?per_page=10&page=${page}`
-    if(athlete !== ''){
-      url += `&atleta=${athlete}`
+    let tokenLocal: any = '';
+    if (typeof window !== 'undefined') {
+      tokenLocal = window.localStorage.getItem('token');
     }
-    
+
+    let url = `${apiURL}/atleta?per_page=10&page=${page}`;
+    if (athlete !== '') {
+      url += `&atleta=${athlete}`;
+    }
+
     const response = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${tokenLocal}`
