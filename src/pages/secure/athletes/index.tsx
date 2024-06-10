@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAsterisk, faMagnifyingGlass, faX } from "@fortawesome/free-solid-svg-icons";
 import { overflow } from "html2canvas/dist/types/css/property-descriptors/overflow";
 import { Bounce, ToastContainer, toast } from "react-toastify";
+import Loading from "react-loading";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -49,30 +50,31 @@ export default function Athletes() {
   const [athletes, setAthletes] = useState<any[]>([]);
   const [totalRow, setTotalRow]: any = useState();
   const [inputFilter, setInputFilter]: any = useState('');
+  const [loading, setLoading] = useState(false); // Estado de carregamento
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<any>({
     nome: '',
     data_nascimento: '',
     posicao_primaria: '',
-    posicao_secundaria: '',
-    posicao_terciaria: ''
+    posicao_secundaria: null,
+    posicao_terciaria: null
   });
 
-  const [formClube, setFormClube] = useState({
-    nome: '',
-    data_inicio: '',
+  const [formClube, setFormClube] = useState<any>({
+    nome: null,
+    data_inicio: null,
   });
 
-  const [formContratoClube, setFormContratoClube] = useState({
-    contrato_sub_tipo_id: '',
-    data_inicio: '',
-    data_termino: '',
+  const [formContratoClube, setFormContratoClube] = useState<any>({
+    contrato_sub_tipo_id: null,
+    data_inicio: null,
+    data_termino: null,
   });
 
-  const [formContratoEmpresa, setFormContratoEmpresa] = useState({
-    contrato_sub_tipo_id: '',
-    data_inicio: '',
-    data_termino: '',
+  const [formContratoEmpresa, setFormContratoEmpresa] = useState<any>({
+    contrato_sub_tipo_id: null,
+    data_inicio: null,
+    data_termino: null,
   });
 
 
@@ -83,29 +85,29 @@ export default function Athletes() {
       nome: '',
       data_nascimento: '',
       posicao_primaria: '',
-      posicao_secundaria: '',
-      posicao_terciaria: ''
+      posicao_secundaria: null,
+      posicao_terciaria: null
     })
     setFormClube({
-      nome: '',
-      data_inicio: '',
+      nome: null,
+      data_inicio: null,
     })
     setFormContratoClube({
-      contrato_sub_tipo_id: '',
-      data_inicio: '',
-      data_termino: '',
+      contrato_sub_tipo_id: null,
+      data_inicio: null,
+      data_termino: null,
     })
     setFormContratoEmpresa({
-      contrato_sub_tipo_id: '',
-      data_inicio: '',
-      data_termino: '',
+      contrato_sub_tipo_id: null,
+      data_inicio: null,
+      data_termino: null,
     })
     setFormAvatar("/images/image-user.png")
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormData(prevState => ({
+    setFormData((prevState: any) => ({
       ...prevState,
       [name]: value,
     }));
@@ -113,7 +115,7 @@ export default function Athletes() {
 
   const handleClubeInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormClube(prevState => ({
+    setFormClube((prevState: any) => ({
       ...prevState,
       [name]: value,
     }));
@@ -121,7 +123,7 @@ export default function Athletes() {
 
   const handleContratoClubeInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormContratoClube(prevState => ({
+    setFormContratoClube((prevState: any) => ({
       ...prevState,
       [name]: value,
     }));
@@ -129,7 +131,7 @@ export default function Athletes() {
 
   const handleContratoEmpresaInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormContratoEmpresa(prevState => ({
+    setFormContratoEmpresa((prevState: any) => ({
       ...prevState,
       [name]: value,
     }));
@@ -138,6 +140,7 @@ export default function Athletes() {
 
 
   const handleSalvarClick = async () => {
+    setLoading(true);
     const request = {
       ...formData,
       clube: formClube,
@@ -159,22 +162,22 @@ export default function Athletes() {
             nome: '',
             data_nascimento: '',
             posicao_primaria: '',
-            posicao_secundaria: '',
-            posicao_terciaria: ''
+            posicao_secundaria: null,
+            posicao_terciaria: null
           })
           setFormClube({
-            nome: '',
-            data_inicio: '',
+            nome: null,
+            data_inicio: null,
           })
           setFormContratoClube({
-            contrato_sub_tipo_id: '',
-            data_inicio: '',
-            data_termino: '',
+            contrato_sub_tipo_id: null,
+            data_inicio: null,
+            data_termino: null,
           })
           setFormContratoEmpresa({
-            contrato_sub_tipo_id: '',
-            data_inicio: '',
-            data_termino: '',
+            contrato_sub_tipo_id: null,
+            data_inicio: null,
+            data_termino: null,
           })
         }
         setNewAthlere(false)
@@ -185,6 +188,8 @@ export default function Athletes() {
         }
 
     } catch (error: any) {
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -211,15 +216,15 @@ export default function Athletes() {
     if (
       formData.nome.trim() !== '' &&
       formData.data_nascimento.trim() !== '' &&
-      formData.posicao_primaria.trim() !== '' &&
-      formClube.nome.trim() !== '' &&
-      formClube.data_inicio.trim() !== '' &&
-      formContratoClube.contrato_sub_tipo_id.trim() !== '' &&
-      formContratoClube.data_inicio.trim() !== '' &&
-      formContratoClube.data_termino.trim() !== '' &&
-      formContratoEmpresa.contrato_sub_tipo_id.trim() !== '' &&
-      formContratoEmpresa.data_inicio.trim() !== '' &&
-      formContratoEmpresa.data_termino.trim() !== ''
+      formData.posicao_primaria.trim() !== ''
+      // formClube.nome.trim() !== '' &&
+      // formClube.data_inicio.trim() !== '' &&
+      // formContratoClube.contrato_sub_tipo_id.trim() !== '' &&
+      // formContratoClube.data_inicio.trim() !== '' &&
+      // formContratoClube.data_termino.trim() !== '' &&
+      // formContratoEmpresa.contrato_sub_tipo_id.trim() !== '' &&
+      // formContratoEmpresa.data_inicio.trim() !== '' &&
+      // formContratoEmpresa.data_termino.trim() !== ''
     ) {
       return true; // Todos os campos estão preenchidos
     } else {
@@ -279,6 +284,11 @@ export default function Athletes() {
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateAthlete}/>
           </div>
           <hr />
+          {loading ? (
+        <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: "150px" }}>
+          <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+        </div>
+      ) : (
           <div className="row" style={{height:'520px'}}>
             <div className="col-md-6">
                 <div className="d-flex justify-content-start align-items-center mb-3">
@@ -385,9 +395,9 @@ export default function Athletes() {
                   </div>
                   <select className="form-select" name="contrato_sub_tipo_id" value={formContratoClube.contrato_sub_tipo_id} onChange={handleContratoClubeInputChange} style={{height:'45px', color: formContratoClube.contrato_sub_tipo_id ? '#fff' : '#999'}}>
                     <option value="" disabled hidden>Selecione</option>
-                    <option value={1} style={{color: '#fff'}}>Profissional</option>
-                    <option value={2} style={{color: '#fff'}}>Amador</option>
-                    <option value={3} style={{color: '#fff'}}>Temporário</option>
+                    <option value={3} style={{color: '#fff'}}>Profissional</option>
+                    <option value={4} style={{color: '#fff'}}>Amador</option>
+                    <option value={5} style={{color: '#fff'}}>Temporário</option>
                     {/* <option value={4} style={{color: '#fff'}}>Nenhum</option> */}
                   </select>
               </div>
@@ -437,9 +447,10 @@ export default function Athletes() {
               </div>
             </div>
             <div className='ms-3 d-flex flex-column mt-3 pb-3' style={{width: '98%'}}>
-              <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClick} >Salvar</button>
+              <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClick} disabled={!isFormValid()}>Salvar</button>
             </div>
           </div>
+        )}
         </Box>
       </Modal>
       <ToastContainer />
