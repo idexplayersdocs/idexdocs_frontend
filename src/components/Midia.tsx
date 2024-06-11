@@ -16,6 +16,8 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { deleteImage, deleteVideo, editImage, editVideo, getGalleryById, getVideosById, saveImage, uploadVideo, uploadVideoYoutube } from "@/pages/api/http-service/gallery";
 import { useRouter } from "next/router";
 import Loading from "react-loading";
+import ReactPlayer from 'react-player'
+
 
 const StyledTab = styled(Tab)({
   color: "#fff",
@@ -297,18 +299,18 @@ export const Midia = () => {
   };
 
   const handleSalvarClickVideo = async () => {
-    // const novosArquivos = [];
-    // for (const index in formListaVideoRequest) {
-    //   if (formListaVideoRequest.hasOwnProperty(index)) {
-    //     const arquivo = formListaVideoRequest[index];
-    //     if (arquivo instanceof File && arquivo.type) {
-    //       const novoArquivo = new File([arquivo], descriptions[index] ? descriptions[index] : '', { type: arquivo.type });
-    //       novosArquivos.push(novoArquivo);
-    //       console.log(novoArquivo)
-    //     }
+    const novosArquivos = [];
+    for (const index in formListaVideoRequest) {
+      if (formListaVideoRequest.hasOwnProperty(index)) {
+        const arquivo = formListaVideoRequest[index];
+        if (arquivo instanceof File && arquivo.type) {
+          const novoArquivo = new File([arquivo], descriptions[index] ? descriptions[index] : '', { type: arquivo.type });
+          novosArquivos.push(novoArquivo);
+          console.log(novoArquivo)
+        }
 
-    //   }
-    // }  
+      }
+    }  
     try {
       // const formData = new FormData();
       // novosArquivos.forEach((file, index) => {
@@ -317,6 +319,7 @@ export const Midia = () => {
       const formData = new FormData();
       formData.append('video', formVideo);
       const response = await uploadVideo(athleteId, formData);
+      handleCloseUploadVideo();
     } catch (error: any) {
       console.log(error);
     }
@@ -609,16 +612,18 @@ export const Midia = () => {
               tableVideo == 'card' &&
               // videos.length > 0 ? (
                 videos.map((video: any, index: number) => (
-                  <iframe
-                  key={index}
-                    className="m-2 col-md-auto"
-                    width="220"
-                    height="220"
-                    src={video.blob_url}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
+                  // <iframe
+                  // key={index}
+                  //   className="m-2 col-md-auto"
+                  //   width="220"
+                  //   height="220"
+                  //   src={video.blob_url}
+                  //   frameBorder="0"
+                  //   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  //   allowFullScreen
+                  // ></iframe>
+                  <ReactPlayer className="m-2 col-md-auto" width={300} height={220} key={index} url={video.blob_url} controls/>
+
                 ))
 
               // ): (
@@ -637,7 +642,7 @@ export const Midia = () => {
                       videos.map((video, index: number) => (
                         <tr key={index}>
                           <td className="table-dark text-start">
-                          <iframe
+                          {/* <iframe
                             className="m-2 col-md-auto"
                             height="50"
                             src={video.blob_url}
@@ -645,7 +650,8 @@ export const Midia = () => {
                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                             style={{width: '150px', height: '100px'}}
-                          ></iframe>
+                          ></iframe> */}
+                          <ReactPlayer className="m-2 col-md-auto" width={150} height={100} url={video.blob_url} controls/>
 
                           </td>
                           <td className="table-dark text-center" style={{verticalAlign: 'middle'}}>{video.descricao}</td>

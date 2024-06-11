@@ -7,7 +7,7 @@ const apiURL = process.env.API_URL;
 export const getGalleryById = async (athleteId: any) => {
   if(athleteId){
     try {
-      const response = await axios.get(`${apiURL}/multiple-files-download/atleta/${athleteId}`);
+      const response = await axios.get(`${apiURL}/multiple-files-download/atleta/${athleteId}?page=1&per_page=999999999999`);
       // toast.success('sucesso')
       return response.data;
     } catch (error) {
@@ -27,7 +27,7 @@ export const getGalleryById = async (athleteId: any) => {
 export const getVideosById = async (athleteId: any) => {
   if(athleteId){
     try {
-      const response = await axios.get(`${apiURL}/video-list/atleta/${athleteId}`);
+      const response = await axios.get(`${apiURL}/video-list/atleta/${athleteId}?page=1&per_page=999999999999`);
       // toast.success('sucesso')
       return response.data;
     } catch (error) {
