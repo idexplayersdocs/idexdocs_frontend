@@ -62,6 +62,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   const pdfRef = useRef<HTMLDivElement | any>();
   const [elementPdf, setElementPdf] = useState<any>(pdfRef.current);
   const btnPdfRef = useRef<any>();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchAthletesData = async () => {
@@ -70,8 +71,12 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
         setAthletes(athletesData.data);
         setTotalRow(athletesData.total);
         setElementPdf(pdfRef.current);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error fetching athletes:", error);
+        if(error.response.status == 401){
+          window.localStorage.removeItem('token');
+          router.push("/public/login")
+        }
       } finally {
         setLoading(false);
       }

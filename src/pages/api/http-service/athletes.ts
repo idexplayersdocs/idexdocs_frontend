@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -26,8 +27,18 @@ export const getAthletes = async (page:number, athlete: string | null = '') => {
     });
 
     return response.data;
-  } catch (error) {
-    console.error('Error fetching users:', error);
+  } catch (error: any) {
+    console.log(error.response.status)
+    toast.error(error.response.data.errors[0].message, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+      transition: Bounce,
+      });
     throw error;
   }
 };
