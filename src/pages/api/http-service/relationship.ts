@@ -7,7 +7,7 @@ const apiURL = process.env.API_URL;
 export const getAthleteRelationship = async (athleteId: any, page:number) => {
   if(athleteId){
     try {
-      const response = await axios.get(`${apiURL}/questionario/relacionamento/atleta/${athleteId}?page=${page}&per_page=${7}`);
+      const response = await axios.get(`${apiURL}/questionario/relacionamento/atleta/${athleteId}?page=${page}&per_page=${5}`);
       return response;
     } catch (error) {
       toast.error('erro');

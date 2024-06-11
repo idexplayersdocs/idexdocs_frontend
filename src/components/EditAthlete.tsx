@@ -8,6 +8,10 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { createAthlete, editAthlete, uploadImageAthlete } from "@/pages/api/http-service/athletes";
 import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
+import React from "react";
+import Loading from "react-loading";
+import styles from "../styles/Login.module.css";
+
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -29,6 +33,8 @@ export default function EditAthlete({athleteData, closeModal}: any) {
   const [formImage, setFormImage]:any = useState();
   const handleOpenEditAthlete = () => setOpenEditAthlete(true);
   const handleCloseCreateAthlete = () => {setOpenEditAthlete(false)}
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
   const [formData, setFormData] = useState({
     nome: athleteData.nome ? athleteData.nome : '',
     data_nascimento: athleteData.data_nascimento ? athleteData.data_nascimento : '',
@@ -61,6 +67,7 @@ export default function EditAthlete({athleteData, closeModal}: any) {
   };
 
   const handleSalvarClick = async () => {
+    setIsLoading(true)
     try {
       const newAthletesData = await editAthlete(formData, athleteId);
       if(formImage){
@@ -72,6 +79,8 @@ export default function EditAthlete({athleteData, closeModal}: any) {
       handleCloseModal();
     } catch (error: any) {
       console.log(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -179,6 +188,13 @@ export default function EditAthlete({athleteData, closeModal}: any) {
           <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClick} >Salvar</button>
         </div>
       </div>
+      {isLoading ? (
+          <div
+            className={`d-flex justify-content-center align-items-center min-vh-100 position-absolute top-0 left-0 ${styles.overlay}`}
+          >
+            <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+          </div>
+        ) : null}
       <ToastContainer />
     </>
   )

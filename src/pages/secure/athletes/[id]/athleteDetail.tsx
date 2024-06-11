@@ -206,6 +206,7 @@ export default function AthleteDetail() {
   const handleSalvarClickRelationShip = async () => {
     setLoading(true);
     try {
+      formDataRelationship['atleta_id'] = athleteId
       formDataRelationship['pendencia_empresa'] = formDataRelationship['pendencia_empresa'] == 'true' ? true : false
       formDataRelationship['pendencia_clube'] = formDataRelationship['pendencia_empresa'] == 'true' ? true : false
       const response = await createAthleteRelationship(formDataRelationship);
@@ -303,7 +304,7 @@ export default function AthleteDetail() {
     setLoading(true);
     try {
       formDataSupportControl['preco'] = parseFloat(formDataSupportControl.preco).toFixed(2)
-      formDataSupportControl['athleteId'] = athleteId
+      formDataSupportControl['atleta_id'] = athleteId
       const response = await createSupportControl(formDataSupportControl);
       handleCloseCreateSupportControl();
       setFormDataSupportControl({
@@ -487,16 +488,18 @@ export default function AthleteDetail() {
                 </tbody>
               </table>
               {
-                totalRowRelationship > 7 &&
-                <Pagination
-                  className="pagination-bar"
-                  count={Math.ceil(totalRowRelationship / 7)}
-                  page={pageRalationship}
-                  onChange={handleChangePageRalationship}
-                  variant="outlined"
-                  size="large"
-                  sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
-                />
+                totalRowRelationship > 5 &&
+                <div className='w-100 d-flex justify-content-center'>
+                  <Pagination
+                    className="pagination-bar"
+                    count={Math.ceil(totalRowRelationship / 5)}
+                    page={pageRalationship}
+                    onChange={handleChangePageRalationship}
+                    variant="outlined"
+                    size="large"
+                    sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
+                  />
+                </div>
               }
             </div>
             <hr />

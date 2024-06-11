@@ -7,6 +7,7 @@ import { LightGallerySettings } from 'lightgallery/lg-settings';
 import lgZoom from 'lightgallery/plugins/zoom';
 import lgVideo from 'lightgallery/plugins/video';
 import styles from "../styles/Gallery.module.css";
+import styles2 from "../styles/Login.module.css";
 import Image from "next/image";
 import Subtitle from "./Subtitle";
 import AddButton from "./AddButton";
@@ -107,6 +108,8 @@ export const Midia = () => {
   const [loading, setLoading] = useState(true);
   const { query, push, back } = useRouter();
   const athleteId = query?.id;
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
 
   const selectTable = (table: string) => {
     setTable(table)
@@ -274,6 +277,8 @@ export const Midia = () => {
   };
 
   const handleSalvarClick = async () => {
+    setIsLoading(true);
+
     const novosArquivos = [];
     for (const index in formListaImageRequest) {
       if (formListaImageRequest.hasOwnProperty(index)) {
@@ -295,10 +300,14 @@ export const Midia = () => {
   
     } catch (error: any) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSalvarClickVideo = async () => {
+    setIsLoading(true);
+
     const novosArquivos = [];
     for (const index in formListaVideoRequest) {
       if (formListaVideoRequest.hasOwnProperty(index)) {
@@ -322,6 +331,9 @@ export const Midia = () => {
       handleCloseUploadVideo();
     } catch (error: any) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
+
     }
   };
 
@@ -375,6 +387,7 @@ export const Midia = () => {
   // ]
 
   const saveEditVideo = async () => {
+    setIsLoading(true);
     try {
       const response = await editVideo(formDataVideo);
       const fetchVideosData = async () => {
@@ -384,7 +397,7 @@ export const Midia = () => {
         } catch (error) {
           console.error("Error fetching athletes:", error);
         } finally {
-          setLoading(false);
+          setIsLoading(false);
         }
   
       }
@@ -393,10 +406,15 @@ export const Midia = () => {
 
     } catch (error: any) {
       console.log(error)
+    } finally {
+      setIsLoading(false);
+
     }
   }
 
   const saveEditImage = async () => {
+    setIsLoading(true);
+
     try {
       const response = await editImage(formImage);
       const fetchGalleryData = async () => {
@@ -415,10 +433,15 @@ export const Midia = () => {
 
     } catch (error: any) {
       console.log(error)
+    } finally {
+      setIsLoading(false);
+
     }
   }
 
   const saveYoutubeLink = async () => {
+    setIsLoading(true);
+
     try {
       const response = await uploadVideoYoutube(athleteId, formLinkYoutube);
       const fetchVideosData = async () => {
@@ -437,10 +460,15 @@ export const Midia = () => {
 
     } catch (error: any) {
       console.log(error)
+    } finally {
+      setIsLoading(false);
+
     }
   }
 
   const saveDeleteVideo = async () => {
+    setIsLoading(true);
+
     try {
       const response = await deleteVideo(formDataVideo.id)
       // handleCloseCreateAthlete();
@@ -453,7 +481,7 @@ export const Midia = () => {
         } catch (error) {
           console.error(error);
         } finally {
-          setLoading(false);
+          setIsLoading(false);
         }
   
       }
@@ -462,10 +490,14 @@ export const Midia = () => {
 
     } catch (error: any) {
       console.log(error)
+    } finally {
+      setIsLoading(false);
     }
   }
 
   const saveDeleteImage = async () => {
+    setIsLoading(true);
+
     try {
       const response = await deleteImage(formImage.imagem_id);
       // handleCloseCreateAthlete();
@@ -476,7 +508,7 @@ export const Midia = () => {
         } catch (error) {
           console.error("Error fetching athletes:", error);
         } finally {
-          setLoading(false);
+          setIsLoading(false);
         }
   
       }
@@ -485,6 +517,9 @@ export const Midia = () => {
 
     } catch (error: any) {
       console.log(error)
+    } finally {
+      setIsLoading(false);
+
     }
   }
 
@@ -731,6 +766,13 @@ export const Midia = () => {
                 <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClick} >Salvar</button>
               </div>
             </div>
+            {isLoading ? (
+              <div
+                className={`d-flex justify-content-center align-items-center w-100 min-vh-100 position-absolute top-0 left-0 ${styles2.overlay}`}
+              >
+                <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+              </div>
+              ) : null}
             </Box>
           </Modal>
         <Modal
@@ -766,6 +808,13 @@ export const Midia = () => {
                 </div>
               </div>
             </div>
+            {isLoading ? (
+              <div
+                className={`d-flex justify-content-center align-items-center w-100 min-vh-100 position-absolute top-0 left-0 ${styles2.overlay}`}
+              >
+                <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+              </div>
+              ) : null}
             </Box>
           </Modal>
         <Modal
@@ -800,6 +849,13 @@ export const Midia = () => {
                 </div>
               </div>
             </div>
+            {isLoading ? (
+              <div
+                className={`d-flex justify-content-center align-items-center w-100 min-vh-100 position-absolute top-0 left-0 ${styles2.overlay}`}
+              >
+                <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+              </div>
+              ) : null}
             </Box>
           </Modal>
         <Modal
@@ -837,6 +893,13 @@ export const Midia = () => {
                 <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={saveEditVideo} >Salvar</button>
               </div>
             </div>
+            {isLoading ? (
+              <div
+                className={`d-flex justify-content-center align-items-center w-100 min-vh-100 position-absolute top-0 left-0 ${styles2.overlay}`}
+              >
+                <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+              </div>
+              ) : null}
             </Box>
           </Modal>
         <Modal
@@ -873,6 +936,13 @@ export const Midia = () => {
                 <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={saveEditImage} >Salvar</button>
               </div>
             </div>
+            {isLoading ? (
+              <div
+                className={`d-flex justify-content-center align-items-center w-100 min-vh-100 position-absolute top-0 left-0 ${styles2.overlay}`}
+              >
+                <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+              </div>
+              ) : null}
             </Box>
           </Modal>
         <Modal
@@ -962,11 +1032,13 @@ export const Midia = () => {
                 </div>
               </TabPanel>
             </TabContext>
-
-
-
-
-
+            {isLoading ? (
+              <div
+                className={`d-flex justify-content-center align-items-center w-100 min-vh-100 position-absolute top-0 left-0 ${styles2.overlay}`}
+              >
+                <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+              </div>
+              ) : null}
             </Box>
           </Modal>
     </div>

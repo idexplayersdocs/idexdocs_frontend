@@ -14,6 +14,8 @@ import { faAsterisk, faMagnifyingGlass, faX } from "@fortawesome/free-solid-svg-
 import { overflow } from "html2canvas/dist/types/css/property-descriptors/overflow";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import Loading from "react-loading";
+import styles from "../../../styles/Login.module.css";
+
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -50,14 +52,14 @@ export default function Athletes() {
   const [athletes, setAthletes] = useState<any[]>([]);
   const [totalRow, setTotalRow]: any = useState();
   const [inputFilter, setInputFilter]: any = useState('');
-  const [loading, setLoading] = useState(false); // Estado de carregamento
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const [formData, setFormData] = useState<any>({
     nome: '',
     data_nascimento: '',
     posicao_primaria: '',
-    posicao_secundaria: null,
-    posicao_terciaria: null
+    posicao_secundaria: '',
+    posicao_terciaria: ''
   });
 
   const [formClube, setFormClube] = useState<any>({
@@ -85,8 +87,8 @@ export default function Athletes() {
       nome: '',
       data_nascimento: '',
       posicao_primaria: '',
-      posicao_secundaria: null,
-      posicao_terciaria: null
+      posicao_secundaria: '',
+      posicao_terciaria: ''
     })
     setFormClube({
       nome: null,
@@ -140,7 +142,7 @@ export default function Athletes() {
 
 
   const handleSalvarClick = async () => {
-    setLoading(true);
+    setIsLoading(true);
     const request = {
       ...formData,
       clube: formClube,
@@ -162,8 +164,8 @@ export default function Athletes() {
             nome: '',
             data_nascimento: '',
             posicao_primaria: '',
-            posicao_secundaria: null,
-            posicao_terciaria: null
+            posicao_secundaria: '',
+            posicao_terciaria: ''
           })
           setFormClube({
             nome: null,
@@ -189,7 +191,7 @@ export default function Athletes() {
 
     } catch (error: any) {
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   }
 
@@ -284,11 +286,6 @@ export default function Athletes() {
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateAthlete}/>
           </div>
           <hr />
-          {loading ? (
-        <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: "150px" }}>
-          <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
-        </div>
-      ) : (
           <div className="row" style={{height:'520px'}}>
             <div className="col-md-6">
                 <div className="d-flex justify-content-start align-items-center mb-3">
@@ -349,7 +346,7 @@ export default function Athletes() {
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
                 <select className="form-select" name="posicao_secundaria" value={formData.posicao_secundaria} onChange={handleInputChange} style={{height:'45px', color: formData.posicao_secundaria ? '#fff' : '#999'}}>
-                  <option value="" disabled hidden>Selecione</option>
+                  <option value="">Selecione</option>
                   <option value="atacante" style={{color: '#fff'}}>Atacante</option>
                   <option value="goleiro" style={{color: '#fff'}}>Goleiro</option>
                   <option value="lateral" style={{color: '#fff'}}>Lateral</option>
@@ -364,7 +361,7 @@ export default function Athletes() {
                   {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
                 </div>
                 <select className="form-select" name="posicao_terciaria" value={formData.posicao_terciaria} onChange={handleInputChange} style={{height:'45px', color: formData.posicao_terciaria ? '#fff' : '#999'}}>
-                <option value="" disabled hidden>Selecione</option>
+                <option value="">Selecione</option>
                   <option value="atacante" style={{color: '#fff'}}>Atacante</option>
                   <option value="goleiro" style={{color: '#fff'}}>Goleiro</option>
                   <option value="lateral" style={{color: '#fff'}}>Lateral</option>
@@ -450,9 +447,15 @@ export default function Athletes() {
               <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClick} disabled={!isFormValid()}>Salvar</button>
             </div>
           </div>
-        )}
         </Box>
       </Modal>
+          {isLoading ? (
+            <div
+              className={`d-flex justify-content-center align-items-center w-100 min-vh-100 position-absolute top-0 left-0 ${styles.overlay}`}
+            >
+              <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+            </div>
+          ) : null}
       <ToastContainer />
     </>
   );

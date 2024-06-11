@@ -7,6 +7,8 @@ import Loading from "react-loading";
 import moment from "moment";
 import { faCheck, faEye, faFilePdf, faTriangleExclamation, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Pagination } from "@mui/material";
+import styles from "../styles/Login.module.css";
+
 
 
 
@@ -53,7 +55,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   const { push } = useRouter();
   const [athletes, setAthletes] = useState<Athlete[]>([]);
   const [totalRow, setTotalRow]: any = useState();
-  const [loading, setLoading] = useState(true); // Estado de carregamento
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [loadingPDF, setLoadingPDF] = useState<boolean>(false);
   const [infoPdf, setInfoPdf] = useState<PDFInfoResponseDTO>();
   const [observacaoDesempenho, setObservacaoDesempenho] = useState<string>();
@@ -78,7 +80,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
           router.push("/public/login")
         }
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -95,7 +97,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
         } catch (error) {
           console.error("Error fetching athletes:", error);
         } finally {
-          setLoading(false);
+          setIsLoading(false);
         }
       };
 
@@ -130,7 +132,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
             orientation: "portrait",
           },
         }).then(() => {
-          setLoading(false);
+          setIsLoading(false);
           setInfoPdf(undefined);
         });
         elementPdf.classList.add("pdf");
@@ -144,7 +146,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
 
     const tryExecute = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
         const res = await PDFInfo(id);
 
         const clubes = res.clube.sort((a: any, b: any) => {
@@ -222,7 +224,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
       } catch (error) {
         console.error("Error fetching athletes:", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     fetchUpdatedAthletesData();
@@ -230,11 +232,6 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
 
   return (
     <>
-      {loading ? (
-        <div className="d-flex justify-content-center align-items-center w-100 h-100" style={{ marginTop: "150px" }}>
-          <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
-        </div>
-      ) : (
         <div>
           <div className="w-100 mt-3 mb-3" style={{ overflow: "auto" }}>
             <table className="table table-striped">
@@ -345,7 +342,13 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
             )}
           </div>
         </div>
-      )}
+        {isLoading ? (
+          <div
+            className={`d-flex justify-content-center align-items-center w-100 min-vh-100 z-3 position-absolute top-0 left-0 ${styles.overlay}`}
+          >
+            <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
+          </div>
+        ) : null}
       <div
         className="bg-white pointer rounded-2 p-4 mx-auto pdf"
         style={{ cursor: "pointer", width: "fit-content" }}
