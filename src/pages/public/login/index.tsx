@@ -8,6 +8,7 @@ import Loading from "react-loading";
 import { LoginUser } from "@/pages/api/http-service/tokenService";
 import { useRouter } from "next/router";
 import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -19,14 +20,18 @@ export default function Login() {
     formState: { errors },
   } = useForm<LoginRequestDTO>();
 
-  const onSubmit = async (data: LoginRequestDTO): Promise<void> => {
+  const onSubmit: SubmitHandler<LoginRequestDTO> = async (data) => {
     setIsLoading(true);
     try {
-      const res = await LoginUser({ email: data.email, password: data.password });      
-      localStorage.setItem("token", res.access_token);      
+      const res = await LoginUser({ email: data.email, password: data.password });
+      localStorage.setItem("token", res.access_token);
       router.push("/secure/athletes");
     } catch (e: unknown | any) {
-      toast.error(e.response.data.errors[0].message, {
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      if (e.response && e.response.data && e.response.data.errors) {
+        errorMessage = e.response.data.errors[0].message;
+      }
+      toast.error(errorMessage, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -35,8 +40,8 @@ export default function Login() {
         progress: undefined,
         theme: "dark",
         transition: Bounce,
-        });
-      // throw e;
+        icon: false,  // Disable the default icon to avoid the large exclamation mark
+      });
     } finally {
       setIsLoading(false);
     }
@@ -45,10 +50,10 @@ export default function Login() {
   React.useEffect(() => {
     const token = localStorage.getItem("token");
 
-    if(token) {
+    if (token) {
       router.push("/secure/athletes");
     }
-  }, [])
+  }, [router]);
 
   return (
     <>
@@ -71,10 +76,10 @@ export default function Login() {
                 id="user"
                 className="w-100 p-2 bg-white rounded-4 border border-0"
                 {...register("email", {
-                  required: true,
+                  required: "User is a required field",
                 })}
               />
-              {errors.email && <span className="text-danger mt-1 d-block">User is required field</span>}
+              {errors.email && <span className="text-danger mt-1 d-block">{errors.email.message}</span>}
             </div>
             <div className="w-100 mb-3">
               <label htmlFor="password" className="text-white d-block mb-1 fw-bold">
@@ -85,10 +90,10 @@ export default function Login() {
                 id="password"
                 className="w-100 p-2 bg-white rounded-4 border border-0"
                 {...register("password", {
-                  required: true,
+                  required: "Password is a required field",
                 })}
               />
-              {errors.password && <span className="text-danger mt-1 d-block">Password is required field</span>}
+              {errors.password && <span className="text-danger mt-1 d-block">{errors.password.message}</span>}
             </div>
             <div className="w-100">
               <button className="fw-bol btn bg-success text-white w-100" type="submit">
