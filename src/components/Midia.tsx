@@ -622,7 +622,7 @@ export const Midia = () => {
                   //   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                   //   allowFullScreen
                   // ></iframe>
-                  <ReactPlayer className="m-2 col-md-auto" width={300} height={220} key={index} url={video.blob_url} controls/>
+                  <ReactPlayer className="m-2 col-md-auto" width={250} height={220} key={index} url={video.blob_url} controls/>
 
                 ))
 
