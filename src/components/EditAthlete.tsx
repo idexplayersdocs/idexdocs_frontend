@@ -63,12 +63,10 @@ export default function EditAthlete({athleteData, closeModal}: any) {
   const handleSalvarClick = async () => {
     try {
       const newAthletesData = await editAthlete(formData, athleteId);
-      if(newAthletesData){
-        if(formImage){
-          const formData = new FormData();
-          formData.append('image', formImage);
-          const uploadImage = await uploadImageAthlete(newAthletesData.id, formData);
-        }
+      if(formImage){
+        const formData = new FormData();
+        formData.append('image', formImage);
+        const uploadImage = await uploadImageAthlete(athleteId, formData);
       }
       // handleCloseCreateAthlete();
       handleCloseModal();
