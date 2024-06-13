@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, Modal, Pagination } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faX } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPenSquare, faPenToSquare, faX } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { useRouter } from 'next/router';
 import { getAthletes } from '@/pages/api/http-service/athletes';
@@ -9,7 +9,7 @@ import data from '../../pages/api/mock-data/mock-data-lesoes.json'
 import Title from '../Title';
 import Subtitle from '../Subtitle';
 import AddButton from '../AddButton';
-import { createInjuries, getInjuries } from '@/pages/api/http-service/injuries';
+import { createInjuries, getInjuries, updateInjuries } from '@/pages/api/http-service/injuries';
 import Loading from 'react-loading';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
@@ -42,6 +42,7 @@ export default function Injuries({closeModal, athleteId}: any) {
   const effectRan = useRef(false);
   const [page, setPage] = useState(1);
   const [openRegisterInjuries, setOpenRegisterInjuries] = useState(false);
+  const [openEditInjuries, setOpenEditInjuries] = useState(false);
   const [totalRow, setTotalRow] = useState(1);
   const [loading, setLoading] = useState(true); // Estado de carregamento
   const [injuries, setInjuries] = useState<any>({
@@ -52,6 +53,7 @@ export default function Injuries({closeModal, athleteId}: any) {
   const [formRegisterInjuries, setFormRegisterInjuries] = useState<any>({
     atleta_id: athleteId,
     descricao: '',
+    data_retorno: '',
     data_lesao: ''
   });
 
@@ -91,7 +93,28 @@ export default function Injuries({closeModal, athleteId}: any) {
     setFormRegisterInjuries({
       atleta_id: athleteId,
       descricao: '',
-      data_lesao: ''
+      data_lesao: '',
+      data_retorno: ''
+    });
+  }
+
+  const handleOpenEditInjuries = (injuries: any) => {
+    setOpenEditInjuries(true)
+    setFormRegisterInjuries({
+      atleta_id: athleteId,
+      lesao_id: injuries.lesao_id,
+      descricao: injuries.descricao,
+      data_lesao: injuries.data_lesao,
+      data_retorno: injuries.data_retorno
+    });
+  };
+  const handleCloseEditInjuries = () => {
+    setOpenEditInjuries(false)
+    setFormRegisterInjuries({
+      atleta_id: athleteId,
+      descricao: '',
+      data_lesao: '',
+      data_retorno: ''
     });
   }
   const handleInputChangeRegisterInjuries = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -108,6 +131,34 @@ export default function Injuries({closeModal, athleteId}: any) {
       const response = await createInjuries(formRegisterInjuries);
 
       handleCloseRegisterInjuries()
+
+      setPage(1)
+      const InjuriesList = await getInjuries(athleteId, page);
+      setInjuries(InjuriesList?.data);
+      setTotalRow(InjuriesList?.total);
+    } catch (error:any) {
+      toast.error(error.response.data.errors[0].message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+        });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveEditInjuries = async () => {
+    setLoading(true);
+    console.log(formRegisterInjuries)
+    try {
+      const response = await updateInjuries(formRegisterInjuries);
+
+      handleCloseEditInjuries()
 
       setPage(1)
       const InjuriesList = await getInjuries(athleteId, page);
@@ -163,16 +214,20 @@ export default function Injuries({closeModal, athleteId}: any) {
               {/* <th className="table-dark text-center" scope="col">Lesão</th> */}
               <th className="table-dark text-center" scope="col">Descrição</th>
               <th className="table-dark text-center" scope="col">Data de retorno</th>
+              <th className="table-dark text-center" scope="col"></th>
             </tr>
           </thead>
           <tbody>
             {
               injuries.length > 0 ? (
-                Array.isArray(injuries) && injuries.map((competicao, index: number) => (
+                Array.isArray(injuries) && injuries.map((lesao, index: number) => (
                   <tr key={index}>
-                    <td className="table-dark text-center">{moment(competicao.data_lesao).format('DD/MM/YYYY')}</td>
-                    <td className="table-dark text-center">{competicao.descricao}</td>
-                    <td className="table-dark text-center">{moment(competicao.data_retorno).format('DD/MM/YYYY')}</td>
+                    <td className="table-dark text-center">{moment(lesao.data_lesao).format('DD/MM/YYYY')}</td>
+                    <td className="table-dark text-center">{lesao.descricao}</td>
+                    <td className="table-dark text-center">{moment(lesao.data_retorno).format('DD/MM/YYYY')}</td>
+                    <td className="table-dark text-center">
+                      <FontAwesomeIcon icon={faPenSquare} size='xl' style={{cursor: 'pointer'}} onClick={()=> handleOpenEditInjuries(lesao)}/>
+                    </td>
                   </tr>
                 ))
               ) : (
@@ -203,7 +258,7 @@ export default function Injuries({closeModal, athleteId}: any) {
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <div className="d-flex justify-content-between">
-            <Subtitle subtitle="Registrar Clube"/>
+            <Subtitle subtitle="Registrar Lesão"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseRegisterInjuries} />
           </div>
           <hr />
@@ -214,14 +269,51 @@ export default function Injuries({closeModal, athleteId}: any) {
                       <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_lesao" style={{height:'45px'}} value={formRegisterInjuries.data_lesao} onChange={handleInputChangeRegisterInjuries}/>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data de Retorno</label>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_retorno" style={{height:'45px'}} value={formRegisterInjuries.data_retorno} onChange={handleInputChangeRegisterInjuries}/>
+                </div>
+                <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Descrição da Lesão</label>
                       <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="descricao" style={{height:'45px'}} value={formRegisterInjuries.descricao} onChange={handleInputChangeRegisterInjuries} />
                 </div>
               </div>
+              <div className='ms-3 d-flex flex-column mt-4' style={{width: '98%'}}>
+                <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaveRegisterInjuries}>Salvar</button>
+              </div>
             </div>
-          <div className='ms-3 d-flex flex-column' style={{width: '98%'}}>
-            <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaveRegisterInjuries}>Salvar</button>
+          <ToastContainer />
+        </Box>
+      </Modal>
+      <Modal
+        open={openEditInjuries}
+        onClose={handleCloseEditInjuries}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={style}>
+          <div className="d-flex justify-content-between">
+            <Subtitle subtitle="Editar Lesão"/>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseEditInjuries} />
           </div>
+          <hr />
+          <div className="row" style={{height:'250px'}}>
+              <div className='col-md'>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data da Lesão</label>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_lesao" style={{height:'45px'}} value={formRegisterInjuries.data_lesao} onChange={handleInputChangeRegisterInjuries}/>
+                </div>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data de Retorno</label>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_retorno" style={{height:'45px'}} value={formRegisterInjuries.data_retorno} onChange={handleInputChangeRegisterInjuries}/>
+                </div>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Descrição da Lesão</label>
+                      <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="descricao" style={{height:'45px'}} value={formRegisterInjuries.descricao} onChange={handleInputChangeRegisterInjuries} />
+                </div>
+              </div>
+              <div className='ms-3 d-flex flex-column mt-4' style={{width: '98%'}}>
+                <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaveEditInjuries}>Salvar</button>
+              </div>
+            </div>
           <ToastContainer />
         </Box>
       </Modal>

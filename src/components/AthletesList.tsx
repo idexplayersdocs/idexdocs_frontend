@@ -8,6 +8,7 @@ import moment from "moment";
 import { faCheck, faEye, faFilePdf, faTriangleExclamation, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Pagination } from "@mui/material";
 import styles from "../styles/Login.module.css";
+import { jwtDecode } from 'jwt-decode';
 
 
 
@@ -65,6 +66,15 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   const [elementPdf, setElementPdf] = useState<any>(pdfRef.current);
   const btnPdfRef = useRef<any>();
   const router = useRouter();
+  const [roles, setRoles] = useState<any>();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const decoded: any = jwtDecode(token!);
+    if (token) {
+      setRoles(decoded.roles[0]);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchAthletesData = async () => {
@@ -530,7 +540,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                 </tr>
               </thead>
               <tbody>
-                {infoPdf?.caracteristicas_posicao.map((x, y) => {
+                {infoPdf?.caracteristicas_posicao?.map((x, y) => {
                   return (
                     <tr key={y}>
                       <td style={{ fontSize: 25 }}>{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
@@ -696,7 +706,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                 </tr>
               </thead>
               <tbody>
-                {infoPdf?.relacionamento.map((x, i) => {
+                {infoPdf?.relacionamento?.map((x, i) => {
                   return (
                     <tr key={i}>
                       <td className="h1">

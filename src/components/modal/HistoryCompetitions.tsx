@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, Modal, Pagination } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faX } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPenSquare, faPenToSquare, faX } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { useRouter } from 'next/router';
 import { getAthletes } from '@/pages/api/http-service/athletes';
@@ -9,7 +9,7 @@ import data from '../../pages/api/mock-data/mock-data-history-competitions.json'
 import Title from '../Title';
 import Subtitle from '../Subtitle';
 import AddButton from '../AddButton';
-import { createCompetitions, getCompetitions } from '@/pages/api/http-service/competitions';
+import { createCompetitions, getCompetitions, updateCompetitions } from '@/pages/api/http-service/competitions';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import Loading from 'react-loading';
 import moment from 'moment';
@@ -34,6 +34,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
   const [page, setPage] = useState(1);
   const [totalRow, setTotalRow] = useState(1)
   const [openRegisterCompetitions, setOpenRegisterCompetitions] = useState(false);
+  const [openEditCompetitions, setOpenEditCompetitions] = useState(false);
   const [loading, setLoading] = useState(true); // Estado de carregamento
   const [competitions, setCompetitions] = useState<any>({
     nome: '',
@@ -105,6 +106,34 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
     });
   }
 
+  const handleOpenEditCompetitions = (competiton: any) => {
+    setOpenEditCompetitions(true)
+    setFormRegisterCompetitions({
+      atleta_id: athleteId,
+      competicao_id: competiton.competicao_id,
+      nome: competiton.nome,
+      data_competicao: competiton.data_competicao,
+      jogos_completos: competiton.jogos_completos,
+      jogos_parciais: competiton.jogos_parciais,
+      minutagem: competiton.minutagem,
+      gols: competiton.gols,
+      assistencias: competiton.assistencias
+    });
+  };
+  const handleCloseEditCompetitions = () => {
+    setOpenEditCompetitions(false)
+    setFormRegisterCompetitions({
+      atleta_id: athleteId,
+      nome: '',
+      data_competicao: '',
+      jogos_completos: '',
+      jogos_parciais: '',
+      minutagem: '',
+      gols: '',
+      assistencias: ''
+    });
+  }
+
   const handleInputChangeRegisterCompetitions = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormRegisterCompetitions((prevState: any) => ({
@@ -120,6 +149,32 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
 
       handleCloseRegisterCompetitions();
 
+      setPage(1)
+      const clubCompetitions = await getCompetitions(athleteId, page);
+      setCompetitions(clubCompetitions?.data);
+      setTotalRow(clubCompetitions?.total);
+    } catch (error:any) {
+      toast.error(error.response.data.errors[0].message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+        });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveEditCompetitions = async () => {
+    setLoading(true);
+    try {
+      const response = await updateCompetitions(formRegisterCompetitions);
+
+      handleCloseEditCompetitions();
       setPage(1)
       const clubCompetitions = await getCompetitions(athleteId, page);
       setCompetitions(clubCompetitions?.data);
@@ -173,6 +228,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
               <th className="table-dark text-center" scope="col">Minutagem</th>
               <th className="table-dark text-center" scope="col">Gols</th>
               <th className="table-dark text-center" scope="col">Assistências</th>
+              <th className="table-dark text-center" scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -187,6 +243,9 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
                     <td className="table-dark text-center">{competicao.minutagem}</td>
                     <td className="table-dark text-center">{competicao.gols}</td>
                     <td className="table-dark text-center">{competicao.assistencias}</td>
+                    <td className="table-dark text-center">
+                      <FontAwesomeIcon icon={faPenSquare} size='xl' style={{cursor: 'pointer'}} onClick={()=> handleOpenEditCompetitions(competicao)}/>
+                    </td>
                   </tr>
                 ))
               ) : (
@@ -257,6 +316,57 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
               </div>
               <div className='ms-3 d-flex flex-column mt-3' style={{width: '98%'}}>
                 <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaveRegisterCompetitions}>Salvar</button>
+              </div>
+            </div>
+          <ToastContainer />
+        </Box>
+      </Modal>
+      <Modal
+        open={openEditCompetitions}
+        onClose={handleCloseEditCompetitions}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={style}>
+          <div className="d-flex justify-content-between">
+            <Subtitle subtitle="Editar Competição"/>
+            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseEditCompetitions} />
+          </div>
+          <hr />
+          <div className="row" style={{height:'300px'}}>
+              <div className='col-md-6'>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Nome</label>
+                      <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="nome" style={{height:'45px'}} value={formRegisterCompetitions.nome} onChange={handleInputChangeRegisterCompetitions}/>
+                </div>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data da Competição</label>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_competicao" style={{height:'45px'}} value={formRegisterCompetitions.data_competicao} onChange={handleInputChangeRegisterCompetitions}/>
+                </div>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Jogos Completos</label>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="jogos_completos" style={{height:'45px'}} value={formRegisterCompetitions.jogos_completos} onChange={handleInputChangeRegisterCompetitions}/>
+                </div>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Jogos Parciais</label>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="jogos_parciais" style={{height:'45px'}} value={formRegisterCompetitions.jogos_parciais} onChange={handleInputChangeRegisterCompetitions}/>
+                </div>
+              </div>
+              <div className='col-md-6'>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Minutagem</label>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="minutagem" style={{height:'45px'}} value={formRegisterCompetitions.minutagem} onChange={handleInputChangeRegisterCompetitions}/>
+                </div>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Gols</label>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="gols" style={{height:'45px'}} value={formRegisterCompetitions.gols} onChange={handleInputChangeRegisterCompetitions}/>
+                </div>
+                <div className="d-flex flex-column w-100 mt-3">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Assistências</label>
+                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="assistencias" style={{height:'45px'}} value={formRegisterCompetitions.assistencias} onChange={handleInputChangeRegisterCompetitions}/>
+                </div>
+              </div>
+              <div className='ms-3 d-flex flex-column mt-3' style={{width: '98%'}}>
+                <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaveEditCompetitions}>Salvar</button>
               </div>
             </div>
           <ToastContainer />

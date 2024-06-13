@@ -26,3 +26,15 @@ export const createCompetitions = async (request: any) => {
     throw error;
   }
 };
+
+export const updateCompetitions = async (request: any) => {
+  try {
+    const response = await axios.put(`${apiURL}/update/competicao`, request);
+    // Se você quiser acessar os dados retornados pelo servidor, pode usar response.data
+    // Por exemplo, console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Erro:', error);
+    throw error;
+  }
+};
