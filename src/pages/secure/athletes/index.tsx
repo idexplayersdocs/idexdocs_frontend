@@ -68,6 +68,8 @@ export default function Athletes() {
     nome: '',
     data_nascimento: '',
     posicao_primaria: '',
+    posicao_secundaria: '',
+    posicao_terciaria: '',
   });
 
 
@@ -78,6 +80,8 @@ export default function Athletes() {
       nome: '',
       data_nascimento: '',
       posicao_primaria: '',
+      posicao_secundaria: '',
+      posicao_terciaria: '',
     })
 
     setFormAvatar("/images/image-user.png")
@@ -95,7 +99,7 @@ export default function Athletes() {
     setIsLoading(true);
     const request = {
       ...formData};
-    try {
+    try {      
       const newAthletesData = await createAthlete(formData);
       if(newAthletesData){
         setNewAthlere(true)
@@ -109,7 +113,9 @@ export default function Athletes() {
           setFormData({
             nome: '',
             data_nascimento: '',
-            posicao_primaria: ''
+            posicao_primaria: '',
+            posicao_secundaria: '',
+            posicao_terciaria: '',
           })
         }
         setNewAthlere(false)
@@ -254,19 +260,44 @@ export default function Athletes() {
               </div>
               <div className="input w-100 mt-2">
               <div className="d-flex align-items-center">
-                <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data de Nascimento</label>
-                  {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
+                <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data de nascimento</label>
                 </div>
                 <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_nascimento" value={formData.data_nascimento} onChange={handleInputChange} style={{height:'45px'}}/>
               </div>
               <div className="input w-100 mt-2">
                 <div className="d-flex align-items-center">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Posição Principal</label>
-                    {/* <FontAwesomeIcon icon={faAsterisk} color="red" className="ms-2"/> */}
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Posição principal</label>
                   </div>
                   <select className="form-select" name="posicao_primaria" value={formData.posicao_primaria} onChange={handleInputChange} style={{height:'45px', color: formData.posicao_primaria ? '#fff' : '#999'}}>
-                    {/* <option value="" disabled hidden>Selecione</option> */}
                     <option value="" disabled hidden>Selecione</option>
+                    <option value="atacante" style={{color: '#fff'}}>Atacante</option>
+                    <option value="goleiro" style={{color: '#fff'}}>Goleiro</option>
+                    <option value="lateral" style={{color: '#fff'}}>Lateral</option>
+                    <option value="meia" style={{color: '#fff'}}>Meia</option>
+                    <option value="volante" style={{color: '#fff'}}>Volante</option>
+                    <option value="zagueiro" style={{color: '#fff'}}>Zagueiro</option>
+                  </select>
+                </div>
+              <div className="input w-100 mt-2">
+                <div className="d-flex align-items-center">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Posição secundária</label>
+                  </div>
+                  <select className="form-select" name="posicao_secundaria" value={formData.posicao_secundaria || ''} onChange={handleInputChange} style={{height:'45px', color: formData.posicao_secundaria ? '#fff' : '#999'}}>
+                    <option value="" style={{color: '#fff'}}>Nenhum</option>
+                    <option value="atacante" style={{color: '#fff'}}>Atacante</option>
+                    <option value="goleiro" style={{color: '#fff'}}>Goleiro</option>
+                    <option value="lateral" style={{color: '#fff'}}>Lateral</option>
+                    <option value="meia" style={{color: '#fff'}}>Meia</option>
+                    <option value="volante" style={{color: '#fff'}}>Volante</option>
+                    <option value="zagueiro" style={{color: '#fff'}}>Zagueiro</option>
+                  </select>
+                </div>
+              <div className="input w-100 mt-2">
+                <div className="d-flex align-items-center">
+                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Outra posição</label>
+                  </div>
+                  <select className="form-select" name="posicao_terciaria" value={formData.posicao_terciaria  || ''} onChange={handleInputChange} style={{height:'45px', color: formData.posicao_terciaria ? '#fff' : '#999'}}>
+                    <option value="" style={{color: '#fff'}}>Nenhum</option>
                     <option value="atacante" style={{color: '#fff'}}>Atacante</option>
                     <option value="goleiro" style={{color: '#fff'}}>Goleiro</option>
                     <option value="lateral" style={{color: '#fff'}}>Lateral</option>

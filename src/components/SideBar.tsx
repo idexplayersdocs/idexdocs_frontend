@@ -31,7 +31,7 @@ const style = {
   overflow: 'auto'
 };
 
-export default function SideBar({athleteData, modal}:any) {
+export default function SideBar({ athleteData, modal }: any) {
   const { query, push, back } = useRouter();
   const athleteId = query?.id;
   const [openEditAthlete, setOpenEditAthlete] = useState(false);
@@ -41,22 +41,22 @@ export default function SideBar({athleteData, modal}:any) {
     // const nextEvaluationDate = moment('2024-05-06').startOf('day');
     // Comparação das datas
     return currentDate.isAfter(nextEvaluationDate);
-};
-const handleOpenEditAthlete = () => setOpenEditAthlete(true);
-const handleCloseEditAthlete = () => {setOpenEditAthlete(false)}
+  };
+  const handleOpenEditAthlete = () => setOpenEditAthlete(true);
+  const handleCloseEditAthlete = () => { setOpenEditAthlete(false) }
 
-const handleCloseEditAthleteUpdate = () => {
-  setOpenEditAthlete(false)
-  location.reload();
-}
+  const handleCloseEditAthleteUpdate = () => {
+    setOpenEditAthlete(false)
+    location.reload();
+  }
 
 
 
   if (!athleteData) {
-    return <div className="d-flex justify-content-center align-items-center w-100 h-25" ><Loading type='bars' color="var(--bg-ternary-color)"/></div>
+    return <div className="d-flex justify-content-center align-items-center w-100 h-25" ><Loading type='bars' color="var(--bg-ternary-color)" /></div>
   }
-  
-    return (
+
+  return (
     <div className={modal ? '' : 'container sidebar__background h-100 ms-2 rounded mb-5 overflow-auto'}>
       <div className="container-avatar">
         <Image
@@ -98,21 +98,25 @@ const handleCloseEditAthleteUpdate = () => {
       </div>
       <h1 className="title-sidebar mt-3">Contratos:</h1>
       {
-        Array.isArray(athleteData.contratos) && athleteData.contratos.map((contrato: any, index: number) => (
-          <div className="mt-2" key={index}>
-            <h1 className="title-sidebar">{contrato.tipo}</h1>
-            {/* <h2 className="subtitle-sidebar">{moment(contrato.data_inicio).format('DD/MM/YYYY')} - {moment(contrato.data_termino).format('DD/MM/YYYY')}</h2> */}
-            <h2 className={`subtitle-sidebar " ${validLabelDate(contrato.data_expiracao) ? 'danger-date' : ''}`}>{moment(contrato.data_inicio).format('DD/MM/YYYY')} - {moment(contrato.data_termino).format('DD/MM/YYYY')}
-            {
-              validLabelDate(contrato.data_expiracao) &&
-              <FontAwesomeIcon className='ms-2 mt-1' icon={faTriangleExclamation} style={{color: "#ff0000",}} />
-            }
-            </h2>
-          </div>
-        ))
+        Array.isArray(athleteData.contratos) && athleteData.contratos.length > 0 ? (
+          athleteData.contratos.map((contrato: any, index: number) => (
+            <div className="mt-2" key={index}>
+              <h1 className="title-sidebar">{contrato.tipo}</h1>
+              {/* <h2 className="subtitle-sidebar">{moment(contrato.data_inicio).format('DD/MM/YYYY')} - {moment(contrato.data_termino).format('DD/MM/YYYY')}</h2> */}
+              <h2 className={`subtitle-sidebar " ${validLabelDate(contrato.data_expiracao) ? 'danger-date' : ''}`}>{moment(contrato.data_inicio).format('DD/MM/YYYY')} - {moment(contrato.data_termino).format('DD/MM/YYYY')}
+                {
+                  validLabelDate(contrato.data_expiracao) &&
+                  <FontAwesomeIcon className='ms-2 mt-1' icon={faTriangleExclamation} style={{ color: "#ff0000", }} />
+                }
+              </h2>
+            </div>
+          ))
+        ) : (
+          <h2 className="subtitle-sidebar">Não possui</h2>
+        )
       }
       <div className="mt-3">
-        <SoccerField athleteData={athleteData}/>
+        <SoccerField athleteData={athleteData} />
       </div>
       <Modal
         open={openEditAthlete}
@@ -121,12 +125,12 @@ const handleCloseEditAthleteUpdate = () => {
         aria-describedby="modal-modal-description">
         <Box sx={style}>
           <div className="d-flex justify-content-between">
-            <Subtitle subtitle="Editar do atleta"/>
-            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseEditAthlete}/>
+            <Subtitle subtitle="Editar do atleta" />
+            <FontAwesomeIcon icon={faX} style={{ color: "#ffffff", cursor: 'pointer' }} size="xl" onClick={handleCloseEditAthlete} />
           </div>
           <hr />
           {/* <SideBar athleteData={athlete} modal={true}/> */}
-          <EditAthlete athleteData={athleteData} closeModal={handleCloseEditAthleteUpdate}/>
+          <EditAthlete athleteData={athleteData} closeModal={handleCloseEditAthleteUpdate} />
         </Box>
       </Modal>
     </div>
