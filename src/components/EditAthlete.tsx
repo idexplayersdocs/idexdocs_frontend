@@ -134,13 +134,16 @@ export default function EditAthlete({athleteData, closeModal}: any) {
               <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Posição Principal</label>
               </div>
               <select className="form-select" name="posicao_primaria" value={formData.posicao_primaria} onChange={handleInputChange} style={{height:'45px', color: formData.posicao_primaria ? '#fff' : '#999'}}>
-                <option value="" disabled hidden>Selecione</option>
-                <option value="atacante" style={{color: '#fff'}}>Atacante</option>
-                <option value="goleiro" style={{color: '#fff'}}>Goleiro</option>
-                <option value="lateral" style={{color: '#fff'}}>Lateral</option>
-                <option value="meia" style={{color: '#fff'}}>Meia</option>
-                <option value="volante" style={{color: '#fff'}}>Volante</option>
-                <option value="zagueiro" style={{color: '#fff'}}>Zagueiro</option>
+              <option value="" disabled hidden>SELECIONE</option>
+              <option value="goleiro" style={{color: '#fff'}}>GOLEIRO</option>
+              <option value="lateral direito" style={{color: '#fff'}}>LATERAL DIREITO</option>
+              <option value="lateral esquerdo" style={{color: '#fff'}}>LATERAL ESQUERDO</option>
+              <option value="zagueiro" style={{color: '#fff'}}>ZAGUEIRO</option>
+              <option value="volante" style={{color: '#fff'}}>VOLANTE</option>
+              <option value="meia armador" style={{color: '#fff'}}>MEIA ARMADOR</option>
+              <option value="meia atacante" style={{color: '#fff'}}>MEIA ATACANTE</option>
+              <option value="atacante" style={{color: '#fff'}}>ATACANTE</option>
+              <option value="centroavante" style={{color: '#fff'}}>CENTROAVANTE</option>
               </select>
             </div>
         </div>
@@ -149,28 +152,34 @@ export default function EditAthlete({athleteData, closeModal}: any) {
           <div className="d-flex align-items-center margin-edit-athlete">
             <label className="ms-3 mt-2" style={{color: 'white', fontSize: '20px'}}>Posição Secundária (opcional)</label>
             </div>
-            <select className="form-select" name="posicao_secundaria" value={formData.posicao_secundaria} onChange={handleInputChange} style={{height:'45px', color: formData.posicao_secundaria ? '#fff' : '#999'}}>
-              <option value="" disabled hidden>Selecione</option>
-              <option value="atacante" style={{color: '#fff'}}>Atacante</option>
-              <option value="goleiro" style={{color: '#fff'}}>Goleiro</option>
-              <option value="lateral" style={{color: '#fff'}}>Lateral</option>
-              <option value="meia" style={{color: '#fff'}}>Meia</option>
-              <option value="volante" style={{color: '#fff'}}>Volante</option>
-              <option value="zagueiro" style={{color: '#fff'}}>Zagueiro</option>
+            <select className="form-select" name="posicao_secundaria" value={formData.posicao_secundaria || ''} onChange={handleInputChange} style={{height:'45px', color: formData.posicao_secundaria ? '#fff' : '#999'}}>
+              <option value="" style={{color: '#fff'}}>NENHUM</option>
+              <option value="goleiro" style={{color: '#fff'}}>GOLEIRO</option>
+              <option value="lateral direito" style={{color: '#fff'}}>LATERAL DIREITO</option>
+              <option value="lateral esquerdo" style={{color: '#fff'}}>LATERAL ESQUERDO</option>
+              <option value="zagueiro" style={{color: '#fff'}}>ZAGUEIRO</option>
+              <option value="volante" style={{color: '#fff'}}>VOLANTE</option>
+              <option value="meia armador" style={{color: '#fff'}}>MEIA ARMADOR</option>
+              <option value="meia atacante" style={{color: '#fff'}}>MEIA ATACANTE</option>
+              <option value="atacante" style={{color: '#fff'}}>ATACANTE</option>
+              <option value="centroavante" style={{color: '#fff'}}>CENTROAVANTE</option>
             </select>
           </div>
           <div>
             <div className="d-flex align-items-center">
               <label className="ms-3 mt-2" style={{color: 'white', fontSize: '20px'}}>Outra Posição (opcional)</label>
               </div>
-              <select className="form-select" name="posicao_terciaria" value={formData.posicao_terciaria} onChange={handleInputChange} style={{height:'45px', color: formData.posicao_terciaria ? '#fff' : '#999'}}>
-              <option value="" disabled hidden>Selecione</option>
-                <option value="atacante" style={{color: '#fff'}}>Atacante</option>
-                <option value="goleiro" style={{color: '#fff'}}>Goleiro</option>
-                <option value="lateral" style={{color: '#fff'}}>Lateral</option>
-                <option value="meia" style={{color: '#fff'}}>Meia</option>
-                <option value="volante" style={{color: '#fff'}}>Volante</option>
-                <option value="zagueiro" style={{color: '#fff'}}>Zagueiro</option>
+              <select className="form-select" name="posicao_terciaria" value={formData.posicao_terciaria  || ''} onChange={handleInputChange} style={{height:'45px', color: formData.posicao_terciaria ? '#fff' : '#999'}}>
+                <option value="" style={{color: '#fff'}}>NENHUM</option>
+                <option value="goleiro" style={{color: '#fff'}}>GOLEIRO</option>
+                <option value="lateral direito" style={{color: '#fff'}}>LATERAL DIREITO</option>
+                <option value="lateral esquerdo" style={{color: '#fff'}}>LATERAL ESQUERDO</option>
+                <option value="zagueiro" style={{color: '#fff'}}>ZAGUEIRO</option>
+                <option value="volante" style={{color: '#fff'}}>VOLANTE</option>
+                <option value="meia armador" style={{color: '#fff'}}>MEIA ARMADOR</option>
+                <option value="meia atacante" style={{color: '#fff'}}>MEIA ATACANTE</option>
+                <option value="atacante" style={{color: '#fff'}}>ATACANTE</option>
+                <option value="centroavante" style={{color: '#fff'}}>CENTROAVANTE</option>
               </select>
             </div>
             <div>

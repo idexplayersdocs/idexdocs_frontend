@@ -6,16 +6,22 @@ export default function SoccerField({ athleteData }: any) {
     switch (posicao) {
       case 'goleiro':
         return styles.goleiro;
+      case 'lateral direito':
+        return styles.lateral_direito;
+      case 'lateral esquerdo':
+        return styles.lateral_esquerdo;
       case 'zagueiro':
         return styles.zagueiro;
-      case 'lateral':
-        return styles.lateral;
       case 'volante':
         return styles.volante;
-      case 'meia':
-        return styles.meia;
+      case 'meia armador':
+        return styles.meia_armador;
+      case 'meia atacante':
+        return styles.meia_atacante;
       case 'atacante':
         return styles.atacante;
+      case 'centroavante':
+        return styles.centroavante;
       default:
         return '';
     }
