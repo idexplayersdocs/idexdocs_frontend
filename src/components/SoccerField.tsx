@@ -23,7 +23,7 @@ export default function SoccerField({ athleteData }: any) {
       case 10:
         return styles.centroavante;
       default:
-        return 1;
+        return '';
     }
   };
 
