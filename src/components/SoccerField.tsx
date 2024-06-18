@@ -4,23 +4,23 @@ export default function SoccerField({ athleteData }: any) {
 
   const getClassName = (posicao: string) => {
     switch (posicao) {
-      case 'goleiro':
+      case 'Goleiro':
         return styles.goleiro;
-      case 'lateral direito':
+      case 'Lateral direito':
         return styles.lateral_direito;
-      case 'lateral esquerdo':
+      case 'Lateral esquerdo':
         return styles.lateral_esquerdo;
-      case 'zagueiro':
+      case 'Zagueiro':
         return styles.zagueiro;
-      case 'volante':
+      case 'Volante':
         return styles.volante;
-      case 'meia armador':
+      case 'Meia armador':
         return styles.meia_armador;
-      case 'meia atacante':
+      case 'Meia atacante':
         return styles.meia_atacante;
-      case 'atacante':
+      case 'Atacante':
         return styles.atacante;
-      case 'centroavante':
+      case 'Centroavante':
         return styles.centroavante;
       default:
         return '';
