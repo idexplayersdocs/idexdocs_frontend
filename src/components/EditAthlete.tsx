@@ -41,7 +41,7 @@ export default function EditAthlete({athleteData, closeModal}: any) {
     posicao_primaria: athleteData.posicao_primaria ? athleteData.posicao_primaria  : '',
     posicao_secundaria: athleteData.posicao_secundaria ? athleteData.posicao_secundaria : '1' ,
     posicao_terciaria: athleteData.posicao_terciaria ? athleteData.posicao_terciaria : '1',
-    ativo: athleteData.ativo ? athleteData.ativo : '',
+    ativo: athleteData.ativo,
   });
 
   const getImageFileObject = (event: any) => {
