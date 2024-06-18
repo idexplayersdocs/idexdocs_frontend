@@ -68,8 +68,8 @@ export default function Athletes() {
     nome: '',
     data_nascimento: '',
     posicao_primaria: '',
-    posicao_secundaria: '',
-    posicao_terciaria: '',
+    posicao_secundaria: '1',
+    posicao_terciaria: '1',
   });
 
 
