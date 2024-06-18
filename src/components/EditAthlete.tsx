@@ -67,6 +67,9 @@ export default function EditAthlete({athleteData, closeModal}: any) {
   };
 
   const handleSalvarClick = async () => {
+    formData.posicao_primaria = formData.posicao_primaria.toString();
+    formData.posicao_secundaria = formData.posicao_secundaria.toString();
+    formData.posicao_terciaria = formData.posicao_terciaria.toString();
     setIsLoading(true)
     try {
       const newAthletesData = await editAthlete(formData, athleteId);

@@ -96,12 +96,19 @@ export default function ProfileConfiguration() {
   };
 
   const onSubmitUpdateUser = async (data: UsuarioUpdateRequestDTO): Promise<void> => {
-    console.log(data);
+    // console.log(data);
     setUpdateUserLoading(true);
+    const dados = data;
+    dados.create_desempenho = checkedValues.create_desempenho;
+    dados.create_relacionamento = checkedValues.create_relacionamento;
     try {
-      const res = await UpdateUsuario(data);
+      const res = await UpdateUsuario(dados);
       setMessageSnackBar("Usuário Atualizado com sucesso!");
       setShowSnackbar(true);
+
+      const usuario = await Usuarios(1, 10);
+      setUsuarioLilst(usuario);
+
 
       const newListUser = usuarioList;
       const userModify = newListUser!.data.find((x) => x.id === data.id);
@@ -120,7 +127,8 @@ export default function ProfileConfiguration() {
         userModify!.tipo = "externo";
       }
 
-      setUsuarioLilst({ count: usuarioList!.count, total: usuarioList!.total, data: newListUser!.data! });
+      // setUsuarioLilst({ count: usuarioList!.count, total: usuarioList!.total, data: newListUser!.data! });
+      handleCloseUpdateModal();
     } catch (e: unknown) {
       console.log(e);
     } finally {
@@ -192,6 +200,43 @@ export default function ProfileConfiguration() {
     setOpenModalUpdate(false);
   };
 
+
+// TODO:
+const [checkedValues, setCheckedValues] = React.useState({
+  create_desempenho: false,
+  create_relacionamento: false,
+});
+
+const handleChangeUpdate = (e: any) => {
+  const { name, checked } = e.target;
+  setCheckedValues((prev: any) => ({
+    ...prev,
+    [name]: checked,
+  }));
+  setValueModalUpdate(name, checked);
+};
+
+const getValueModalUpdate = () => {
+  // Simulação da função getValueModal para retornar os valores atuais
+  return checkedValues;
+};
+
+const setValueModalUpdate = (key: any, value: any) => {
+  // Simulação da função setValueModal para atualizar os valores
+  setCheckedValues((prev: any) => ({
+    ...prev,
+    [key]: value,
+  }));
+};
+
+
+
+
+
+
+
+
+
   const onUpdateUser = async (usuario: Usuario): Promise<void> => {
     setValueModal("nome", usuario.nome);
     setValueModal("email", usuario.email);
@@ -199,6 +244,11 @@ export default function ProfileConfiguration() {
     if (usuario.permissoes) {
       setValueModal("create_desempenho", usuario.permissoes.create_relacionamento);
       setValueModal("create_relacionamento", usuario.permissoes.create_relacionamento);
+
+      setCheckedValues({
+        create_desempenho: usuario.permissoes.create_desempenho,
+        create_relacionamento: usuario.permissoes.create_relacionamento,
+      })
     }
 
     switch (usuario.tipo) {
@@ -538,6 +588,37 @@ export default function ProfileConfiguration() {
                   <span className="text-danger mt-1 d-block">Nome is required field</span>
                 )}
               </div>
+              <div className="mt-4 d-flex align-items-center">
+                <Checkbox
+                  color="success"
+                  onChange={handleChangeUpdate}
+                  name="create_relacionamento"
+                  checked={checkedValues.create_relacionamento}
+                  sx={{
+                    color: "var(--bg-ternary-color)",
+                    "&.Mui-checked": {
+                      color: "var(--bg-ternary-color)",
+                    },
+                  }}
+                />
+                  <p className="text-white mb-0">Acesso a tela de relacionamento</p>
+              </div>
+              <div className="mt-1 d-flex align-items-center">
+                <Checkbox
+                  color="success"
+                  onChange={handleChangeUpdate}
+                  name="create_desempenho"
+                  checked={checkedValues.create_desempenho}
+                  sx={{
+                    color: "var(--bg-ternary-color)",
+                    "&.Mui-checked": {
+                      color: "var(--bg-ternary-color)",
+                    },
+                  }}
+                />
+
+                <p className="text-white mb-0">Acesso a tela de desempenho</p>
+              </div>
               <div className="mt-4 d-flex align-items-center justify-content-end">
                 <button
                   disabled={updateUserLoading}
@@ -551,37 +632,6 @@ export default function ProfileConfiguration() {
                     </div>
                   ) : null}
                 </button>
-              </div>
-              <div className="mt-4 d-flex align-items-center">
-                <Checkbox
-                  color="success"
-                  name="clube_atual"
-                  onChange={(e) => setValueModal("create_relacionamento", e.target.checked)}
-                  checked={getValueModal("create_relacionamento")}
-                  sx={{
-                    color: "var(--bg-ternary-color)",
-                    "&.Mui-checked": {
-                      color: "var(--bg-ternary-color)",
-                    },
-                  }}
-                />
-                <p className="text-white mb-0">Acesso a tela de relacionamento</p>
-              </div>
-              <div className="mt-1 d-flex align-items-center">
-                <Checkbox
-                  color="success"
-                  onChange={(e) => setValueModal("create_desempenho", e.target.checked)}
-                  name="clube_atual"
-                  checked={getValueModal("create_desempenho")}
-                  sx={{
-                    color: "var(--bg-ternary-color)",
-                    "&.Mui-checked": {
-                      color: "var(--bg-ternary-color)",
-                    },
-                  }}
-                />
-
-                <p className="text-white mb-0">Acesso a tela de desempenho</p>
               </div>
             </form>
           </div>

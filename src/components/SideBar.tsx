@@ -51,6 +51,32 @@ export default function SideBar({ athleteData, modal }: any) {
   }
 
 
+  const convertIDPosicao = (posicao: number) => {
+    switch(posicao) {
+      case 1:
+        return 'NENHUM';
+      case 2:
+        return 'GOLEIRO';
+      case 3:
+        return 'LATERAL DIREITO';
+      case 4:
+        return 'LATERAL ESQUERDO';
+      case 5:
+        return 'ZAGUEIRO';
+      case 6:
+        return 'VOLANTE';
+      case 7:
+        return 'MEIA ARMADOR';
+      case 8:
+        return 'MEIA ATACANTE';
+      case 9:
+        return 'ATACANTE';
+      case 10:
+        return 'CENTROAVANTE';
+    }
+  }
+
+
 
   if (!athleteData) {
     return <div className="d-flex justify-content-center align-items-center w-100 h-25" ><Loading type='bars' color="var(--bg-ternary-color)" /></div>
@@ -78,15 +104,15 @@ export default function SideBar({ athleteData, modal }: any) {
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Posição:</h1>
-        <h2 className="subtitle-sidebar">{athleteData.posicao_primaria ? athleteData.posicao_primaria : 'Não possui'}</h2>
+        <h2 className="subtitle-sidebar">{athleteData.posicao_primaria ? convertIDPosicao(athleteData.posicao_primaria) : 'Não possui'}</h2>
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Posição Secundaria:</h1>
-        <h2 className="subtitle-sidebar">{athleteData.posicao_secundaria ? athleteData.posicao_secundaria : 'Não possui'}</h2>
+        <h2 className="subtitle-sidebar">{athleteData.posicao_secundaria ? convertIDPosicao(athleteData.posicao_secundaria) : 'Não possui'}</h2>
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Outra Posição:</h1>
-        <h2 className="subtitle-sidebar">{athleteData.posicao_terciaria ? athleteData.posicao_terciaria : 'Não possui'}</h2>
+        <h2 className="subtitle-sidebar">{athleteData.posicao_terciaria ? convertIDPosicao(athleteData.posicao_terciaria) : 'Não possui'}</h2>
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Nascimento:</h1>
