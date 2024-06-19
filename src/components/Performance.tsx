@@ -182,8 +182,7 @@ export default function Performance({athleteData}: any) {
   useEffect(() => {
     const fetchAthletesData = async () => {
       try {
-        console.log(athleteData.posicao_primaria)
-        const characteristic = await getPhysical(athleteId, 1, athleteData.posicao_primaria);
+        const characteristic = await getPhysical(athleteId, 1, athleteData.posicao_primaria.tostring());
         setDataCharacteristic(characteristic?.data);
 
         // Observações

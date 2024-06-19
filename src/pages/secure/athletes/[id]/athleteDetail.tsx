@@ -314,6 +314,11 @@ export default function AthleteDetail() {
         preco: '',
         data_controle: '',
       });
+      setPageSupportControl(1)
+      // await getSupportControl(athleteId, pageSupportControl);
+      const supportControl = await getSupportControl(athleteId, pageSupportControl);
+      setDisplayedDataSupportControl(supportControl?.data.data.controles);
+      setTotalRowSupportControl(supportControl?.data.total);
     } catch (error:any) {
       console.error('Error:', error);
       toast.error(error.response.data.errors[0].message, {
@@ -329,11 +334,11 @@ export default function AthleteDetail() {
     } finally {
       setLoading(false);
     }
-    setPageSupportControl(1)
-    // await getSupportControl(athleteId, pageSupportControl);
-    const supportControl = await getSupportControl(athleteId, pageSupportControl);
-    setDisplayedDataSupportControl(supportControl?.data.data);
-    setTotalRowSupportControl(supportControl?.data.total);
+    // setPageSupportControl(1)
+    // // await getSupportControl(athleteId, pageSupportControl);
+    // const supportControl = await getSupportControl(athleteId, pageSupportControl);
+    // setDisplayedDataSupportControl(supportControl?.data.data);
+    // setTotalRowSupportControl(supportControl?.data.total);
   };
 
   const isFormValidSupportControl= () => {
