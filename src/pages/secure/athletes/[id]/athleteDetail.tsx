@@ -8,8 +8,8 @@ import { Box, Button, Modal, Pagination, colors, styled } from "@mui/material";
 import Observacoes from '../../../../components/Observation';
 import AddButton from '@/components/AddButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { createAthleteRelationship, createSupportControl, getAthleteRelationship, getSupportControl } from '@/pages/api/http-service/relationship';
+import { faCheck, faX, faXmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { createAthleteRelationship, createSupportControl, deleteSupportControl, getAthleteRelationship, getSupportControl } from '@/pages/api/http-service/relationship';
 import Subtitle from '@/components/Subtitle';
 import { getObservations, saveObservations } from '@/pages/api/http-service/observations';
 import  Performance  from '@/components/Performance'
@@ -21,6 +21,7 @@ import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overfl
 import { jwtDecode } from 'jwt-decode';
 import ContractHistory from '@/components/modal/ContractHistory';
 import { Midia } from '@/components/Midia';
+
 
 moment.locale('pt-br');
 
@@ -128,6 +129,18 @@ export default function AthleteDetail() {
     data_controle: '',
   });
 
+  const handleDeleteControle = async (controle_id: number, index: any) => {
+    try {
+      const response = await deleteSupportControl(controle_id)
+      if (response) {
+        const updatedData = [...displayedDataSupportControl]
+        updatedData.splice(index, 1)
+        setDisplayedDataSupportControl(updatedData)
+      } 
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     if (!effectRan.current) {
@@ -526,6 +539,7 @@ export default function AthleteDetail() {
                         <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>NOME</th>
                         <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>QUANTIDADE</th>
                         <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>PREÇO</th>
+                        <th className="table-dark text-center" scope="col" ></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -536,8 +550,15 @@ export default function AthleteDetail() {
                             <td className="table-dark text-center">{new Date(supportContol.data_controle).toLocaleDateString()}</td>
                             <td className="table-dark text-center">{supportContol.nome}</td>
                             <td className="table-dark text-center">{supportContol.quantidade}</td>
-                            {/* <td className="table-dark text-center">R$ {supportContol.preco}</td> */}
                             <td className="table-dark text-center">{supportContol.preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                            <td className="table-dark text-center">
+                              <FontAwesomeIcon
+                                icon={faTrashCan} 
+                                size="lg" 
+                                style={{color: "#ff0000", cursor: 'pointer'}}
+                                onClick={() => handleDeleteControle(supportContol.controle_id, index)}
+                              />
+                              </td>
                           </tr>
                         ))
                       ) : (
