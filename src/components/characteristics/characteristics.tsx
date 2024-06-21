@@ -2,7 +2,6 @@ import moment from "moment";
 import Subtitle from "../Subtitle";
 
 export default function Characteristics({dataList, labelList}: any) {
-  console.log(dataList)
   return(
     <>
     <div className="w-100 mt-3" style={{maxHeight: '300px', overflow: 'auto'}}>

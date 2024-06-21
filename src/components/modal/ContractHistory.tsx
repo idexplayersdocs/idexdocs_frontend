@@ -34,7 +34,7 @@ const style = {
   overflow: 'auto'
 };
 
-export default function ContractHistory({closeModal, athleteId}: any) {
+export default function ContractHistory({closeModal, athleteId, closeModalUpdateData}: any) {
   const effectRan = useRef(false);
   const [page, setPage] = useState(1);
   const [openRegisterContractHistory, setOpenRegisterContractHistory] = useState(false);
@@ -58,6 +58,8 @@ export default function ContractHistory({closeModal, athleteId}: any) {
     data_termino: '',
     observacao: ''
   });
+
+  const [alterou, setAlterou] = useState<boolean>(false)
 
 
   useEffect(() => {
@@ -161,8 +163,9 @@ export default function ContractHistory({closeModal, athleteId}: any) {
         setContractHistory(contractHistoryList?.data);
         setTotalRow(contractHistoryList?.total);
       }
+      setAlterou(true)
     } catch (error:any) {
-      toast.error(error.response.data.errors[0].message, {
+      toast.error("Erro ao cadastrar contrato", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -186,7 +189,7 @@ export default function ContractHistory({closeModal, athleteId}: any) {
       const contractHistoryList = await getContract(athleteId, page);
       setContractHistory(contractHistoryList?.data);
       setTotalRow(contractHistoryList?.total);
-
+      setAlterou(true)
     } catch (error:any) {
       console.error(error)
       // toast.error(error.response.data.errors[0].message, {
@@ -209,7 +212,11 @@ export default function ContractHistory({closeModal, athleteId}: any) {
   };
 
   const handleCloseModal = () => {
-    closeModal();
+    if(alterou){
+      closeModalUpdateData();
+    } else {
+      closeModal();
+    }
   };
 
   if (loading) {

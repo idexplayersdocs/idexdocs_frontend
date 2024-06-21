@@ -271,9 +271,8 @@ else if (athleteData && athleteData.posicao_primaria == 6) {
   useEffect(() => {
     const fetchAthletesData = async () => {
       try {
-        const characteristic = await getPhysical(athleteId, 1, athleteData.posicao_primaria.tostring());
+        const characteristic = await getPhysical(athleteId, 1, athleteData.posicao_primaria.toString());
         setDataCharacteristic(characteristic?.data);
-
         // Observações
         const responseObservacoes = await getObservations(athleteId, 'desempenho');
         // let observacao = responseObservacoes?.data[responseObservacoes?.data.length - 1]
