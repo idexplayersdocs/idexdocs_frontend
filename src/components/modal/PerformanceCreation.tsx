@@ -42,13 +42,13 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
 
   //--Label--//
   // Fisico
-  const reorderedKeysLabelFisico = labelList.fisico.filter((item:any) => item !== "Total" && item !== "Média" && item !== "Data");
-  const reorderedKeysLabelTecnico = labelList.tecnico.filter((item:any) => item !== "Total" && item !== "Média" && item !== "Data");
-  const reorderedKeysLabelPsicologico = labelList.psicologico.filter((item:any) => item !== "Total" && item !== "Média" && item !== "Data");
+  const reorderedKeysLabelFisico = labelList.label.fisico.filter((item:any) => item !== "Total" && item !== "Média" && item !== "Data");
+  const reorderedKeysLabelTecnico = labelList.label.tecnico.filter((item:any) => item !== "Total" && item !== "Média" && item !== "Data");
+  const reorderedKeysLabelPsicologico = labelList.label.psicologico.filter((item:any) => item !== "Total" && item !== "Média" && item !== "Data");
 
   //--Dados--//
   // Fisico
-  const dataFisico = dataList.fisico.map((item: any) => {
+  const dataFisico = labelList.api.fisico.map((item: any) => {
     const newItem = { ...item }; 
     for (const key in newItem) {
         if (newItem.hasOwnProperty(key)) {
@@ -75,7 +75,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
   };
 
   // Tecnico
-  const dataTecnico = dataList.tecnico.map((item: any) => {
+  const dataTecnico = labelList.api.tecnico.map((item: any) => {
     const newItem = { ...item }; 
     for (const key in newItem) {
         if (newItem.hasOwnProperty(key)) {
@@ -102,7 +102,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
     };
 
     // Psicologico
-    const dataPsicologico = dataList.psicologico.map((item: any) => {
+    const dataPsicologico = labelList.api.psicologico.map((item: any) => {
       const newItem = { ...item }; 
       for (const key in newItem) {
           if (newItem.hasOwnProperty(key)) {
@@ -141,7 +141,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
         ...formDataListTecnico,
         ...formDataListPsicologico,
         data_avaliacao: formDate,
-        caracteristica: athleteData.posicao_primaria,
+        caracteristica: athleteData.posicao_primaria.toString(),
         atleta_id: athleteId
       };
       const response = await createPhysical(request);
@@ -149,7 +149,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
       if(response){
 
         // Fisico
-        const dataFisico = dataList.fisico.map((item: any) => {
+        const dataFisico = labelList.api.fisico.map((item: any) => {
           const newItem = { ...item }; 
           for (const key in newItem) {
               if (newItem.hasOwnProperty(key)) {
@@ -167,7 +167,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
         setFormDataListFisico(reorderedKeysDataFisico);
   
         // Tecnico
-        const dataTecnico = dataList.tecnico.map((item: any) => {
+        const dataTecnico = labelList.api.tecnico.map((item: any) => {
           const newItem = { ...item }; 
           for (const key in newItem) {
               if (newItem.hasOwnProperty(key)) {
@@ -185,7 +185,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
         setFormDataListTecnico(reorderedKeysDataTecnico);
   
         // Psicologico
-        const dataPsicologico = dataList.psicologico.map((item: any) => {
+        const dataPsicologico = labelList.api.psicologico.map((item: any) => {
           const newItem = { ...item }; 
           for (const key in newItem) {
               if (newItem.hasOwnProperty(key)) {
@@ -207,7 +207,8 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
       }
 
     } catch (error:any) {
-      toast.error(error.response.data.errors[0].message, {
+      console.log(error)
+      toast.error('Erro ao cadastrar as características', {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
