@@ -132,14 +132,26 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
       setFormDate(event.target.value)
     };
 
+    const replaceEmptyStrings = (obj: any) => {
+      Object.keys(obj).forEach(key => {
+        if (obj[key] === "") {
+          obj[key] = '0';
+        }
+      });
+      return obj;
+    };
+
   const handleSaverRegister = async () => {
     setLoading(true);
     try {
+      const processedFisico = replaceEmptyStrings({ ...formDataListFisico });
+      const processedTecnico = replaceEmptyStrings({ ...formDataListTecnico });
+      const processedPsicologico = replaceEmptyStrings({ ...formDataListPsicologico });
       
       const request = {
-        ...formDataListFisico,
-        ...formDataListTecnico,
-        ...formDataListPsicologico,
+        ...processedFisico,
+        ...processedTecnico,
+        ...processedPsicologico,
         data_avaliacao: formDate,
         caracteristica: athleteData.posicao_primaria.toString(),
         atleta_id: athleteId
