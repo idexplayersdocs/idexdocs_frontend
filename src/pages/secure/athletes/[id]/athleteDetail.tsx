@@ -645,7 +645,7 @@ export default function AthleteDetail() {
                         displayedDataSupportControl.length > 0 ? (
                         Array.isArray(displayedDataSupportControl) && displayedDataSupportControl.map((supportContol,index) => (
                           <tr key={index}>
-                            <td className="table-dark text-center">{new Date(supportContol.data_controle).toLocaleDateString()}</td>
+                            <td className="table-dark text-center">{moment(supportContol.data_controle).format('DD/MM/YYYY')}</td>
                             <td className="table-dark text-center">{supportContol.nome}</td>
                             <td className="table-dark text-center">{supportContol.quantidade}</td>
                             <td className="table-dark text-center">{supportContol.preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
