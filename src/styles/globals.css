@@ -34,6 +34,15 @@ hr {
   align-self: flex-start !important;
 }
 
+.subtitle-pdf {
+  color: 'black' !important;
+  text-transform: uppercase !important;
+  font-size: 26px !important;
+  margin-left: 15px !important;
+  display: flex !important;
+  align-self: flex-start !important;
+}
+
 .bg-dark {
   background-color: var(--bg-primary-color) !important;
 }

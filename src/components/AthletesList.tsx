@@ -19,6 +19,7 @@ import { PDFInfo } from "@/pages/api/http-service/pdfService";
 import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
 import generatePDF, { Margin, Options } from "react-to-pdf";
 import SoccerField from "./SoccerField";
+import Subtitle from "./Subtitle";
 
 interface Athlete {
   id: number;
@@ -58,7 +59,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   const [totalRow, setTotalRow]: any = useState();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [loadingPDF, setLoadingPDF] = useState<boolean>(false);
-  const [infoPdf, setInfoPdf] = useState<PDFInfoResponseDTO>();
+  const [infoPdf, setInfoPdf] = useState<any>();
   const [observacaoDesempenho, setObservacaoDesempenho] = useState<string>();
   const [observacaoRelacionamento, setObservacaoRelacionamento] = useState<string>();
   const [clubes, setClubes] = useState<any>([]);
@@ -67,12 +68,113 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   const btnPdfRef = useRef<any>();
   const router = useRouter();
   const [roles, setRoles] = useState<any>();
+  const [permissions, setPermissions] = useState<any>({
+    relationship: false,
+    performance: false
+  });
+
+  const [labelCharacteristic, setLabelCharacteristic] = useState<any>();
+
+  const convertLabelCharacteristic = (infoPdf: any) => {
+    if (infoPdf?.atleta && (infoPdf?.atleta.posicao_primaria == 9 || infoPdf?.atleta.posicao_primaria == 10)) {
+      setLabelCharacteristic ({
+          'label': {
+              fisico: ['Data', 'Estatura / Maturação', 'Velocidade / Aceleração Curta Distância', '1 x 1 Ofensivo', 'Desmarques / Mobilidade', 'Controle de Bola', 'Cruzamento / Passes para Gol', 'Finalização', 'Total', 'Média'],
+              tecnico: ['Data', 'Visão Espacial', 'Domínio Orientado / Ambidestria', 'Dribles em Diagonal (Direção à Baliza)', 'Leitura de Jogo', 'Reação Pós Perda', 'Total', 'Média'],
+              psicologico: ['Data', 'Criatividade / Improvisação', 'Capacidade de Decisão / Confiança / Extroversão', 'Inteligência Tática / Intuição Antecipar Ações', 'Competitividade / Coragem / Concentração', 'Total', 'Média']
+          }, 'api': {
+              fisico: [{'data_avaliacao': null, 'estatura_fis': null, 'velocidade_fis': null, 'um_contra_um_ofensivo_fis': null, 'desmarques_fis': null, 'controle_bola_fis': null, 'cruzamentos_fis': null, 'finalizacao_fis': null, 'sum': null, 'mean': null}],
+              tecnico: [{'data_avaliacao': null, 'visao_espacial_tec': null, 'dominio_orientado_tec': null, 'dribles_em_diagonal_tec': null, 'leitura_jogo_tec': null, 'reacao_pos_perda_tec': null, 'sum': null, 'mean': null}],
+              psicologico: [{'data_avaliacao': null, 'criatividade_psi': null, 'capacidade_decisao_psi': null, 'inteligencia_tatica_psi': null, 'competitividade_psi': null, 'sum': null, 'mean': null}]
+          }
+      });
+    }
+    // Lateral esquerdo / Direito
+    else if (infoPdf?.atleta && (infoPdf?.atleta.posicao_primaria == 3 || infoPdf?.atleta.posicao_primaria == 4)) {
+      setLabelCharacteristic ({
+          'label': {
+              fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Passe Curto', 'Passe Longo', 'Capacidade Aeróbica', 'Fechamento Defensivo / Contenção', 'Total', 'Média'],
+              tecnico: ['Data', 'Leitura de Jogo / Amplitude Organizacional', 'Participação Ofensiva / Penetração / Mobilidade', 'Cruzamento / 1 x 1 Ofencivo', 'Jogo Aéreo', 'Condução de Bola em Velocidade', 'Total', 'Média'],
+              psicologico: ['Data', 'Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade', 'Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade', 'Total', 'Média']
+          },
+          'api': {
+              fisico: [{'data_avaliacao': null, 'estatura_fis': null, 'velocidade_fis': null, 'passe_curto_fis': null, 'passe_longo_fis': null, 'capacidade_aerobia_fis': null, 'fechemanento_defensivo_fis': null, 'sum': null, 'mean': null}],
+              tecnico: [{'data_avaliacao': null, 'leitura_jogo_tec': null, 'participacao_ofensiva_tec': null, 'cruzamento_tec': null, 'jogo_aereo_tec': null, 'conducao_bola_tec': null, 'sum': null, 'mean': null}],
+              psicologico: [{'data_avaliacao': null, 'lideranca_psi': null, 'confianca_psi': null, 'inteligencia_tatica_psi': null, 'competitividade_psi': null, 'sum': null, 'mean': null}]
+          }
+      });
+    }
+    // Meia Armador / Meia Atacante
+    else if (infoPdf?.atleta && (infoPdf?.atleta.posicao_primaria == 7 || infoPdf?.atleta.posicao_primaria == 8)) {
+      setLabelCharacteristic ({
+          'label': {
+              fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Leitura de Jogo / Cobertura Ofensiva / Contenção', 'Desmarques / Mobilidade', 'Controle de Bola / Passe para Gol', 'Capacidade Aeróbica', 'Finalização', 'Total', 'Média'],
+              tecnico: ['Data', 'Visão Espacial', 'Domíinio Orientado / Ambidestria', 'Dribles', 'Organização Ação Ofensiva / Dinâmica', 'Pisada na Área para Finalizar / Penetração', 'Total', 'Média'],
+              psicologico: ['Data', 'Criatividade e Improvisação', 'Capacidade de Decisão', 'Confiança / Responsabilidade', 'Inteligência Tática / Intuição Antecipar Ações', 'Competitividade / Coragem / Concentração', 'Total', 'Média']
+          },
+          'api': {
+              fisico: [{'data_avaliacao': null, 'estatura_fis': null, 'velocidade_fis': null, 'leitura_jogo_fis': null, 'desmarques_fis': null, 'controle_bola_fis': null, 'capacidade_aerobia_fis': null, 'finalizacao_fis': null, 'sum': null, 'mean': null}],
+              tecnico: [{'data_avaliacao': null, 'visao_espacial_tec': null, 'dominio_orientado_tec': null, 'dribles_tec': null, 'organizacao_acao_ofensica_tec': null, 'pisada_na_area_para_finalizar_tec': null, 'sum': null, 'mean': null}],
+              psicologico: [{'data_avaliacao': null, 'criatividade_psi': null, 'capacidade_decisao_psi': null, 'confianca_psi': null, 'inteligencia_tatica_psi': null, 'competitividade_psi': null, 'sum': null, 'mean': null}]
+          }
+      });
+    }
+    // Zagueiro
+    else if (infoPdf?.atleta && infoPdf?.atleta.posicao_primaria == 5) {
+      setLabelCharacteristic ({
+          'label': {
+              fisico: ['Data', 'Estatura / Maturação', 'Força / Recuperação / Cobertura', 'Passe Curto', 'Passe Longo', 'Jogo Aéreo', 'Confronto Defensivo 1 x 1 / Contenção', 'Total', 'Média'],
+              tecnico: ['Data', 'Leitura de Jogo / Organização Defensiva', 'Ambidestria', 'Participação Ofensiva / Penetração / Mobilidade', 'Cabeceio Ofensivo', 'Passe Entre Linhas / Passe Longo Diagonal', 'Total', 'Média'],
+              psicologico: ['Data', 'Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade', 'Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade', 'Total', 'Média']
+          },
+          'api': {
+              fisico: [{'data_avaliacao': null, 'estatura_fis': null, 'força_fis': null, 'passe_curto_fis': null, 'passe_longo_fis': null, 'jogo_aereo_fis': null, 'confronto_defensivo_fis': null, 'sum': null, 'mean': null}],
+              tecnico: [{'data_avaliacao': null, 'leitura_jogo_tec': null, 'ambidestria_tec': null, 'participacao_ofensica_tec': null, 'cabeceio_ofensivo_tec': null, 'passe_entre_linhas_tec': null, 'sum': null, 'mean': null}],
+              psicologico: [{'data_avaliacao': null, 'lideranca_psi': null, 'confianca_psi': null, 'inteligencia_tatica_psi': null, 'competitividade_psi': null, 'sum': null, 'mean': null}]
+          }
+      });
+    }
+    // Goleiro
+    else if (infoPdf?.atleta && infoPdf?.atleta.posicao_primaria == 2) {
+      setLabelCharacteristic ({
+          'label': {
+              fisico: ['Data', 'Perfil', 'Maturação', 'Agilidade / Impulsão', 'Velocidade Membros Superiores', 'Flexibilidade', 'Posicionamento Ofensivo e Defensivo', 'Total', 'Média'],
+              tecnico: ['Data', 'Leitura de Jogo', 'Jogo com os Pés / Reposição de Jogo', 'Organização da Defesa / Domínio da Área', 'Domínio Coberturas e Saídas', 'Total', 'Média'],
+              psicologico: ['Data', 'Liderança', 'Coragem / Confiança', 'Concentração / Responsabilidade', 'Controle de Estresse', 'Total', 'Média']
+          },
+          'api': {
+              fisico: [{'data_avaliacao': null, 'perfil_fis': null, 'maturacao_fis': null, 'agilidade_fis': null, 'velocidade_membros_superiores_fis': null, 'flexibilidade_fis': null, 'posicionamento_fis': null, 'sum': null, 'mean': null}],
+              tecnico: [{'data_avaliacao': null, 'leitura_jogo_tec': null, 'jogo_com_pes_tec': null, 'organizacao_da_defesa_tec': null, 'dominio_coberturas_e_saidas_tec': null, 'sum': null, 'mean': null}],
+              psicologico: [{'data_avaliacao': null, 'lideranca_psi': null, 'coragem_psi': null, 'concentracao_psi': null, 'controle_estresse_psi': null, 'sum': null, 'mean': null}]
+          }
+      });
+    }
+    // Volante
+    else if (infoPdf?.atleta && infoPdf?.atleta.posicao_primaria == 6) {
+      setLabelCharacteristic ({
+          'label': {
+              fisico: ['Data', 'Estatura / Maturação', 'Força / Desarmes / Contenção', 'Passe Curto', 'Capacidade Aeróbica', 'Dinâmica / Mobilidade / Penetração', 'Visão Espacial / Mudança de Corredores', 'Total', 'Média'],
+              tecnico: ['Data', 'Leitura de Jogo / Coberturas / Espaço', 'Domínio Orientado / Ambidestria', 'Jogo Aéreo Ofensivo / Defensivo', 'Passes Verticais', 'Finalização de Média Distância', 'Total', 'Média'],
+              psicologico: ['Data', 'Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade', 'Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade / Coragem / Conventração', 'Total', 'Média']
+          },
+          'api': {
+              fisico: [{'data_avaliacao': null, 'estatura_fis': null, 'forca_fis': null, 'passe_curto_fis': null, 'capacidade_aerobia_fis': null, 'dinamica_fis': null, 'visao_espacial_fis': null, 'sum': null, 'mean': null}],
+              tecnico: [{'data_avaliacao': null, 'leitura_jogo_tec': null, 'dominio_orientado_tec': null, 'jogo_aereo_ofensivo_tec': null, 'passes_verticais_tec': null, 'finalizacao_media_distancia_tec': null, 'sum': null, 'mean': null}],
+              psicologico: [{'data_avaliacao': null, 'lideranca_psi': null, 'confianca_psi': null, 'inteligencia_tatica_psi': null, 'competitividade_psi': null, 'sum': null, 'mean': null}]
+          }
+      });
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const decoded: any = jwtDecode(token!);
     if (token) {
       setRoles(decoded.roles[0]);
+      setPermissions({
+        relationship: decoded.permissions.includes("create_relacionamento"),
+        performance: decoded.permissions.includes("create_desempenho")
+      });
     }
   }, []);
 
@@ -128,6 +230,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
   };
 
   useEffect(() => {
+    console.log(infoPdf)
     if (infoPdf) {      
       if (elementPdf) {        
         elementPdf.classList.remove("pdf");
@@ -157,7 +260,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
     const tryExecute = async () => {
       try {
         setIsLoading(true);
-        const res = await PDFInfo(id);
+        const res = await PDFInfo(id, permissions);
 
         const clubes = res.clube.sort((a: any, b: any) => {
           if (!a.data_fim && !b.data_fim) {
@@ -183,6 +286,8 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
 
         setClubes(clubes);
         setInfoPdf(res);
+        convertLabelCharacteristic(res)
+        
       } catch (e: unknown) {
         console.log(e);
         if (!retry) {
@@ -372,7 +477,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
             width={0}
             height={0}
             sizes="100vw"
-            style={{ width: 200, height: "auto", maxWidth: "100%" }}
+            style={{ width: "200px", height: "auto", maxWidth: "200px" }}
           />
           <h1 className="fw-bold h1  text-dark text-center">Relatório desempenho com atletas representados</h1>
           <Image
@@ -380,7 +485,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
             alt="Logo Fort House"
             width={0}
             height={0}
-            style={{ width: 150, height: "auto", maxWidth: "100%" }}
+            style={{ width: '150px', height: "auto", maxWidth: "150px" }}
             sizes="100vw"
           />
         </header>
@@ -393,7 +498,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                 width={0}
                 height={0}
                 sizes="100vw"
-                style={{ width: "100%", height: "auto", maxWidth: "100%" }}
+                style={{ width: "300px", height: "auto", maxWidth: "300px" }}
               />
             ) : (
               <Image
@@ -402,7 +507,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                 width={0}
                 height={0}
                 sizes="100vw"
-                style={{ width: "100%", height: "auto", maxWidth: "100%" }}
+                style={{ width: "300px", height: "auto", maxWidth: "300px" }}
               />
             )}
           </article>
@@ -441,245 +546,308 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
             </div>
           </article>
         </section>
+
+        {
+            infoPdf?.caracteristicas_fisicas.length > 0 &&
+              <section className="mt-4">
+                <div className="mt-3 w-100">
+                  <h2 className="subtitle-pdf fw-bold">HISTÓRICO FÍSICO</h2>
+                </div>
+                <div className="w-100 mt-3" style={{maxHeight: '300px', overflow: 'auto'}}>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Data</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Estatura</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Envergadura</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Peso</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>% Gordura</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        infoPdf?.caracteristicas_fisicas.map((fisica: any, i: number) => (
+                            <tr key={i}>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{moment(fisica.data_avaliacao).format("DD/MM/YYYY")}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{fisica.estatura}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{fisica.envergadura}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{fisica.peso}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{fisica.percentual_gordura}</td>
+                            </tr>
+                          )
+                    )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+          }
+        {
+          infoPdf?.caracteristicas_posicao && 
+            <section className="mt-4">
+                <div className="mt-3 w-100">
+                  <h2 className="subtitle-pdf fw-bold">PERFIL FÍSICO E TÉCNICO</h2>
+                </div>
+                <div className="w-100 mt-3" style={{maxHeight: '300px', overflow: 'auto'}}>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        {labelCharacteristic?.label.fisico.map((label: any, index: number) => (
+                          <th key={index} className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>{label}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {infoPdf?.caracteristicas_posicao && infoPdf?.caracteristicas_posicao.fisico && infoPdf?.caracteristicas_posicao.fisico.length > 0 ? (
+                        infoPdf?.caracteristicas_posicao.fisico.map((data: any, index: number) => {
+                          const reorderedKeys = ['data_avaliacao', ...Object.keys(data).filter(key => key !== 'data_avaliacao' && key !== 'sum' && key !== 'mean'), 'sum', 'mean'];
+                          return (
+                            <tr key={index}>
+                              {reorderedKeys.map((key: string, idx: number) => (
+                                <td key={idx} className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>
+                                  {/* {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') : data[key]} */}
+                                  {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') 
+                                    : key === 'mean' ? parseFloat(data[key]).toFixed(2) 
+                                    : data[key]
+                                  }
+                                </td>
+                              ))}
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan={20} className="table-dark text-center">
+                            Lista vazia
+                          </td>
+                        </tr>
+                      )
+                      }
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-4 w-100">
+                  <h2 className="subtitle-pdf fw-bold">PERFIL TÉCNICO DIFERENCIAL</h2>
+                </div>
+                <div className="w-100 mt-3" style={{maxHeight: '300px', overflow: 'auto'}}>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        {labelCharacteristic?.label.tecnico.map((label: any, index: number) => (
+                          <th key={index} className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>{label}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {infoPdf?.caracteristicas_posicao && infoPdf?.caracteristicas_posicao.tecnico && infoPdf?.caracteristicas_posicao.tecnico.length > 0 ? (
+                        infoPdf?.caracteristicas_posicao.tecnico.map((data: any, index: number) => {
+                          const reorderedKeys = ['data_avaliacao', ...Object.keys(data).filter(key => key !== 'data_avaliacao' && key !== 'sum' && key !== 'mean'), 'sum', 'mean'];
+                          return (
+                            <tr key={index}>
+                              {reorderedKeys.map((key: string, idx: number) => (
+                                <td key={idx} className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>
+                                  {/* {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') : data[key]} */}
+                                  {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') 
+                                    : key === 'mean' ? parseFloat(data[key]).toFixed(2) 
+                                    : data[key]
+                                  }
+                                </td>
+                              ))}
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan={20} className="table-dark text-center">
+                            Lista vazia
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-4 w-100">
+                  <h2 className="subtitle-pdf fw-bold">PERFIL PSICOLÓGICO</h2>
+                </div>
+                <div className="w-100 mt-3" style={{maxHeight: '300px', overflow: 'auto'}}>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        {labelCharacteristic?.label.psicologico.map((label: any, index: number) => (
+                          <th key={index} className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>{label}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {infoPdf?.caracteristicas_posicao && infoPdf?.caracteristicas_posicao.psicologico && infoPdf?.caracteristicas_posicao.psicologico.length > 0 ? (
+                        infoPdf?.caracteristicas_posicao.psicologico.map((data: any, index: number) => {
+                          const reorderedKeys = ['data_avaliacao', ...Object.keys(data).filter(key => key !== 'data_avaliacao' && key !== 'sum' && key !== 'mean'), 'sum', 'mean'];
+                          return (
+                            <tr key={index}>
+                              {reorderedKeys.map((key: string, idx: number) => (
+                                <td key={idx} className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>
+                                  {/* {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') : data[key]} */}
+                                  {key === 'data_avaliacao' ? moment(data[key]).format('DD/MM/YYYY') 
+                                    : key === 'mean' ? parseFloat(data[key]).toFixed(2) 
+                                    : data[key]
+                                  }
+                                </td>
+                              ))}
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan={20} className="table-dark text-center">
+                            Lista vazia
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="mt-5 align-self-start media-das-medias" style={{maxHeight: '300px', overflow: 'auto'}}>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Data</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Média Geral</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {infoPdf?.caracteristicas_posicao && infoPdf?.caracteristicas_posicao.total_mean && Object.keys(infoPdf?.caracteristicas_posicao.total_mean).length > 0 ? (
+                      Object.entries(infoPdf?.caracteristicas_posicao.total_mean).map(([key, value], index) => (
+                        <tr key={index}>
+                          <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{moment(key).format('DD/MM/YYYY')}</td>
+                          <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{value as number}</td>
+                        </tr>
+                      ))
+                      ) : (
+                        <tr>
+                          <td colSpan={2} className="table-dark text-center">
+                            Lista vazia
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+            </section>
+        }
+
+          {
+            infoPdf?.lesao.length > 0 &&
+              <section className="mt-4">
+                <div className="mt-3 w-100">
+                  <h2 className="subtitle-pdf fw-bold">HISTÓRICO DE LESÕES</h2>
+                </div>
+                <div className="w-100 mt-3" style={{maxHeight: '300px', overflow: 'auto'}}>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Data</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Descrição</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Data de Retorno</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        infoPdf?.lesao.map((lesao: any, i: number) => (
+                            <tr key={i}>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{moment(lesao.data_lesao).format("DD/MM/YYYY")}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{lesao.descricao}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{moment(lesao.data_retorno).format("DD/MM/YYYY")}</td>
+                            </tr>
+                          )
+                    )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+          }
+
+          {
+            infoPdf?.clube.length > 0 &&
+              <section className="mt-4">
+                <div className="mt-3 w-100">
+                  <h2 className="subtitle-pdf fw-bold">HISTÓRICO DE CLUBES</h2>
+                </div>
+                <div className="w-100 mt-3" style={{maxHeight: '300px', overflow: 'auto'}}>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Clube</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Data de Início</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Data de Término</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Clube Atual</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        infoPdf?.clube.map((clube: any, i: number) => (
+                          <tr key={i}>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{clube.nome}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{moment(clube.data_inicio).format("DD/MM/YYYY")}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{moment(clube.data_fim).format("DD/MM/YYYY")}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{clube.clube_atual ? 'Sim' : 'Não'}</td>
+                            </tr>
+                          )
+                    )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+          }
+          {
+            infoPdf?.competicao.length > 0 &&
+              <section className="mt-4">
+                <div className="mt-3 w-100">
+                  <h2 className="subtitle-pdf fw-bold">HISTÓRICO DE COMPETIÇÕES</h2>
+                </div>
+                <div className="w-100 mt-3" style={{maxHeight: '300px', overflow: 'auto'}}>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Data</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Competição</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Jogos Completos</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Jogos Parciais</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Minutagem</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Gols</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Assistências</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        infoPdf?.competicao.map((competicao: any, i: number) => (
+                          <tr key={i}>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{moment(competicao.data_competicao).format("DD/MM/YYYY")}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{competicao.nome}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{competicao.jogos_completos}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{competicao.jogos_parciais}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{competicao.minutagem}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{competicao.gols}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{competicao.Assistências}</td>
+                            </tr>
+                          )
+                    )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+          }
         <section className="mt-5">
           <article>
-            <div className="border-bottom border-4 border-black mb-3">
-              <p className="fw-bold mb-2 text-uppercase h1">PERFIL FÍSICO E TÉCNICO</p>
-            </div>
-
-            <table className="table">
-              <thead className="thead-dark">
-                <tr>
-                  <th className="h1" scope="col">
-                    Data
-                  </th>
-                  <th className="h1" scope="col">
-                    Estatura
-                  </th>
-                  <th className="h1" scope="col">
-                    Envergadura
-                  </th>
-                  <th className="h1" scope="col">
-                    Peso
-                  </th>
-                  <th className="h1" scope="col">
-                    Percentual de Gordura
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {infoPdf?.caracteristicas_fisicas.map((x, i) => {
-                  return (
-                    <tr key={i}>
-                      <td className="h2">{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
-                      <td className="h2">{x.estatura}</td>
-                      <td className="h2">{x.envergadura}</td>
-                      <td className="h2">{x.peso}</td>
-                      <td className="h2">{x.percentual_gordura}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </article>
-        </section>
-        <section className="mt-5">
-          <article>
-            <div className="border-bottom border-4 border-black mb-3">
-              <p className="fw-bold mb-2 text-uppercase h1">PERFIL TÉCNICO DIFERENCIAL</p>
-            </div>
-
-            <table className="table" style={{ maxWidth: "100%", width: "100%" }}>
-              <thead>
-                <tr>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Data
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Est.
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Veloci.
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    1x1
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Desmarq.
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Ctrl de Bola
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Cruzamen.
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Finzali.
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Vis Espacial.
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Dom Orien.
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Dribles
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Leit. De Jogo
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Criativi.
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Capac. De Decisão
-                  </th>
-                  <th className="" scope="col" style={{ fontSize: 30 }}>
-                    Competividade
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {infoPdf?.caracteristicas_posicao?.map((x, y) => {
-                  return (
-                    <tr key={y}>
-                      <td style={{ fontSize: 25 }}>{moment(x.data_criacao).format("DD/MM/YYYY")}</td>
-                      <td style={{ fontSize: 25 }}>{x.estatura_fis}</td>
-                      <td style={{ fontSize: 25 }}>{x.velocidade_fis}</td>
-                      <td style={{ fontSize: 25 }}>{x.um_contra_um_ofensivo_fis}</td>
-                      <td style={{ fontSize: 25 }}>{x.desmarques_fis}</td>
-                      <td style={{ fontSize: 25 }}>{x.controle_bola_fis}</td>
-                      <td style={{ fontSize: 25 }}>{x.cruzamentos_fis}</td>
-                      <td style={{ fontSize: 25 }}>{x.finalizacao_fis}</td>
-                      <td style={{ fontSize: 25 }}>{x.visao_espacial_tec}</td>
-                      <td style={{ fontSize: 25 }}>{x.dominio_orientado_tec}</td>
-                      <td style={{ fontSize: 25 }}>{x.dribles_em_diagonal_tec}</td>
-                      <td style={{ fontSize: 25 }}>{x.leitura_jogo_tec}</td>
-                      <td style={{ fontSize: 25 }}>{x.criatividade_psi}</td>
-                      <td style={{ fontSize: 25 }}>{x.capacidade_decisao_psi}</td>
-                      <td style={{ fontSize: 25 }}>{x.competitividade_psi}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </article>
-        </section>
-
-        <section className="mt-4">
-          <article>
-            <div className="border-bottom border-4 border-black mb-3">
-              <p className="fw-bold mb-2 text-uppercase h1">Histórico de Lesões </p>
-            </div>
-
-            <table className="table" style={{ maxWidth: "100%", width: "100%" }}>
-              <thead>
-                <tr>
-                  <th className="h1">Data</th>
-                  <th className="h1">Descrição</th>
-                </tr>
-              </thead>
-              <tbody>
-                {infoPdf?.lesao.map((x, i) => {
-                  return (
-                    <tr key={i}>
-                      <td className="h2">{moment(x.data_lesao).format("DD/MM/YYYY")}</td>
-                      <td className="h2">{x.descricao}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </article>
-        </section>
-        <section className="mt-4">
-          <article>
-            <div className="border-bottom border-4 border-black mb-3">
-              <p className="fw-bold mb-2 text-uppercase h1">Histórico de Clubes </p>
-            </div>
-            <table className="table">
-              <thead>
-                <tr>
-                  <td className="h1">Date de Inicio</td>
-                  <td className="h1">Data de Fim</td>
-                  <td className="h1">Nome</td>
-                </tr>
-              </thead>
-              <tbody>
-                {clubes.map((x: any, i: number) => {
-                  return (
-                    <tr key={i}>
-                      <td className="h2">{moment(x.data_inicio).format("DD/MM/YYYY")}</td>
-                      <td className="h2">{x.data_fim ? moment(x.data_fim).format("DD/MM/YYYY") : "--"}</td>
-                      <td className="h2">{x.nome}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </article>
-        </section>
-        <section className="mt-10">
-          <article>
-            <div className="border-bottom border-4 border-black mb-3">
-              <p className="fw-bold mb-2 text-uppercase h1">Histórico de competição</p>
-            </div>
-            <table className="table">
-              <thead>
-                <tr>
-                  <td className="h1">Nome</td>
-                  <td className="h1">Gols</td>
-                  <td className="h1">Jogos Completos</td>
-                  <td className="h1">Jogos Parciais</td>
-                  <td className="h1">Minutagem</td>
-                </tr>
-              </thead>
-              <tbody>
-                {infoPdf?.competicao.map((x, i: number) => {
-                  return (
-                    <tr key={i}>
-                      <td className="h2">{x.nome}</td>
-                      <td className="h2">{x.gols}</td>
-                      <td className="h2">{x.jogos_completos}</td>
-                      <td className="h2">{x.jogos_parciais}</td>
-                      <td className="h2">{x.minutagem}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            {/* {infoPdf.clube.map((x, i) => {
-                return (
-                  <div className="row border-bottom border-2 mb-2 border-gray" key={i}>
-                    <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                      Nome:
-                      <span className="fw-normal"> {x.nome}</span>
-                    </p>
-                    <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                      Data de Inicio:
-                      <span className="fw-normal"> {x.data_inicio}</span>
-                    </p>
-                    <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
-                      Data de Fim:
-                      <span className="fw-normal"> {x.data_fim}</span>
-                    </p>
-                  </div>
-                );
-              })} */}
-          </article>
-        </section>
-        <section className="mt-5">
-          <article>
-            <div className="border-bottom border-4 border-black mb-3">
-              <p className="fw-bold mb-2 text-uppercase h1">Observações de Desempenho</p>
-            </div>
+          <div className="mt-3 w-100">
+            <h2 className="subtitle-pdf fw-bold">OBSERVAÇÃO DE DESEMPENHO</h2>
+          </div>
             <div className="row border-bottom border-2 mb-2 border-gray">
               <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
                 <textarea
                   disabled
                   className="w-100 bg-white border-black text-black"
                   style={{ resize: "none" }}
-                  value={observacaoDesempenho}
+                  value={infoPdf?.observacoes_desempenho ? infoPdf?.observacoes_desempenho.descricao : ''}
                 ></textarea>
               </p>
             </div>
@@ -687,49 +855,53 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
           {/* <p className="fw-bold text-uppercase"> Observações</p>
             <textarea disabled className="w-100 bg-white border-black " style={{ resize: "none" }} value={}></textarea> */}
         </section>
+
+        {
+            infoPdf?.relacionamento.length > 0 &&
+              <section className="mt-4">
+                <div className="mt-3 w-100">
+                  <h2 className="subtitle-pdf fw-bold">RELACIONAMENTO</h2>
+                </div>
+                <div className="w-100 mt-3" style={{maxHeight: '300px', overflow: 'auto'}}>
+                  <table className="table table-striped">
+                    <thead>
+                      <tr>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>Data</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>RECEPTIVIDADE CONTRATO</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>SATISFAÇÃO EMPRESA</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>SATISFAÇÃO CLUBE</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>RELAÇÕES FAMILIARES</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>INFLUÊNCIA EXTERNAS</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>PENDÊNCIAS EMPRESA</th>
+                        <th className="text-center" style={{backgroundColor: '#626262', color: "#ffffff", fontSize: '20px', verticalAlign: 'middle'}}>PENDÊNCIAS CLUBE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {
+                        infoPdf?.relacionamento.map((relacionamento: any, i: number) => (
+                          <tr key={i}>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{moment(relacionamento.data_avaliacao).format("DD/MM/YYYY")}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.nome}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.receptividade_contrato}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.satisfacao_empresa}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.satisfacao_clube}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.relacao_familiares}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.influencias_externas}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.pendencia_empresa ? 'Sim' : 'Não'}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.pendencia_clube ? 'Sim' : 'Não'}</td>
+                            </tr>
+                          )
+                    )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+          }
+
         <section className="mt-5">
           <article>
-            <div className="border-bottom border-4 border-black mb-3">
-              <p className="fw-bold mb-2 text-uppercase h1">Relacionamento</p>
-            </div>
-            <table className="table">
-              <thead>
-                <tr>
-                  <td className="h1">Data</td>
-                  <td className="h1">Receptividade Contrato</td>
-                  <td className="h1">Satisfação da Empresa</td>
-                  <td className="h1">Satisfação do Clube</td>
-                  <td className="h1">Relação Familiares</td>
-                  <td className="h1">Influências Externas</td>
-                  <td className="h1">Pendência Empresa</td>
-                  <td className="h1">Pendência Clube</td>
-                </tr>
-              </thead>
-              <tbody>
-                {infoPdf?.relacionamento?.map((x, i) => {
-                  return (
-                    <tr key={i}>
-                      <td className="h1">
-                        {x.data_criacao ? moment(x.data_criacao).format("DD/MM/YYYY").toString() : "---"}
-                      </td>
-                      <td className="h2">{x.receptividade_contrato}</td>
-                      <td className="h2">{x.satisfacao_empresa}</td>
-                      <td className="h2">{x.satisfacao_clube}</td>
-                      <td className="h2">{x.relacao_familiares}</td>
-                      <td className="h2">{x.influencias_externas}</td>
-                      <td className="h2">{x.pendencia_empresa ? "Sim" : "Não"}</td>
-                      <td className="h2">{x.pendencia_clube ? "Sim" : "Não"}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </article>
-        </section>
-        <section className="mt-5">
-          <article>
-            <div className="border-bottom border-4 border-black mb-3">
-              <p className="fw-bold mb-2 text-uppercase h1">Observações de Relacionamento</p>
+            <div className="mt-3 w-100">
+              <h2 className="subtitle-pdf fw-bold">OBSERVAÇÃO DE RELACIONAMENTO</h2>
             </div>
             <div className="row border-bottom border-2 mb-2 border-gray">
               <p className="fw-bold d-flex align-items-center justify-content-between mb-2 text-uppercase w-100">
@@ -737,7 +909,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                   disabled
                   className="w-100 bg-white border-black text-black"
                   style={{ resize: "none" }}
-                  value={observacaoRelacionamento}
+                  value={infoPdf?.observacoes_relacionamento ? infoPdf?.observacoes_desempenho.observacoes_relacionamento : ''}
                 ></textarea>
               </p>
             </div>
