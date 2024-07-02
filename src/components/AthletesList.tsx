@@ -706,7 +706,10 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                   </table>
                 </div>
 
-                <div className="mt-5 align-self-start media-das-medias" style={{maxHeight: '300px', overflow: 'auto'}}>
+                <div className="mt-4 w-100">
+                  <h2 className="subtitle-pdf fw-bold">MÉDIA GERAL</h2>
+                </div>
+                <div className="mt-3 align-self-start media-das-medias" style={{maxHeight: '300px', overflow: 'auto'}}>
                   <table className="table table-striped">
                     <thead>
                       <tr>
