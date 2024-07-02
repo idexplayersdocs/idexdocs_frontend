@@ -9,7 +9,6 @@ export const PDFInfo = async (id: number, permissions: any): Promise<PDFInfoResp
         if (permissions.performance) consultas.push('create_desempenho');
         url += `?permissoes=[${consultas.join(',')}]`;
     }
-    console.log(url)
     const {data} = await axiosClient.get<PDFInfoResponseDTO>(url);
     return data;
 }

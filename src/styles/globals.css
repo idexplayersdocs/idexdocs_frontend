@@ -549,3 +549,17 @@ h3 {
       width: 100% !important;
     }
   }
+
+  .img-pdf {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-repeat: no-repeat; */
+    background-size: cover;
+    background-position: center;
+    width: 105%;
+    height: 0;
+    padding-bottom: 56.25%;
+    position: relative;
+    margin-left: -11px;
+  }

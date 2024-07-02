@@ -582,7 +582,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
               </section>
           }
         {
-          infoPdf?.caracteristicas_posicao && 
+          infoPdf?.caracteristicas_posicao.fisico && 
             <section className="mt-4">
                 <div className="mt-3 w-100">
                   <h2 className="subtitle-pdf fw-bold">PERFIL FÍSICO E TÉCNICO</h2>
@@ -827,7 +827,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                               <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{competicao.jogos_parciais}</td>
                               <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{competicao.minutagem}</td>
                               <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{competicao.gols}</td>
-                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{competicao.Assistências}</td>
+                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{competicao.assistências}</td>
                             </tr>
                           )
                     )}
@@ -881,7 +881,6 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                         infoPdf?.relacionamento.map((relacionamento: any, i: number) => (
                           <tr key={i}>
                               <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{moment(relacionamento.data_avaliacao).format("DD/MM/YYYY")}</td>
-                              <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.nome}</td>
                               <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.receptividade_contrato}</td>
                               <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.satisfacao_empresa}</td>
                               <td className="text-center" style={{backgroundColor: '#ffffff', color: "#000", fontSize: '20px', verticalAlign: 'middle'}}>{relacionamento.satisfacao_clube}</td>
