@@ -490,7 +490,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
           />
         </header>
         <section className="row">
-          <article className="col-3 border border-black rounded p-2 d-flex align-items-center justify-content-center">
+          {/* <article className="col-3 border border-black rounded p-2 d-flex align-items-center justify-content-center">
             {infoPdf?.atleta.blob_url ? (
               <Image
                 src={infoPdf?.atleta.blob_url}
@@ -510,8 +510,8 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                 style={{ width: "300px", height: "auto", maxWidth: "300px" }}
               />
             )}
-          </article>
-          <article className="col-6">
+          </article> */}
+          <article className="col-9">
             <div className="border-bottom border-4 border-black mb-3"></div>
             <div className="border-bottom border-4 border-black mb-3">
               <p className="fw-bold  h2 mb-3 d-flex align-items-center justify-content-between">
@@ -532,7 +532,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
               </p>
             </div>
           </article>
-          <article className="col-3 ">
+          <article className="col-3">
             <div className="p-1 d-flex align-items-center justify-content-end w-100 ">
               <div className="w-100">
                 <SoccerField
