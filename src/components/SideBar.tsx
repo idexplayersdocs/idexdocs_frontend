@@ -103,6 +103,18 @@ export default function SideBar({ athleteData, modal }: any) {
         <h2 className="subtitle-sidebar">{athleteData.nome}</h2>
       </div>
       <div className="mt-2">
+        <h1 className="title-sidebar">Estatura:</h1>
+        <h2 className="subtitle-sidebar">{athleteData.physical.estatura ? `${athleteData.physical.estatura} cm` : 'Não avaliado'}</h2>
+      </div>
+      <div className="mt-2">
+        <h1 className="title-sidebar">Peso:</h1>
+        <h2 className="subtitle-sidebar">{athleteData.physical.peso ? `${athleteData.physical.peso} kg` : 'Não avaliado'}</h2>
+      </div>
+      <div className="mt-2">
+        <h1 className="title-sidebar">% Gordura:</h1>
+        <h2 className="subtitle-sidebar">{athleteData.physical.percentual_gordura ? `${athleteData.physical.percentual_gordura} %` : 'Não avaliado'}</h2>
+      </div>
+      <div className="mt-2">
         <h1 className="title-sidebar">Posição:</h1>
         <h2 className="subtitle-sidebar">{athleteData.posicao_primaria ? convertIDPosicao(athleteData.posicao_primaria) : 'Não possui'}</h2>
       </div>

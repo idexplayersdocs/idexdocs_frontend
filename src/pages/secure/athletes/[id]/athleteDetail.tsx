@@ -21,6 +21,7 @@ import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overfl
 import { jwtDecode } from 'jwt-decode';
 import ContractHistory from '@/components/modal/ContractHistory';
 import { Midia } from '@/components/Midia';
+import { getPhysical } from '@/pages/api/http-service/physical';
 
 moment.locale('pt-br');
 
@@ -137,8 +138,18 @@ export default function AthleteDetail() {
         if(athleteId){
           try {
             // Atleta
-            const athleteData = await getAthleteById(athleteId);
-            setAthlete(athleteData?.data);
+            const [athleteData, athletePhysicalData] = await Promise.all([
+              getAthleteById(athleteId), getPhysical(athleteId, 1, 'fisico', 1)
+            ]);
+
+            const latestPhysical = athletePhysicalData?.data?.at(-1); // Get the last element
+
+            const mergedData = {
+              ...athleteData?.data,
+              physical: latestPhysical || {} // Store it as an object instead of an array
+          };
+            
+            setAthlete(mergedData);
   
             // Relacionamento
             const relationship = await getAthleteRelationship(athleteId, pageRalationship);
