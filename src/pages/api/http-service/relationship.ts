@@ -53,3 +53,13 @@ export const createSupportControl = async (request: any) => {
     throw error;
   }
 };
+
+export const deleteSupportControl = async (controle_id: number) => {
+  try {
+    const response = await axios.delete(`${apiURL}/delete/controle/${controle_id}`)
+    return response.data
+  } catch (error) {
+    console.error('Erro', error);
+    throw error
+  }
+}

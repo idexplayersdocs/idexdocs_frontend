@@ -147,6 +147,7 @@ export const Midia = () => {
     setOpenUploadImage(false)
     setFormListaImage([])
     setFormListaImageRequest([])
+    setDescriptions([]);
   };
   const handleOpenEditVideo = (photo: any) => {
     setFormDataVideo({
@@ -209,6 +210,7 @@ export const Midia = () => {
       descricao: '',
       blob_url: ''
     })
+    setDescriptions([]);
   };
 
   const handleCloseDeleteVideo = () => { 
@@ -218,6 +220,9 @@ export const Midia = () => {
       descricao: '',
       blob_url: ''
     })
+    setDescriptions([]);
+    setFormListaVideoRequest([])
+    setFormListaVideo([])
   };
   const handleOpenUploadVideo = () => setOpenUploadVideo(true);
   const handleCloseUploadVideo = () => { 
@@ -227,6 +232,12 @@ export const Midia = () => {
       id: '',
       blob_url: '',
       descricao: '',
+    })
+    setDescriptions([]);
+    setFormListaVideoRequest([])
+    setFormListaVideo([])
+    setFormLinkYoutube({
+      video_url: ''
     })
   };
 
@@ -297,7 +308,8 @@ export const Midia = () => {
       
       const response = await saveImage(formData, athleteId);
       handleCloseUploadImage();
-  
+      const galleryData = await getGalleryById(athleteId);
+      setGallery(galleryData.data)
     } catch (error: any) {
       console.log(error);
     } finally {
@@ -315,7 +327,6 @@ export const Midia = () => {
         if (arquivo instanceof File && arquivo.type) {
           const novoArquivo = new File([arquivo], descriptions[index] ? descriptions[index] : '', { type: arquivo.type });
           novosArquivos.push(novoArquivo);
-          console.log(novoArquivo)
         }
 
       }
@@ -328,6 +339,8 @@ export const Midia = () => {
       const formData = new FormData();
       formData.append('video', formVideo);
       const response = await uploadVideo(athleteId, formData);
+      const videosData = await getVideosById(athleteId);
+      setVideos(videosData.data)
       handleCloseUploadVideo();
     } catch (error: any) {
       console.log(error);
@@ -422,7 +435,7 @@ export const Midia = () => {
           const galleryData = await getGalleryById(athleteId);
           setGallery(galleryData.data)
         } catch (error) {
-          console.error("Error fetching athletes:", error);
+          console.error("Error:", error);
         } finally {
           setLoading(false);
         }
@@ -444,20 +457,9 @@ export const Midia = () => {
 
     try {
       const response = await uploadVideoYoutube(athleteId, formLinkYoutube);
-      const fetchVideosData = async () => {
-        try {
-          const videosData = await getVideosById(athleteId);
-          setVideos(videosData.data)
-        } catch (error) {
-          console.error("Error fetching athletes:", error);
-        } finally {
-          setLoading(false);
-        }
-  
-      }
-      fetchVideosData();
+      const videosData = await getVideosById(athleteId);
+      setVideos(videosData.data)
       handleCloseUploadVideo();
-
     } catch (error: any) {
       console.log(error)
     } finally {
@@ -788,7 +790,7 @@ export const Midia = () => {
             <hr />
             <div className="d-flex flex-column">
                 <div className="m-2 text-center d-flex flex-column align-items-center justify-content-center">
-                <iframe
+                {/* <iframe
                   className="m-2 col-md-auto"
                   height="50"
                   src={formDataVideo.blob_url}
@@ -796,7 +798,9 @@ export const Midia = () => {
                   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   style={{width: '200px', height: '100px'}}
-                ></iframe>
+                ></iframe> */}
+                <ReactPlayer className="m-2 col-md-auto" width={200} height={100} url={formDataVideo.blob_url} controls/>
+
                   <div style={{marginTop: '20px'}}>
                     <Subtitle subtitle='Certeza que deseja remover o vídeo?'/>
                   </div>

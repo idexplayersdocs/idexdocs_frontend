@@ -8,8 +8,8 @@ import { Box, Button, Modal, Pagination, colors, styled } from "@mui/material";
 import Observacoes from '../../../../components/Observation';
 import AddButton from '@/components/AddButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { createAthleteRelationship, createSupportControl, getAthleteRelationship, getSupportControl } from '@/pages/api/http-service/relationship';
+import { faCheck, faX, faXmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { createAthleteRelationship, createSupportControl, deleteSupportControl, getAthleteRelationship, getSupportControl } from '@/pages/api/http-service/relationship';
 import Subtitle from '@/components/Subtitle';
 import { getObservations, saveObservations } from '@/pages/api/http-service/observations';
 import  Performance  from '@/components/Performance'
@@ -22,6 +22,7 @@ import { jwtDecode } from 'jwt-decode';
 import ContractHistory from '@/components/modal/ContractHistory';
 import { Midia } from '@/components/Midia';
 import { getPhysical } from '@/pages/api/http-service/physical';
+
 
 moment.locale('pt-br');
 
@@ -53,6 +54,21 @@ const style = {
   p: 4,
   borderRadius: '20px',
   height: '95%',
+  overflow: 'auto'
+};
+
+const styleDelete = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '95%',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  height: 'auto',
   overflow: 'auto'
 };
 
@@ -128,7 +144,43 @@ export default function AthleteDetail() {
     preco: '',
     data_controle: '',
   });
+  const [formSupportControlSelected, setFormSupportControlSelected] = useState<any>({
+    controle: '',
+    index: ''
+  })
 
+  
+
+  const handleDeleteControle = async () => {
+    try {
+      const response = await deleteSupportControl(formSupportControlSelected.controle.controle_id)
+      if (response) {
+        // const updatedData = [...displayedDataSupportControl]
+        // updatedData.splice(formSupportControlSelected.index, 1)
+        // setDisplayedDataSupportControl(updatedData)
+
+        setPageSupportControl(1)
+        // await getSupportControl(athleteId, pageSupportControl);
+        const supportControl = await getSupportControl(athleteId, pageSupportControl);
+        setDisplayedDataSupportControl(supportControl?.data.data.controles);
+        setTotalRowSupportControl(supportControl?.data.total);
+        setDisplayedTotalValueSupportControl(supportControl?.data.data.total.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}));
+        toast.success(`${formSupportControlSelected.controle.nome} foi deletado com sucesso`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+          transition: Bounce,
+          });
+      } 
+      handleCloseConfirmDeleteControl();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     if (!effectRan.current) {
@@ -213,14 +265,24 @@ export default function AthleteDetail() {
       data_avaliacao: ''
     });
   }
+  const replaceEmptyStrings = (obj: any) => {
+    Object.keys(obj).forEach(key => {
+      if (obj[key] === "") {
+        obj[key] = '0';
+      }
+    });
+    return obj;
+  };
 
   const handleSalvarClickRelationShip = async () => {
     setLoading(true);
     try {
       formDataRelationship['atleta_id'] = athleteId
       formDataRelationship['pendencia_empresa'] = formDataRelationship['pendencia_empresa'] == 'true' ? true : false
-      formDataRelationship['pendencia_clube'] = formDataRelationship['pendencia_empresa'] == 'true' ? true : false
-      const response = await createAthleteRelationship(formDataRelationship);
+      formDataRelationship['pendencia_clube'] = formDataRelationship['pendencia_clube'] == 'true' ? true : false
+
+      const form = replaceEmptyStrings({...formDataRelationship})
+      const response = await createAthleteRelationship(form);
       handleCloseCreateQuestionaryRelationship();
       setFormDataRelationship({
         atleta_id: athleteId,
@@ -236,7 +298,7 @@ export default function AthleteDetail() {
       const relationship = await getAthleteRelationship(athleteId, 1);
       setDisplayedDataRelationShip(relationship?.data.data);
       setTotalRowRelationship(relationship?.data.total);
-
+      setPageRalationship(1)
     } catch (error:any) {
       console.error('Error:', error);
       toast.error(error.response.data.errors[0].message, {
@@ -325,6 +387,14 @@ export default function AthleteDetail() {
         preco: '',
         data_controle: '',
       });
+      setPageSupportControl(1)
+      // await getSupportControl(athleteId, pageSupportControl);
+      const supportControl = await getSupportControl(athleteId, pageSupportControl);
+      setDisplayedDataSupportControl(supportControl?.data.data.controles);
+      setTotalRowSupportControl(supportControl?.data.total);
+      setDisplayedTotalValueSupportControl(supportControl?.data.data.total.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}));
+
+      
     } catch (error:any) {
       console.error('Error:', error);
       toast.error(error.response.data.errors[0].message, {
@@ -340,11 +410,11 @@ export default function AthleteDetail() {
     } finally {
       setLoading(false);
     }
-    setPageSupportControl(1)
-    // await getSupportControl(athleteId, pageSupportControl);
-    const supportControl = await getSupportControl(athleteId, pageSupportControl);
-    setDisplayedDataSupportControl(supportControl?.data.data);
-    setTotalRowSupportControl(supportControl?.data.total);
+    // setPageSupportControl(1)
+    // // await getSupportControl(athleteId, pageSupportControl);
+    // const supportControl = await getSupportControl(athleteId, pageSupportControl);
+    // setDisplayedDataSupportControl(supportControl?.data.data);
+    // setTotalRowSupportControl(supportControl?.data.total);
   };
 
   const isFormValidSupportControl= () => {
@@ -395,9 +465,55 @@ export default function AthleteDetail() {
     }
   };
 
+  const [openConfirmDeleteControl, setOpenConfirmDeleteControl] = React.useState(false);
+  const handleOpenConfirmDeleteControl = (controle: any, index: any) => {
+    setFormSupportControlSelected({
+      controle: controle,
+      index: index
+    })
+    setOpenConfirmDeleteControl(true)
+    
+  };
+
+  const handleCloseConfirmDeleteControl= () => {
+    setOpenConfirmDeleteControl(false)
+  };
+
   const [openContractHistory, setOpenContractHistory] = React.useState(false);
   const handleOpenContractHistory = () => setOpenContractHistory(true);
-  const handleCloseContractHistory = () => setOpenContractHistory(false);
+
+  const handleCloseContractHistory = () => {
+    setOpenContractHistory(false)
+  };
+
+  const handleCloseContractHistoryUpdateData = () => {
+    const fetchAthletesData = async () => {
+      setLoading(true);
+      try {
+        // Atleta
+        const athleteData = await getAthleteById(athleteId);
+        setAthlete(athleteData?.data);
+
+      } catch (error:any) {
+        toast.error('Dados do atleta temporariamente indisponível', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+          });
+        console.error('Error fetching athletes:', error);
+      } finally{
+        setLoading(false);
+      }
+    };
+
+    fetchAthletesData();
+    setOpenContractHistory(false)
+  }
 
   if (loading) {
     return (
@@ -532,6 +648,7 @@ export default function AthleteDetail() {
                         <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>NOME</th>
                         <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>QUANTIDADE</th>
                         <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>PREÇO</th>
+                        <th className="table-dark text-center" scope="col" ></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -539,11 +656,19 @@ export default function AthleteDetail() {
                         displayedDataSupportControl.length > 0 ? (
                         Array.isArray(displayedDataSupportControl) && displayedDataSupportControl.map((supportContol,index) => (
                           <tr key={index}>
-                            <td className="table-dark text-center">{new Date(supportContol.data_controle).toLocaleDateString()}</td>
+                            <td className="table-dark text-center">{moment(supportContol.data_controle).format('DD/MM/YYYY')}</td>
                             <td className="table-dark text-center">{supportContol.nome}</td>
                             <td className="table-dark text-center">{supportContol.quantidade}</td>
-                            {/* <td className="table-dark text-center">R$ {supportContol.preco}</td> */}
                             <td className="table-dark text-center">{supportContol.preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
+                            <td className="table-dark text-center">
+                              <FontAwesomeIcon
+                                icon={faTrashCan} 
+                                size="lg" 
+                                style={{color: "#ff0000", cursor: 'pointer'}}
+                                onClick={() => handleOpenConfirmDeleteControl(supportContol, index)}
+                                // onClick={handleOpenConfirmDeleteControl}
+                              />
+                              </td>
                           </tr>
                         ))
                       ) : (
@@ -715,16 +840,15 @@ export default function AthleteDetail() {
                 <div className="d-flex flex-column w-100 mt-3">
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Pendências Empresa</label>
                     <select className="form-select" name="pendencia_empresa" value={formDataRelationship.pendencia_empresa} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.pendencia_empresa ? '#fff' : '#999'}}>
-                      <option value="" disabled hidden>Selecione</option>
-                      <option value="true" style={{color: '#fff'}}>Sim</option>
+                      {/* <option value="" disabled hidden>Selecione</option> */}
+                      <option value="true" selected style={{color: '#fff'}}>Sim</option>
                       <option value="false" style={{color: '#fff'}}>Não</option>
                     </select>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Pendência Clube</label>
                     <select className="form-select" name="pendencia_clube" value={formDataRelationship.pendencia_clube} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.pendencia_clube ? '#fff' : '#999'}}>
-                      <option value="" disabled hidden>Selecione</option>
-                      <option value="true" style={{color: '#fff'}}>Sim</option>
+                      <option value="true" selected style={{color: '#fff'}}>Sim</option>
                       <option value="false" style={{color: '#fff'}}>Não</option>
                     </select>
                 </div>
@@ -798,7 +922,24 @@ export default function AthleteDetail() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={style}>
-          <ContractHistory closeModal={handleCloseContractHistory} athleteId={athleteId}/>
+          <ContractHistory closeModal={handleCloseContractHistory} athleteId={athleteId} closeModalUpdateData={handleCloseContractHistoryUpdateData}/>
+        </Box>
+      </Modal>
+      <Modal
+        open={openConfirmDeleteControl}
+        onClose={handleCloseConfirmDeleteControl}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <Box sx={styleDelete}>
+          <div className='w-100 h-100 d-flex justify-content-center align-items-center'>
+            <Subtitle subtitle={`Certeza que deseja remover ${formSupportControlSelected.controle.nome}`}/>
+          </div>
+          <div className='w-100 d-flex flex-column mt-5 pb-3' style={{width: '95%'}}>
+                <div className="d-flex justify-content-center gap-5">
+                  <button type="button" className="btn btn-success align-self-center" style={{width:'auto'}} onClick={handleDeleteControle}>Sim</button>
+                  <button type="button" className="btn btn-secondary align-self-center" style={{width:'auto', backgroundColor: '#626262'}} onClick={handleCloseConfirmDeleteControl} >Não</button>
+                </div>
+          </div>
         </Box>
       </Modal>
       <ToastContainer />

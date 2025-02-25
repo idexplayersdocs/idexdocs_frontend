@@ -34,6 +34,15 @@ hr {
   align-self: flex-start !important;
 }
 
+.subtitle-pdf {
+  color: 'black' !important;
+  text-transform: uppercase !important;
+  font-size: 26px !important;
+  margin-left: 15px !important;
+  display: flex !important;
+  align-self: flex-start !important;
+}
+
 .bg-dark {
   background-color: var(--bg-primary-color) !important;
 }
@@ -539,4 +548,18 @@ h3 {
     .media-das-medias{
       width: 100% !important;
     }
+  }
+
+  .img-pdf {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-repeat: no-repeat; */
+    background-size: cover;
+    background-position: center;
+    width: 105%;
+    height: 0;
+    padding-bottom: 56.25%;
+    position: relative;
+    margin-left: -11px;
   }

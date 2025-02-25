@@ -76,8 +76,6 @@ export default function SideBar({ athleteData, modal }: any) {
     }
   }
 
-
-
   if (!athleteData) {
     return <div className="d-flex justify-content-center align-items-center w-100 h-25" ><Loading type='bars' color="var(--bg-ternary-color)" /></div>
   }

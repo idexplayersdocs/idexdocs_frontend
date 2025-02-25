@@ -8,7 +8,7 @@ export default function Characteristics({dataList, labelList}: any) {
       <table className="table table-striped">
         <thead>
           <tr>
-            {labelList.fisico.map((label: any, index: number) => (
+            {labelList.label.fisico.map((label: any, index: number) => (
               <th key={index} className="table-dark text-center">{label}</th>
             ))}
           </tr>
@@ -33,7 +33,7 @@ export default function Characteristics({dataList, labelList}: any) {
             })
           ) : (
             <tr>
-              <td colSpan={Object.keys(labelList.fisico).length} className="table-dark text-center">
+              <td colSpan={Object.keys(labelList.label.fisico).length} className="table-dark text-center">
                 Lista vazia
               </td>
             </tr>
@@ -48,7 +48,7 @@ export default function Characteristics({dataList, labelList}: any) {
       <table className="table table-striped">
         <thead>
           <tr>
-            {labelList.tecnico.map((label: any, index: number) => (
+            {labelList.label.tecnico.map((label: any, index: number) => (
               <th key={index} className="table-dark text-center">{label}</th>
             ))}
           </tr>
@@ -73,7 +73,7 @@ export default function Characteristics({dataList, labelList}: any) {
             })
           ) : (
             <tr>
-              <td colSpan={Object.keys(labelList.tecnico).length} className="table-dark text-center">
+              <td colSpan={Object.keys(labelList.label.tecnico).length} className="table-dark text-center">
                 Lista vazia
               </td>
             </tr>
@@ -88,7 +88,7 @@ export default function Characteristics({dataList, labelList}: any) {
       <table className="table table-striped">
         <thead>
           <tr>
-            {labelList.psicologico.map((label: any, index: number) => (
+            {labelList.label.psicologico.map((label: any, index: number) => (
               <th key={index} className="table-dark text-center">{label}</th>
             ))}
           </tr>
@@ -113,7 +113,7 @@ export default function Characteristics({dataList, labelList}: any) {
             })
           ) : (
             <tr>
-              <td colSpan={Object.keys(labelList.tecnico).length} className="table-dark text-center">
+              <td colSpan={Object.keys(labelList.label.tecnico).length} className="table-dark text-center">
                 Lista vazia
               </td>
             </tr>

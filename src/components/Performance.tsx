@@ -129,63 +129,150 @@ export default function Performance({athleteData}: any) {
   const handleCloseInfo = () => setOpenInfo(false);
   const [dataCharacteristic, setDataCharacteristic] = useState<any>();
   const [labelCharacteristic, setLabelCharacteristic] = useState<any>(() => {
+    // // Atacante / Centroavante
+    // if (athleteData && (athleteData.posicao_primaria == 9 || athleteData.posicao_primaria == 10)) {
+    //   return {
+    //     fisico: ['Data', 'Estatura / Maturação', 'Velocidade / Aceleração Curta Distância', '1 x 1 Ofensivo', 'Desmarques / Mobilidade', 'Controle de Bola', 'Cruzamento / Passes para Gol', 'Finalização', 'Total', 'Média'],
+    //     tecnico: ['Data', 'Visão Espacial', 'Domínio Orientado / Ambidestria', 'Dribles em Diagonal (Direção à Baliza)', 'Leitura de Jogo', 'Reação Pós Perda', 'Total', 'Média'],
+    //     psicologico: ['Data','Criatividade / Improvisação', 'Capacidade de Decisão / Confiança / Extroversão', 'Inteligência Tática / Intuição Antecipar Ações','Competitividade / Coragem / Concentração', 'Total', 'Média']
+    //   };
+    // } 
+    // // Lateral esquerdo / Direito
+    // else if(athleteData && (athleteData.posicao_primaria == 3 || athleteData.posicao_primaria == 4) ) {
+    //   return {
+    //     fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Passe Curto', 'Passe Longo', 'Capacidade Aeróbica', 'Fechamento Defensivo / Contenção', 'Total', 'Média'],
+    //     tecnico: ['Data', 'Leitura de Jogo / Amplitude Organizacional', 'Participação Ofensiva / Penetração / Mobilidade', 'Cruzamento / 1 x 1 Ofencivo', 'Jogo Aéreo', 'Condução de Bola em Velocidade', 'Total', 'Média'],
+    //     psicologico: ['Data','Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade', 'Inteligência Tática / Intuição Ent. Ação Advers.','Competitividade', 'Total', 'Média']
+    //   };
+    // }
+    // // Meia Armador / Meia Atacante
+    // else if(athleteData && (athleteData.posicao_primaria == 7 || athleteData.posicao_primaria == 8)) {
+    //   return {
+    //     fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Leitura de Jogo / Cobertura Ofensiva / Contenção', 'Desmarques / Mobilidade', 'Controle de Bola / Passe para Gol', 'Capacidade Aeróbica', 'Finalização', 'Total', 'Média'],
+    //     tecnico: ['Data', 'Visão Espacial', 'Domíinio Orientado / Ambidestria', 'Dribles', 'Organização Ação Ofensiva / Dinâmica', 'Pisada na Área para Finalizar / Penetração', 'Total', 'Média'],
+    //     psicologico: ['Data','Criatividade e Improvisação', 'Capacidade de Decisão', 'Confiança / Responsabilidade','Inteligência Tática / Intuição Antecipar Ações', 'Competitividade / Coragem / Concentração', 'Total', 'Média']
+    //   };
+    // }
+    // // Zagueiro
+    // else if(athleteData && athleteData.posicao_primaria == 5) {
+    //   return {
+    //     fisico: ['Data', 'Estatura / Maturação', 'Força / Recuperação / Cobertura', 'Passe Curto', 'Passe Longo', 'Jogo Aéreo', 'Confronto Defensivo 1 x 1 / Contenção', 'Total', 'Média'],
+    //     tecnico: ['Data', 'Leitura de Jogo / Organização Defensiva', 'Ambidestria', 'Participação Ofensiva / Penetração / Mobilidade', 'Cabeceio Ofensivo', 'Passe Entre Linhas / Passe Longo Diagonal', 'Total', 'Média'],
+    //     psicologico: ['Data','Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade','Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade', 'Total', 'Média']
+    //   };
+    // }
+    // // Goleiro
+    // else if(athleteData && athleteData.posicao_primaria == 2) {
+    //   return {
+    //     fisico: ['Data', 'Perfil', 'Maturação', 'Agilidade / Impulsão', 'Velocidade Membros Superiores', 'Flexibilidade', 'Posicionamento Ofensivo e Defensivo', 'Total', 'Média'],
+    //     tecnico: ['Data', 'Leitura de Jogo', 'Jogo com os Pés / Reposição de Jogo', 'Organização da Defesa / Domínio da Área', 'Domínio Coberturas e Saídas', 'Total', 'Média'],
+    //     psicologico: ['Data','Liderança', 'Coragem / Confiança', 'Concentração / Responsabilidade', 'Controle de Estresse', 'Total', 'Média']
+    //   };
+    // }
+    // // Volante
+    // else if(athleteData && athleteData.posicao_primaria == 6) {
+    //   return {
+    //     fisico: ['Data', 'Estatura / Maturação', 'Força / Desarmes / Contenção', 'Passe Curto', 'Capacidade Aeróbica', 'Dinâmica / Mobilidade / Penetração', 'Visão Espacial / Mudança de Corredores', 'Total', 'Média'],
+    //     tecnico: ['Data', 'Leitura de Jogo / Coberturas / Espaço', 'Domínio Orientado / Ambidestria', 'Jogo Aéreo Ofensivo / Defensivo', 'Passes Verticais', 'Finalização de Média Distância', 'Total', 'Média'],
+    //     psicologico: ['Data','Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade','Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade / Coragem / Conventração', 'Total', 'Média']
+    //   };
+    // }
     // Atacante / Centroavante
-    if (athleteData && (athleteData.posicao_primaria == 9 || athleteData.posicao_primaria == 10)) {
-      return {
-        fisico: ['Data', 'Estatura / Maturação', 'Velocidade / Aceleração Curta Distância', '1 x 1 Ofensivo', 'Desmarques / Mobilidade', 'Controle de Bola', 'Cruzamento / Passes para Gol', 'Finalização', 'Total', 'Média'],
-        tecnico: ['Data', 'Visão Espacial', 'Domínio Orientado / Ambidestria', 'Dribles em Diagonal (Direção à Baliza)', 'Leitura de Jogo', 'Reação Pós Perda', 'Total', 'Média'],
-        psicologico: ['Data','Criatividade / Improvisação', 'Capacidade de Decisão / Confiança / Extroversão', 'Inteligência Tática / Intuição Antecipar Ações','Competitividade / Coragem / Concentração', 'Total', 'Média']
-      };
-    } 
-    // Lateral esquerdo / Direito
-    else if(athleteData && (athleteData.posicao_primaria == 3 || athleteData.posicao_primaria == 4) ) {
-      return {
-        fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Passe Curto', 'Passe Longo', 'Capacidade Aeróbica', 'Fechamento Defensivo / Contenção', 'Total', 'Média'],
-        tecnico: ['Data', 'Leitura de Jogo / Amplitude Organizacional', 'Participação Ofensiva / Penetração / Mobilidade', 'Cruzamento / 1 x 1 Ofencivo', 'Jogo Aéreo', 'Condução de Bola em Velocidade', 'Total', 'Média'],
-        psicologico: ['Data','Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade', 'Inteligência Tática / Intuição Ent. Ação Advers.','Competitividade', 'Total', 'Média']
-      };
-    }
-    // Meia Armador / Meia Atacante
-    else if(athleteData && (athleteData.posicao_primaria == 7 || athleteData.posicao_primaria == 8)) {
-      return {
-        fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Leitura de Jogo / Cobertura Ofensiva / Contenção', 'Desmarques / Mobilidade', 'Controle de Bola / Passe para Gol', 'Capacidade Aeróbica', 'Finalização', 'Total', 'Média'],
-        tecnico: ['Data', 'Visão Espacial', 'Domíinio Orientado / Ambidestria', 'Dribles', 'Organização Ação Ofensiva / Dinâmica', 'Pisada na Área para Finalizar / Penetração', 'Total', 'Média'],
-        psicologico: ['Data','Criatividade e Improvisação', 'Capacidade de Decisão', 'Confiança / Responsabilidade','Inteligência Tática / Intuição Antecipar Ações', 'Competitividade / Coragem / Concentração', 'Total', 'Média']
-      };
-    }
-    // Zagueiro
-    else if(athleteData && athleteData.posicao_primaria == 5) {
-      return {
-        fisico: ['Data', 'Estatura / Maturação', 'Força / Recuperação / Cobertura', 'Passe Curto', 'Passe Longo', 'Jogo Aéreo', 'Confronto Defensivo 1 x 1 / Contenção', 'Total', 'Média'],
-        tecnico: ['Data', 'Leitura de Jogo / Organização Defensiva', 'Ambidestria', 'Participação Ofensiva / Penetração / Mobilidade', 'Cabeceio Ofensivo', 'Passe Entre Linhas / Passe Longo Diagonal', 'Total', 'Média'],
-        psicologico: ['Data','Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade','Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade', 'Total', 'Média']
-      };
-    }
-    // Goleiro
-    else if(athleteData && athleteData.posicao_primaria == 2) {
-      return {
-        fisico: ['Data', 'Perfil', 'Maturação', 'Agilidade / Impulsão', 'Velocidade Membros Superiores', 'Flexibilidade', 'Posicionamento Ofensivo e Defensivo', 'Total', 'Média'],
-        tecnico: ['Data', 'Leitura de Jogo', 'Jogo com os Pés / Reposição de Jogo', 'Organização da Defesa / Domínio da Área', 'Domínio Coberturas e Saídas', 'Total', 'Média'],
-        psicologico: ['Data','Liderança', 'Coragem / Confiança', 'Concentração / Responsabilidade', 'Controle de Estresse', 'Total', 'Média']
-      };
-    }
-    // Volante
-    else if(athleteData && athleteData.posicao_primaria == 6) {
-      return {
-        fisico: ['Data', 'Estatura / Maturação', 'Força / Desarmes / Contenção', 'Passe Curto', 'Capacidade Aeróbica', 'Dinâmica / Mobilidade / Penetração', 'Visão Espacial / Mudança de Corredores', 'Total', 'Média'],
-        tecnico: ['Data', 'Leitura de Jogo / Coberturas / Espaço', 'Domínio Orientado / Ambidestria', 'Jogo Aéreo Ofensivo / Defensivo', 'Passes Verticais', 'Finalização de Média Distância', 'Total', 'Média'],
-        psicologico: ['Data','Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade','Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade / Coragem / Conventração', 'Total', 'Média']
-      };
-    }
+if (athleteData && (athleteData.posicao_primaria == 9 || athleteData.posicao_primaria == 10)) {
+  return {
+      'label': {
+          fisico: ['Data', 'Estatura / Maturação', 'Velocidade / Aceleração Curta Distância', '1 x 1 Ofensivo', 'Desmarques / Mobilidade', 'Controle de Bola', 'Cruzamento / Passes para Gol', 'Finalização', 'Total', 'Média'],
+          tecnico: ['Data', 'Visão Espacial', 'Domínio Orientado / Ambidestria', 'Dribles em Diagonal (Direção à Baliza)', 'Leitura de Jogo', 'Reação Pós Perda', 'Total', 'Média'],
+          psicologico: ['Data', 'Criatividade / Improvisação', 'Capacidade de Decisão / Confiança / Extroversão', 'Inteligência Tática / Intuição Antecipar Ações', 'Competitividade / Coragem / Concentração', 'Total', 'Média']
+      }, 'api': {
+          fisico: [{'data_avaliacao': null, 'estatura_fis': null, 'velocidade_fis': null, 'um_contra_um_ofensivo_fis': null, 'desmarques_fis': null, 'controle_bola_fis': null, 'cruzamentos_fis': null, 'finalizacao_fis': null, 'sum': null, 'mean': null}],
+          tecnico: [{'data_avaliacao': null, 'visao_espacial_tec': null, 'dominio_orientado_tec': null, 'dribles_em_diagonal_tec': null, 'leitura_jogo_tec': null, 'reacao_pos_perda_tec': null, 'sum': null, 'mean': null}],
+          psicologico: [{'data_avaliacao': null, 'criatividade_psi': null, 'capacidade_decisao_psi': null, 'inteligencia_tatica_psi': null, 'competitividade_psi': null, 'sum': null, 'mean': null}]
+      }
+  };
+}
+// Lateral esquerdo / Direito
+else if (athleteData && (athleteData.posicao_primaria == 3 || athleteData.posicao_primaria == 4)) {
+  return {
+      'label': {
+          fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Passe Curto', 'Passe Longo', 'Capacidade Aeróbica', 'Fechamento Defensivo / Contenção', 'Total', 'Média'],
+          tecnico: ['Data', 'Leitura de Jogo / Amplitude Organizacional', 'Participação Ofensiva / Penetração / Mobilidade', 'Cruzamento / 1 x 1 Ofencivo', 'Jogo Aéreo', 'Condução de Bola em Velocidade', 'Total', 'Média'],
+          psicologico: ['Data', 'Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade', 'Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade', 'Total', 'Média']
+      },
+      'api': {
+          fisico: [{'data_avaliacao': null, 'estatura_fis': null, 'velocidade_fis': null, 'passe_curto_fis': null, 'passe_longo_fis': null, 'capacidade_aerobia_fis': null, 'fechemanento_defensivo_fis': null, 'sum': null, 'mean': null}],
+          tecnico: [{'data_avaliacao': null, 'leitura_jogo_tec': null, 'participacao_ofensiva_tec': null, 'cruzamento_tec': null, 'jogo_aereo_tec': null, 'conducao_bola_tec': null, 'sum': null, 'mean': null}],
+          psicologico: [{'data_avaliacao': null, 'lideranca_psi': null, 'confianca_psi': null, 'inteligencia_tatica_psi': null, 'competitividade_psi': null, 'sum': null, 'mean': null}]
+      }
+  };
+}
+// Meia Armador / Meia Atacante
+else if (athleteData && (athleteData.posicao_primaria == 7 || athleteData.posicao_primaria == 8)) {
+  return {
+      'label': {
+          fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Leitura de Jogo / Cobertura Ofensiva / Contenção', 'Desmarques / Mobilidade', 'Controle de Bola / Passe para Gol', 'Capacidade Aeróbica', 'Finalização', 'Total', 'Média'],
+          tecnico: ['Data', 'Visão Espacial', 'Domíinio Orientado / Ambidestria', 'Dribles', 'Organização Ação Ofensiva / Dinâmica', 'Pisada na Área para Finalizar / Penetração', 'Total', 'Média'],
+          psicologico: ['Data', 'Criatividade e Improvisação', 'Capacidade de Decisão', 'Confiança / Responsabilidade', 'Inteligência Tática / Intuição Antecipar Ações', 'Competitividade / Coragem / Concentração', 'Total', 'Média']
+      },
+      'api': {
+          fisico: [{'data_avaliacao': null, 'estatura_fis': null, 'velocidade_fis': null, 'leitura_jogo_fis': null, 'desmarques_fis': null, 'controle_bola_fis': null, 'capacidade_aerobia_fis': null, 'finalizacao_fis': null, 'sum': null, 'mean': null}],
+          tecnico: [{'data_avaliacao': null, 'visao_espacial_tec': null, 'dominio_orientado_tec': null, 'dribles_tec': null, 'organizacao_acao_ofensica_tec': null, 'pisada_na_area_para_finalizar_tec': null, 'sum': null, 'mean': null}],
+          psicologico: [{'data_avaliacao': null, 'criatividade_psi': null, 'capacidade_decisao_psi': null, 'confianca_psi': null, 'inteligencia_tatica_psi': null, 'competitividade_psi': null, 'sum': null, 'mean': null}]
+      }
+  };
+}
+// Zagueiro
+else if (athleteData && athleteData.posicao_primaria == 5) {
+  return {
+      'label': {
+          fisico: ['Data', 'Estatura / Maturação', 'Força / Recuperação / Cobertura', 'Passe Curto', 'Passe Longo', 'Jogo Aéreo', 'Confronto Defensivo 1 x 1 / Contenção', 'Total', 'Média'],
+          tecnico: ['Data', 'Leitura de Jogo / Organização Defensiva', 'Ambidestria', 'Participação Ofensiva / Penetração / Mobilidade', 'Cabeceio Ofensivo', 'Passe Entre Linhas / Passe Longo Diagonal', 'Total', 'Média'],
+          psicologico: ['Data', 'Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade', 'Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade', 'Total', 'Média']
+      },
+      'api': {
+          fisico: [{'data_avaliacao': null, 'estatura_fis': null, 'força_fis': null, 'passe_curto_fis': null, 'passe_longo_fis': null, 'jogo_aereo_fis': null, 'confronto_defensivo_fis': null, 'sum': null, 'mean': null}],
+          tecnico: [{'data_avaliacao': null, 'leitura_jogo_tec': null, 'ambidestria_tec': null, 'participacao_ofensica_tec': null, 'cabeceio_ofensivo_tec': null, 'passe_entre_linhas_tec': null, 'sum': null, 'mean': null}],
+          psicologico: [{'data_avaliacao': null, 'lideranca_psi': null, 'confianca_psi': null, 'inteligencia_tatica_psi': null, 'competitividade_psi': null, 'sum': null, 'mean': null}]
+      }
+  };
+}
+// Goleiro
+else if (athleteData && athleteData.posicao_primaria == 2) {
+  return {
+      'label': {
+          fisico: ['Data', 'Perfil', 'Maturação', 'Agilidade / Impulsão', 'Velocidade Membros Superiores', 'Flexibilidade', 'Posicionamento Ofensivo e Defensivo', 'Total', 'Média'],
+          tecnico: ['Data', 'Leitura de Jogo', 'Jogo com os Pés / Reposição de Jogo', 'Organização da Defesa / Domínio da Área', 'Domínio Coberturas e Saídas', 'Total', 'Média'],
+          psicologico: ['Data', 'Liderança', 'Coragem / Confiança', 'Concentração / Responsabilidade', 'Controle de Estresse', 'Total', 'Média']
+      },
+      'api': {
+          fisico: [{'data_avaliacao': null, 'perfil_fis': null, 'maturacao_fis': null, 'agilidade_fis': null, 'velocidade_membros_superiores_fis': null, 'flexibilidade_fis': null, 'posicionamento_fis': null, 'sum': null, 'mean': null}],
+          tecnico: [{'data_avaliacao': null, 'leitura_jogo_tec': null, 'jogo_com_pes_tec': null, 'organizacao_da_defesa_tec': null, 'dominio_coberturas_e_saidas_tec': null, 'sum': null, 'mean': null}],
+          psicologico: [{'data_avaliacao': null, 'lideranca_psi': null, 'coragem_psi': null, 'concentracao_psi': null, 'controle_estresse_psi': null, 'sum': null, 'mean': null}]
+      }
+  };
+}
+// Volante
+else if (athleteData && athleteData.posicao_primaria == 6) {
+  return {
+      'label': {
+          fisico: ['Data', 'Estatura / Maturação', 'Força / Desarmes / Contenção', 'Passe Curto', 'Capacidade Aeróbica', 'Dinâmica / Mobilidade / Penetração', 'Visão Espacial / Mudança de Corredores', 'Total', 'Média'],
+          tecnico: ['Data', 'Leitura de Jogo / Coberturas / Espaço', 'Domínio Orientado / Ambidestria', 'Jogo Aéreo Ofensivo / Defensivo', 'Passes Verticais', 'Finalização de Média Distância', 'Total', 'Média'],
+          psicologico: ['Data', 'Liderança / Comunicação Pró-Ativa', 'Confiança / Transm. Segurança / Responsabilidade', 'Inteligência Tática / Intuição Ent. Ação Advers.', 'Competitividade / Coragem / Conventração', 'Total', 'Média']
+      },
+      'api': {
+          fisico: [{'data_avaliacao': null, 'estatura_fis': null, 'forca_fis': null, 'passe_curto_fis': null, 'capacidade_aerobia_fis': null, 'dinamica_fis': null, 'visao_espacial_fis': null, 'sum': null, 'mean': null}],
+          tecnico: [{'data_avaliacao': null, 'leitura_jogo_tec': null, 'dominio_orientado_tec': null, 'jogo_aereo_ofensivo_tec': null, 'passes_verticais_tec': null, 'finalizacao_media_distancia_tec': null, 'sum': null, 'mean': null}],
+          psicologico: [{'data_avaliacao': null, 'lideranca_psi': null, 'confianca_psi': null, 'inteligencia_tatica_psi': null, 'competitividade_psi': null, 'sum': null, 'mean': null}]
+      }
+  };
+}
   });
 
   useEffect(() => {
     const fetchAthletesData = async () => {
       try {
-        console.log(athleteData.posicao_primaria)
-        const characteristic = await getPhysical(athleteId, 1, athleteData.posicao_primaria);
+        const characteristic = await getPhysical(athleteId, 1, athleteData.posicao_primaria.toString());
         setDataCharacteristic(characteristic?.data);
-
         // Observações
         const responseObservacoes = await getObservations(athleteId, 'desempenho');
         // let observacao = responseObservacoes?.data[responseObservacoes?.data.length - 1]

@@ -33,6 +33,8 @@ export type AthletaInfo = {
 };
 
 export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
+  console.log(info)
+  console.log(urlFoto)
   const pdfRef = React.useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -104,7 +106,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
                   width={0}
                   height={0}
                   sizes="100vw"
-                  style={{ width: "100%", height: "auto", maxWidth: "100%" }}
+                  style={{ width: "50px", height: "auto", maxWidth: "50px" }}
                 />
               ) : (
                 <Image
