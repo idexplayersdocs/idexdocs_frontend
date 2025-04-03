@@ -49,26 +49,10 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
   };
 
   const ParsePosition = (
-    atleta: Atleta,
+    position: number,
     t: (key: string) => string
   ): string => {
-    return Object.entries(atleta)
-      .filter(([key, value]) => key.startsWith("posicao_") && value !== null)
-      .map(([key, value]) => {
-        if (typeof value !== "number") return "";
-
-        const positionNumber = key.includes("primaria")
-          ? "1."
-          : key.includes("secundaria")
-          ? "2."
-          : key.includes("terciaria")
-          ? "3."
-          : "";
-
-        return `${positionNumber} ${t(getPositionName(value))}`; // Translate value using i18next
-      })
-      .filter(Boolean)
-      .join(", ");
+    return t(getPositionName(position));
   };
 
   return (
@@ -88,9 +72,29 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
             <Text style={styles.text}>
               {t("name")}: {data.atleta.nome}
             </Text>
-            <Text style={styles.text}>
-              {t("position")}: {ParsePosition(data.atleta, t)}
-            </Text>
+            <View style={{gap: 2}}>
+              {/* Posição primária */}
+              {data.atleta.posicao_primaria != 1 && (
+                <Text style={styles.text}>
+                  {t("position") + " 1"} :{" "}
+                  {ParsePosition(data.atleta.posicao_primaria, t)}
+                </Text>
+              )}
+              {/* Posição secundária */}
+              {data.atleta.posicao_secundaria != 1 && (
+                <Text style={styles.text}>
+                  {t("position") + " 2"} :{" "}
+                  {ParsePosition(data.atleta.posicao_secundaria, t)}
+                </Text>
+              )}
+              {/* Posição terciária */}
+              {data.atleta.posicao_terciaria != 1 && (
+                <Text style={styles.text}>
+                  {t("position") + " 3"} :{" "}
+                  {ParsePosition(data.atleta.posicao_terciaria, t)}
+                </Text>
+              )}
+            </View>
             <Text style={styles.text}>
               {t("birthdate")}: {data.atleta.data_nascimento}
             </Text>

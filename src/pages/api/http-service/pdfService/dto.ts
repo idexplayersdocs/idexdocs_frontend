@@ -37,9 +37,9 @@ export interface Videos {
 export interface Atleta {
   nome: string
   data_nascimento: string
-  posicao_primaria: string
-  posicao_secundaria: string
-  posicao_terciaria: string
+  posicao_primaria: number
+  posicao_secundaria: number
+  posicao_terciaria: number
   clube_atual: string
   contrato: Contrato
   blob_url: string;

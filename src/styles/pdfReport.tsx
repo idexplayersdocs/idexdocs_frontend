@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
   sectionAthlete: {
     flexDirection: "column",
     alignItems: "flex-start",
-    gap: "20",
+    gap: "15",
   },
   table: {
     display: "table" as any,

@@ -1,4 +1,4 @@
-export const getPositionName = (posicao: any) => {
+export const getPositionName = (posicao: number): string => {
   switch (posicao) {
     case 2:
       return "goleiro";
