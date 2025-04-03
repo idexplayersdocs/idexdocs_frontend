@@ -100,7 +100,7 @@ export const styles = StyleSheet.create({
   },
   text: { fontSize: 11 },
   title: { fontSize: 24 },
-  thumbnail: { width: "auto" },
+  thumbnail: { width: "auto", maxWidth: "100%", maxHeight: 130 },
 });
 
 export const stylesPositions: Record<string, any> = StyleSheet.create({

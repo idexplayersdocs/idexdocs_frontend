@@ -25,13 +25,16 @@ export interface PDFInfoResponseDTO {
 }
 
 export interface Imagens {
-  path: string
-  descricao: string
+  id: number
+  blob_url: string
+  descricao: string | null
 }
 
 export interface Videos {
-  path: string
-  descricao: string
+  id: number
+  blob_url: string
+  tipo: "video" | "youtube"
+  descricao: string | null
 }
 
 export interface Atleta {

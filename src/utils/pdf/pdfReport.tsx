@@ -23,11 +23,11 @@ export const getPositionName = (posicao: number): string => {
   }
 };
 
-export const getYouTubeThumbnail = (url: string): string => {
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
-  return match
-    ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg`
-    : "https://via.placeholder.com/200x112?text=No+Thumbnail";
+export const getThumbnail = (url: string): string => {
+  const youtubeRegex = /(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([\w-]+)/;
+  const match = url.match(youtubeRegex);
+
+  return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : "/images/download.jpg";
 };
 
 export const createRows = <T,>(items: T[] = [], itemsPerRow: number): T[][] => {

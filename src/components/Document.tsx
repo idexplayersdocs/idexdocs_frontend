@@ -8,7 +8,7 @@ import {
 import { useTranslation } from "react-i18next";
 import {
   getPositionName,
-  getYouTubeThumbnail,
+  getThumbnail,
   createRows,
 } from "@/utils/pdf/pdfReport";
 import { styles } from "@/styles/pdfReport";
@@ -194,12 +194,12 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
                 {row.map((video, colIndex) => (
                   <View key={colIndex} style={styles.imageContainer}>
                     <Image
-                      src={getYouTubeThumbnail(video.path)}
+                      src={getThumbnail(video.blob_url)}
                       style={styles.thumbnail}
                     />
                     <Text style={styles.text}>{video.descricao}</Text>
-                    <Link src={video.path} style={styles.text}>
-                      {t("watchOnYouTube")}
+                    <Link src={video.blob_url} style={styles.text}>
+                      {video.tipo === "youtube" ? t("watchOnYouTube") : t("downloadTowatch")}
                     </Link>
                   </View>
                 ))}
@@ -215,7 +215,7 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
               <View key={rowImageIndex} style={styles.rowImage}>
                 {row.map((img, colIndex) => (
                   <View key={colIndex} style={styles.imageContainer}>
-                    <Image src={img.path} style={styles.image} />
+                    <Image src={img.blob_url} style={styles.image} />
                     <Text style={styles.text}>{img.descricao}</Text>
                   </View>
                 ))}

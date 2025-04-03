@@ -309,58 +309,55 @@ export const pdfReportData = {
   },
   imagens: [
     {
-      path: "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_1/Neymar_Junior.png",
-      description: "description",
+      id: 1,
+      blob_url:
+        "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_2/bf8b8a73-cfda-4a7f-aaeb-7292d69160de.jpeg",
+      descricao: "Centro de análise de performance em Portugal",
     },
     {
-      path: "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_1/Neymar_Junior.png",
-      description: "description",
+      id: 2,
+      blob_url:
+        "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_2/bf8b8a73-cfda-4a7f-aaeb-7292d69160de.jpeg",
+      descricao: "Centro de análise de performance em Portugal",
     },
     {
-      path: "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_1/Neymar_Junior.png",
-      description: "description",
+      id: 3,
+      blob_url:
+        "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_2/bf8b8a73-cfda-4a7f-aaeb-7292d69160de.jpeg",
+      descricao: "Centro de análise de performance em Portugal",
     },
     {
-      path: "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_1/Neymar_Junior.png",
-      description: "description",
+      id: 4,
+      blob_url:
+        "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_2/bf8b8a73-cfda-4a7f-aaeb-7292d69160de.jpeg",
+      descricao: "Centro de análise de performance em Portugal",
     },
     {
-      path: "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_1/Neymar_Junior.png",
-      description: "description",
+      id: 5,
+      blob_url:
+        "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_2/bf8b8a73-cfda-4a7f-aaeb-7292d69160de.jpeg",
+      descricao: "Centro de análise de performance em Portugal",
     },
     {
-      path: "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_1/Neymar_Junior.png",
-      description: "description",
-    },
-    {
-      path: "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_1/Neymar_Junior.png",
-      description: "description",
-    },
-    {
-      path: "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_1/Neymar_Junior.png",
-      description: "description",
+      id: 6,
+      blob_url:
+        "https://idexdocsblob.blob.core.windows.net/atleta-imagens/atleta_2/bf8b8a73-cfda-4a7f-aaeb-7292d69160de.jpeg",
+      descricao: "Centro de análise de performance em Portugal",
     },
   ],
   videos: [
     {
-      path: "https://www.youtube.com/watch?v=wOvfGhqAtjs",
-      description: "description",
+      id: 1,
+      blob_url:
+        "https://idexdocsblob.blob.core.windows.net/atleta-videos/atleta_2/0d0574d9-48f0-414d-aad7-874585aad327.mp4",
+      tipo: "video",
+      descricao: "7fdcfff8-49a4-4f67-90e0-e2c6bc9ab03a",
     },
     {
-      path: "https://www.youtube.com/watch?v=wOvfGhqAtjs",
-      description: "description",
-    },
-    {
-      path: "https://www.youtube.com/watch?v=wOvfGhqAtjs",
-      description: "description",
-    },
-    {
-      path: "https://www.youtube.com/watch?v=wOvfGhqAtjs",
-      description: "description",
-    },
-    {
-      path: "https://www.youtube.com/watch?v=wOvfGhqAtjs",
-      description: "description",
+      id: 2,
+      blob_url: "https://www.youtube.com/embed/5ynIotpB468",
+      tipo: "youtube",
+      descricao: null,
     },
   ],
   posicao: [
