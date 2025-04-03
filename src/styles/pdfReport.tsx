@@ -1,0 +1,152 @@
+import { StyleSheet } from "@react-pdf/renderer";
+
+// Define styles
+export const styles = StyleSheet.create({
+  athlete: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginVertical: 10,
+    height: "15%",
+    gap: 10,
+  },
+  avatar: { width: "20%", height: "100%", borderRadius: 5, objectFit: "cover" },
+  cell: {
+    padding: 4,
+    borderStyle: "solid",
+    borderWidth: 0.5,
+    flex: 1,
+    fontSize: 10,
+    fontWeight: "bold",
+  },
+  containerVideosColumn: {
+    margin: 10,
+    padding: 10,
+    // alignItems: "center",
+    width: 400,
+    flex: "column",
+    justifyContent: "space-between",
+  },
+  containerVideosRow: {
+    flexDirection: "row",
+    // flexWrap: "wrap",
+    // justifyContent: "space-between",
+  },
+  footer: {
+    position: "absolute",
+    bottom: 10,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    fontSize: 10,
+    color: "gray",
+  },
+  field: { width: "auto", height: "100%" },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  horizontalLine: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+    marginVertical: 10,
+  },
+  image: {
+    width: "75%", // Scale down to 50% of its container
+    height: "auto",
+    objectFit: "contain",
+  },
+  imageContainer: { width: "32%", alignItems: "center", gap: 10 },
+  link: { fontSize: 12, color: "blue", textDecoration: "none" },
+  logo: { width: "auto", height: 80 },
+  page: { padding: 30 },
+  position: {
+    goleiro: { position: "absolute" },
+  },
+  row: { flexDirection: "row" },
+  rowImage: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    gap: 10,
+    marginBottom: 20,
+  },
+  section: { marginVertical: 10 },
+  sectionAthlete: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: "20",
+  },
+  table: {
+    display: "table" as any,
+    width: "100%",
+    borderStyle: "solid",
+    borderWidth: 0.5,
+    textAlign: "center",
+  },
+  tableTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginVertical: 10,
+    textAlign: "center",
+  },
+  tableHeader: {
+    flexDirection: "row",
+    backgroundColor: "gray",
+    color: "white",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  text: { fontSize: 11 },
+  title: { fontSize: 24 },
+  thumbnail: { width: "auto" },
+});
+
+export const stylesPositions: Record<string, any> = StyleSheet.create({
+  goleiro: {
+    position: "absolute",
+    bottom: 10,
+    left: 430,
+    width: 20,
+    // zIndex: 1,
+  },
+  zagueiro: {
+    position: "absolute",
+    bottom: 40,
+    left: 430,
+    width: 20,
+    // zIndex: 2,
+  },
+  volante: {
+    position: "absolute",
+    bottom: 50,
+    left: 430,
+    width: 20,
+    // zIndex: 3,
+  },
+  meia_armador: {
+    position: "absolute",
+    bottom: 60,
+    left: 430,
+    width: 20,
+    // zIndex: 4,
+  },
+  meia_atacante: {
+    position: "absolute",
+    bottom: 70,
+    left: 430,
+    width: 20,
+    // zIndex: 5,
+  },
+  atacante: {
+    position: "absolute",
+    bottom: 80,
+    left: 430,
+    width: 30,
+    // zIndex: 6,
+  },
+  centro_avante: { position: "absolute", bottom: 90, left: 430, width: 20 },
+  lateral_direito: { position: "absolute", bottom: 35, left: 480, width: 20 },
+  lateral_esquerdo: { position: "absolute", bottom: 35, left: 380, width: 20 },
+});

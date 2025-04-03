@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { useRouter } from "next/router";
@@ -16,10 +16,12 @@ import { jwtDecode } from 'jwt-decode';
 import Image from "next/image";
 
 import { PDFInfo } from "@/pages/api/http-service/pdfService";
-import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
-import generatePDF, { Margin, Options } from "react-to-pdf";
 import SoccerField from "./SoccerField";
 import Subtitle from "./Subtitle";
+
+import MyDocument from "./Document";
+import { pdf } from "@react-pdf/renderer";
+import i18n from "@/i18n";
 
 interface Athlete {
   id: number;
@@ -30,27 +32,6 @@ interface Athlete {
   data_proxima_avaliacao_relacionamento: any;
   ativo: boolean;
 }
-
-const options: Options = {
-  // default is `save`
-  method: "save",
-
-  // default is Resolution.MEDIUM = 3, which should be enough, higher values
-  // increases the image quality but also the size of the PDF, so be careful
-  // using values higher than 10 when having multiple pages generated, it
-  // might cause the page to crash or hang.
-  page: {
-    // margin is in MM, default is Margin.NONE = 0
-    margin: Margin.MEDIUM,
-    // default is 'A4'
-    format: "A2",
-    // default is 'portrait'
-    orientation: "portrait",
-  },
-  // Customize any value passed to the jsPDF instance and html2canvas
-  // function. You probably will not need this and things can break,
-  // so use with caution
-};
 
 export default function AthletesList({ newAthlete, inputFilter, searchFilter }: any) {
   const [page, setPage] = useState(1);
@@ -217,10 +198,6 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
     }
   }, [newAthlete, inputFilter]);
 
-  useEffect(() => {
-    // console.log(pdfRef);
-  }, []);
-
   const handleEditAthlete = (id: number) => {
     push(`/secure/athletes/${id}/athleteDetail`);
   };
@@ -229,30 +206,38 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
     setPage(newPage);
   };
 
-  useEffect(() => {
-    console.log(infoPdf)
-    if (infoPdf) {      
-      if (elementPdf) {        
-        elementPdf.classList.remove("pdf");
-        generatePDF(pdfRef, {          
-          method: "save",
-          filename: `${infoPdf.atleta.nome} - ${moment(new Date()).format("DD/MM/YYYY").toString()}`,
-          page: {
-            margin: Margin.MEDIUM,
+  // Define generatePdf function with useCallback to avoid redeclaration
+  const generatePdf = useCallback(async () => {
 
-            format: "A2",
-
-            orientation: "portrait",
-          },
-        }).then(() => {
-          setIsLoading(false);
-          setInfoPdf(undefined);
-        });
-        elementPdf.classList.add("pdf");
-      }
+    try {
+      const pdfBlob = await pdf(<MyDocument data={infoPdf} />).toBlob();
+      // Create a download link and trigger click event
+      const url = URL.createObjectURL(pdfBlob);
+      // Generate a dynamic filename with timestamp
+      const fileName = `${infoPdf.atleta.nome} - ${new Date().getTime()}`;
+      // Create an anchor element to trigger the download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url)   
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setIsLoading(false);
     }
-    setElementPdf(pdfRef.current);
-  }, [infoPdf]);
+  }, [infoPdf, setIsLoading]);
+
+  useEffect(() => {
+    if (infoPdf) {
+      generatePdf(); // Call generatePdf when infoPdf changes
+    };
+  }, [infoPdf, generatePdf]);
+
+
+
 
   const handleClickPdf = async (id: number): Promise<void> => {
     let retry = false;
@@ -304,31 +289,14 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
     setLoadingPDF(isLoadingPDF);
   };
 
-  // const searchAthlete = () => {
-  //   const fetchUpdatedAthletesData = async () => {
-  //     try {
-  //       const athletesData = await getAthletes(1, inputFilter); // Passando o filtro para a função getAthletes
-  //       setAthletes(athletesData.data);
-  //       setTotalRow(athletesData.total);
-  //       setPage(1);
-  //     } catch (error) {
-  //       console.error("Error fetching athletes:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchUpdatedAthletesData();
-  // };
 
   const validLabelDate = (dataAvaliacao: string) => {
     const currentDate = moment().startOf("day");
     const nextEvaluationDate = moment(dataAvaliacao).startOf("day");
-    // const nextEvaluationDate = moment('2024-05-06').startOf('day');
-    // Comparação das datas
     return currentDate.isAfter(nextEvaluationDate);
   };
 
+  // FILTRO DE ATLETA
   useEffect(() => {
     const fetchUpdatedAthletesData = async () => {
       try {
@@ -347,6 +315,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
 
   return (
     <>
+      {/* LISTAGEM DE ATLETA*/}
         <div>
           <div className="w-100 mt-3 mb-3" style={{ overflow: "auto" }}>
             <table className="table table-striped">
@@ -464,6 +433,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
             <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
           </div>
         ) : null}
+      {/* PDF HTML */}
       <div
         className="bg-white pointer rounded-2 p-4 mx-auto pdf"
         style={{ cursor: "pointer", width: "fit-content" }}
@@ -490,7 +460,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
           />
         </header>
         <section className="row">
-          {/* <article className="col-3 border border-black rounded p-2 d-flex align-items-center justify-content-center">
+          <article className="col-3 border border-black rounded p-2 d-flex align-items-center justify-content-center">
             {infoPdf?.atleta.blob_url ? (
               <Image
                 src={infoPdf?.atleta.blob_url}
@@ -510,7 +480,7 @@ export default function AthletesList({ newAthlete, inputFilter, searchFilter }: 
                 style={{ width: "300px", height: "auto", maxWidth: "300px" }}
               />
             )}
-          </article> */}
+          </article>
           <article className="col-9">
             <div className="border-bottom border-4 border-black mb-3"></div>
             <div className="border-bottom border-4 border-black mb-3">

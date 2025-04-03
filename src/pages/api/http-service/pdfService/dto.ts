@@ -20,6 +20,8 @@ export interface PDFInfoResponseDTO {
   relacionamento: Relacionamento[]
   caracteristicas_fisicas: CaracteristicasFisica[]
   caracteristicas_posicao: CaracteristicasPosicao[]
+  imagens: [],
+  videos: []
 }
 
 export interface Atleta {
@@ -65,6 +67,7 @@ export interface Competicao {
   jogos_completos: number
   jogos_parciais: number
   minutagem: number
+  assistencias: number
   gols: number
 }
 
@@ -94,6 +97,7 @@ export interface CaracteristicasFisica {
   peso: number
   percentual_gordura: number
   data_criacao: string
+  data_avaliacao: string
   data_atualizado: any
   atleta_id: number
 }
