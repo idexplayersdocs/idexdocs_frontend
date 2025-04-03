@@ -1,7 +1,10 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import { Page, Text, View, Document, Image, Link } from "@react-pdf/renderer";
-import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
+import {
+  Atleta,
+  PDFInfoResponseDTO,
+} from "@/pages/api/http-service/pdfService/dto";
 import { useTranslation } from "react-i18next";
 import {
   getPositionName,
@@ -46,7 +49,7 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
   };
 
   const ParsePosition = (
-    atleta: Record<string, string | null>,
+    atleta: Atleta,
     t: (key: string) => string
   ): string => {
     return Object.entries(atleta)
@@ -190,7 +193,7 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
                       src={getYouTubeThumbnail(video.path)}
                       style={styles.thumbnail}
                     />
-                    <Text style={styles.text}>{video.description}</Text>
+                    <Text style={styles.text}>{video.descricao}</Text>
                     <Link src={video.path} style={styles.text}>
                       {t("watchOnYouTube")}
                     </Link>
@@ -209,7 +212,7 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
                 {row.map((img, colIndex) => (
                   <View key={colIndex} style={styles.imageContainer}>
                     <Image src={img.path} style={styles.image} />
-                    <Text style={styles.text}>{img.description}</Text>
+                    <Text style={styles.text}>{img.descricao}</Text>
                   </View>
                 ))}
               </View>

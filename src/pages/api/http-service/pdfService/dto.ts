@@ -20,8 +20,18 @@ export interface PDFInfoResponseDTO {
   relacionamento: Relacionamento[]
   caracteristicas_fisicas: CaracteristicasFisica[]
   caracteristicas_posicao: CaracteristicasPosicao[]
-  imagens: [],
-  videos: []
+  imagens: Imagens[],
+  videos: Videos[]
+}
+
+export interface Imagens {
+  path: string
+  descricao: string
+}
+
+export interface Videos {
+  path: string
+  descricao: string
 }
 
 export interface Atleta {
