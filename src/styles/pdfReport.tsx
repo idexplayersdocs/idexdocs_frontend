@@ -146,7 +146,7 @@ export const stylesPositions: Record<string, any> = StyleSheet.create({
     width: 30,
     // zIndex: 6,
   },
-  centro_avante: { position: "absolute", bottom: 90, left: 430, width: 20 },
+  centroavante: { position: "absolute", bottom: 90, left: 430, width: 20 },
   lateral_direito: { position: "absolute", bottom: 35, left: 480, width: 20 },
   lateral_esquerdo: { position: "absolute", bottom: 35, left: 380, width: 20 },
 });

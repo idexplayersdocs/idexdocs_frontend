@@ -367,7 +367,7 @@ export const pdfReportData = {
     "meia_armador",
     "meia_atacante",
     "atacante",
-    "centro_avante",
+    "centroavante",
     "lateral_direito",
     "lateral_esquerdo",
   ],
