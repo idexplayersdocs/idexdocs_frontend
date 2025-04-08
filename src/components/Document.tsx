@@ -99,7 +99,7 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
               {t("birthdate")}: {data.atleta.data_nascimento}
             </Text>
             <Text style={styles.text}>
-              {t("currentClub")}: {data.atleta.clube_atual}
+              {t("currentClub")}: {data.atleta.clube_atual ? data.atleta.clube_atual : t("noCurrentClub")}
             </Text>
           </View>
           <Image src={"/images/campo.png"} style={styles.field} />
