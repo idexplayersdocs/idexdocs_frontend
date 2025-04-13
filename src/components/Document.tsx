@@ -2,7 +2,6 @@
 import React from "react";
 import { Page, Text, View, Document, Image, Link } from "@react-pdf/renderer";
 import {
-  Atleta,
   PDFInfoResponseDTO,
 } from "@/pages/api/http-service/pdfService/dto";
 import { useTranslation } from "react-i18next";

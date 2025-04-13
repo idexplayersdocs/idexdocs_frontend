@@ -37,5 +37,7 @@
   "meia_armador": "Playmaker",
   "meia_atacante": "Attacking midfielder",
   "atacante": "Forward",
-  "centroavante": "Center forward / striker"
+  "centroavante": "Center forward / striker",
+  "extremo_direito": "Right winger",
+  "extremo_esquerdo": "Left winger"
 }

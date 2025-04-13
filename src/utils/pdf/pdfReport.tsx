@@ -18,6 +18,10 @@ export const getPositionName = (posicao: number): string => {
       return "atacante";
     case 10:
       return "centroavante";
+    case 11:
+      return "extremo_direito";
+    case 12:
+      return "extremo_esquerdo";
     default:
       return "";
   }

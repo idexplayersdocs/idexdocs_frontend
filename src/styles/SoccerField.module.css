@@ -27,7 +27,9 @@
 .meia_armador,
 .meia_atacante,
 .atacante,
-.centroavante {
+.centroavante,
+.extremo_direito,
+.extremo_esquerdo {
   position: absolute;
   background-repeat: no-repeat;
   background-size: contain;
@@ -94,6 +96,18 @@
   left: 45%;
   background-image: url('../../public/images/jogador.png');
   z-index: 1;
+}
+
+.extremo_direito {
+  bottom: 1%;
+  left: 68%;
+  background-image: url('../../public/images/jogador.png');
+}
+
+.extremo_esquerdo {
+  bottom: 1%;
+  left: 22%;
+  background-image: url('../../public/images/jogador.png');
 }
 
 @media (max-width: 1000px) {

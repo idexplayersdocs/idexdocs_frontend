@@ -147,6 +147,8 @@ export default function EditAthlete({athleteData, closeModal}: any) {
               <option value={8} style={{color: '#fff'}}>MEIA ATACANTE</option>
               <option value={9} style={{color: '#fff'}}>ATACANTE</option>
               <option value={10} style={{color: '#fff'}}>CENTROAVANTE</option>
+              <option value={11} style={{color: '#fff'}}>EXTREMO DIREITO</option>
+              <option value={12} style={{color: '#fff'}}>EXTREMO ESQUERDO</option>
               </select>
             </div>
         </div>
@@ -166,6 +168,8 @@ export default function EditAthlete({athleteData, closeModal}: any) {
               <option value={8} style={{color: '#fff'}}>MEIA ATACANTE</option>
               <option value={9} style={{color: '#fff'}}>ATACANTE</option>
               <option value={10} style={{color: '#fff'}}>CENTROAVANTE</option>
+              <option value={11} style={{color: '#fff'}}>EXTREMO DIREITO</option>
+              <option value={12} style={{color: '#fff'}}>EXTREMO ESQUERDO</option>
             </select>
           </div>
           <div>
@@ -183,6 +187,8 @@ export default function EditAthlete({athleteData, closeModal}: any) {
                 <option value={8} style={{color: '#fff'}}>MEIA ATACANTE</option>
                 <option value={9} style={{color: '#fff'}}>ATACANTE</option>
                 <option value={10} style={{color: '#fff'}}>CENTROAVANTE</option>
+                <option value={11} style={{color: '#fff'}}>EXTREMO DIREITO</option>
+                <option value={12} style={{color: '#fff'}}>EXTREMO ESQUERDO</option>                
               </select>
             </div>
             <div>

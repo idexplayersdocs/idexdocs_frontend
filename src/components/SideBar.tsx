@@ -73,6 +73,10 @@ export default function SideBar({ athleteData, modal }: any) {
         return 'ATACANTE';
       case 10:
         return 'CENTROAVANTE';
+      case 11:
+        return 'EXTREMO DIREITO';
+      case 12:
+        return 'EXTREMO ESQUERDO';
     }
   }
 

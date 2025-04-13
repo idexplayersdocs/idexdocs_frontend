@@ -22,6 +22,10 @@ export default function SoccerField({ athleteData }: any) {
         return styles.atacante;
       case 10:
         return styles.centroavante;
+      case 11:
+        return styles.extremo_direito;
+      case 12:
+        return styles.extremo_esquerdo;
       default:
         return '';
     }

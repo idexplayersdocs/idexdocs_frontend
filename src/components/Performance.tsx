@@ -191,8 +191,8 @@ if (athleteData && (athleteData.posicao_primaria == 9 || athleteData.posicao_pri
       }
   };
 }
-// Lateral esquerdo / Direito
-else if (athleteData && (athleteData.posicao_primaria == 3 || athleteData.posicao_primaria == 4)) {
+// Lateral direito (3) / Lateral esquerdo (4) / Extremo direito (11)/ Extremo esquerdo (12)
+else if (athleteData && [3, 4, 11, 12].includes(athleteData.posicao_primaria)) {
   return {
       'label': {
           fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Passe Curto', 'Passe Longo', 'Capacidade Aeróbica', 'Fechamento Defensivo / Contenção', 'Total', 'Média'],

@@ -37,5 +37,7 @@
   "meia_armador": "Media punta",
   "meia_atacante": "Medio campista ofensivo",
   "atacante": "Delantero",
-  "centroavante": "Delantero centro"
+  "centroavante": "Delantero centro",
+  "extremo_direito": "Extremo derecho",
+  "extremo_esquerdo": "Extremo izquierdo"
 }
