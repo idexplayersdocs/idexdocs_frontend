@@ -152,6 +152,8 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
               <Text style={styles.cell}>{t("date")}</Text>
               <Text style={styles.cell}>{t("competition")} </Text>
               <Text style={styles.cell}>{t("fullGames")}</Text>
+              <Text style={styles.cell}>{t("partialGames")}</Text>
+              <Text style={styles.cell}>{t("timePlayed")}</Text>
               <Text style={styles.cell}>{t("goals")}</Text>
               <Text style={styles.cell}>{t("assists")}</Text>
             </View>
@@ -160,6 +162,8 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
                 <Text style={styles.cell}>{comp.data_competicao}</Text>
                 <Text style={styles.cell}>{comp.nome}</Text>
                 <Text style={styles.cell}>{comp.jogos_completos}</Text>
+                <Text style={styles.cell}>{comp.jogos_parciais}</Text>
+                <Text style={styles.cell}>{comp.minutagem}</Text>
                 <Text style={styles.cell}>{comp.gols}</Text>
                 <Text style={styles.cell}>{comp.assistencias}</Text>
               </View>
