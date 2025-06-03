@@ -1538,30 +1538,29 @@ export const Midia = () => {
           </div>
           <hr />
           <div className="d-flex justify-content-center align-items-center mb-3">
-            <div className="d-flex flex-column mt-5 gap-3">
-              <label htmlFor="input-link">Link</label>
+            <div className="d-flex flex-column mt-5 gap-3" style={{width: '50%'}}>
+              <label htmlFor="input-link" className="ms-3" style={{color: 'white', fontSize: '20px', marginTop:'14px'}}>Link</label>
               <input
                 id="input-link"
                 type="text"
                 name="url"
+                className="form-control input-create bg-dark-custom"
                 value={linkFormData.url}
                 onChange={handleInputFormData}
               />
 
-              <label htmlFor="input-descricao">Descrição</label>
+              <label htmlFor="input-descricao" className="ms-3" style={{color: 'white', fontSize: '20px', marginTop:'14px'}}>Descrição</label>
               <input
                 id="input-descricao"
                 type="text"
                 name="descricao"
                 value={linkFormData.descricao}
+                className="form-control input-create bg-dark-custom"
                 onChange={handleInputFormData}
               />
             </div>
           </div>
           <div className="d-flex flex-column">
-            <div className="mt-5 w-100 d-flex justify-content-center">
-              <Subtitle subtitle="Favor, faça o upload do link" />
-            </div>
             <div
               className="ms-3 d-flex flex-column mt-5 pb-3"
               style={{ width: "95%" }}
