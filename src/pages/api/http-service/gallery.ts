@@ -65,6 +65,68 @@ export const saveImage = async (files: any, athleteId: any) => {
   }
 };
 
+export const fetchLinkbyAthleteId = async (athleteId: any) => {
+  try {
+    const response = await axios.get(`${apiURL}/link/atleta/${athleteId}`)
+    return response.data
+  } catch (error) {
+    toast.error('Erro ao buscar links', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+      transition: Bounce,
+    });
+
+    throw error;
+  }
+}
+
+
+export const saveLink = async (link: any) => {
+  try {
+    const response = await axios.post(`${apiURL}/create/link`, link)
+    return response.data
+  } catch (error) {
+    toast.error('Erro ao salvar link', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+      transition: Bounce,
+    });
+
+    throw error;
+  }
+}
+
+
+export const deleteLink = async (linkId: string) => {
+  try {
+    const response = await axios.delete(`${apiURL}/delete/link/${linkId}`)
+    return response.data
+  } catch (error) {
+    toast.error('Erro ao deletar link', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored',
+      transition: Bounce,
+    });
+
+    throw error;
+  }
+}
+
 export const uploadImageAthlete = async (IDAtleta: any, file:any) => {
   try {
     const response = await axios.post(`${apiURL}/file-upload/atleta/${IDAtleta}`, file);
@@ -149,7 +211,7 @@ export const deleteImage = async (IdImage: any) => {
     const response = await axios.delete(`${apiURL}/imagem/delete/${IdImage}`);
     return response.data;
   } catch (error) {
-    toast.error('Erro ao deletar o imagem', {
+    toast.error('Erro ao deletar a imagem', {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,

@@ -556,7 +556,7 @@ export default function AthleteDetail() {
               </li>
               )}
               <li className="nav-item menu" style={{cursor: 'pointer'}}>
-                <a className={ tabAtual === 'midia' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('midia')}>Imagem / Vídeo</a>
+                <a className={ tabAtual === 'midia' ? 'nav-link active' : 'nav-link'} aria-current="page" onClick={() => setTab('midia')}>Imagem / Vídeo / Links</a>
               </li>
           </ul>
           {
@@ -916,6 +916,7 @@ export default function AthleteDetail() {
           <SideBar athleteData={athlete} modal={true}/>
         </Box>
       </Modal>
+      {/* Histórico de contratos */}
       <Modal
         open={openContractHistory}
         onClose={handleCloseContractHistory}
@@ -925,6 +926,7 @@ export default function AthleteDetail() {
           <ContractHistory closeModal={handleCloseContractHistory} athleteId={athleteId} closeModalUpdateData={handleCloseContractHistoryUpdateData}/>
         </Box>
       </Modal>
+      {/* Delete Controle Suporte */}
       <Modal
         open={openConfirmDeleteControl}
         onClose={handleCloseConfirmDeleteControl}

@@ -22,6 +22,7 @@ export interface PDFInfoResponseDTO {
   caracteristicas_posicao: CaracteristicasPosicao[]
   imagens: Imagens[],
   videos: Videos[]
+  links: Links[]
 }
 
 export interface Imagens {
@@ -35,6 +36,12 @@ export interface Videos {
   blob_url: string
   tipo: "video" | "youtube"
   descricao: string | null
+}
+
+export interface Links {
+  id: number
+  url: string
+  descricao: string
 }
 
 export interface Atleta {

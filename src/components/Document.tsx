@@ -71,7 +71,7 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
             <Text style={styles.text}>
               {t("name")}: {data.atleta.nome}
             </Text>
-            <View style={{gap: 2}}>
+            <View style={{ gap: 2 }}>
               {/* Posição primária */}
               {data.atleta.posicao_primaria != 1 && (
                 <Text style={styles.text}>
@@ -188,7 +188,7 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
             ))}
           </View>
         </View>
-        {/* Verifica se existem vídeos a cria uma página caso existirem */}
+        {/* Vídeos */}
         {rowsForVideo.length > 0 && (
           <View style={styles.section} break>
             <Text style={styles.tableTitle}>{t("videos")}</Text>
@@ -210,7 +210,7 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
             ))}
           </View>
         )}
-        {/* Verifica se existem imagens a cria uma página caso existirem */}
+        {/* Imagens */}
         {rowsForImage.length > 0 && (
           <View style={styles.section} break>
             <Text style={styles.tableTitle}>{t("images")}</Text>
@@ -226,6 +226,22 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
             ))}
           </View>
         )}
+        {/* Links */}
+        <View style={styles.section} break>
+          <Text style={styles.tableTitle}>{"Links"}</Text>
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              <Text style={styles.cell}>{"Link"}</Text>
+            </View>
+            {data.links.map((link, index) => (
+              <View style={styles.row} key={index}>
+                <Link src={link.url} style={[styles.cell, styles.link]}>
+                  {link.descricao ? link.descricao : "Sem descrição"}
+                </Link>
+              </View>
+            ))}
+          </View>
+        </View>
         {/* Footer */}
         <View style={styles.footer} fixed>
           <Text>Build Stars</Text>
