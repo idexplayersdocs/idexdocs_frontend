@@ -428,18 +428,6 @@ export default function AthletesList({
                         />
                       </div>
 
-                      <div
-                        onClick={() => handleClickPdf(athlete.id)}
-                        ref={btnPdfRef}
-                        style={{ display: "inline-block" }}
-                      >
-                        <FontAwesomeIcon
-                          className="ms-2 me-2"
-                          icon={faFilePdf}
-                          style={{ color: "white", cursor: "pointer" }}
-                          size="2xl"
-                        />
-                      </div>
                       <FontAwesomeIcon
                         className="ms-2 me-2"
                         icon={faEye}
