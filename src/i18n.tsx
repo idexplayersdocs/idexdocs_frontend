@@ -5,10 +5,14 @@ import pt from "./locales/pt.json";
 import es from "./locales/es.json";
 
 i18n.use(initReactI18next).init({
-  resources: { en: { translation: en }, pt: { translation: pt }, es: { translation: es } },
+  resources: {
+    en: { translation: en },
+    pt: { translation: pt },
+    es: { translation: es },
+  },
   lng: "pt", // Default language
-  fallbackLng: "en",
-  interpolation: { escapeValue: false }
+  fallbackLng: "pt",
+  interpolation: { escapeValue: false },
 });
 
 export default i18n;

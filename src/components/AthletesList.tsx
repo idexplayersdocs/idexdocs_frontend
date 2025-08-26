@@ -9,16 +9,27 @@ import {
   faEye,
   faFilePdf,
   faTriangleExclamation,
+  faFileText,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { Pagination } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Input,
+  Modal,
+  Pagination,
+  Typography,
+} from "@mui/material";
 import styles from "../styles/Login.module.css";
+
 import { jwtDecode } from "jwt-decode";
 
 import { PDFInfo } from "@/pages/api/http-service/pdfService";
 
 import MyDocument from "./Document";
 import { pdf } from "@react-pdf/renderer";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 
 interface Athlete {
   id: number;
@@ -29,6 +40,28 @@ interface Athlete {
   data_proxima_avaliacao_relacionamento: any;
   ativo: boolean;
 }
+
+const modalStyle = {
+  wrapper: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "30px",
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 600,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  },
+  row: {
+    display: "flex",
+    gap: "20px",
+    justifyContent: "space-between",
+  },
+};
 
 export default function AthletesList({
   newAthlete,
@@ -47,6 +80,7 @@ export default function AthletesList({
     relationship: false,
     performance: false,
   });
+  const [athleteToShow, setAthleteToShow] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -169,6 +203,14 @@ export default function AthletesList({
     await tryExecute();
   };
 
+  const handleClickAthleteReport = async (id: number) => {
+    const protocol = window.location.protocol;
+    const host = window.location.host;
+    const code = btoa(`${id}-YKhZ-PhhZ-*TKAJ`);
+
+    setAthleteToShow(`${protocol}//${host}/secure/athlete-report/${code}`);
+  };
+
   const validLabelDate = (dataAvaliacao: string) => {
     const currentDate = moment().startOf("day");
     const nextEvaluationDate = moment(dataAvaliacao).startOf("day");
@@ -192,9 +234,68 @@ export default function AthletesList({
     fetchUpdatedAthletesData();
   }, [searchFilter]);
 
+  const copyToClipboard = () => {
+    if (athleteToShow) {
+      navigator.clipboard.writeText(athleteToShow);
+      toast.success(
+        "Relatório do atleta copiado para a área de transferência."
+      );
+    }
+  };
+
+  const openAthleteReport = () => {
+    if (athleteToShow) {
+      window.open(athleteToShow, "_blank");
+    }
+  };
+
   return (
     <>
       {/* LISTAGEM DE ATLETA*/}
+      <ToastContainer />
+      <Modal
+        open={athleteToShow !== null}
+        onClose={() => setAthleteToShow(null)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle.wrapper}>
+          <Box sx={modalStyle.row}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Compartilhe o link do atleta
+            </Typography>
+            {/* Close Button */}
+            <IconButton onClick={() => setAthleteToShow(null)}>
+              <FontAwesomeIcon icon={faXmark} />
+            </IconButton>
+          </Box>
+          <Input
+            type="text"
+            value={athleteToShow}
+            onChange={(e) => setAthleteToShow(e.target.value)}
+            fullWidth
+          />
+
+          <Box sx={modalStyle.row}>
+            {/* open */}
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => openAthleteReport()}
+            >
+              Visualizar
+            </Button>
+
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={copyToClipboard}
+            >
+              Copiar Link
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
       <div>
         <div className="w-100 mt-3 mb-3" style={{ overflow: "auto" }}>
           <table className="table table-striped">
@@ -277,6 +378,19 @@ export default function AthletesList({
                       size="2xl"
                       style={{ color: '#ff0000', cursor: 'pointer' }}
                     /> */}
+                      <div
+                        onClick={() => handleClickAthleteReport(athlete.id)}
+                        ref={btnPdfRef}
+                        style={{ display: "inline-block" }}
+                      >
+                        <FontAwesomeIcon
+                          className="ms-2 me-2"
+                          icon={faFileText}
+                          style={{ color: "white", cursor: "pointer" }}
+                          size="2xl"
+                        />
+                      </div>
+
                       <div
                         onClick={() => handleClickPdf(athlete.id)}
                         ref={btnPdfRef}

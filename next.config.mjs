@@ -14,7 +14,10 @@ const nextConfig = {
     remotePatterns: [{
       protocol: 'https',
       hostname: process.env.STORAGE_HOST
-    },],
+    },{
+      protocol: 'https',
+      hostname: 'img.youtube.com',
+    }],
   },
   env: {
     API_URL: process.env.API_URL,
