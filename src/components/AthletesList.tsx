@@ -11,6 +11,7 @@ import {
   faTriangleExclamation,
   faFileText,
   faXmark,
+  faCopy,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
@@ -30,6 +31,7 @@ import { PDFInfo } from "@/pages/api/http-service/pdfService";
 import MyDocument from "./Document";
 import { pdf } from "@react-pdf/renderer";
 import { Bounce, ToastContainer, toast } from "react-toastify";
+import Subtitle from "./Subtitle";
 
 interface Athlete {
   id: number;
@@ -45,21 +47,26 @@ const modalStyle = {
   wrapper: {
     display: "flex",
     flexDirection: "column",
-    gap: "30px",
     position: "absolute" as "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 600,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
+    bgcolor: "var(--bg-primary-color)",
+    border: "2px solid var(--color-line)",
+    borderRadius: "20px",
     boxShadow: 24,
     p: 4,
+  },
+  body: {
+    marginTop: "20px",
+    marginBottom: "20px",
   },
   row: {
     display: "flex",
     gap: "20px",
     justifyContent: "space-between",
+    alignItems: "center",
   },
 };
 
@@ -208,7 +215,7 @@ export default function AthletesList({
     const host = window.location.host;
     const code = btoa(`${id}-YKhZ-PhhZ-*TKAJ`);
 
-    setAthleteToShow(`${protocol}//${host}/secure/athlete-report/${code}`);
+    setAthleteToShow(`${protocol}//${host}/public/athlete-report/${code}`);
   };
 
   const validLabelDate = (dataAvaliacao: string) => {
@@ -249,6 +256,18 @@ export default function AthletesList({
     }
   };
 
+  const downloadPdf = () => {
+    const hash = athleteToShow?.split("/").pop();
+
+    if (hash) {
+      const decoded = atob(hash).split("-YKhZ-PhhZ-*TKAJ")[0];
+
+      handleClickPdf(Number(decoded));
+    } else {
+      toast.error("Erro ao baixar PDF");
+    }
+  };
+
   return (
     <>
       {/* LISTAGEM DE ATLETA*/}
@@ -261,29 +280,44 @@ export default function AthletesList({
       >
         <Box sx={modalStyle.wrapper}>
           <Box sx={modalStyle.row}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Compartilhe o link do atleta
-            </Typography>
-            {/* Close Button */}
+            <Subtitle subtitle="Compartilhe o link do atleta" />
             <IconButton onClick={() => setAthleteToShow(null)}>
               <FontAwesomeIcon icon={faXmark} />
             </IconButton>
           </Box>
-          <Input
-            type="text"
-            value={athleteToShow}
-            onChange={(e) => setAthleteToShow(e.target.value)}
-            fullWidth
-          />
+          <hr />
+
+          <Box sx={modalStyle.body}>
+            <input
+              type="text"
+              value={athleteToShow || ""}
+              onChange={(e) => setAthleteToShow(e.target.value)}
+              style={{ width: "100%" }}
+              className="form-control input-create input-date bg-dark-custom"
+            />
+          </Box>
 
           <Box sx={modalStyle.row}>
-            {/* open */}
             <Button
               variant="contained"
               color="secondary"
               onClick={() => openAthleteReport()}
             >
-              Visualizar
+              <Box sx={modalStyle.row}>
+                <FontAwesomeIcon icon={faEye} />
+                {` `} Visualizar
+              </Box>
+            </Button>
+
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => downloadPdf()}
+            >
+              <Box sx={modalStyle.row}>
+                <FontAwesomeIcon icon={faFilePdf} />
+                {` `} Baixar PDF
+              </Box>
             </Button>
 
             <Button
@@ -291,7 +325,10 @@ export default function AthletesList({
               color="primary"
               onClick={copyToClipboard}
             >
-              Copiar Link
+              <Box sx={modalStyle.row}>
+                <FontAwesomeIcon icon={faCopy} />
+                {` `} Copiar Link
+              </Box>
             </Button>
           </Box>
         </Box>

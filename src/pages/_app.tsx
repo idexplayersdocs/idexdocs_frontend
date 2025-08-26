@@ -8,9 +8,10 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   React.useEffect(() => {
+    const isPublicRoute = router.pathname.startsWith("/public/");
     const token = localStorage.getItem("token");
 
-    if (!token) {
+    if (!token && !isPublicRoute) {
       router.push("/public/login");
     }
   }, [router.pathname]);
