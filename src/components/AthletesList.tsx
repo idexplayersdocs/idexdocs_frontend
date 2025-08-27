@@ -294,7 +294,10 @@ export default function AthletesList({
   };
 
   const downloadPdf = () => {
-    const hash = athleteToShow?.split("/").pop()?.replace("?lang=pt", "");
+    const hash = athleteToShow
+      ?.split("/")
+      .pop()
+      ?.replace(`?lang=${i18n.language}`, "");
 
     if (hash) {
       const decoded = atob(hash).split("-YKhZ-PhhZ-*TKAJ")[0];
