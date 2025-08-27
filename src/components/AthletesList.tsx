@@ -12,12 +12,21 @@ import {
   faFileText,
   faXmark,
   faCopy,
+  faArrowDown,
+  faArrowLeft,
+  faArrowRight,
+  faChevronLeft,
+  faChevronRight,
+  faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Button,
+  ButtonGroup,
   IconButton,
   Input,
+  Menu,
+  MenuItem,
   Modal,
   Pagination,
   Typography,
@@ -32,6 +41,7 @@ import MyDocument from "./Document";
 import { pdf } from "@react-pdf/renderer";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import Subtitle from "./Subtitle";
+import { useTranslation } from "react-i18next";
 
 interface Athlete {
   id: number;
@@ -51,7 +61,7 @@ const modalStyle = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 600,
+    width: { xs: 380, sm: 380, md: 600 },
     bgcolor: "var(--bg-primary-color)",
     border: "2px solid var(--color-line)",
     borderRadius: "20px",
@@ -68,6 +78,12 @@ const modalStyle = {
     justifyContent: "space-between",
     alignItems: "center",
   },
+  btnsDesktop: {
+    display: { xs: "none", sm: "none", md: "flex" },
+  },
+  dropdownBtn: {
+    display: { xs: "flex", sm: "flex", md: "none" },
+  },
 };
 
 export default function AthletesList({
@@ -75,6 +91,7 @@ export default function AthletesList({
   inputFilter,
   searchFilter,
 }: any) {
+  const { i18n } = useTranslation();
   const [page, setPage] = useState(1);
   const { push } = useRouter();
   const [athletes, setAthletes] = useState<Athlete[]>([]);
@@ -88,7 +105,7 @@ export default function AthletesList({
     performance: false,
   });
   const [athleteToShow, setAthleteToShow] = useState<string | null>(null);
-
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   useEffect(() => {
     const token = localStorage.getItem("token");
     const decoded: any = jwtDecode(token!);
@@ -137,6 +154,24 @@ export default function AthletesList({
       fetchUpdatedAthletesData();
     }
   }, [newAthlete, inputFilter]);
+
+  const handleClick = () => {
+    // Função principal ao clicar no botão
+    console.log("Botão principal clicado");
+  };
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOptionClick = (option: string) => {
+    console.log(`Opção selecionada: ${option}`);
+    handleClose();
+  };
 
   const handleEditAthlete = (id: number) => {
     push(`/secure/athletes/${id}/athleteDetail`);
@@ -215,7 +250,9 @@ export default function AthletesList({
     const host = window.location.host;
     const code = btoa(`${id}-YKhZ-PhhZ-*TKAJ`);
 
-    setAthleteToShow(`${protocol}//${host}/public/athlete-report/${code}`);
+    setAthleteToShow(
+      `${protocol}//${host}/public/athlete-report/${code}?lang=${i18n.language}`
+    );
   };
 
   const validLabelDate = (dataAvaliacao: string) => {
@@ -299,6 +336,7 @@ export default function AthletesList({
 
           <Box sx={modalStyle.row}>
             <Button
+              sx={modalStyle.btnsDesktop}
               variant="contained"
               color="secondary"
               onClick={() => openAthleteReport()}
@@ -310,6 +348,7 @@ export default function AthletesList({
             </Button>
 
             <Button
+              sx={modalStyle.btnsDesktop}
               variant="contained"
               color="success"
               onClick={() => downloadPdf()}
@@ -321,6 +360,7 @@ export default function AthletesList({
             </Button>
 
             <Button
+              sx={modalStyle.btnsDesktop}
               variant="contained"
               color="primary"
               onClick={copyToClipboard}
@@ -330,6 +370,47 @@ export default function AthletesList({
                 {` `} Copiar Link
               </Box>
             </Button>
+
+            <Box sx={modalStyle.dropdownBtn}></Box>
+
+            <ButtonGroup variant="contained" sx={modalStyle.dropdownBtn}>
+              <Button onClick={copyToClipboard}>
+                <Box sx={modalStyle.row}>
+                  <FontAwesomeIcon icon={faCopy} />
+                  {` `} Copiar Link
+                </Box>
+              </Button>
+              <Button
+                size="small"
+                aria-controls={anchorEl ? "split-button-menu" : undefined}
+                aria-haspopup="menu"
+                aria-expanded={anchorEl ? "true" : undefined}
+                onClick={handleMenuClick}
+              >
+                <FontAwesomeIcon
+                  icon={Boolean(anchorEl) ? faChevronRight : faChevronDown}
+                />
+              </Button>
+              <Menu
+                id="split-button-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={() => openAthleteReport()}>
+                  <Box sx={modalStyle.row}>
+                    <FontAwesomeIcon icon={faEye} />
+                    {` `} Visualizar
+                  </Box>
+                </MenuItem>
+                <MenuItem onClick={() => downloadPdf()}>
+                  <Box sx={modalStyle.row}>
+                    <FontAwesomeIcon icon={faFilePdf} />
+                    {` `} Baixar PDF
+                  </Box>
+                </MenuItem>
+              </Menu>
+            </ButtonGroup>
           </Box>
         </Box>
       </Modal>

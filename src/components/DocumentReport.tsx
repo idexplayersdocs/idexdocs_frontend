@@ -9,11 +9,20 @@ import {
 } from "@/utils/pdf/pdfReport";
 import styles from "@/styles/DocumentReport.module.css";
 import YouTube from "./YouTube";
+import { useRouter } from "next/router";
 
 // Criando o componente HTML equivalente ao PDF
 const MyDocumentReport = ({ data }: { data: PDFInfoResponseDTO }) => {
+  // query string param
+  const { query } = useRouter();
   const { t, i18n } = useTranslation();
   const HorizontalLine = () => <div className={styles["horizontal-line"]} />;
+
+  useEffect(() => {
+    if (query.lang && typeof query.lang === "string") {
+      i18n.changeLanguage(query.lang);
+    }
+  }, [query.lang, i18n]);
 
   const formatDate = (date: string) => {
     return new Intl.DateTimeFormat(i18n.language || "pt-BR").format(
