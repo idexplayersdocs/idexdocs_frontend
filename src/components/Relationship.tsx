@@ -189,17 +189,52 @@ export default function Relationship() {
     setPageSupportControl(newPage);
   };
 
+  // Currency formatting functions
+  const formatCurrency = (value: string) => {
+    // Remove non-numeric characters except comma and dot
+    const numericValue = value.replace(/[^\d,]/g, '');
+    
+    // Convert to number for formatting
+    const numberValue = parseFloat(numericValue.replace(',', '.')) || 0;
+    
+    // Format as Brazilian Real
+    return numberValue.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2
+    });
+  };
+
+  const parseCurrencyToFloat = (currencyString: string) => {
+    if (!currencyString) return 0;
+    // Remove currency symbol and spaces, replace comma with dot
+    return parseFloat(currencyString.replace(/[R$\s]/g, '').replace(',', '.')) || 0;
+  };
+
   const handleInputChangeSupportControl = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormDataSupportControl((prevState: any) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    
+    if (name === 'preco') {
+      // Handle price field with currency formatting
+      const rawValue = value.replace(/[^\d,]/g, '');
+      const formattedValue = rawValue ? formatCurrency(rawValue) : '';
+      
+      setFormDataSupportControl((prevState: any) => ({
+        ...prevState,
+        [name]: formattedValue,
+      }));
+    } else {
+      setFormDataSupportControl((prevState: any) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSalvarClickSupportControl = async () => {
     try {
-      formDataSupportControl['preco'] = parseFloat(formDataSupportControl.preco).toFixed(2)
+      // Convert currency back to float for API
+      formDataSupportControl['preco'] = parseCurrencyToFloat(formDataSupportControl.preco).toFixed(2)
       formDataSupportControl['athleteId'] = athleteId
       const response = await createSupportControl(formDataSupportControl);
     } catch (error) {
@@ -219,11 +254,14 @@ export default function Relationship() {
   };
 
   const isFormValidSupportControl= () => {
+    const precoValue = parseCurrencyToFloat(formDataSupportControl?.preco || '');
+    
     if (
       (formDataSupportControl?.atleta_id ?? '').trim() !== '' &&
       (formDataSupportControl?.nome ?? '').trim() !== '' &&
       (formDataSupportControl?.quantidade ?? '').trim() !== '' &&
       (formDataSupportControl?.preco ?? '').trim() !== '' &&
+      precoValue > 0 &&
       (formDataSupportControl?.data_controle ?? '').trim() !== ''
     ) {
       return true;
@@ -463,7 +501,15 @@ export default function Relationship() {
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Preço</label>
-                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="preco" style={{height:'45px'}} value={formDataSupportControl.preco} onChange={handleInputChangeSupportControl}/>
+                      <input 
+                        type="text" 
+                        className="form-control input-create input-date bg-dark-custom" 
+                        placeholder="R$ 0,00" 
+                        name="preco" 
+                        style={{height:'45px'}} 
+                        value={formDataSupportControl.preco} 
+                        onChange={handleInputChangeSupportControl}
+                      />
                 </div>
               </div>
             </div>

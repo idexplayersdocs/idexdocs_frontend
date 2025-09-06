@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import SideBar from '@/components/SideBar';
-import Relationship from '@/components/Relationship';
 import { useRouter } from 'next/router';
 import { getAthleteById } from '@/pages/api/http-service/athletes';
-import { Box, Button, Modal, Pagination, colors, styled } from "@mui/material";
-import Observacoes from '../../../../components/Observation';
+import { Box, Modal, Pagination} from "@mui/material";
 import AddButton from '@/components/AddButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faX, faXmark, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faX, faXmark, faTrashCan, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { createAthleteRelationship, createSupportControl, deleteSupportControl, getAthleteRelationship, getSupportControl } from '@/pages/api/http-service/relationship';
 import Subtitle from '@/components/Subtitle';
 import { getObservations, saveObservations } from '@/pages/api/http-service/observations';
@@ -17,7 +15,6 @@ import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
 import Loading from 'react-loading';
 import Image from "next/image";
-import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
 import { jwtDecode } from 'jwt-decode';
 import ContractHistory from '@/components/modal/ContractHistory';
 import { Midia } from '@/components/Midia';
@@ -72,17 +69,22 @@ const styleDelete = {
   overflow: 'auto'
 };
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
+const styleSupportControl = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: { xs: '95%', sm: '90%', md: '80%', lg: '70%' },
+  maxWidth: '800px',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  maxHeight: '90vh',
+  overflow: 'auto',
+  overflowX: 'hidden'
+};
 
 export default function AthleteDetail() {
   const effectRan = useRef(false);
@@ -143,6 +145,7 @@ export default function AthleteDetail() {
     quantidade: '',
     preco: '',
     data_controle: '',
+    arquivo: null,
   });
   const [formSupportControlSelected, setFormSupportControlSelected] = useState<any>({
     controle: '',
@@ -155,10 +158,6 @@ export default function AthleteDetail() {
     try {
       const response = await deleteSupportControl(formSupportControlSelected.controle.controle_id)
       if (response) {
-        // const updatedData = [...displayedDataSupportControl]
-        // updatedData.splice(formSupportControlSelected.index, 1)
-        // setDisplayedDataSupportControl(updatedData)
-
         setPageSupportControl(1)
         // await getSupportControl(athleteId, pageSupportControl);
         const supportControl = await getSupportControl(athleteId, pageSupportControl);
@@ -352,6 +351,7 @@ export default function AthleteDetail() {
       quantidade: '',
       preco: '',
       data_controle: '',
+      arquivo: null,
     });
   }
 
@@ -365,27 +365,164 @@ export default function AthleteDetail() {
     setPageSupportControl(newPage);
   };
 
+  const handleDownloadFile = async (supportControl: any) => {
+    try {
+      
+      if (supportControl?.arquivo_url || supportControl?.arquivo_path) {
+        // If we have a direct URL or path, create a download link
+        const downloadUrl = supportControl.arquivo_url || supportControl.arquivo_path;
+        
+        // Create a temporary anchor element to trigger download
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `comprovante_${supportControl.nome}_${supportControl.id || 'arquivo'}`;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        toast.success('Download iniciado com sucesso!');
+      } else if (supportControl?.id) {
+        // If we need to fetch from an API endpoint
+        const response = await fetch(`/api/support-control/${supportControl.id}/download`);
+        
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `comprovante_${supportControl.nome}_${supportControl.id}`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          
+          toast.success('Download concluído com sucesso!');
+        } else {
+          toast.error('Erro ao baixar o arquivo. Tente novamente.');
+        }
+      } else {
+        toast.warning('Arquivo não disponível para download.');
+      }
+    } catch (error) {
+      console.error('Erro ao baixar arquivo:', error);
+      toast.error('Erro ao baixar o arquivo. Verifique sua conexão e tente novamente.');
+    }
+  };
+
+  // Currency formatting functions
+  const formatCurrency = (value: string) => {
+    // Remove non-numeric characters except comma and dot
+    const numericValue = value.replace(/[^\d,]/g, '');
+    
+    // Convert to number for formatting
+    const numberValue = parseFloat(numericValue.replace(',', '.')) || 0;
+    
+    // Format as Brazilian Real
+    return numberValue.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2
+    });
+  };
+
+  const parseCurrencyToFloat = (currencyString: string) => {
+    if (!currencyString) return 0;
+    // Remove currency symbol and spaces, replace comma with dot
+    return parseFloat(currencyString.replace(/[R$\s]/g, '').replace(',', '.')) || 0;
+  };
+
   const handleInputChangeSupportControl = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
+    
+    if (name === 'preco') {
+      // Handle price field with currency formatting
+      const rawValue = value.replace(/[^\d,]/g, '');
+      const formattedValue = rawValue ? formatCurrency(rawValue) : '';
+      
+      setFormDataSupportControl((prevState: any) => ({
+        ...prevState,
+        [name]: formattedValue,
+      }));
+    } else {
+      setFormDataSupportControl((prevState: any) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleFileChangeSupportControl = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    
+    if (file) {
+      // Check file size (limit to 10MB)
+      const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+      if (file.size > maxSize) {
+        toast.error('Arquivo muito grande. Tamanho máximo: 10MB');
+        event.target.value = ''; // Clear the input
+        return;
+      }
+      
+      // Check file type
+      const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        toast.error('Tipo de arquivo não suportado. Use apenas PDF, JPG, JPEG ou PNG');
+        event.target.value = ''; // Clear the input
+        return;
+      }
+    }
+    
     setFormDataSupportControl((prevState: any) => ({
       ...prevState,
-      [name]: value,
+      arquivo: file,
     }));
   };
 
   const handleSalvarClickSupportControl = async () => {
+    if (!isFormValidSupportControl()) {
+      toast.error('Por favor, preencha todos os campos obrigatórios, incluindo o arquivo.');
+      return;
+    }
+
     setLoading(true);
     try {
-      formDataSupportControl['preco'] = parseFloat(formDataSupportControl.preco).toFixed(2)
-      formDataSupportControl['atleta_id'] = athleteId
-      const response = await createSupportControl(formDataSupportControl);
-      handleCloseCreateSupportControl();
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('atleta_id', athleteId?.toString() || '');
+      formData.append('nome', formDataSupportControl.nome);
+      formData.append('quantidade', formDataSupportControl.quantidade);
+      formData.append('preco', parseCurrencyToFloat(formDataSupportControl.preco).toFixed(2));
+      formData.append('data_controle', formDataSupportControl.data_controle);
+      formData.append('arquivo', formDataSupportControl.arquivo);
+
+      const response = await createSupportControl(formData);
+      
+      // Show success message before closing modal
+      toast.success('Controle de suporte criado com sucesso!', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+      
+      // Small delay to ensure toast appears before modal closes
+      setTimeout(() => {
+        handleCloseCreateSupportControl();
+      }, 100);
+      
+      // Don't call handleCloseCreateSupportControl() immediately
       setFormDataSupportControl({
         atleta_id: athleteId,
         nome: '',
         quantidade: '',
         preco: '',
         data_controle: '',
+        arquivo: null,
       });
       setPageSupportControl(1)
       // await getSupportControl(athleteId, pageSupportControl);
@@ -397,7 +534,19 @@ export default function AthleteDetail() {
       
     } catch (error:any) {
       console.error('Error:', error);
-      toast.error(error.response.data.errors[0].message, {
+      
+      // Extract error message with fallback handling
+      let errorMessage = 'Erro ao criar controle de suporte. Tente novamente.';
+      
+      if (error?.response?.data?.errors && Array.isArray(error.response.data.errors) && error.response.data.errors.length > 0) {
+        errorMessage = error.response.data.errors[0].message;
+      } else if (error?.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+      
+      toast.error(errorMessage, {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -406,29 +555,26 @@ export default function AthleteDetail() {
         progress: undefined,
         theme: "dark",
         transition: Bounce,
-        });
+      });
+      
+      // Don't close modal on error - let user try again
+      return;
     } finally {
       setLoading(false);
     }
-    // setPageSupportControl(1)
-    // // await getSupportControl(athleteId, pageSupportControl);
-    // const supportControl = await getSupportControl(athleteId, pageSupportControl);
-    // setDisplayedDataSupportControl(supportControl?.data.data);
-    // setTotalRowSupportControl(supportControl?.data.total);
   };
 
-  const isFormValidSupportControl= () => {
-    if (
-      (formDataSupportControl?.atleta_id ?? '').trim() !== '' &&
+  const isFormValidSupportControl = () => {
+    const precoValue = parseCurrencyToFloat(formDataSupportControl?.preco || '');
+    
+    return (
+      (formDataSupportControl?.atleta_id ?? '').toString().trim() !== '' &&
       (formDataSupportControl?.nome ?? '').trim() !== '' &&
-      (formDataSupportControl?.quantidade ?? '').trim() !== '' &&
-      (formDataSupportControl?.preco ?? '').trim() !== '' &&
-      (formDataSupportControl?.data_controle ?? '').trim() !== ''
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+      (formDataSupportControl?.quantidade ?? '').toString().trim() !== '' &&
+      (formDataSupportControl?.preco ?? '').trim() !== '' && precoValue > 0 &&
+      (formDataSupportControl?.data_controle ?? '').trim() !== '' &&
+      formDataSupportControl?.arquivo !== null
+    );
   };
 
   const setTab = (tab: string) => {
@@ -634,7 +780,7 @@ export default function AthleteDetail() {
               <div className="col-md d-flex flex-column align-items-center justify-content-center mb-3 ms-3 force-scrool">
                 <div className='d-flex justify-content-between align-items-center w-100 p-2'>
                   <div>
-                    <Subtitle subtitle='Controle de Suporte' />
+                    <Subtitle subtitle='Controle de Suportes' />
                   </div>
                   <div onClick={handleOpenCreateSupportControl} className='margin-button-control-support'>
                     <AddButton />
@@ -648,7 +794,7 @@ export default function AthleteDetail() {
                         <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>NOME</th>
                         <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>QUANTIDADE</th>
                         <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>PREÇO</th>
-                        <th className="table-dark text-center" scope="col" ></th>
+                        <th className="table-dark text-center" scope="col" style={{ fontSize: '13px' }}>AÇÕES</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -661,19 +807,33 @@ export default function AthleteDetail() {
                             <td className="table-dark text-center">{supportContol.quantidade}</td>
                             <td className="table-dark text-center">{supportContol.preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</td>
                             <td className="table-dark text-center">
-                              <FontAwesomeIcon
-                                icon={faTrashCan} 
-                                size="lg" 
-                                style={{color: "#ff0000", cursor: 'pointer'}}
-                                onClick={() => handleOpenConfirmDeleteControl(supportContol, index)}
-                                // onClick={handleOpenConfirmDeleteControl}
-                              />
-                              </td>
+                              <div className="d-flex justify-content-center gap-3">
+                                {supportContol.arquivo_url ? (
+                                  <FontAwesomeIcon
+                                    icon={faDownload}
+                                    size="lg"
+                                    style={{ color: "#28a745", cursor: 'pointer' }}
+                                    onClick={() => handleDownloadFile(supportContol)}
+                                    title="Baixar comprovante"
+                                  />
+                                ) : (
+                                  // placeholder keeps spacing so trash icon doesn't shift when download icon is missing
+                                  <span aria-hidden style={{ display: 'inline-block', width: 20, height: 24 }} />
+                                )}
+                                <FontAwesomeIcon
+                                  icon={faTrashCan}
+                                  size="lg"
+                                  style={{ color: "#ff0000", cursor: 'pointer' }}
+                                  onClick={() => handleOpenConfirmDeleteControl(supportContol, index)}
+                                  title="Excluir registro"
+                                />
+                              </div>
+                            </td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={8} className="table-dark text-center">Lista vazia</td>
+                          <td colSpan={5} className="table-dark text-center">Lista vazia</td>
                         </tr>
                         )
                       }
@@ -867,36 +1027,168 @@ export default function AthleteDetail() {
         onClose={handleCloseCreateSupportControl}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
-          <div className="d-flex justify-content-between">
-            <Subtitle subtitle="Criar Controle de Suporte"/>
-            <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateSupportControl}
-/>
+        <Box sx={styleSupportControl}>
+          <div className="d-flex justify-content-between align-items-center" style={{marginBottom: '20px'}}>
+            <div>
+              <Subtitle subtitle="Criar Controle de Suporte"/>
+              <small style={{color: '#adb5bd', marginLeft: '3px'}}>Preencha todos os campos obrigatórios (*)</small>
+            </div>
+            <FontAwesomeIcon 
+              icon={faX} 
+              style={{color: "#ffffff", cursor: 'pointer', padding: '8px'}} 
+              size="lg" 
+              onClick={handleCloseCreateSupportControl}
+            />
           </div>
-          <hr />
-          <div className="row" style={{height:'400px'}}>
-              <div className=''>
-                <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
-                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_controle" style={{height:'45px'}} value={formDataSupportControl.data_controle} onChange={handleInputChangeSupportControl}/>
+          <hr style={{margin: '0 0 25px 0', borderColor: '#495057'}} />
+          <div className="row" style={{minHeight: 'auto', paddingBottom: '20px'}}>
+            <div className="col-12">
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="d-flex flex-column w-100 mt-3">
+                    <label className="ms-3" style={{color: 'white', fontSize: '18px', marginBottom: '8px'}}>Data *</label>
+                    <input 
+                      type="date" 
+                      className="form-control input-create input-date bg-dark-custom" 
+                      placeholder="selecione a data" 
+                      name="data_controle" 
+                      style={{height:'45px'}} 
+                      value={formDataSupportControl.data_controle} 
+                      onChange={handleInputChangeSupportControl}
+                      required
+                    />
+                  </div>
+                  <div className="d-flex flex-column w-100 mt-3">
+                    <label className="ms-3" style={{color: 'white', fontSize: '18px', marginBottom: '8px'}}>Nome *</label>
+                    <input 
+                      type="text" 
+                      className="form-control input-create input-date bg-dark-custom" 
+                      placeholder="Digite o nome..." 
+                      name="nome" 
+                      style={{height:'45px'}} 
+                      value={formDataSupportControl.nome} 
+                      onChange={handleInputChangeSupportControl}
+                      required
+                    />
+                  </div>
+                  <div className="d-flex flex-column w-100 mt-3">
+                    <label className="ms-3" style={{color: 'white', fontSize: '18px', marginBottom: '8px'}}>Quantidade *</label>
+                    <input 
+                      type="number" 
+                      className="form-control input-create input-date bg-dark-custom" 
+                      placeholder="Digite a quantidade..." 
+                      name="quantidade" 
+                      style={{height:'45px'}} 
+                      value={formDataSupportControl.quantidade} 
+                      onChange={handleInputChangeSupportControl}
+                      min="1"
+                      required
+                    />
+                  </div>
                 </div>
-                <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Nome</label>
-                      <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="nome" style={{height:'45px'}} value={formDataSupportControl.nome} onChange={handleInputChangeSupportControl}/>
-                </div>
-                <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Quantidade</label>
-                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="quantidade" style={{height:'45px'}} value={formDataSupportControl.quantidade} onChange={handleInputChangeSupportControl}/>
-                </div>
-                <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Preço</label>
-                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="preco" style={{height:'45px'}} value={formDataSupportControl.preco} onChange={handleInputChangeSupportControl}/>
+                <div className="col-md-6">
+                  <div className="d-flex flex-column w-100 mt-3">
+                    <label className="ms-3" style={{color: 'white', fontSize: '18px', marginBottom: '8px'}}>Preço *</label>
+                    <input 
+                      type="text" 
+                      className="form-control input-create input-date bg-dark-custom" 
+                      placeholder="R$ 0,00" 
+                      name="preco" 
+                      style={{height:'45px'}} 
+                      value={formDataSupportControl.preco} 
+                      onChange={handleInputChangeSupportControl}
+                      required
+                    />
+                  </div>
+                  <div className="d-flex flex-column w-100 mt-3">
+                    <label className="ms-3" style={{color: 'white', fontSize: '18px', marginBottom: '8px'}}>
+                      Comprovante * 
+                      <small style={{color: '#adb5bd', fontSize: '14px'}}> (Max: 10MB)</small>
+                    </label>
+                    <div style={{position: 'relative'}}>
+                      <input 
+                        type="file" 
+                        name="arquivo" 
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={handleFileChangeSupportControl}
+                        required
+                        style={{
+                          position: 'absolute',
+                          opacity: 0,
+                          width: '100%',
+                          height: '45px',
+                          cursor: 'pointer',
+                          zIndex: 2
+                        }}
+                      />
+                      <div 
+                        className="form-control input-create input-date bg-dark-custom d-flex align-items-center justify-content-between"
+                        style={{
+                          height:'45px', 
+                          cursor: 'pointer',
+                          border: '1px solid #495057',
+                          borderRadius: '8px',
+                          position: 'relative',
+                          zIndex: 1
+                        }}
+                      >
+                        <span style={{
+                          color: formDataSupportControl.arquivo ? '#ffffff' : '#adb5bd',
+                          fontSize: '14px',
+                          marginLeft: '12px',
+                          flex: 1,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap'
+                        }}>
+                          {formDataSupportControl.arquivo ? formDataSupportControl.arquivo.name : 'Selecionar arquivo...'}
+                        </span>
+                        <button 
+                          type="button"
+                          className="btn btn-outline-light btn-sm"
+                          style={{
+                            margin: '4px',
+                            padding: '6px 12px',
+                            fontSize: '12px',
+                            pointerEvents: 'none',
+                            borderColor: '#6c757d',
+                            color: '#adb5bd'
+                          }}
+                        >
+                          Procurar
+                        </button>
+                      </div>
+                    </div>
+                    <div style={{minHeight: '24px', marginTop: '8px'}}>
+                      {formDataSupportControl.arquivo ? (
+                        <small className="ms-3" style={{color: '#28a745', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                          <span style={{fontSize: '16px'}}>✓</span>
+                          <span>Arquivo selecionado</span>
+                        </small>
+                      ) : (
+                        <small className="ms-3" style={{color: '#dc3545', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                          <span style={{fontSize: '16px'}}>⚠</span>
+                          <span>Arquivo obrigatório</span>
+                        </small>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
 
-          <div className='ms-3 d-flex flex-column mt-5' style={{width: '98%'}}>
-            <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickSupportControl}>Salvar</button>
+          <hr style={{margin: '30px 0 20px 0', borderColor: '#495057'}} />
+          <div className='d-flex justify-content-end' style={{padding: '0 20px 10px 20px'}}>
+            <button 
+              type="button" 
+              className="btn btn-success" 
+              style={{minWidth: '120px', padding: '12px 24px'}} 
+              onClick={handleSalvarClickSupportControl}
+              disabled={!isFormValidSupportControl}
+            >
+              Salvar
+            </button>
           </div>
         <ToastContainer />
         </Box>
