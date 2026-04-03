@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenSquare, faPenToSquare, faX } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { useRouter } from 'next/router';
-import { getAthletes } from '@/pages/api/http-service/athletes';
-import data from '../../pages/api/mock-data/mock-data-lesoes.json'
+import { getAthletes } from '@/lib/http-service/athletes';
+import data from '@/lib/mock-data/mock-data-lesoes.json'
 import Title from '../Title';
 import Subtitle from '../Subtitle';
 import AddButton from '../AddButton';
-import { createInjuries, getInjuries, updateInjuries } from '@/pages/api/http-service/injuries';
+import { createInjuries, getInjuries, updateInjuries } from '@/lib/http-service/injuries';
 import Loading from 'react-loading';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';

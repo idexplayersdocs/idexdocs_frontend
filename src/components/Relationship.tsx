@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import dataRalationship from '../pages/api/mock-data/mock-data-relationship-list.json'
-import dataSupportControl from '../pages/api/mock-data/mock-data-support-control.json'
+import dataRalationship from '@/lib/mock-data/mock-data-relationship-list.json'
+import dataSupportControl from '@/lib/mock-data/mock-data-support-control.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPlus, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Box, Modal, Pagination } from '@mui/material';
@@ -9,7 +9,7 @@ import Subtitle from './Subtitle';
 import Observacoes from './Observation';
 import AddButton from './AddButton';
 import { useRouter } from 'next/router';
-import { createAthleteRelationship, createSupportControl, getAthleteRelationship, getSupportControl } from '@/pages/api/http-service/relationship';
+import { createAthleteRelationship, createSupportControl, getAthleteRelationship, getSupportControl } from '@/lib/http-service/relationship';
 import Header from './Header';
 import SideBar from './SideBar';
 

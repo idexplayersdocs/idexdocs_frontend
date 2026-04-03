@@ -17,7 +17,7 @@ const getToken = (): string | null => {
 export const axiosClient = axios.create({
   baseURL: apiURL,
   headers: {
-    Authorization: "Bearer" + getToken(),
+    Authorization: "Bearer " + getToken(),
   },
 });
 

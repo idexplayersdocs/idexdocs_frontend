@@ -33,7 +33,7 @@ import {
   saveLink,
   fetchLinkbyAthleteId,
   deleteLink,
-} from "@/pages/api/http-service/gallery";
+} from "@/lib/http-service/gallery";
 import { useRouter } from "next/router";
 import Loading from "react-loading";
 import ReactPlayer from "react-player";

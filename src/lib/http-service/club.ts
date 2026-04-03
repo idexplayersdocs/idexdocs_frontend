@@ -1,5 +1,4 @@
 import axios from 'axios';
-import 'react-toastify/dist/ReactToastify.css';
 
 const apiURL = process.env.API_URL;
 

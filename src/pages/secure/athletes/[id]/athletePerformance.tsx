@@ -1,14 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
-import dataRalationship from '../../../api/mock-data/mock-data-relationship-list.json'
-import dataSupportControl from '../../../api/mock-data/mock-data-support-control.json'
+import dataRalationship from '@/lib/mock-data/mock-data-relationship-list.json'
+import dataSupportControl from '@/lib/mock-data/mock-data-support-control.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useRouter } from 'next/router';
 import Header from '@/components/Header';
 import SideBar from '@/components/SideBar';
 import Performance from '@/components/Performance';
-import { getAthleteById } from '@/pages/api/http-service/athletes';
+import { getAthleteById } from '@/lib/http-service/athletes';
 
 export default function AthletePerformance() {
   const { query, push, back } = useRouter();

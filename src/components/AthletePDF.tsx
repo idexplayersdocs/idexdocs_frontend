@@ -1,4 +1,4 @@
-import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
+import { PDFInfoResponseDTO } from "@/lib/http-service/pdfService/dto";
 import Image from "next/image";
 import React from "react";
 import generatePDF, { Margin, Options } from "react-to-pdf";
