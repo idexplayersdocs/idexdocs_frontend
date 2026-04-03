@@ -5,7 +5,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Box, Button, Modal, colors, styled } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { createAthlete, editAthlete, uploadImageAthlete } from "@/pages/api/http-service/athletes";
+import { createAthlete, editAthlete, uploadImageAthlete } from "@/lib/http-service/athletes";
 import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
 import React from "react";

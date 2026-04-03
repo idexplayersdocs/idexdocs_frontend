@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Loading from "react-loading";
 import SoccerField from "./SoccerField";
-import { getAthleteById, getAvatarAthletes } from "@/pages/api/http-service/athletes";
+import { getAthleteById, getAvatarAthletes } from "@/lib/http-service/athletes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTriangleExclamation, faX } from "@fortawesome/free-solid-svg-icons";
 import { Box, Button, Modal, Pagination, colors, styled } from "@mui/material";

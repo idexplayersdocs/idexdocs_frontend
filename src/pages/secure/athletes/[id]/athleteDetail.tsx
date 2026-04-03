@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import SideBar from '@/components/SideBar';
 import { useRouter } from 'next/router';
-import { getAthleteById } from '@/pages/api/http-service/athletes';
+import { getAthleteById } from '@/lib/http-service/athletes';
 import { Box, Modal, Pagination} from "@mui/material";
 import AddButton from '@/components/AddButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faX, faXmark, faTrashCan, faDownload } from '@fortawesome/free-solid-svg-icons';
-import { createAthleteRelationship, createSupportControl, deleteSupportControl, getAthleteRelationship, getSupportControl } from '@/pages/api/http-service/relationship';
+import { createAthleteRelationship, createSupportControl, deleteSupportControl, getAthleteRelationship, getSupportControl } from '@/lib/http-service/relationship';
 import Subtitle from '@/components/Subtitle';
-import { getObservations, saveObservations } from '@/pages/api/http-service/observations';
+import { getObservations, saveObservations } from '@/lib/http-service/observations';
 import  Performance  from '@/components/Performance'
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
@@ -18,7 +18,7 @@ import Image from "next/image";
 import { jwtDecode } from 'jwt-decode';
 import ContractHistory from '@/components/modal/ContractHistory';
 import { Midia } from '@/components/Midia';
-import { getPhysical } from '@/pages/api/http-service/physical';
+import { getPhysical } from '@/lib/http-service/physical';
 
 
 moment.locale('pt-br');

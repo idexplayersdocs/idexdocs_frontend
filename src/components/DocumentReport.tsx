@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
+import { PDFInfoResponseDTO } from "@/lib/http-service/pdfService/dto";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import {

@@ -4,11 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faEye, faPenSquare, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Subtitle from '../Subtitle';
 import AddButton from '../AddButton';
-import { createInjuries, getInjuries } from '@/pages/api/http-service/injuries';
+import { createInjuries, getInjuries } from '@/lib/http-service/injuries';
 import Loading from 'react-loading';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
-import { createContract, getContract, getContractVersion } from '@/pages/api/http-service/contract';
+import { createContract, getContract, getContractVersion } from '@/lib/http-service/contract';
 
 interface Athlete {
   id: number;

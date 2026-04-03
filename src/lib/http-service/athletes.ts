@@ -1,10 +1,5 @@
 import axios from 'axios';
-import { useRouter } from 'next/router';
-import { Bounce, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-// const apiURL = process.env.NEXT_PUBLIC_API_URL;
-// const apiURL = 'https://idexdocs-api.azurewebsites.net';
+import { showErrorToast } from '@/lib/toast-error';
 
 const apiURL = process.env.API_URL;
 
@@ -29,16 +24,7 @@ export const getAthletes = async (page:number, athlete: string | null = '') => {
     return response.data;
   } catch (error: any) {
     console.log(error.response.status)
-    toast.error(error.response.data.errors[0].message, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'colored',
-      transition: Bounce,
-      });
+    showErrorToast(error.response.data.errors[0].message);
     throw error;
   }
 };
@@ -47,19 +33,9 @@ export const getAthleteById = async (athleteId: any) => {
   if(athleteId){
     try {
       const response = await axios.get(`${apiURL}/atleta/${athleteId}`);
-      // toast.success('sucesso')
       return response.data;
     } catch (error) {
-      toast.error('Erro na lista de atletas', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-        transition: Bounce,
-        });
+      showErrorToast('Erro na lista de atletas');
     }
   }
 };
@@ -69,17 +45,7 @@ export const createAthlete = async (athleteData: any) => {
     const response = await axios.post(`${apiURL}/create/atleta`, athleteData);
     return response.data;
   } catch (error) {
-    toast.error('Erro ao criar atleta', {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'colored',
-      transition: Bounce,
-      });
-
+    showErrorToast('Erro ao criar atleta');
     throw error;
   }
 };
@@ -87,20 +53,9 @@ export const createAthlete = async (athleteData: any) => {
 export const uploadImageAthlete = async (IDAtleta: any, file:any) => {
   try {
     const response = await axios.post(`${apiURL}/file-upload/atleta/${IDAtleta}`, file);
-    // Se você quiser acessar os dados retornados pelo servidor, pode usar response.data
-    // Por exemplo, console.log(response.data);
     return response.data;
   } catch (error) {
-    toast.error('Erro no anexo da imagem', {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'colored',
-      transition: Bounce,
-      });
+    showErrorToast('Erro no anexo da imagem');
     throw error;
   }
 };
@@ -120,17 +75,7 @@ export const editAthlete = async (athleteData: any, athleteId: any) => {
     const response = await axios.put(`${apiURL}/update/atleta/${athleteId}`, athleteData);
     return response.data;
   } catch (error) {
-    toast.error('Erro ao editar o atleta', {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'colored',
-      transition: Bounce,
-      });
-
+    showErrorToast('Erro ao editar o atleta');
     throw error;
   }
 };

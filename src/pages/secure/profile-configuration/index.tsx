@@ -11,12 +11,12 @@ import {
   UsuarioRequestDTO,
   UsuarioResponseDTO,
   UsuarioUpdateRequestDTO,
-} from "@/pages/api/http-service/usuarioService/dto";
+} from "@/lib/http-service/usuarioService/dto";
 import { styled } from "@mui/material/styles";
 import { Controller, useForm } from "react-hook-form";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { CriarUsuario, UpdatePassword, UpdateUsuario, Usuarios } from "@/pages/api/http-service/usuarioService";
+import { CriarUsuario, UpdatePassword, UpdateUsuario, Usuarios } from "@/lib/http-service/usuarioService";
 import { SnackBar } from "@/components/SnackBar";
 import { LoadingOverlay } from "@/components/LoadingOverley";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

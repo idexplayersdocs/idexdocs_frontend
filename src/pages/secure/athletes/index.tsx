@@ -10,7 +10,7 @@ import {
   createAthlete,
   getAthletes,
   uploadImageAthlete,
-} from "@/pages/api/http-service/athletes";
+} from "@/lib/http-service/athletes";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

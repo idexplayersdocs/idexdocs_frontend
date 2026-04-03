@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { PDFInfo } from "@/pages/api/http-service/pdfService";
-import { PDFInfoResponseDTO } from "@/pages/api/http-service/pdfService/dto";
+import { PDFInfo } from "@/lib/http-service/pdfService";
+import { PDFInfoResponseDTO } from "@/lib/http-service/pdfService/dto";
 import MyDocumentReport from "@/components/DocumentReport";
 import { I18nextProvider } from "react-i18next";
 import i18n from "@/i18n";

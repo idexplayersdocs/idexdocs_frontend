@@ -4,13 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPenSquare, faX } from '@fortawesome/free-solid-svg-icons';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { useRouter } from 'next/router';
-import { getAthletes } from '@/pages/api/http-service/athletes';
-import data from '../../pages/api/mock-data/mock-data-clubs.json'
+import { getAthletes } from '@/lib/http-service/athletes';
+import data from '@/lib/mock-data/mock-data-clubs.json'
 import Title from '../Title';
 import Subtitle from '../Subtitle';
 import AddButton from '../AddButton';
 import Loading from 'react-loading';
-import { createClub, getClub, updateClub } from '@/pages/api/http-service/club';
+import { createClub, getClub, updateClub } from '@/lib/http-service/club';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
 import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';

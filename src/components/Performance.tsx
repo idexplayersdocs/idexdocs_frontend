@@ -3,20 +3,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, Modal, Pagination, Typography } from '@mui/material';
 import Subtitle from './Subtitle';
-import data from '../pages/api/mock-data/mock-data-physical-characteristics.json'
+import data from '@/lib/mock-data/mock-data-physical-characteristics.json'
 
 import Observacoes from './Observation';
 import { faPlus, faQuestion, faX } from '@fortawesome/free-solid-svg-icons';
 import AddButton from './AddButton';
-import { getAthletes } from '@/pages/api/http-service/athletes';
+import { getAthletes } from '@/lib/http-service/athletes';
 import HistoryCompetitions from './modal/HistoryCompetitions';
 import ClubHistory from './modal/ClubHistory';
 import Injuries from './modal/Injuries';
 import PhysicalHistory from './modal/PhysicalHistory';
 import { useRouter } from 'next/router';
 import Characteristics from './characteristics/characteristics';
-import { getPhysical } from '@/pages/api/http-service/physical';
-import { getObservations, saveObservations } from '@/pages/api/http-service/observations';
+import { getPhysical } from '@/lib/http-service/physical';
+import { getObservations, saveObservations } from '@/lib/http-service/observations';
 import { Bounce, toast } from 'react-toastify';
 import PerformanceCreation from './modal/PerformanceCreation';
 import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';

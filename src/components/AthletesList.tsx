@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
-import { getAthletes } from "@/pages/api/http-service/athletes";
+import { getAthletes } from "@/lib/http-service/athletes";
 import Loading from "react-loading";
 import moment from "moment";
 import {
@@ -35,7 +35,7 @@ import styles from "../styles/Login.module.css";
 
 import { jwtDecode } from "jwt-decode";
 
-import { PDFInfo } from "@/pages/api/http-service/pdfService";
+import { PDFInfo } from "@/lib/http-service/pdfService";
 
 import MyDocument from "./Document";
 import { pdf } from "@react-pdf/renderer";

@@ -3,7 +3,7 @@ import React from "react";
 import { Page, Text, View, Document, Image, Link } from "@react-pdf/renderer";
 import {
   PDFInfoResponseDTO,
-} from "@/pages/api/http-service/pdfService/dto";
+} from "@/lib/http-service/pdfService/dto";
 import { useTranslation } from "react-i18next";
 import {
   getPositionName,
@@ -12,7 +12,7 @@ import {
 } from "@/utils/pdf/pdfReport";
 import { styles } from "@/styles/pdfReport";
 import { stylesPositions } from "@/styles/pdfReport";
-import { PlayerPositionImgProps } from "@/pages/api/http-service/pdfService/types";
+import { PlayerPositionImgProps } from "@/lib/http-service/pdfService/types";
 
 // Create PDF Component
 const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
