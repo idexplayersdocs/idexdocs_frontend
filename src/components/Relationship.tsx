@@ -127,7 +127,7 @@ export default function Relationship() {
   const handleSalvarClickRelationShip = async () => {
     try {
       formDataRelationship['pendencia_empresa'] = formDataRelationship['pendencia_empresa'] == 'true' ? true : false
-      formDataRelationship['pendencia_clube'] = formDataRelationship['pendencia_empresa'] == 'true' ? true : false
+      formDataRelationship['pendencia_clube'] = formDataRelationship['pendencia_clube'] == 'true' ? true : false
       const response = await createAthleteRelationship(formDataRelationship as any);
     } catch (error) {
       console.error('Error:', error);

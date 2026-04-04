@@ -385,7 +385,7 @@ export const Midia = () => {
       const response = await saveLink(payload);
       handleCloseUploadLink();
       const linkData = await fetchLinkbyAthleteId(athleteId);
-      setLink(linkData);
+      setLink(linkData.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -467,7 +467,7 @@ export const Midia = () => {
     const fetchLinkData = async () => {
       try {
         const linksData = await fetchLinkbyAthleteId(athleteId);
-        setLink(linksData);
+        setLink(linksData.data);
       } catch (error) {
         console.error("Error fetching links:", error);
       } finally {
@@ -597,7 +597,7 @@ export const Midia = () => {
     const fetchLinkData = async () => {
       try {
         const linksData = await fetchLinkbyAthleteId(athleteId);
-        setLink(linksData);
+        setLink(linksData.data);
       } catch (error) {
         console.error("Error fetching links:", error);
       } finally {

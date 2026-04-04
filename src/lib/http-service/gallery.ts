@@ -35,7 +35,7 @@ export const saveImage = async (files: FormData, athleteId: number | string) => 
   }
 };
 
-export const fetchLinkbyAthleteId = async (athleteId: number | string): Promise<AthleteLink[]> => {
+export const fetchLinkbyAthleteId = async (athleteId: number | string): Promise<{ data: AthleteLink[] }> => {
   try {
     const response = await axios.get(`${apiURL}/link/atleta/${athleteId}`)
     return response.data
