@@ -156,12 +156,14 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
       if (file.size > maxSize) {
         toast.error('Arquivo muito grande. Tamanho máximo: 10MB');
         event.target.value = '';
+        setFormRegisterContractHistory((prevState: any) => ({ ...prevState, arquivo: null }));
         return;
       }
       const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
       if (!allowedTypes.includes(file.type)) {
         toast.error('Tipo de arquivo não suportado. Use apenas PDF, JPG, JPEG ou PNG');
         event.target.value = '';
+        setFormRegisterContractHistory((prevState: any) => ({ ...prevState, arquivo: null }));
         return;
       }
     }
