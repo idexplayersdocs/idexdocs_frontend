@@ -16,7 +16,7 @@ export const getContract = async (athleteId: number | string, page: number): Pro
   }
 };
 
-export const createContract = async (request: Partial<Contract>) => {
+export const createContract = async (request: FormData | Partial<Contract>) => {
   try {
     const response = await axios.post(`${apiURL}/create/contrato`, request);
     return response.data;
@@ -26,7 +26,7 @@ export const createContract = async (request: Partial<Contract>) => {
   }
 };
 
-export const editContract = async (request: Partial<Contract>) => {
+export const editContract = async (request: FormData | Partial<Contract>) => {
   try {
     const response = await axios.put(`${apiURL}/update/contrato`, request);
     return response.data;

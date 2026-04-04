@@ -93,6 +93,7 @@ export interface SupportControlResponse {
 
 export interface Contract {
   id?: number;
+  contrato_id?: number;
   contrato_sub_tipo_id: number;
   data_inicio: string;
   data_termino: string;
@@ -100,6 +101,8 @@ export interface Contract {
   versao?: number;
   ativo?: boolean;
   contrato_sub_tipo_nome?: string;
+  arquivo?: File | null;
+  arquivo_url?: string | null;
 }
 
 export interface ContractVersion {
