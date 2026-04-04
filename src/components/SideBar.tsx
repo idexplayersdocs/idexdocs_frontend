@@ -10,10 +10,13 @@ import { faPenToSquare, faTriangleExclamation, faX } from "@fortawesome/free-sol
 import { Box, Button, Modal, Pagination, colors, styled } from "@mui/material";
 import Subtitle from "./Subtitle";
 import EditAthlete from "./EditAthlete";
+import { POSITION_LABELS } from '@/types';
+import type { AthleteDetail, AthleteContract } from '@/types';
 
 
 type Props = {
-  athleteData: any
+  athleteData: AthleteDetail;
+  modal?: boolean;
 }
 
 const style = {
@@ -31,7 +34,7 @@ const style = {
   overflow: 'auto'
 };
 
-export default function SideBar({ athleteData, modal }: any) {
+export default function SideBar({ athleteData, modal }: Props) {
   const { query, push, back } = useRouter();
   const athleteId = query?.id;
   const [openEditAthlete, setOpenEditAthlete] = useState(false);
@@ -52,32 +55,7 @@ export default function SideBar({ athleteData, modal }: any) {
 
 
   const convertIDPosicao = (posicao: number) => {
-    switch(posicao) {
-      case 1:
-        return 'NENHUM';
-      case 2:
-        return 'GOLEIRO';
-      case 3:
-        return 'LATERAL DIREITO';
-      case 4:
-        return 'LATERAL ESQUERDO';
-      case 5:
-        return 'ZAGUEIRO';
-      case 6:
-        return 'VOLANTE';
-      case 7:
-        return 'MEIA ARMADOR';
-      case 8:
-        return 'MEIA ATACANTE';
-      case 9:
-        return 'ATACANTE';
-      case 10:
-        return 'CENTROAVANTE';
-      case 11:
-        return 'EXTREMO DIREITO';
-      case 12:
-        return 'EXTREMO ESQUERDO';
-    }
+    return POSITION_LABELS[posicao] || 'NENHUM';
   }
 
   if (!athleteData) {
@@ -106,15 +84,15 @@ export default function SideBar({ athleteData, modal }: any) {
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Estatura:</h1>
-        <h2 className="subtitle-sidebar">{athleteData.physical.estatura ? `${athleteData.physical.estatura} cm` : 'Não avaliado'}</h2>
+        <h2 className="subtitle-sidebar">{athleteData.physical?.estatura ? `${athleteData.physical.estatura} cm` : 'Não avaliado'}</h2>
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Peso:</h1>
-        <h2 className="subtitle-sidebar">{athleteData.physical.peso ? `${athleteData.physical.peso} kg` : 'Não avaliado'}</h2>
+        <h2 className="subtitle-sidebar">{athleteData.physical?.peso ? `${athleteData.physical.peso} kg` : 'Não avaliado'}</h2>
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">% Gordura:</h1>
-        <h2 className="subtitle-sidebar">{athleteData.physical.percentual_gordura ? `${athleteData.physical.percentual_gordura} %` : 'Não avaliado'}</h2>
+        <h2 className="subtitle-sidebar">{athleteData.physical?.percentual_gordura ? `${athleteData.physical.percentual_gordura} %` : 'Não avaliado'}</h2>
       </div>
       <div className="mt-2">
         <h1 className="title-sidebar">Posição:</h1>
@@ -139,7 +117,7 @@ export default function SideBar({ athleteData, modal }: any) {
       <h1 className="title-sidebar mt-3">Contratos:</h1>
       {
         Array.isArray(athleteData.contratos) && athleteData.contratos.length > 0 ? (
-          athleteData.contratos.map((contrato: any, index: number) => (
+          athleteData.contratos.map((contrato: AthleteContract, index: number) => (
             <div className="mt-2" key={index}>
               <h1 className="title-sidebar">{contrato.tipo}</h1>
               {/* <h2 className="subtitle-sidebar">{moment(contrato.data_inicio).format('DD/MM/YYYY')} - {moment(contrato.data_termino).format('DD/MM/YYYY')}</h2> */}

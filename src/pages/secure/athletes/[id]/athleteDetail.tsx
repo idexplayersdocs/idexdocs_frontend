@@ -19,6 +19,7 @@ import { jwtDecode } from 'jwt-decode';
 import ContractHistory from '@/components/modal/ContractHistory';
 import { Midia } from '@/components/Midia';
 import { getPhysical } from '@/lib/http-service/physical';
+import type { AthleteDetail as AthleteDetailType, Relationship, SupportControl, UserPermissions, DecodedToken, Observation } from '@/types';
 
 
 moment.locale('pt-br');
@@ -89,31 +90,31 @@ const styleSupportControl = {
 export default function AthleteDetail() {
   const effectRan = useRef(false);
   const { query, push, back } = useRouter();
-  const athleteId = query?.id;
+  const athleteId = query?.id as string;
   const [tabAtual, setTabAtual] = useState<string>('relationship')
   const [loading, setLoading] = useState(true); // Estado de carregamento
 
-  const [athlete, setAthlete] = useState<any>();
+  const [athlete, setAthlete] = useState<AthleteDetailType>();
   const [pageRalationship, setPageRalationship] = useState(1);
   const [pageSupportControl, setPageSupportControl] = useState(1);
-  const [displayedDataRelationShip, setDisplayedDataRelationShip] = useState<any>([]);
-  const [displayedDataSupportControl, setDisplayedDataSupportControl] = useState<any>([]);
-  const [displayedTotalValueSupportControl, setDisplayedTotalValueSupportControl] = useState<any>();
+    const [displayedDataRelationShip, setDisplayedDataRelationShip] = useState<Relationship[]>([]);
+    const [displayedDataSupportControl, setDisplayedDataSupportControl] = useState<SupportControl[]>([]);
+    const [displayedTotalValueSupportControl, setDisplayedTotalValueSupportControl] = useState<string>();
   const [totalPages, setTotalPages] = useState(1);
   const [openCreateQuestionaryRelationship, setOpenCreateQuestionaryRelationship] = useState(false);
   const [openCreateSupportControl, setOpenCreateSupportControl] = useState(false);
   const [openSideBar, setOpenSideBar] = useState(false);
   const [totalRowRelationship, setTotalRowRelationship] = useState<number>(1);
   const [totalRowSupportControl, setTotalRowSupportControl] = useState<number>(1);
-  const [permissions, setPermissions] = useState<any>({
-    relationship: false,
-    performance: false
-  });
+    const [permissions, setPermissions] = useState<UserPermissions>({
+      relationship: false,
+      performance: false
+    });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const decoded: any = jwtDecode(token!);
-    if (token) {
+        const decoded = jwtDecode<DecodedToken>(token!);
+        if (token) {
       setPermissions({
         relationship: decoded.permissions.includes("create_relacionamento"),
         performance: decoded.permissions.includes("create_desempenho")
@@ -127,7 +128,7 @@ export default function AthleteDetail() {
   const [observacao, setObservacao] = useState<string>('');
 
 
-  const [formDataRelationship, setFormDataRelationship] = useState<any>({
+  const [formDataRelationship, setFormDataRelationship] = useState<Record<string, any>>({
     atleta_id: athleteId,
     receptividade_contrato: '',
     satisfacao_empresa: '',
@@ -139,7 +140,7 @@ export default function AthleteDetail() {
     data_avaliacao: ''
   });
 
-  const [formDataSupportControl, setFormDataSupportControl] = useState<any>({
+  const [formDataSupportControl, setFormDataSupportControl] = useState<Record<string, any>>({
     atleta_id: athleteId,
     nome: '',
     quantidade: '',
@@ -147,7 +148,7 @@ export default function AthleteDetail() {
     data_controle: '',
     arquivo: null,
   });
-  const [formSupportControlSelected, setFormSupportControlSelected] = useState<any>({
+  const [formSupportControlSelected, setFormSupportControlSelected] = useState<Record<string, any>>({
     controle: '',
     index: ''
   })
@@ -200,7 +201,7 @@ export default function AthleteDetail() {
               physical: latestPhysical || {} // Store it as an object instead of an array
           };
             
-            setAthlete(mergedData);
+            setAthlete(mergedData as AthleteDetailType);
   
             // Relacionamento
             const relationship = await getAthleteRelationship(athleteId, pageRalationship);
@@ -246,7 +247,7 @@ export default function AthleteDetail() {
   }, [athleteId, pageRalationship, pageSupportControl]);
 
   // Relacionamento
-  const handleChangePageRalationship = (event: any, newPage: number) => {
+  const handleChangePageRalationship = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPageRalationship(newPage);
   };
   const handleOpenCreateQuestionaryRelationship = () => setOpenCreateQuestionaryRelationship(true);
@@ -335,7 +336,7 @@ export default function AthleteDetail() {
 
   const handleInputChangeRelationship = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormDataRelationship((prevState: any) => ({
+    setFormDataRelationship((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -361,7 +362,7 @@ export default function AthleteDetail() {
     setOpenSideBar(false)
   }
 
-  const handleChangePageSupportControl= (event: any, newPage:number) => {
+  const handleChangePageSupportControl = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPageSupportControl(newPage);
   };
 
@@ -440,19 +441,19 @@ export default function AthleteDetail() {
       const rawValue = value.replace(/[^\d,]/g, '');
       const formattedValue = rawValue ? formatCurrency(rawValue) : '';
       
-      setFormDataSupportControl((prevState: any) => ({
-        ...prevState,
-        [name]: formattedValue,
-      }));
-    } else {
-      setFormDataSupportControl((prevState: any) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-  };
+        setFormDataSupportControl((prevState) => ({
+          ...prevState,
+          [name]: formattedValue,
+        }));
+      } else {
+        setFormDataSupportControl((prevState) => ({
+          ...prevState,
+          [name]: value,
+        }));
+      }
+    };
 
-  const handleFileChangeSupportControl = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChangeSupportControl = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     
     if (file) {
@@ -473,10 +474,10 @@ export default function AthleteDetail() {
       }
     }
     
-    setFormDataSupportControl((prevState: any) => ({
-      ...prevState,
-      arquivo: file,
-    }));
+        setFormDataSupportControl((prevState) => ({
+          ...prevState,
+          arquivo: file,
+        }));
   };
 
   const handleSalvarClickSupportControl = async () => {
@@ -581,16 +582,16 @@ export default function AthleteDetail() {
     setTabAtual(tab)
   }
 
-  const handleInputObservation = (event: any) => {
+  const handleInputObservation = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setObservacao(event.target.value)
   };
 
   const handleSaveObservation = async () => {
     setLoading(true);
     try {
-      const request = {
+      const request: Observation = {
         atleta_id: athleteId,
-        tipo: "relacionamento",
+        tipo: "relacionamento" as const,
         descricao: observacao
       }
       const response = await saveObservations(request);
@@ -612,7 +613,7 @@ export default function AthleteDetail() {
   };
 
   const [openConfirmDeleteControl, setOpenConfirmDeleteControl] = React.useState(false);
-  const handleOpenConfirmDeleteControl = (controle: any, index: any) => {
+  const handleOpenConfirmDeleteControl = (controle: any, index: number) => {
     setFormSupportControlSelected({
       controle: controle,
       index: index
@@ -637,8 +638,8 @@ export default function AthleteDetail() {
       setLoading(true);
       try {
         // Atleta
-        const athleteData = await getAthleteById(athleteId);
-        setAthlete(athleteData?.data);
+        const athleteData = await getAthleteById(athleteId as string);
+        setAthlete(athleteData?.data as AthleteDetailType);
 
       } catch (error:any) {
         toast.error('Dados do atleta temporariamente indisponível', {
@@ -685,7 +686,7 @@ export default function AthleteDetail() {
           />
         </div>
         <div className="col-lg-2">
-          <SideBar athleteData={athlete} modal={false} />
+          <SideBar athleteData={athlete!} modal={false} />
         </div>
         <div className="col-lg-10">
           <ul className="nav nav-tabs">
@@ -880,7 +881,7 @@ export default function AthleteDetail() {
           tabAtual === 'performance' &&
           // Desempenho
           <div className="card athlete-detail-card" style={{ backgroundColor: 'var(--bg-secondary-color)', marginRight: '10px' }}>
-            <Performance athleteData={athlete} />
+            <Performance athleteData={athlete!} />
           </div>
           }
 
@@ -1205,7 +1206,7 @@ export default function AthleteDetail() {
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseSideBar}/>
           </div>
           <hr />
-          <SideBar athleteData={athlete} modal={true}/>
+          <SideBar athleteData={athlete!} modal={true}/>
         </Box>
       </Modal>
       {/* Histórico de contratos */}

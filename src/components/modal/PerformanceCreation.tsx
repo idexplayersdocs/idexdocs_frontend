@@ -34,7 +34,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
   const effectRan = useRef(false);
   const [loading, setLoading] = useState(false);
   const [formDataList, setFormDataList] = useState(dataList)
-  const [formDate, setFormDate] = useState<any>('')
+  const [formDate, setFormDate] = useState<string>('')
 
   const handleCloseModal = () => {
     closeModal();
@@ -68,7 +68,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
 
   const handleChangeFisico = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setFormDataListFisico((prevState: any) => ({
+    setFormDataListFisico((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -95,7 +95,7 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
 
     const handleChangeTecnico = (event: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;
-      setFormDataListTecnico((prevState: any) => ({
+      setFormDataListTecnico((prevState) => ({
         ...prevState,
         [name]: value,
       }));
@@ -122,13 +122,13 @@ export default function PerformanceCreation({closeModal, athleteData, dataList, 
   
       const handleChangePsicologico = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = event.target;
-        setFormDataListPsicologico((prevState: any) => ({
+        setFormDataListPsicologico((prevState) => ({
           ...prevState,
           [name]: value,
         }));
       };
 
-    const handleInputDate = (event: any) => {
+    const handleInputDate = (event: React.ChangeEvent<HTMLInputElement>) => {
       setFormDate(event.target.value)
     };
 

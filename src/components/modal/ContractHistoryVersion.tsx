@@ -39,20 +39,15 @@ export default function ContractHistoryVersion({contractId}: any) {
   const [openRegisterContractHistoryVersion, setOpenRegisterContractHistoryVersion] = useState(false);
   const [totalRow, setTotalRow] = useState(1);
   const [loading, setLoading] = useState(true); // Estado de carregamento
-  const [contractHistoryVersion, setContractHistoryVersion] = useState<any>({
-    versao: '',
-    data_inicio: '',
-    data_termino: '',
-    observacao: '',
-  });
+  const [contractHistoryVersion, setContractHistoryVersion] = useState<any[]>([]);
   useEffect(() => {
     if (!effectRan.current) {
       const fetchAthletesData = async () => {
         setLoading(true)
         try {
           const contractHistoryVersionList = await getContractVersion(contractId, page);
-          setContractHistoryVersion(contractHistoryVersionList?.data);
-          setTotalRow(contractHistoryVersionList?.total);
+          setContractHistoryVersion(contractHistoryVersionList?.data ?? []);
+          setTotalRow(contractHistoryVersionList?.total ?? 0);
         } catch (error:any) {
           console.error('Error:', error);
           // toast.error(error.response.data.errors[0].message, {
@@ -77,7 +72,7 @@ export default function ContractHistoryVersion({contractId}: any) {
   const handleOpenRegisterContractHistoryVersion = () => setOpenRegisterContractHistoryVersion(true);
   const handleCloseRegisterContractHistory = () => setOpenRegisterContractHistoryVersion(false);
 
-  const handleChangePageContractHistoryVersion = (event: any, newPage:number) => {
+  const handleChangePageContractHistoryVersion = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 

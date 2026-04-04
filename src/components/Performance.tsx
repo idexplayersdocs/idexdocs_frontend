@@ -21,6 +21,7 @@ import { Bounce, toast } from 'react-toastify';
 import PerformanceCreation from './modal/PerformanceCreation';
 import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
 import ContractHistory from './modal/ContractHistory';
+import type { AthleteDetail, Observation } from '@/types';
 
 const styleCaracteristic = {
   position: 'absolute' as 'absolute',
@@ -68,10 +69,10 @@ const styleInfo = {
   overflow: 'auto'
 };
 
-export default function Performance({athleteData}: any) {
+export default function Performance({athleteData}: { athleteData: AthleteDetail }) {
   const effectRan = useRef(false);
   const { query, push, back } = useRouter();
-  const athleteId = query?.id;
+  const athleteId = query?.id as string;
   
   const [openHistoryCompetitions, setOpenHistoryCompetitions] = React.useState(false);
   const [openClubHistory, setOpenClubHistory] = React.useState(false);
@@ -105,7 +106,7 @@ export default function Performance({athleteData}: any) {
     setOpenPerformanceCreation(false)
     const fetchAthletesData = async () => {
       try {
-        const characteristic = await getPhysical(athleteId, 1, athleteData.posicao_primaria);
+        const characteristic = await getPhysical(athleteId, 1, String(athleteData.posicao_primaria ?? ''));
         setDataCharacteristic(characteristic?.data);
 
       }  catch(error: any){
@@ -127,8 +128,8 @@ export default function Performance({athleteData}: any) {
 
   const handleOpenInfo = () => setOpenInfo(true);
   const handleCloseInfo = () => setOpenInfo(false);
-  const [dataCharacteristic, setDataCharacteristic] = useState<any>();
-  const [labelCharacteristic, setLabelCharacteristic] = useState<any>(() => {
+  const [dataCharacteristic, setDataCharacteristic] = useState<unknown[]>();
+  const [labelCharacteristic, setLabelCharacteristic] = useState<{ label: Record<string, string[]>; api: Record<string, Record<string, unknown>[]> } | undefined>(() => {
     // // Atacante / Centroavante
     // if (athleteData && (athleteData.posicao_primaria == 9 || athleteData.posicao_primaria == 10)) {
     //   return {
@@ -192,7 +193,7 @@ if (athleteData && (athleteData.posicao_primaria == 9 || athleteData.posicao_pri
   };
 }
 // Lateral direito (3) / Lateral esquerdo (4) / Extremo direito (11)/ Extremo esquerdo (12)
-else if (athleteData && [3, 4, 11, 12].includes(athleteData.posicao_primaria)) {
+else if (athleteData && athleteData.posicao_primaria != null && [3, 4, 11, 12].includes(athleteData.posicao_primaria)) {
   return {
       'label': {
           fisico: ['Data', 'Estatura / Maturação', 'Velocidade', 'Passe Curto', 'Passe Longo', 'Capacidade Aeróbica', 'Fechamento Defensivo / Contenção', 'Total', 'Média'],
@@ -271,7 +272,7 @@ else if (athleteData && athleteData.posicao_primaria == 6) {
   useEffect(() => {
     const fetchAthletesData = async () => {
       try {
-        const characteristic = await getPhysical(athleteId, 1, athleteData.posicao_primaria.toString());
+        const characteristic = await getPhysical(athleteId, 1, String(athleteData.posicao_primaria ?? ''));
         setDataCharacteristic(characteristic?.data);
         // Observações
         const responseObservacoes = await getObservations(athleteId, 'desempenho');
@@ -287,15 +288,15 @@ else if (athleteData && athleteData.posicao_primaria == 6) {
     fetchAthletesData();
   }, [athleteId, athleteData]);
 
-  const handleInputObservation = (event: any) => {
-    setObservacao(event.target.value)
-  };
+    const handleInputObservation = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setObservacao(event.target.value)
+    };
 
   const handleSaveObservation = async () => {
     try {
-      const request = {
+      const request: Observation = {
         atleta_id: athleteId,
-        tipo: "desempenho",
+        tipo: "desempenho" as const,
         descricao: observacao
       }
       const response = await saveObservations(request);

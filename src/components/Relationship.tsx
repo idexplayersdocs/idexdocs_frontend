@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { createAthleteRelationship, createSupportControl, getAthleteRelationship, getSupportControl } from '@/lib/http-service/relationship';
 import Header from './Header';
 import SideBar from './SideBar';
+import type { Relationship as RelationshipType, SupportControl, Observation } from '@/types';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -34,27 +35,27 @@ type Props = {
 export default function Relationship() {
   const effectRan = useRef(false);
   const { query, push, back } = useRouter();
-  const athleteId = query?.id;
+  const athleteId = query?.id as string;
 
   const [pageRalationship, setPageRalationship] = useState(1);
   const [pageSupportControl, setPageSupportControl] = useState(1);
-  const [displayedDataRelationShip, setDisplayedDataRelationShip] = useState<any>([]);
-  const [displayedDataSupportControl, setDisplayedDataSupportControl] = useState<any>([]);
+  const [displayedDataRelationShip, setDisplayedDataRelationShip] = useState<RelationshipType[]>([]);
+  const [displayedDataSupportControl, setDisplayedDataSupportControl] = useState<SupportControl[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [openCreateQuestionaryRelationship, setOpenCreateQuestionaryRelationship] = useState(false);
   const [openCreateSupportControl, setOpenCreateSupportControl] = useState(false);
   const [totalRowRelationship, setTotalRowRelationship] = useState<number>(1);
   const [totalRowSupportControl, setTotalRowSupportControl] = useState<number>(1);
 
-  const [observacao, setObservacao] = useState<any>({
-    atleta_id: athleteId,
-    tipo: 'relacionamento',
-    descricao: ''
-  });
+    const [observacao, setObservacao] = useState<Observation>({
+      atleta_id: athleteId as number | string,
+      tipo: 'relacionamento',
+      descricao: ''
+    });
 
 
-  const [formDataRelationship, setFormDataRelationship] = useState<any>({
-    atleta_id: athleteId,
+  const [formDataRelationship, setFormDataRelationship] = useState<Record<string, any>>({
+    atleta_id: athleteId ?? '',
     receptividade_contrato: '',
     satisfacao_empresa: '',
     satisfacao_clube: '',
@@ -65,8 +66,8 @@ export default function Relationship() {
     data_criacao: ''
   });
 
-  const [formDataSupportControl, setFormDataSupportControl] = useState<any>({
-    atleta_id: athleteId,
+  const [formDataSupportControl, setFormDataSupportControl] = useState<Record<string, any>>({
+    atleta_id: athleteId ?? '',
     nome: '',
     quantidade: '',
     preco: '',
@@ -104,7 +105,7 @@ export default function Relationship() {
   }, [athleteId, pageRalationship, pageSupportControl]);
 
   // Relacionamento
-  const handleChangePageRalationship = (event: any, newPage: number) => {
+  const handleChangePageRalationship = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPageRalationship(newPage);
   };
   const handleOpenCreateQuestionaryRelationship = () => setOpenCreateQuestionaryRelationship(true);
@@ -126,8 +127,8 @@ export default function Relationship() {
   const handleSalvarClickRelationShip = async () => {
     try {
       formDataRelationship['pendencia_empresa'] = formDataRelationship['pendencia_empresa'] == 'true' ? true : false
-      formDataRelationship['pendencia_clube'] = formDataRelationship['pendencia_empresa'] == 'true' ? true : false
-      const response = await createAthleteRelationship(formDataRelationship);
+      formDataRelationship['pendencia_clube'] = formDataRelationship['pendencia_clube'] == 'true' ? true : false
+      const response = await createAthleteRelationship(formDataRelationship as any);
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -148,15 +149,15 @@ export default function Relationship() {
 
   const isFormValidRelationship = () => {
     if (
-      (formDataRelationship?.atleta_id ?? '').trim() !== '' &&
-      (formDataRelationship?.receptividade_contrato ?? '').trim() !== '' &&
-      (formDataRelationship?.satisfacao_empresa ?? '').trim() !== '' &&
-      (formDataRelationship?.satisfacao_clube ?? '').trim() !== '' &&
-      (formDataRelationship?.relacao_familiares ?? '').trim() !== '' &&
-      (formDataRelationship?.influencias_externas ?? '').trim() !== '' &&
-      (formDataRelationship?.pendencia_empresa ?? '').trim() !== '' &&
-      (formDataRelationship?.pendencia_clube ?? '').trim() !== '' &&
-      (formDataRelationship?.data_criacao ?? '').trim() !== ''
+      String(formDataRelationship?.atleta_id ?? '').trim() !== '' &&
+      String(formDataRelationship?.receptividade_contrato ?? '').trim() !== '' &&
+      String(formDataRelationship?.satisfacao_empresa ?? '').trim() !== '' &&
+      String(formDataRelationship?.satisfacao_clube ?? '').trim() !== '' &&
+      String(formDataRelationship?.relacao_familiares ?? '').trim() !== '' &&
+      String(formDataRelationship?.influencias_externas ?? '').trim() !== '' &&
+      String(formDataRelationship?.pendencia_empresa ?? '').trim() !== '' &&
+      String(formDataRelationship?.pendencia_clube ?? '').trim() !== '' &&
+      String(formDataRelationship?.data_criacao ?? '').trim() !== ''
     ) {
       return true;
     } else {
@@ -166,7 +167,7 @@ export default function Relationship() {
 
   const handleInputChangeRelationship = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormDataRelationship((prevState: any) => ({
+    setFormDataRelationship((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -185,7 +186,7 @@ export default function Relationship() {
     });
   }
 
-  const handleChangePageSupportControl= (event: any, newPage:number) => {
+  const handleChangePageSupportControl = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPageSupportControl(newPage);
   };
 
@@ -219,12 +220,12 @@ export default function Relationship() {
       const rawValue = value.replace(/[^\d,]/g, '');
       const formattedValue = rawValue ? formatCurrency(rawValue) : '';
       
-      setFormDataSupportControl((prevState: any) => ({
-        ...prevState,
-        [name]: formattedValue,
-      }));
-    } else {
-      setFormDataSupportControl((prevState: any) => ({
+          setFormDataSupportControl((prevState) => ({
+            ...prevState,
+            [name]: formattedValue,
+          }));
+        } else {
+          setFormDataSupportControl((prevState) => ({
         ...prevState,
         [name]: value,
       }));
@@ -236,7 +237,7 @@ export default function Relationship() {
       // Convert currency back to float for API
       formDataSupportControl['preco'] = parseCurrencyToFloat(formDataSupportControl.preco).toFixed(2)
       formDataSupportControl['athleteId'] = athleteId
-      const response = await createSupportControl(formDataSupportControl);
+      const response = await createSupportControl(formDataSupportControl as any);
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -275,7 +276,7 @@ export default function Relationship() {
       <Header />
       <div className="row justify-content-start">
         <div className="col-2">
-          <SideBar athleteData={athleteId} modal={false}/>
+          <SideBar athleteData={athleteId as any} modal={false}/>
         </div>
         <div className="col-10">
           <ul className="nav nav-tabs">

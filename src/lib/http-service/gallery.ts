@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { showErrorToast } from '@/lib/toast-error';
+import type { PaginatedResponse, GalleryImage, GalleryVideo, AthleteLink } from '@/types';
 
 const apiURL = process.env.API_URL;
 
-export const getGalleryById = async (athleteId: any) => {
+export const getGalleryById = async (athleteId: number | string): Promise<PaginatedResponse<GalleryImage> | undefined> => {
   if(athleteId){
     try {
       const response = await axios.get(`${apiURL}/multiple-files-download/atleta/${athleteId}?page=1&per_page=999999999999`);
@@ -13,7 +14,7 @@ export const getGalleryById = async (athleteId: any) => {
     }
   }
 };
-export const getVideosById = async (athleteId: any) => {
+export const getVideosById = async (athleteId: number | string): Promise<PaginatedResponse<GalleryVideo> | undefined> => {
   if(athleteId){
     try {
       const response = await axios.get(`${apiURL}/video-list/atleta/${athleteId}?page=1&per_page=999999999999`);
@@ -24,7 +25,7 @@ export const getVideosById = async (athleteId: any) => {
   }
 };
 
-export const saveImage = async (files: any, athleteId: any) => {
+export const saveImage = async (files: FormData, athleteId: number | string) => {
   try {
     const response = await axios.post(`${apiURL}/multiple-files-upload/atleta/${athleteId}`, files);
     return response.data;
@@ -34,7 +35,7 @@ export const saveImage = async (files: any, athleteId: any) => {
   }
 };
 
-export const fetchLinkbyAthleteId = async (athleteId: any) => {
+export const fetchLinkbyAthleteId = async (athleteId: number | string): Promise<{ data: AthleteLink[] }> => {
   try {
     const response = await axios.get(`${apiURL}/link/atleta/${athleteId}`)
     return response.data
@@ -45,7 +46,7 @@ export const fetchLinkbyAthleteId = async (athleteId: any) => {
 }
 
 
-export const saveLink = async (link: any) => {
+export const saveLink = async (link: { atleta_id: number | string; url: string; descricao?: string }) => {
   try {
     const response = await axios.post(`${apiURL}/create/link`, link)
     return response.data
@@ -66,7 +67,7 @@ export const deleteLink = async (linkId: string) => {
   }
 }
 
-export const uploadImageAthlete = async (IDAtleta: any, file:any) => {
+export const uploadImageAthlete = async (IDAtleta: number | string, file: FormData) => {
   try {
     const response = await axios.post(`${apiURL}/file-upload/atleta/${IDAtleta}`, file);
     return response.data;
@@ -76,7 +77,7 @@ export const uploadImageAthlete = async (IDAtleta: any, file:any) => {
   }
 };
 
-export const getAvatarAthletes = async (athleteId: any) => {
+export const getAvatarAthletes = async (athleteId: number | string) => {
   try {
     const response = await axios.get(`${apiURL}/avatar/atleta/${athleteId}`);
     return response.data;
@@ -114,7 +115,7 @@ export const editImage = async (image: {imagem_id: number, descricao: string}) =
   }
 };
 
-export const deleteImage = async (IdImage: any) => {
+export const deleteImage = async (IdImage: number | string) => {
   try {
     const response = await axios.delete(`${apiURL}/imagem/delete/${IdImage}`);
     return response.data;
@@ -124,9 +125,9 @@ export const deleteImage = async (IdImage: any) => {
   }
 };
 
-export const deleteVideo = async (IdImage: any) => {
+export const deleteVideo = async (IdVideo: number | string) => {
   try {
-    const response = await axios.delete(`${apiURL}/video/delete/${IdImage}`);
+    const response = await axios.delete(`${apiURL}/video/delete/${IdVideo}`);
     return response.data;
   } catch (error) {
     showErrorToast('Erro ao deletar o video');
@@ -134,7 +135,7 @@ export const deleteVideo = async (IdImage: any) => {
   }
 };
 
-export const uploadVideoYoutube = async (IDAtleta: any, link:any) => {
+export const uploadVideoYoutube = async (IDAtleta: number | string, link: { video_url: string }) => {
   const request = {
     video_url: link.video_url
   }
@@ -148,7 +149,7 @@ export const uploadVideoYoutube = async (IDAtleta: any, link:any) => {
   }
 };
 
-export const uploadVideo = async (IDAtleta: any, file:any) => {
+export const uploadVideo = async (IDAtleta: number | string, file: FormData) => {
 
   try {
     const response = await axios.post(`${apiURL}/video-upload/atleta/${IDAtleta}`, file);
