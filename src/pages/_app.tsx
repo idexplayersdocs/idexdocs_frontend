@@ -6,6 +6,7 @@ import React from "react";
 import { I18nextProvider } from "react-i18next";
 import i18n from "@/i18n";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <I18nextProvider i18n={i18n}>
       <Component {...pageProps} />
       <Analytics />
+      <SpeedInsights />
     </I18nextProvider>
   );
 }
