@@ -45,12 +45,8 @@ export default function Injuries({closeModal, athleteId}: any) {
   const [openEditInjuries, setOpenEditInjuries] = useState(false);
   const [totalRow, setTotalRow] = useState(1);
   const [loading, setLoading] = useState(true); // Estado de carregamento
-  const [injuries, setInjuries] = useState<any>({
-    nome: '',
-    data_inicio: '',
-    data_fim: '',
-  });
-  const [formRegisterInjuries, setFormRegisterInjuries] = useState<any>({
+  const [injuries, setInjuries] = useState<any[]>([]);
+  const [formRegisterInjuries, setFormRegisterInjuries] = useState<Record<string, any>>({
     atleta_id: athleteId,
     descricao: '',
     data_retorno: '',
@@ -64,8 +60,8 @@ export default function Injuries({closeModal, athleteId}: any) {
         setLoading(true)
         try {
           const injuriesList = await getInjuries(athleteId, page);
-          setInjuries(injuriesList?.data);
-          setTotalRow(injuriesList?.total);
+          setInjuries(injuriesList?.data ?? []);
+          setTotalRow(injuriesList?.total ?? 0);
         } catch (error:any) {
           console.error('Error:', error);
           toast.error(error.response.data.errors[0].message, {
@@ -98,7 +94,7 @@ export default function Injuries({closeModal, athleteId}: any) {
     });
   }
 
-  const handleOpenEditInjuries = (injuries: any) => {
+  const handleOpenEditInjuries = (injuries: Record<string, unknown>) => {
     setOpenEditInjuries(true)
     setFormRegisterInjuries({
       atleta_id: athleteId,
@@ -119,7 +115,7 @@ export default function Injuries({closeModal, athleteId}: any) {
   }
   const handleInputChangeRegisterInjuries = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormRegisterInjuries((prevState: any) => ({
+    setFormRegisterInjuries((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -134,8 +130,8 @@ export default function Injuries({closeModal, athleteId}: any) {
 
       setPage(1)
       const InjuriesList = await getInjuries(athleteId, page);
-      setInjuries(InjuriesList?.data);
-      setTotalRow(InjuriesList?.total);
+      setInjuries(InjuriesList?.data ?? []);
+      setTotalRow(InjuriesList?.total ?? 0);
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
         position: "top-center",
@@ -162,8 +158,8 @@ export default function Injuries({closeModal, athleteId}: any) {
 
       setPage(1)
       const InjuriesList = await getInjuries(athleteId, page);
-      setInjuries(InjuriesList?.data);
-      setTotalRow(InjuriesList?.total);
+      setInjuries(InjuriesList?.data ?? []);
+      setTotalRow(InjuriesList?.total ?? 0);
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
         position: "top-center",
@@ -180,7 +176,7 @@ export default function Injuries({closeModal, athleteId}: any) {
     }
   };
 
-  const handleChangePageInjuries = (event: any, newPage:number) => {
+  const handleChangePageInjuries = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 

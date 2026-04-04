@@ -27,7 +27,7 @@ const VisuallyHiddenInput = styled('input')({
 
 export default function EditAthlete({athleteData, closeModal}: any) {
   const { query, push, back } = useRouter();
-  const athleteId = query?.id;
+  const athleteId = query?.id as string;
   const [formAvatar, setFormAvatar] = useState(athleteData.blob_url ? athleteData.blob_url : "/images/image-user.png");
   const [openEditAthlete, setOpenEditAthlete] = useState(false);
   const [formImage, setFormImage]:any = useState();

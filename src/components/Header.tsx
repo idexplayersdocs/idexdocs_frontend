@@ -15,11 +15,12 @@ import React from "react";
 import { jwtDecode } from "jwt-decode";
 import { Box, MenuItem, Select } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import type { DecodedToken } from '@/types';
 
 export default function Header() {
   const { i18n } = useTranslation("translation", { keyPrefix: "menu" });
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [decoded, setDecoded] = React.useState<any>(null);
+  const [decoded, setDecoded] = React.useState<DecodedToken | null>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
 
@@ -29,13 +30,13 @@ export default function Header() {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("token");
       if (token) {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode<DecodedToken>(token);
         setDecoded(decodedToken);
       }
     }
   }, []);
 
-  const handleClick = (event: any) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {

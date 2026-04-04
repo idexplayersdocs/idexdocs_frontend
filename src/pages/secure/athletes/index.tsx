@@ -24,6 +24,7 @@ import { Bounce, ToastContainer, toast } from "react-toastify";
 import Loading from "react-loading";
 import styles from "../../../styles/Login.module.css";
 import { jwtDecode } from "jwt-decode";
+import type { AthleteListItem, AthleteCreateRequest, DecodedToken } from '@/types';
 
 const style = {
   position: "absolute" as "absolute",
@@ -55,23 +56,23 @@ const VisuallyHiddenInput = styled("input")({
 export default function Athletes() {
   const [openCreateAthlete, setOpenCreateAthlete] = useState(false);
   const [formAvatar, setFormAvatar] = useState("/images/image-user.png");
-  const [formImage, setFormImage]: any = useState();
-  const [newAthlere, setNewAthlere]: any = useState();
-  const [athletes, setAthletes] = useState<any[]>([]);
-  const [totalRow, setTotalRow]: any = useState();
-  const [inputFilter, setInputFilter]: any = useState("");
+  const [formImage, setFormImage] = useState<File>();
+  const [newAthlere, setNewAthlere] = useState<boolean>(false);
+  const [athletes, setAthletes] = useState<AthleteListItem[]>([]);
+  const [totalRow, setTotalRow] = useState<number>(0);
+  const [inputFilter, setInputFilter] = useState("");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [roles, setRoles] = useState<any>();
+  const [roles, setRoles] = useState<string>();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const decoded: any = jwtDecode(token!);
-    if (token) {
-      setRoles(decoded.roles[0]);
+        const decoded = jwtDecode<DecodedToken>(token!);
+        if (token) {
+          setRoles(decoded.roles[0]);
     }
   }, []);
 
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState<AthleteCreateRequest>({
     nome: "",
     data_nascimento: "",
     posicao_primaria: "",
@@ -97,7 +98,7 @@ export default function Athletes() {
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
-    setFormData((prevState: any) => ({
+    setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -142,12 +143,12 @@ export default function Athletes() {
     }
   };
 
-  const getImageFileObject = (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader: any = new FileReader();
+    const getImageFileObject = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
       reader.onload = () => {
-        setFormAvatar(reader.result);
+        setFormAvatar(reader.result as string);
       };
       reader.readAsDataURL(file);
       setFormImage(file);
@@ -181,7 +182,7 @@ export default function Athletes() {
     }
   };
 
-  const handleInputFilter = (event: any) => {
+  const handleInputFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputFilter(event.target.value);
   };
 

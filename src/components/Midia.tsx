@@ -34,6 +34,7 @@ import {
   fetchLinkbyAthleteId,
   deleteLink,
 } from "@/lib/http-service/gallery";
+import type { GalleryImage, GalleryVideo, AthleteLink } from '@/types';
 import { useRouter } from "next/router";
 import Loading from "react-loading";
 import ReactPlayer from "react-player";
@@ -106,40 +107,41 @@ export const Midia = () => {
   const [openDeleteImage, setOpenDeleteImage] = useState<boolean>(false);
   const [openDeleteVideo, setOpenDeleteVideo] = useState<boolean>(false);
   const [openUploadVideo, setOpenUploadVideo] = useState<boolean>(false);
-  const [formImage, setFormImage] = React.useState<any>({
-    imagem_id: "",
-    descricao: "",
-    blob_url: "",
-  });
-  const [formListaImage, setFormListaImage] = React.useState<any[]>([]);
-  const [formListaImageRequest, setFormListaImageRequest] = React.useState<
-    any[]
-  >([]);
-  const [formListaVideo, setFormListaVideo] = React.useState<any[]>([]);
-  const [formListaVideoRequest, setFormListaVideoRequest] = React.useState<
-    any[]
-  >([]);
-  const [formDataVideo, setFormDataVideo] = React.useState<any>({
-    id: "",
-    blob_url: "",
-    descricao: "",
-  });
-  const [formVideo, setFormVideo] = React.useState<any>();
+    const [formImage, setFormImage] = React.useState<GalleryImage>({
+      imagem_id: 0,
+      descricao: "",
+      blob_url: "",
+    });
+  const [formListaImage, setFormListaImage] = React.useState<string[]>([]);
+    const [formListaImageRequest, setFormListaImageRequest] = React.useState<
+      File[]
+    >([]);
+  const [formListaVideo, setFormListaVideo] = React.useState<string[]>([]);
+    const [formListaVideoRequest, setFormListaVideoRequest] = React.useState<
+      File[]
+    >([]);
+    const [formDataVideo, setFormDataVideo] = React.useState<GalleryVideo>({
+      id: 0,
+      blob_url: "",
+      descricao: "",
+      tipo: 'video',
+    });
+  const [formVideo, setFormVideo] = React.useState<File | null>();
   const [descriptions, setDescriptions] = useState<string[]>([]);
 
   // Lista dos conteúdos principais da página
-  const [gallery, setGallery] = useState<any[]>([]);
-  const [link, setLink] = useState<any[]>([]);
-  const [videos, setVideos] = useState<any[]>([]);
+    const [gallery, setGallery] = useState<GalleryImage[]>([]);
+    const [link, setLink] = useState<AthleteLink[]>([]);
+    const [videos, setVideos] = useState<GalleryVideo[]>([]);
 
   const [table, setTable] = useState<string>("list");
   const [tableVideo, setTableVideo] = useState<string>("list");
-  const [formLinkYoutube, setFormLinkYoutube] = useState<any>({
-    video_url: "",
-  });
+    const [formLinkYoutube, setFormLinkYoutube] = useState<{ video_url: string }>({
+      video_url: "",
+    });
   const [loading, setLoading] = useState(true);
   const { query, push, back } = useRouter();
-  const athleteId = query?.id;
+  const athleteId = query?.id as string;
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const selectTable = (table: string) => {
@@ -158,14 +160,14 @@ export const Midia = () => {
     setFormListaVideo([]);
   };
 
-  const handleInputChangeUrl = (
-    event: React.ChangeEvent<HTMLInputElement | any>
-  ) => {
-    const { name, value } = event.target;
-    setFormLinkYoutube((prevState: any) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    const handleInputChangeUrl = (
+      event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+      const { name, value } = event.target;
+      setFormLinkYoutube((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -211,7 +213,7 @@ export const Midia = () => {
   const handleCloseEditImage = () => {
     setOpenEditImage(false);
     setFormImage({
-      imagem_id: "",
+      imagem_id: 0,
       descricao: "",
       blob_url: "",
     });
@@ -220,7 +222,7 @@ export const Midia = () => {
   const handleCloseEditVideo = () => {
     setOpenEditVideo(false);
     setFormDataVideo({
-      id: "",
+      id: 0,
       descricao: "",
       blob_url: "",
     });
@@ -247,7 +249,7 @@ export const Midia = () => {
   const handleCloseDeleteImage = () => {
     setOpenDeleteImage(false);
     setFormImage({
-      imagem_id: "",
+      imagem_id: 0,
       descricao: "",
       blob_url: "",
     });
@@ -257,7 +259,7 @@ export const Midia = () => {
   const handleCloseDeleteVideo = () => {
     setOpenDeleteVideo(false);
     setFormDataVideo({
-      id: "",
+      id: 0,
       descricao: "",
       blob_url: "",
     });
@@ -270,7 +272,7 @@ export const Midia = () => {
     setOpenUploadVideo(false);
     setFormVideo(null);
     setFormDataVideo({
-      id: "",
+      id: 0,
       blob_url: "",
       descricao: "",
     });
@@ -357,7 +359,7 @@ export const Midia = () => {
       const response = await saveImage(formData, athleteId);
       handleCloseUploadImage();
       const galleryData = await getGalleryById(athleteId);
-      setGallery(galleryData.data);
+      setGallery(galleryData?.data ?? []);
     } catch (error: any) {
       console.log(error);
     } finally {
@@ -383,7 +385,7 @@ export const Midia = () => {
       const response = await saveLink(payload);
       handleCloseUploadLink();
       const linkData = await fetchLinkbyAthleteId(athleteId);
-      setLink(linkData.data);
+      setLink(linkData);
     } catch (error) {
       console.log(error);
     } finally {
@@ -414,10 +416,10 @@ export const Midia = () => {
       //   formData.append(`files`, file);
       // });
       const formData = new FormData();
-      formData.append("video", formVideo);
+      if (formVideo) formData.append("video", formVideo);
       const response = await uploadVideo(athleteId, formData);
       const videosData = await getVideosById(athleteId);
-      setVideos(videosData.data);
+      setVideos(videosData?.data ?? []);
       handleCloseUploadVideo();
     } catch (error: any) {
       console.log(error);
@@ -431,7 +433,7 @@ export const Midia = () => {
     const fetchGalleryData = async () => {
       try {
         const galleryData = await getGalleryById(athleteId);
-        setGallery(galleryData.data);
+        setGallery(galleryData?.data ?? []);
         // setAthletes((prevAthletes) => [...prevAthletes, newAthlete]);
         // setTotalRow(athletesData.total);
       } catch (error) {
@@ -448,7 +450,7 @@ export const Midia = () => {
     const fetchVideosData = async () => {
       try {
         const videosData = await getVideosById(athleteId);
-        setVideos(videosData.data);
+        setVideos(videosData?.data ?? []);
         // setAthletes((prevAthletes) => [...prevAthletes, newAthlete]);
         // setTotalRow(athletesData.total);
       } catch (error) {
@@ -465,7 +467,7 @@ export const Midia = () => {
     const fetchLinkData = async () => {
       try {
         const linksData = await fetchLinkbyAthleteId(athleteId);
-        setLink(linksData.data);
+        setLink(linksData);
       } catch (error) {
         console.error("Error fetching links:", error);
       } finally {
@@ -478,11 +480,11 @@ export const Midia = () => {
   const saveEditVideo = async () => {
     setIsLoading(true);
     try {
-      const response = await editVideo(formDataVideo);
+      const response = await editVideo({ id: formDataVideo.id, descricao: formDataVideo.descricao ?? '' });
       const fetchVideosData = async () => {
         try {
           const videosData = await getVideosById(athleteId);
-          setVideos(videosData.data);
+          setVideos(videosData?.data ?? []);
         } catch (error) {
           console.error("Error fetching athletes:", error);
         } finally {
@@ -502,11 +504,11 @@ export const Midia = () => {
     setIsLoading(true);
 
     try {
-      const response = await editImage(formImage);
+      const response = await editImage({ imagem_id: formImage.imagem_id, descricao: formImage.descricao ?? '' });
       const fetchGalleryData = async () => {
         try {
           const galleryData = await getGalleryById(athleteId);
-          setGallery(galleryData.data);
+          setGallery(galleryData?.data ?? []);
         } catch (error) {
           console.error("Error:", error);
         } finally {
@@ -528,7 +530,7 @@ export const Midia = () => {
     try {
       const response = await uploadVideoYoutube(athleteId, formLinkYoutube);
       const videosData = await getVideosById(athleteId);
-      setVideos(videosData.data);
+      setVideos(videosData?.data ?? []);
       handleCloseUploadVideo();
     } catch (error: any) {
       console.log(error);
@@ -546,7 +548,7 @@ export const Midia = () => {
       const fetchVideosData = async () => {
         try {
           const videosData = await getVideosById(athleteId);
-          setVideos(videosData.data);
+          setVideos(videosData?.data ?? []);
           // setAthletes((prevAthletes) => [...prevAthletes, newAthlete]);
           // setTotalRow(athletesData.total);
         } catch (error) {
@@ -573,7 +575,7 @@ export const Midia = () => {
       const fetchGalleryData = async () => {
         try {
           const galleryData = await getGalleryById(athleteId);
-          setGallery(galleryData.data);
+          setGallery(galleryData?.data ?? []);
         } catch (error) {
           console.error("Error fetching athletes:", error);
         } finally {
@@ -589,13 +591,13 @@ export const Midia = () => {
     }
   };
 
-  const saveDeleteLink = async (linkId: string) => {
+  const saveDeleteLink = async (linkId: number | string) => {
     setIsLoading(true);
 
     const fetchLinkData = async () => {
       try {
         const linksData = await fetchLinkbyAthleteId(athleteId);
-        setLink(linksData.data);
+        setLink(linksData);
       } catch (error) {
         console.error("Error fetching links:", error);
       } finally {
@@ -604,7 +606,7 @@ export const Midia = () => {
     };
 
     try {
-      const response = await deleteLink(linkId);
+      const response = await deleteLink(String(linkId));
       fetchLinkData();
     } catch (error: any) {
       console.log(error);
@@ -613,24 +615,24 @@ export const Midia = () => {
     }
   };
 
-  const handleEditImage = (
-    event: React.ChangeEvent<HTMLInputElement> | any
-  ) => {
-    const { name, value } = event.target;
-    setFormImage((prevState: any) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    const handleEditImage = (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+      const { name, value } = event.target;
+      setFormImage((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
   };
 
-  const handleEditVideo = (
-    event: React.ChangeEvent<HTMLInputElement> | any
-  ) => {
-    const { name, value } = event.target;
-    setFormDataVideo((prevState: any) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    const handleEditVideo = (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+      const { name, value } = event.target;
+      setFormDataVideo((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
   };
 
   if (loading) {
@@ -1260,7 +1262,7 @@ export const Midia = () => {
               <textarea
                 placeholder="Descrição"
                 name="descricao"
-                value={formDataVideo.descricao}
+                value={formDataVideo.descricao ?? ''}
                 onChange={handleEditVideo}
                 className="w-100"
                 style={{ resize: "none" }}
@@ -1325,7 +1327,7 @@ export const Midia = () => {
               <textarea
                 placeholder="Descrição"
                 name="descricao"
-                value={formImage.descricao}
+                value={formImage.descricao ?? ''}
                 onChange={handleEditImage}
                 className="w-100"
                 style={{ resize: "none" }}

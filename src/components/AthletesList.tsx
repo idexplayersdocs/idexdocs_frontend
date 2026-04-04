@@ -34,8 +34,9 @@ import {
 import styles from "../styles/Login.module.css";
 
 import { jwtDecode } from "jwt-decode";
-
+import type { UserPermissions, DecodedToken, AthleteListItem } from '@/types';
 import { PDFInfo } from "@/lib/http-service/pdfService";
+import type { PDFInfoResponseDTO } from "@/lib/http-service/pdfService/dto";
 
 import MyDocument from "./Document";
 import { pdf } from "@react-pdf/renderer";
@@ -43,15 +44,6 @@ import { Bounce, ToastContainer, toast } from "react-toastify";
 import Subtitle from "./Subtitle";
 import { useTranslation } from "react-i18next";
 
-interface Athlete {
-  id: number;
-  nome: string;
-  posicao_primaria: string;
-  data_nascimento: string;
-  clube_atual: string;
-  data_proxima_avaliacao_relacionamento: any;
-  ativo: boolean;
-}
 
 const modalStyle = {
   wrapper: {
@@ -94,21 +86,21 @@ export default function AthletesList({
   const { i18n } = useTranslation();
   const [page, setPage] = useState(1);
   const { push } = useRouter();
-  const [athletes, setAthletes] = useState<Athlete[]>([]);
-  const [totalRow, setTotalRow]: any = useState();
+  const [athletes, setAthletes] = useState<AthleteListItem[]>([]);
+  const [totalRow, setTotalRow] = useState<number>(0);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [infoPdf, setInfoPdf] = useState<any>();
-  const btnPdfRef = useRef<any>();
+  const [infoPdf, setInfoPdf] = useState<PDFInfoResponseDTO>();
+  const btnPdfRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const [permissions, setPermissions] = useState<any>({
-    relationship: false,
-    performance: false,
-  });
+    const [permissions, setPermissions] = useState<UserPermissions>({
+      relationship: false,
+      performance: false,
+    });
   const [athleteToShow, setAthleteToShow] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const decoded: any = jwtDecode(token!);
+    const decoded = jwtDecode<DecodedToken>(token!);
     if (token) {
       setPermissions({
         relationship: decoded.permissions.includes("create_relacionamento"),
@@ -177,12 +169,13 @@ export default function AthletesList({
     push(`/secure/athletes/${id}/athleteDetail`);
   };
 
-  const handleChangePage = (event: any, newPage: number) => {
+  const handleChangePage = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 
   // Define generatePdf function with useCallback to avoid redeclaration
   const generatePdf = useCallback(async () => {
+    if (!infoPdf) return;
     try {
       const pdfBlob = await pdf(<MyDocument data={infoPdf} />).toBlob();
       // Create a download link and trigger click event
@@ -255,7 +248,8 @@ export default function AthletesList({
     );
   };
 
-  const validLabelDate = (dataAvaliacao: string) => {
+  const validLabelDate = (dataAvaliacao: string | null) => {
+    if (!dataAvaliacao) return false;
     const currentDate = moment().startOf("day");
     const nextEvaluationDate = moment(dataAvaliacao).startOf("day");
     return currentDate.isAfter(nextEvaluationDate);

@@ -36,17 +36,9 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
   const [page, setPage] = useState(1);
   const [totalRow, setTotalRow] = useState(1);
   const [loading, setLoading] = useState(true); // Estado de carregamento
-  const [physical, setPhysical] = useState<any>({
-    atleta_id: athleteId,
-    estatura: '',
-    envergadura: '',
-    peso: '',
-    percentual_gordura: '',
-    data_criacao: '',
-    data_atualizado: '',
-  });
+  const [physical, setPhysical] = useState<any[]>([]);
 
-  const [formRegisterPhysical, setFormRegisterPhysical] = useState<any>({
+  const [formRegisterPhysical, setFormRegisterPhysical] = useState<Record<string, any>>({
     atleta_id: athleteId,
     caracteristica: "fisico",
     estatura: '',
@@ -65,8 +57,8 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
       const fetchAthletesData = async () => {
         try {
           const physicalList = await getPhysical(athleteId, page, 'fisico', 6);
-          setPhysical(physicalList?.data);
-          setTotalRow(physicalList?.total);
+          setPhysical(physicalList?.data ?? []);
+          setTotalRow(physicalList?.total ?? 0);
 
         } catch (error) {
           console.error('Error:', error);
@@ -95,7 +87,7 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
 
   const handleInputChangeRegisterPhysical = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormRegisterPhysical((prevState: any) => ({
+    setFormRegisterPhysical((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -108,8 +100,8 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
       handleCloseRegisterPhysical();
       setPage(1)
       const clubList = await getPhysical(athleteId, page, 'fisico');
-      setPhysical(clubList?.data);
-      setTotalRow(clubList?.total);
+      setPhysical(clubList?.data ?? []);
+      setTotalRow(clubList?.total ?? 0);
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
         position: "top-center",
@@ -126,7 +118,7 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
     }
   };
 
-  const handleChangePage = (event: any, newPage:number) => {
+  const handleChangePage = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 

@@ -38,13 +38,9 @@ export default function ClubHistory({ closeModal, athleteId }: any) {
   const [page, setPage] = useState(1);
   const [totalRow, setTotalRow] = useState(1);
   const [loading, setLoading] = useState(true); // Estado de carregamento
-  const [club, setClub] = useState<any>({
-    nome: '',
-    data_inicio: '',
-    data_fim: '',
-  });
+  const [club, setClub] = useState<any[]>([]);
 
-  const [formRegisterClub, setFormRegisterClub] = useState<any>({
+  const [formRegisterClub, setFormRegisterClub] = useState<Record<string, any>>({
     atleta_id: athleteId,
     nome: '',
     data_inicio: '',
@@ -56,7 +52,7 @@ export default function ClubHistory({ closeModal, athleteId }: any) {
     closeModal();
   };
 
-  const handleChangePage = (event: any, newPage: number) => {
+  const handleChangePage = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 
@@ -66,8 +62,8 @@ export default function ClubHistory({ closeModal, athleteId }: any) {
         setLoading(true);
         try {
           const clubList = await getClub(athleteId, page);
-          setClub(clubList?.data);
-          setTotalRow(clubList?.total);
+          setClub(clubList?.data ?? []);
+          setTotalRow(clubList?.total ?? 0);
 
         } catch (error: any) {
           toast.error(error.response.data.errors[0].message, {
@@ -102,7 +98,7 @@ export default function ClubHistory({ closeModal, athleteId }: any) {
     });
   }
 
-  const handleOpenEditClub = (clube: any) => {
+  const handleOpenEditClub = (clube: Record<string, unknown>) => {
     setOpenEditClub(true)
     setFormRegisterClub({
       atleta_id: athleteId,
@@ -126,10 +122,10 @@ export default function ClubHistory({ closeModal, athleteId }: any) {
 
   const handleInputChangeRegisterClub = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormRegisterClub((prevState: any) => ({
-      ...prevState,
-      [name]: value,
-    }));
+        setFormRegisterClub((prevState) => ({
+          ...prevState,
+          [name]: value,
+        }));
   };
 
   const handleSaveRegisterClub = async () => {
@@ -141,8 +137,8 @@ export default function ClubHistory({ closeModal, athleteId }: any) {
 
       setPage(1)
       const clubList = await getClub(athleteId, page);
-      setClub(clubList?.data);
-      setTotalRow(clubList?.total);
+      setClub(clubList?.data ?? []);
+      setTotalRow(clubList?.total ?? 0);
     } catch (error: any) {
       toast.error(error.response.data.errors[0].message, {
         position: "top-center",
@@ -168,8 +164,8 @@ export default function ClubHistory({ closeModal, athleteId }: any) {
 
       setPage(1)
       const clubList = await getClub(athleteId, page);
-      setClub(clubList?.data);
-      setTotalRow(clubList?.total);
+      setClub(clubList?.data ?? []);
+      setTotalRow(clubList?.total ?? 0);
     } catch (error: any) {
       toast.error(error.response.data.errors[0].message, {
         position: "top-center",
@@ -273,61 +269,61 @@ export default function ClubHistory({ closeModal, athleteId }: any) {
                 <Checkbox
                   color="success"
                   name="clube_atual"
-                  onChange={(event) => setFormRegisterClub((prevState: any) => ({
-                    ...prevState,
-                    clube_atual: event.target.checked,
-                  }))}
-                  checked={formRegisterClub.clube_atual}
-                  sx={{
-                    color: "var(--bg-ternary-color)",
-                    '&.Mui-checked': {
-                      color: "var(--bg-ternary-color)",
-                    },
-                  }}
-                />
-              </div>
-              <div className="d-flex flex-column w-100 mt-3">
-                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data de Início</label>
-                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_inicio" style={{ height: '45px' }} value={formRegisterClub.data_inicio} onChange={handleInputChangeRegisterClub} />
-              </div>
-              <div className="d-flex flex-column w-100 mt-3">
-                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data de Término</label>
-                <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_fim" style={{ height: '45px' }} value={formRegisterClub.data_fim} onChange={handleInputChangeRegisterClub} />
-              </div>
-            </div>
-          </div>
-          <div className='ms-3 d-flex flex-column' style={{ width: '98%' }}>
-            <button type="button" className="btn btn-success align-self-end" style={{ width: 'auto' }} onClick={handleSaveRegisterClub}>Salvar</button>
-          </div>
-          <ToastContainer />
-        </Box>
-      </Modal>
-      <Modal
-        open={openEditClub}
-        onClose={handleCloseEditClub}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
-        <Box sx={style}>
-          <div className="d-flex justify-content-between">
-            <Subtitle subtitle="Editar Clube" />
-            <FontAwesomeIcon icon={faX} style={{ color: "#ffffff", cursor: 'pointer' }} size="xl" onClick={handleCloseEditClub} />
-          </div>
-          <hr />
-          <div className="row" style={{ height: '400px' }}>
-            <div className='col-md'>
-              <div className="d-flex flex-column w-100 mt-3">
-                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Nome do Clube</label>
-                <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="nome" style={{ height: '45px' }} value={formRegisterClub.nome} onChange={handleInputChangeRegisterClub} />
-              </div>
-              <div className="mt-3">
-                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Clube Atual</label>
-                <Checkbox
-                  color="success"
-                  name="clube_atual"
-                  onChange={(event) => setFormRegisterClub((prevState: any) => ({
-                    ...prevState,
-                    clube_atual: event.target.checked,
-                  }))}
+                        onChange={(event) => setFormRegisterClub((prevState) => ({
+                          ...prevState,
+                          clube_atual: event.target.checked,
+                        }))}
+                        checked={formRegisterClub.clube_atual as boolean}
+                        sx={{
+                          color: "var(--bg-ternary-color)",
+                          '&.Mui-checked': {
+                            color: "var(--bg-ternary-color)",
+                          },
+                        }}
+                      />
+                    </div>
+                    <div className="d-flex flex-column w-100 mt-3">
+                      <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data de Início</label>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_inicio" style={{ height: '45px' }} value={formRegisterClub.data_inicio as string} onChange={handleInputChangeRegisterClub} />
+                    </div>
+                    <div className="d-flex flex-column w-100 mt-3">
+                      <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data de Término</label>
+                      <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="data_fim" style={{ height: '45px' }} value={formRegisterClub.data_fim as string} onChange={handleInputChangeRegisterClub} />
+                    </div>
+                  </div>
+                </div>
+                <div className='ms-3 d-flex flex-column' style={{ width: '98%' }}>
+                  <button type="button" className="btn btn-success align-self-end" style={{ width: 'auto' }} onClick={handleSaveRegisterClub}>Salvar</button>
+                </div>
+                <ToastContainer />
+              </Box>
+            </Modal>
+            <Modal
+              open={openEditClub}
+              onClose={handleCloseEditClub}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description">
+              <Box sx={style}>
+                <div className="d-flex justify-content-between">
+                  <Subtitle subtitle="Editar Clube" />
+                  <FontAwesomeIcon icon={faX} style={{ color: "#ffffff", cursor: 'pointer' }} size="xl" onClick={handleCloseEditClub} />
+                </div>
+                <hr />
+                <div className="row" style={{ height: '400px' }}>
+                  <div className='col-md'>
+                    <div className="d-flex flex-column w-100 mt-3">
+                      <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Nome do Clube</label>
+                      <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="nome" style={{ height: '45px' }} value={formRegisterClub.nome as string} onChange={handleInputChangeRegisterClub} />
+                    </div>
+                    <div className="mt-3">
+                      <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Clube Atual</label>
+                      <Checkbox
+                        color="success"
+                        name="clube_atual"
+                        onChange={(event) => setFormRegisterClub((prevState) => ({
+                          ...prevState,
+                          clube_atual: event.target.checked,
+                        }))}
                   checked={formRegisterClub.clube_atual}
                   sx={{
                     color: "var(--bg-ternary-color)",

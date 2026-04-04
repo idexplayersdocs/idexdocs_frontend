@@ -36,17 +36,9 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
   const [openRegisterCompetitions, setOpenRegisterCompetitions] = useState(false);
   const [openEditCompetitions, setOpenEditCompetitions] = useState(false);
   const [loading, setLoading] = useState(true); // Estado de carregamento
-  const [competitions, setCompetitions] = useState<any>({
-    nome: '',
-    data_competicao: '',
-    jogos_completos: '',
-    jogos_parciais: '',
-    minutagem: '',
-    gols: '',
-    assistencias: ''
-  });
+  const [competitions, setCompetitions] = useState<any[]>([]);
 
-  const [formRegisterCompetitions, setFormRegisterCompetitions] = useState<any>({
+  const [formRegisterCompetitions, setFormRegisterCompetitions] = useState<Record<string, any>>({
     atleta_id: athleteId,
     nome: '',
     data_competicao: '',
@@ -68,8 +60,8 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
         setLoading(true);
         try {
           const competitionList = await getCompetitions(athleteId, page);
-          setCompetitions(competitionList?.data);
-          setTotalRow(competitionList?.total);
+          setCompetitions(competitionList?.data ?? []);
+          setTotalRow(competitionList?.total ?? 0);
         } catch (error:any) {
           console.error('Error:', error);
           toast.error(error.response.data.errors[0].message, {
@@ -106,7 +98,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
     });
   }
 
-  const handleOpenEditCompetitions = (competiton: any) => {
+  const handleOpenEditCompetitions = (competiton: Record<string, unknown>) => {
     setOpenEditCompetitions(true)
     setFormRegisterCompetitions({
       atleta_id: athleteId,
@@ -136,7 +128,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
 
   const handleInputChangeRegisterCompetitions = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setFormRegisterCompetitions((prevState: any) => ({
+    setFormRegisterCompetitions((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -151,8 +143,8 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
 
       setPage(1)
       const clubCompetitions = await getCompetitions(athleteId, page);
-      setCompetitions(clubCompetitions?.data);
-      setTotalRow(clubCompetitions?.total);
+      setCompetitions(clubCompetitions?.data ?? []);
+      setTotalRow(clubCompetitions?.total ?? 0);
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
         position: "top-center",
@@ -177,8 +169,8 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
       handleCloseEditCompetitions();
       setPage(1)
       const clubCompetitions = await getCompetitions(athleteId, page);
-      setCompetitions(clubCompetitions?.data);
-      setTotalRow(clubCompetitions?.total);
+      setCompetitions(clubCompetitions?.data ?? []);
+      setTotalRow(clubCompetitions?.total ?? 0);
     } catch (error:any) {
       toast.error(error.response.data.errors[0].message, {
         position: "top-center",
@@ -195,7 +187,7 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
     }
   };
 
-  const handleChangePageCompetitions = (event: any, newPage:number) => {
+  const handleChangePageCompetitions = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 

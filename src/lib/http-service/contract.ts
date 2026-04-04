@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { showErrorToast } from '@/lib/toast-error';
+import type { PaginatedResponse, Contract, ContractVersion } from '@/types';
 
 const apiURL = process.env.API_URL;
 
-export const getContract = async (athleteId: any, page:number) => {
+export const getContract = async (athleteId: number | string, page: number): Promise<PaginatedResponse<Contract> | undefined> => {
   if(athleteId){
     try {
       const response = await axios.get(`${apiURL}/contrato/atleta/${athleteId}?page=${page}&per_page=${6}`);
@@ -15,7 +16,7 @@ export const getContract = async (athleteId: any, page:number) => {
   }
 };
 
-export const createContract = async (request: any) => {
+export const createContract = async (request: Partial<Contract>) => {
   try {
     const response = await axios.post(`${apiURL}/create/contrato`, request);
     return response.data;
@@ -25,7 +26,7 @@ export const createContract = async (request: any) => {
   }
 };
 
-export const editContract = async (request: any) => {
+export const editContract = async (request: Partial<Contract>) => {
   try {
     const response = await axios.put(`${apiURL}/update/contrato`, request);
     return response.data;
@@ -35,7 +36,7 @@ export const editContract = async (request: any) => {
   }
 };
 
-export const getContractVersion = async (athleteId: any, page:number) => {
+export const getContractVersion = async (athleteId: number | string, page: number): Promise<PaginatedResponse<ContractVersion> | undefined> => {
   if(athleteId){
     try {
       const response = await axios.get(`${apiURL}/contrato/versao/${athleteId}?page=${page}&per_page=${6}`);

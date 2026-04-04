@@ -1,13 +1,14 @@
 import axios from 'axios';
 import { showErrorToast } from '@/lib/toast-error';
+import type { PaginatedResponse, AthleteListItem, AthleteDetail, AthleteCreateRequest, AthleteCreateResponse, ApiResponse } from '@/types';
 
 const apiURL = process.env.API_URL;
 
-export const getAthletes = async (page:number, athlete: string | null = '') => {
+export const getAthletes = async (page: number, athlete: string | null = ''): Promise<PaginatedResponse<AthleteListItem>> => {
   try {
-    let tokenLocal: any = '';
+    let tokenLocal = '';
     if (typeof window !== 'undefined') {
-      tokenLocal = window.localStorage.getItem('token');
+      tokenLocal = window.localStorage.getItem('token') || '';
     }
 
     let url = `${apiURL}/atleta?per_page=10&page=${page}`;
@@ -22,14 +23,15 @@ export const getAthletes = async (page:number, athlete: string | null = '') => {
     });
 
     return response.data;
-  } catch (error: any) {
-    console.log(error.response.status)
-    showErrorToast(error.response.data.errors[0].message);
+  } catch (error: unknown) {
+    const err = error as { response?: { status?: number; data?: { errors?: Array<{ message: string }> } } };
+    console.log(err.response?.status);
+    showErrorToast(err.response?.data?.errors?.[0]?.message || 'Erro na lista de atletas');
     throw error;
   }
 };
 
-export const getAthleteById = async (athleteId: any) => {
+export const getAthleteById = async (athleteId: number | string): Promise<ApiResponse<AthleteDetail> | undefined> => {
   if(athleteId){
     try {
       const response = await axios.get(`${apiURL}/atleta/${athleteId}`);
@@ -40,7 +42,7 @@ export const getAthleteById = async (athleteId: any) => {
   }
 };
 
-export const createAthlete = async (athleteData: any) => {
+export const createAthlete = async (athleteData: AthleteCreateRequest): Promise<AthleteCreateResponse> => {
   try {
     const response = await axios.post(`${apiURL}/create/atleta`, athleteData);
     return response.data;
@@ -50,7 +52,7 @@ export const createAthlete = async (athleteData: any) => {
   }
 };
 
-export const uploadImageAthlete = async (IDAtleta: any, file:any) => {
+export const uploadImageAthlete = async (IDAtleta: number | string, file: FormData): Promise<unknown> => {
   try {
     const response = await axios.post(`${apiURL}/file-upload/atleta/${IDAtleta}`, file);
     return response.data;
@@ -60,7 +62,7 @@ export const uploadImageAthlete = async (IDAtleta: any, file:any) => {
   }
 };
 
-export const getAvatarAthletes = async (athleteId: any) => {
+export const getAvatarAthletes = async (athleteId: number | string): Promise<unknown> => {
   try {
     const response = await axios.get(`${apiURL}/avatar/atleta/${athleteId}`);
     return response.data;
@@ -70,7 +72,7 @@ export const getAvatarAthletes = async (athleteId: any) => {
   }
 };
 
-export const editAthlete = async (athleteData: any, athleteId: any) => {
+export const editAthlete = async (athleteData: Partial<AthleteDetail>, athleteId: number | string): Promise<unknown> => {
   try {
     const response = await axios.put(`${apiURL}/update/atleta/${athleteId}`, athleteData);
     return response.data;

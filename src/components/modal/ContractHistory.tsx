@@ -39,19 +39,12 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
   const [page, setPage] = useState(1);
   const [openRegisterContractHistory, setOpenRegisterContractHistory] = useState(false);
   const [openContractHistoryVersion, setOpenContractHistoryVersion] = useState(false);
-  const [contractId, setContractId] = useState<any>(null);
+  const [contractId, setContractId] = useState<number | null>(null);
   const [openEditContract, setOpenEditContract] = useState(false);
   const [totalRow, setTotalRow] = useState(1);
   const [loading, setLoading] = useState(true); // Estado de carregamento
-  const [contractHistory, setContractHistory] = useState<any>({
-    contrato_tipo: '',
-    contrato_nome: '',
-    data_inicio: '',
-    data_termino: '',
-    observacao: '',
-    ativo: false
-  });
-  const [formRegisterContractHistory, setFormRegisterContractHistory] = useState<any>({
+  const [contractHistory, setContractHistory] = useState<any[]>([]);
+  const [formRegisterContractHistory, setFormRegisterContractHistory] = useState<Record<string, any>>({
     atleta_id: athleteId,
     contrato_sub_tipo_id: '',
     data_inicio: '',
@@ -68,8 +61,8 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
         setLoading(true)
         try {
           const contractHistoryList = await getContract(athleteId, page);
-          setContractHistory(contractHistoryList?.data);
-          setTotalRow(contractHistoryList?.total);
+          setContractHistory(contractHistoryList?.data ?? []);
+          setTotalRow(contractHistoryList?.total ?? 0);
         } catch (error:any) {
           console.error('Error:', error);
         } finally {
@@ -93,7 +86,7 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
     });
   }
 
-  const handleOpenContractHistoryVersion = (id: any) => {
+  const handleOpenContractHistoryVersion = (id: number) => {
     setContractId(id);
     setOpenContractHistoryVersion(true);
   };
@@ -121,7 +114,7 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
     }
   }
 
-  const handleOpenEditContract = (contract: any) => {
+  const handleOpenEditContract = (contract: Record<string, unknown>) => {
     setOpenEditContract(true)
     setFormRegisterContractHistory({
       atleta_id: athleteId,
@@ -144,9 +137,9 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
     });
   }
 
-  const handleInputChangeRegisterContractHistory = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | any) => {
-    const { name, value } = event.target;
-    setFormRegisterContractHistory((prevState: any) => ({
+    const handleInputChangeRegisterContractHistory = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value } = event.target;
+      setFormRegisterContractHistory((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -160,8 +153,8 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
         handleCloseRegisterContractHistory()
         setPage(1)
         const contractHistoryList = await getContract(athleteId, page);
-        setContractHistory(contractHistoryList?.data);
-        setTotalRow(contractHistoryList?.total);
+        setContractHistory(contractHistoryList?.data ?? []);
+        setTotalRow(contractHistoryList?.total ?? 0);
       }
       setAlterou(true)
     } catch (error:any) {
@@ -187,8 +180,8 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
       handleCloseEditContract()
       setPage(1)
       const contractHistoryList = await getContract(athleteId, page);
-      setContractHistory(contractHistoryList?.data);
-      setTotalRow(contractHistoryList?.total);
+      setContractHistory(contractHistoryList?.data ?? []);
+      setTotalRow(contractHistoryList?.total ?? 0);
       setAlterou(true)
     } catch (error:any) {
       console.error(error)
@@ -207,7 +200,7 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
     }
   };
 
-  const handleChangePageContractHistory = (event: any, newPage:number) => {
+  const handleChangePageContractHistory = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 
