@@ -15,7 +15,7 @@ import { Bounce, ToastContainer, toast } from 'react-toastify';
 import moment from 'moment';
 import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow';
 
-const style = {
+const styleList = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
@@ -27,6 +27,21 @@ const style = {
   p: 4,
   borderRadius: '20px',
   height: '95%',
+  overflow: 'auto'
+};
+
+const styleForm = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '60%',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  maxHeight: '90vh',
   overflow: 'auto'
 };
 
@@ -189,13 +204,13 @@ export default function PhysicalHistory({closeModal, athleteId}: any) {
         onClose={handleCloseRegisterPhysical}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={styleForm}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Registrar Característica"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseRegisterPhysical}/>
           </div>
           <hr />
-          <div className="row" style={{height:'250px'}}>
+          <div className="row" style={{height:'auto'}}>
               <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>

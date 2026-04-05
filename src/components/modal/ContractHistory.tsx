@@ -19,7 +19,7 @@ interface Athlete {
   clube_atual: string;
 }
 
-const style = {
+const styleList = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
@@ -31,6 +31,21 @@ const style = {
   p: 4,
   borderRadius: '20px',
   height: '95%',
+  overflow: 'auto'
+};
+
+const styleForm = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '60%',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  maxHeight: '90vh',
   overflow: 'auto'
 };
 
@@ -365,13 +380,13 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
         onClose={handleCloseRegisterContractHistory}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={styleForm}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Registrar Contrato"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseRegisterContractHistory} />
           </div>
           <hr />
-          <div className="row" style={{height:'250px'}}>
+          <div className="row" style={{height:'auto'}}>
               <div className='col-md'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Início</label>
@@ -425,7 +440,7 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
         onClose={handleCloseContractHistoryVersion}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={styleList}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Versões do Contrato"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseContractHistoryVersion} />
@@ -440,13 +455,13 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
         onClose={handleCloseEditContract}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={styleForm}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Editar Contrato"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseEditContract} />
           </div>
           <hr />
-          <div className="row" style={{height:'250px'}}>
+          <div className="row" style={{height:'auto'}}>
               <div className='col-md'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data Início</label>

@@ -14,7 +14,7 @@ import { Bounce, ToastContainer, toast } from 'react-toastify';
 import Loading from 'react-loading';
 import moment from 'moment';
 
-const style = {
+const styleList = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
@@ -26,6 +26,21 @@ const style = {
   p: 4,
   borderRadius: '20px',
   height: '95%',
+  overflow: 'auto'
+};
+
+const styleForm = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '60%',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  maxHeight: '90vh',
   overflow: 'auto'
 };
 
@@ -267,13 +282,13 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
         onClose={handleCloseRegisterCompetitions}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={styleForm}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Registrar Competição"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseRegisterCompetitions} />
           </div>
           <hr />
-          <div className="row" style={{height:'300px'}}>
+          <div className="row" style={{height:'auto'}}>
               <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Nome</label>
@@ -318,13 +333,13 @@ export default function HistoryCompetitions({closeModal, athleteId}: any) {
         onClose={handleCloseEditCompetitions}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={styleForm}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Editar Competição"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseEditCompetitions} />
           </div>
           <hr />
-          <div className="row" style={{height:'300px'}}>
+          <div className="row" style={{height:'auto'}}>
               <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Nome</label>

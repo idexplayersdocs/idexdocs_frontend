@@ -23,7 +23,7 @@ interface Athlete {
   clube_atual: string;
 }
 
-const style = {
+const styleList = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
@@ -35,6 +35,21 @@ const style = {
   p: 4,
   borderRadius: '20px',
   height: '95%',
+  overflow: 'auto'
+};
+
+const styleForm = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '60%',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  maxHeight: '90vh',
   overflow: 'auto'
 };
 
@@ -252,13 +267,13 @@ export default function Injuries({closeModal, athleteId}: any) {
         onClose={handleCloseRegisterInjuries}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={styleForm}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Registrar Lesão"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseRegisterInjuries} />
           </div>
           <hr />
-          <div className="row" style={{height:'250px'}}>
+          <div className="row" style={{height:'auto'}}>
               <div className='col-md'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data da Lesão</label>
@@ -285,13 +300,13 @@ export default function Injuries({closeModal, athleteId}: any) {
         onClose={handleCloseEditInjuries}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={styleForm}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Editar Lesão"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseEditInjuries} />
           </div>
           <hr />
-          <div className="row" style={{height:'250px'}}>
+          <div className="row" style={{height:'auto'}}>
               <div className='col-md'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data da Lesão</label>

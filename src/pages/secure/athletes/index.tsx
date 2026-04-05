@@ -26,19 +26,34 @@ import styles from "../../../styles/Login.module.css";
 import { jwtDecode } from "jwt-decode";
 import type { AthleteListItem, AthleteCreateRequest, DecodedToken } from '@/types';
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "95%",
-  bgcolor: "var(--bg-primary-color)",
-  border: "1px solid var(--color-line)",
+const styleList = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '95%',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
   boxShadow: 24,
   p: 4,
-  borderRadius: "20px",
-  height: "95%",
-  overflow: "auto",
+  borderRadius: '20px',
+  height: '95%',
+  overflow: 'auto'
+};
+
+const styleForm = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '60%',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  maxHeight: '90vh',
+  overflow: 'auto'
 };
 
 const VisuallyHiddenInput = styled("input")({
@@ -254,7 +269,7 @@ export default function Athletes() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={styleForm}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Criação do atleta" />
             <FontAwesomeIcon
@@ -265,7 +280,7 @@ export default function Athletes() {
             />
           </div>
           <hr />
-          <div className="row" style={{ height: "520px" }}>
+          <div className="row" style={{ height: "auto" }}>
             <div className="col-md-5 d-flex">
               <div className="d-flex justify-content-start align-items-center mb-3">
                 <Image
