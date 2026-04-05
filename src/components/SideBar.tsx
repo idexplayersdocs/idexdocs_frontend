@@ -34,6 +34,21 @@ const style = {
   overflow: 'auto'
 };
 
+const styleForm = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '60%',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  maxHeight: '90vh',
+  overflow: 'auto'
+};
+
 export default function SideBar({ athleteData, modal }: Props) {
   const { query, push, back } = useRouter();
   const athleteId = query?.id;
@@ -141,7 +156,7 @@ export default function SideBar({ athleteData, modal }: Props) {
         onClose={handleCloseEditAthlete}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={styleForm}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Editar do atleta" />
             <FontAwesomeIcon icon={faX} style={{ color: "#ffffff", cursor: 'pointer' }} size="xl" onClick={handleCloseEditAthlete} />

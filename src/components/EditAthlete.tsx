@@ -94,7 +94,7 @@ export default function EditAthlete({athleteData, closeModal}: any) {
 
   return (
     <>
-      <div className="row" style={{height:'520px'}}>
+      <div className="row" style={{height:'auto'}}>
         <div className="col-md-6">
             <div className="d-flex justify-content-start align-items-center mb-3">
             <Image 

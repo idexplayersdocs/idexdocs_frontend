@@ -29,6 +29,21 @@ const style = {
   overflow: 'auto'
 };
 
+const styleForm = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '60%',
+  bgcolor: 'var(--bg-primary-color)',
+  border: '1px solid var(--color-line)',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '20px',
+  maxHeight: '90vh',
+  overflow: 'auto'
+};
+
 type Props = {
   athlete: any
 }
@@ -408,14 +423,14 @@ export default function Relationship() {
         onClose={handleCloseCreateQuestionaryRelationship}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={styleForm}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Criar Questionário de relacionamento"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateQuestionaryRelationship}
 />
           </div>
           <hr />
-          <div className="row" style={{height:'400px'}}>
+          <div className="row" style={{height:'auto'}}>
               <div className='col-md-6'>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
@@ -479,14 +494,14 @@ export default function Relationship() {
         onClose={handleCloseCreateSupportControl}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box sx={style}>
+        <Box sx={styleForm}>
           <div className="d-flex justify-content-between">
             <Subtitle subtitle="Criar Controle de Suporte"/>
             <FontAwesomeIcon icon={faX} style={{color: "#ffffff", cursor: 'pointer'}} size="xl" onClick={handleCloseCreateSupportControl}
 />
           </div>
           <hr />
-          <div className="row" style={{height:'400px'}}>
+          <div className="row" style={{height:'auto'}}>
               <div className=''>
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
