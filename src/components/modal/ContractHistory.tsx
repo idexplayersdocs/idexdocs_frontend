@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, Checkbox, Modal, Pagination } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faDownload, faEye, faPenSquare, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faEye, faPenSquare, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Subtitle from '../Subtitle';
 import AddButton from '../AddButton';
 import { createInjuries, getInjuries } from '@/lib/http-service/injuries';
@@ -65,7 +65,6 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
     data_inicio: '',
     data_termino: '',
     observacao: '',
-    arquivo: null as File | null,
   });
 
   const [alterou, setAlterou] = useState<boolean>(false)
@@ -99,7 +98,6 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
       data_inicio: '',
       data_termino: '',
       observacao: '',
-      arquivo: null,
     });
   }
 
@@ -140,8 +138,6 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
       observacao: contract.observacao,
       contrato_id: contract.contrato_id,
       ativo: contract.ativo,
-      arquivo_url: contract.arquivo_url || null,
-      arquivo: null,
     })
   };
   const handleCloseEditContract = () => {
@@ -152,7 +148,6 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
       data_inicio: '',
       data_termino: '',
       observacao: '',
-      arquivo: null,
     });
   }
 
@@ -164,67 +159,10 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
     }));
   };
 
-  const handleFileChangeContract = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    if (file) {
-      const maxSize = 10 * 1024 * 1024; // 10MB
-      if (file.size > maxSize) {
-        toast.error('Arquivo muito grande. Tamanho máximo: 10MB');
-        event.target.value = '';
-        setFormRegisterContractHistory((prevState: any) => ({ ...prevState, arquivo: null }));
-        return;
-      }
-      const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
-      if (!allowedTypes.includes(file.type)) {
-        toast.error('Tipo de arquivo não suportado. Use apenas PDF, JPG, JPEG ou PNG');
-        event.target.value = '';
-        setFormRegisterContractHistory((prevState: any) => ({ ...prevState, arquivo: null }));
-        return;
-      }
-    }
-    setFormRegisterContractHistory((prevState: any) => ({
-      ...prevState,
-      arquivo: file,
-    }));
-  };
-
-  const handleDownloadContractFile = async (contract: any) => {
-    try {
-      if (contract?.arquivo_url) {
-        const link = document.createElement('a');
-        link.href = contract.arquivo_url;
-        link.download = `contrato_${contract.contrato_nome || ''}_${contract.contrato_id || 'arquivo'}`;
-        link.target = '_blank';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        toast.success('Download iniciado com sucesso!');
-      } else {
-        toast.warning('Arquivo não disponível para download.');
-      }
-    } catch (error) {
-      console.error('Erro ao baixar arquivo:', error);
-      toast.error('Erro ao baixar o arquivo. Verifique sua conexão e tente novamente.');
-    }
-  };
-
   const handleSaveRegisterContractHistory = async () => {
     setLoading(true);
     try {
-      let requestData: any;
-      if (formRegisterContractHistory.arquivo) {
-        const formData = new FormData();
-        formData.append('atleta_id', formRegisterContractHistory.atleta_id?.toString() || '');
-        formData.append('contrato_sub_tipo_id', formRegisterContractHistory.contrato_sub_tipo_id?.toString() || '');
-        formData.append('data_inicio', formRegisterContractHistory.data_inicio);
-        formData.append('data_termino', formRegisterContractHistory.data_termino);
-        formData.append('observacao', formRegisterContractHistory.observacao || '');
-        formData.append('arquivo', formRegisterContractHistory.arquivo);
-        requestData = formData;
-      } else {
-        requestData = formRegisterContractHistory;
-      }
-      const response = await createContract(requestData);
+      const response = await createContract(formRegisterContractHistory);
       if(response) {
         handleCloseRegisterContractHistory()
         setPage(1)
@@ -252,20 +190,7 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
   const handleSaveEditContract = async () => {
     setLoading(true);
     try {
-      let requestData: any;
-      if (formRegisterContractHistory.arquivo) {
-        const formData = new FormData();
-        formData.append('contrato_id', formRegisterContractHistory.contrato_id?.toString() || '');
-        formData.append('data_inicio', formRegisterContractHistory.data_inicio);
-        formData.append('data_termino', formRegisterContractHistory.data_termino);
-        formData.append('observacao', formRegisterContractHistory.observacao || '');
-        formData.append('ativo', formRegisterContractHistory.ativo?.toString() || 'true');
-        formData.append('arquivo', formRegisterContractHistory.arquivo);
-        requestData = formData;
-      } else {
-        requestData = formRegisterContractHistory;
-      }
-      const response = await editContract(requestData);
+      await editContract(formRegisterContractHistory);
       handleCloseEditContract()
       setPage(1)
       const contractHistoryList = await getContract(athleteId, 1);
@@ -338,13 +263,6 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
                       <FontAwesomeIcon icon={contract.ativo ? faCheck : faXmark} size='xl' style={contract.ativo? { color: "#15ff00" } : { color: "#ff0000" }} />
                     </td>
                     <td className="table-dark text-end" style={{ whiteSpace: "nowrap" }}>
-                      {contract.arquivo_url ? (
-                        <div style={{ display: "inline-block" }} onClick={() => handleDownloadContractFile(contract)}>
-                          <FontAwesomeIcon className="ms-2 me-2" icon={faDownload} size="xl" style={{ color: "#28a745", cursor: 'pointer' }} title="Baixar arquivo do contrato" />
-                        </div>
-                      ) : (
-                        <span aria-hidden style={{ display: 'inline-block', width: 20, height: 24 }} />
-                      )}
                       <div  style={{ display: "inline-block" }} onClick={() => handleOpenEditContract(contract)}>
                         <FontAwesomeIcon className="ms-2 me-2" icon={faPenSquare} style={{ color: "white", cursor: "pointer" }} size="xl" />
                       </div>
@@ -416,17 +334,6 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
                 <div className="d-flex flex-column w-100 mt-3">
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Observação</label>
                       <input type="text" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="observacao" style={{height:'45px'}} value={formRegisterContractHistory.observacao} onChange={handleInputChangeRegisterContractHistory} />
-                </div>
-                <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Arquivo do Contrato</label>
-                  <input
-                    type="file"
-                    className="form-control input-create bg-dark-custom"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    onChange={handleFileChangeContract}
-                    style={{height:'45px'}}
-                  />
-                  <small className="ms-3" style={{color: '#999'}}>PDF, JPG, JPEG ou PNG. Máximo 10MB. (Opcional)</small>
                 </div>
               <div className='ms-3 d-flex flex-column mt-3' style={{width: '98%'}}>
                 <button type="button" className="btn btn-success align-self-end save-contract" style={{width:'auto'}} onClick={handleSaveRegisterContractHistory}>Salvar</button>
@@ -507,20 +414,6 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
                       },
                     }}
                   />
-                </div>
-                <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Arquivo do Contrato</label>
-                  {formRegisterContractHistory.arquivo_url && (
-                    <small className="ms-3 mb-1" style={{color: '#28a745'}}>Arquivo atual anexado. Selecione um novo para substituir.</small>
-                  )}
-                  <input
-                    type="file"
-                    className="form-control input-create bg-dark-custom"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    onChange={handleFileChangeContract}
-                    style={{height:'45px'}}
-                  />
-                  <small className="ms-3" style={{color: '#999'}}>PDF, JPG, JPEG ou PNG. Máximo 10MB. (Opcional)</small>
                 </div>
               <div className='ms-3 d-flex flex-column mt-3' style={{width: '98%'}}>
                 <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSaveEditContract}>Salvar</button>

@@ -174,22 +174,26 @@ describe('Property 2 (extended): PerformanceCreation and ContractHistoryVersion 
     expect(height).toBe('95%');
   });
 
-  test('ContractHistoryVersion.tsx - no styleForm constant (file is untouched)', () => {
+  test('ContractHistoryVersion.tsx - styleForm constant uses width: 60% and maxHeight: 90vh (version form modals)', () => {
+    // ContractHistoryVersion.tsx was updated by the contract-version-file-upload spec to add
+    // version create/edit form modals. It now legitimately has a styleForm constant.
     const source = fs.readFileSync(UNCHANGED_FILES.contractHistoryVersion, 'utf-8');
-    const hasStyleForm = /const\s+styleForm\s*=/.test(source);
-    expect(hasStyleForm).toBe(false);
-  });
-
-  test('ContractHistoryVersion.tsx - style constant preserves width: 95% and height: 95%', () => {
-    const source = fs.readFileSync(UNCHANGED_FILES.contractHistoryVersion, 'utf-8');
-    const styleStr = extractStyleConstant(source, 'style');
+    const styleStr = extractStyleConstant(source, 'styleForm');
 
     expect(styleStr).not.toBeNull();
 
     const width = extractProp(styleStr!, 'width');
-    const height = extractProp(styleStr!, 'height');
+    const maxHeight = extractProp(styleStr!, 'maxHeight');
 
-    expect(width).toBe('95%');
-    expect(height).toBe('95%');
+    expect(width).toBe('60%');
+    expect(maxHeight).toBe('90vh');
+  });
+
+  test('ContractHistoryVersion.tsx - outer container uses overflow auto (list area preserved)', () => {
+    // The outer table container uses an inline style with overflow: auto.
+    // This verifies the list area layout is preserved after the fix.
+    const source = fs.readFileSync(UNCHANGED_FILES.contractHistoryVersion, 'utf-8');
+    const hasOverflowAuto = /style=\{\{[^}]*overflow:\s*['"]auto['"]/.test(source);
+    expect(hasOverflowAuto).toBe(true);
   });
 });

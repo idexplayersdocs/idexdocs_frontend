@@ -47,3 +47,23 @@ export const getContractVersion = async (athleteId: number | string, page: numbe
     }
   }
 };
+
+export const createContractVersion = async (request: FormData | Partial<ContractVersion>) => {
+  try {
+    const response = await axios.post(`${apiURL}/create/contrato/versao`, request);
+    return response.data;
+  } catch (error) {
+    showErrorToast('Erro ao criar a versão do contrato');
+    throw error;
+  }
+};
+
+export const editContractVersion = async (request: FormData | Partial<ContractVersion>) => {
+  try {
+    const response = await axios.put(`${apiURL}/update/contrato/versao`, request);
+    return response.data;
+  } catch (error) {
+    showErrorToast('Erro ao editar a versão do contrato');
+    throw error;
+  }
+};
