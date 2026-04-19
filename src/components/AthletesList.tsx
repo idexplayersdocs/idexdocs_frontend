@@ -12,10 +12,6 @@ import {
   faFileText,
   faXmark,
   faCopy,
-  faArrowDown,
-  faArrowLeft,
-  faArrowRight,
-  faChevronLeft,
   faChevronRight,
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
@@ -24,12 +20,10 @@ import {
   Button,
   ButtonGroup,
   IconButton,
-  Input,
   Menu,
   MenuItem,
   Modal,
   Pagination,
-  Typography,
 } from "@mui/material";
 import styles from "../styles/Login.module.css";
 
@@ -40,9 +34,10 @@ import type { PDFInfoResponseDTO } from "@/lib/http-service/pdfService/dto";
 
 import MyDocument from "./Document";
 import { pdf } from "@react-pdf/renderer";
-import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Subtitle from "./Subtitle";
 import { useTranslation } from "react-i18next";
+import { showSuccessToast, showErrorToast } from "@/lib/toast-error";
 
 
 const modalStyle = {
@@ -147,22 +142,12 @@ export default function AthletesList({
     }
   }, [newAthlete, inputFilter]);
 
-  const handleClick = () => {
-    // Função principal ao clicar no botão
-    console.log("Botão principal clicado");
-  };
-
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleOptionClick = (option: string) => {
-    console.log(`Opção selecionada: ${option}`);
-    handleClose();
   };
 
   const handleEditAthlete = (id: number) => {
@@ -275,9 +260,7 @@ export default function AthletesList({
   const copyToClipboard = () => {
     if (athleteToShow) {
       navigator.clipboard.writeText(athleteToShow);
-      toast.success(
-        "Relatório do atleta copiado para a área de transferência."
-      );
+      showSuccessToast("Relatório do atleta copiado para a área de transferência.");
     }
   };
 
@@ -298,14 +281,13 @@ export default function AthletesList({
 
       handleClickPdf(Number(decoded));
     } else {
-      toast.error("Erro ao baixar PDF");
+      showErrorToast("Erro ao baixar PDF");
     }
   };
 
   return (
     <>
       {/* LISTAGEM DE ATLETA*/}
-      <ToastContainer />
       <Modal
         open={athleteToShow !== null}
         onClose={() => setAthleteToShow(null)}
@@ -488,12 +470,7 @@ export default function AthletesList({
                       className="table-dark text-end"
                       style={{ whiteSpace: "nowrap" }}
                     >
-                      {/* <FontAwesomeIcon
-                      icon={faTrashCan}
-                      size="2xl"
-                      style={{ color: '#ff0000', cursor: 'pointer' }}
-                    /> */}
-                      <div
+                                            <div
                         onClick={() => handleClickAthleteReport(athlete.id)}
                         ref={btnPdfRef}
                         style={{ display: "inline-block" }}

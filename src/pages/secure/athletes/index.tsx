@@ -1,10 +1,9 @@
 import Header from "../../../components/Header";
-import Search from "../../../components/Search";
 import Title from "../../../components/Title";
 import AthletesList from "../../../components/AthletesList";
 import AddButton from "@/components/AddButton";
 import React, { useEffect, useState } from "react";
-import { Box, Button, Modal, colors, styled } from "@mui/material";
+import { Box, Button, Modal, styled } from "@mui/material";
 import Subtitle from "@/components/Subtitle";
 import {
   createAthlete,
@@ -15,31 +14,16 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faAsterisk,
   faMagnifyingGlass,
   faX,
 } from "@fortawesome/free-solid-svg-icons";
-import { overflow } from "html2canvas/dist/types/css/property-descriptors/overflow";
-import { Bounce, ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Loading from "react-loading";
 import styles from "../../../styles/Login.module.css";
 import { jwtDecode } from "jwt-decode";
 import type { AthleteListItem, AthleteCreateRequest, DecodedToken } from '@/types';
-
-const styleList = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '95%',
-  bgcolor: 'var(--bg-primary-color)',
-  border: '1px solid var(--color-line)',
-  boxShadow: 24,
-  p: 4,
-  borderRadius: '20px',
-  height: '95%',
-  overflow: 'auto'
-};
+import { showSuccessToast, showErrorToast } from "@/lib/toast-error";
 
 const styleForm = {
   position: 'absolute' as 'absolute',
@@ -78,12 +62,13 @@ export default function Athletes() {
   const [inputFilter, setInputFilter] = useState("");
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [roles, setRoles] = useState<string>();
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-        const decoded = jwtDecode<DecodedToken>(token!);
-        if (token) {
-          setRoles(decoded.roles[0]);
+    const decoded = jwtDecode<DecodedToken>(token!);
+    if (token) {
+      setRoles(decoded.roles[0]);
     }
   }, []);
 
@@ -120,13 +105,14 @@ export default function Athletes() {
   };
 
   const handleSalvarClick = async () => {
-    setIsLoading(true);
+    setIsSaving(true);
     const request = {
       ...formData,
     };
     try {
       const newAthletesData = await createAthlete(formData);
       if (newAthletesData) {
+        showSuccessToast("Atleta criado com sucesso!");
         setNewAthlere(true);
 
         if (formImage) {
@@ -136,32 +122,34 @@ export default function Athletes() {
             newAthletesData.id,
             formData
           );
-
-          handleCloseCreateAthlete();
-          setFormData({
-            nome: "",
-            data_nascimento: "",
-            posicao_primaria: "",
-            posicao_secundaria: "",
-            posicao_terciaria: "",
-          });
         }
+
+        handleCloseCreateAthlete();
+        setFormData({
+          nome: "",
+          data_nascimento: "",
+          posicao_primaria: "",
+          posicao_secundaria: "",
+          posicao_terciaria: "",
+        });
         setNewAthlere(false);
-        location.reload();
+
+        // Refresh data after showing toast
         const athletesData = await getAthletes(1);
         setAthletes(athletesData.data);
         setTotalRow(athletesData.total);
       }
     } catch (error: any) {
+      showErrorToast("Erro ao criar atleta. Tente novamente.");
     } finally {
-      setIsLoading(false);
+      setIsSaving(false);
     }
   };
 
-    const getImageFileObject = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        const reader = new FileReader();
+  const getImageFileObject = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
       reader.onload = () => {
         setFormAvatar(reader.result as string);
       };
@@ -172,9 +160,6 @@ export default function Athletes() {
     }
   };
 
-  // function runAfterImageDelete(file:any) {
-  //   console.log({ file })
-  // }
 
   const isFormValid = () => {
     // Verifica se todos os campos obrigatórios estão preenchidos
@@ -182,14 +167,6 @@ export default function Athletes() {
       formData.nome.trim() !== "" &&
       formData.data_nascimento.trim() !== "" &&
       formData.posicao_primaria.trim() !== ""
-      // formClube.nome.trim() !== '' &&
-      // formClube.data_inicio.trim() !== '' &&
-      // formContratoClube.contrato_sub_tipo_id.trim() !== '' &&
-      // formContratoClube.data_inicio.trim() !== '' &&
-      // formContratoClube.data_termino.trim() !== '' &&
-      // formContratoEmpresa.contrato_sub_tipo_id.trim() !== '' &&
-      // formContratoEmpresa.data_inicio.trim() !== '' &&
-      // formContratoEmpresa.data_termino.trim() !== ''
     ) {
       return true; // Todos os campos estão preenchidos
     } else {
@@ -533,9 +510,9 @@ export default function Athletes() {
                 className="btn btn-success align-self-end"
                 style={{ width: "auto" }}
                 onClick={handleSalvarClick}
-                disabled={!isFormValid()}
+                disabled={!isFormValid() || isSaving}
               >
-                Salvar
+                {isSaving ? "Salvando..." : "Salvar"}
               </button>
             </div>
           </div>
