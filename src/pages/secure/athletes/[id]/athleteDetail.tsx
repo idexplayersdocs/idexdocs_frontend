@@ -406,45 +406,71 @@ export default function AthleteDetail() {
 
   // Currency formatting functions
   const formatCurrency = (value: string) => {
-    // Remove non-numeric characters except comma and dot
-    const numericValue = value.replace(/[^\d,]/g, '');
+    if (!value) return '';
     
-    // Convert to number for formatting
-    const numberValue = parseFloat(numericValue.replace(',', '.')) || 0;
+    // Remove all non-numeric characters except comma
+    let cleanValue = value.replace(/[^\d,]/g, '');
     
-    // Format as Brazilian Real
-    return numberValue.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 2
-    });
+    // Handle multiple commas - keep only the last one
+    const parts = cleanValue.split(',');
+    if (parts.length > 2) {
+      cleanValue = parts.slice(0, -1).join('') + ',' + parts[parts.length - 1];
+    } else {
+      cleanValue = parts.join(',');
+    }
+    
+    // Limit decimal part to 2 digits
+    const finalParts = cleanValue.split(',');
+    if (finalParts[1] && finalParts[1].length > 2) {
+      finalParts[1] = finalParts[1].substring(0, 2);
+      cleanValue = finalParts.join(',');
+    }
+    
+    return cleanValue;
+  };
+
+  const formatCurrencyForDisplay = (value: string) => {
+    const formatted = formatCurrency(value);
+    if (!formatted) return '';
+    
+    // Apply thousands separator for display
+    const parts = formatted.split(',');
+    let integerPart = parts[0] || '0';
+    let decimalPart = parts[1] || '';
+    
+    // Add thousands separator
+    if (integerPart.length > 3) {
+      integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+    
+    return `R$ ${integerPart}${decimalPart ? ',' + decimalPart : ''}`;
   };
 
   const parseCurrencyToFloat = (currencyString: string) => {
     if (!currencyString) return 0;
-    // Remove currency symbol and spaces, replace comma with dot
-    return parseFloat(currencyString.replace(/[R$\s]/g, '').replace(',', '.')) || 0;
+    // Remove currency symbol, spaces, and dots, then handle comma as decimal
+    const cleanValue = currencyString.replace(/[R$\s.]/g, '');
+    return parseFloat(cleanValue.replace(',', '.')) || 0;
   };
 
   const handleInputChangeSupportControl = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     
     if (name === 'preco') {
-      // Handle price field with currency formatting
-      const rawValue = value.replace(/[^\d,]/g, '');
-      const formattedValue = rawValue ? formatCurrency(rawValue) : '';
+      // Store raw value with basic validation
+      const formattedValue = formatCurrency(value);
       
-        setFormDataSupportControl((prevState) => ({
-          ...prevState,
-          [name]: formattedValue,
-        }));
-      } else {
-        setFormDataSupportControl((prevState) => ({
-          ...prevState,
-          [name]: value,
-        }));
-      }
-    };
+      setFormDataSupportControl((prevState) => ({
+        ...prevState,
+        [name]: formattedValue,
+      }));
+    } else {
+      setFormDataSupportControl((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  };
 
     const handleFileChangeSupportControl = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
@@ -1021,16 +1047,31 @@ export default function AthleteDetail() {
                 <div className="col-md-6">
                   <div className="d-flex flex-column w-100 mt-3">
                     <label className="ms-3" style={{color: 'white', fontSize: '18px', marginBottom: '8px'}}>Preço *</label>
-                    <input 
-                      type="text" 
-                      className="form-control input-create input-date bg-dark-custom" 
-                      placeholder="R$ 0,00" 
-                      name="preco" 
-                      style={{height:'45px'}} 
-                      value={formDataSupportControl.preco} 
-                      onChange={handleInputChangeSupportControl}
-                      required
-                    />
+                    <div style={{position: 'relative'}}>
+                      <input 
+                        type="text" 
+                        className="form-control input-create input-date bg-dark-custom" 
+                        placeholder="1000,00" 
+                        name="preco" 
+                        style={{height:'45px', paddingLeft: '35px'}} 
+                        value={formDataSupportControl.preco} 
+                        onChange={handleInputChangeSupportControl}
+                        required
+                      />
+                      <span 
+                        style={{
+                          position: 'absolute',
+                          left: '12px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          color: '#adb5bd',
+                          fontSize: '14px',
+                          pointerEvents: 'none'
+                        }}
+                      >
+                        R$
+                      </span>
+                    </div>
                   </div>
                   <div className="d-flex flex-column w-100 mt-3">
                     <label className="ms-3" style={{color: 'white', fontSize: '18px', marginBottom: '8px'}}>

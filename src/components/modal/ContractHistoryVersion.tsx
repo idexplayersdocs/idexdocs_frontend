@@ -293,8 +293,76 @@ export default function ContractHistoryVersion({ contractId }: any) {
               <input type="text" className="form-control input-create input-date bg-dark-custom" placeholder="Digite..." name="observacao" style={{ height: '45px' }} value={formVersion.observacao} onChange={handleInputChangeVersion} />
             </div>
             <div className="d-flex flex-column w-100 mt-3">
-              <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Arquivo (PDF, JPG, JPEG, PNG — máx. 10MB)</label>
-              <input type="file" className="form-control input-create bg-dark-custom" accept=".pdf,.jpg,.jpeg,.png" style={{ height: '45px' }} onChange={handleFileChangeVersion} />
+              <label className="ms-3" style={{color: 'white', fontSize: '18px', marginBottom: '8px'}}>
+                Arquivo * 
+                <small style={{color: '#adb5bd', fontSize: '14px'}}> (Max: 10MB)</small>
+              </label>
+              <div style={{position: 'relative'}}>
+                <input 
+                  type="file" 
+                  name="arquivo" 
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={handleFileChangeVersion}
+                  style={{
+                    position: 'absolute',
+                    opacity: 0,
+                    width: '100%',
+                    height: '45px',
+                    cursor: 'pointer',
+                    zIndex: 2
+                  }}
+                />
+                <div 
+                  className="form-control input-create input-date bg-dark-custom d-flex align-items-center justify-content-between"
+                  style={{
+                    height:'45px', 
+                    cursor: 'pointer',
+                    border: '1px solid #495057',
+                    borderRadius: '8px',
+                    position: 'relative',
+                    zIndex: 1
+                  }}
+                >
+                  <span style={{
+                    color: formVersion.arquivo ? '#ffffff' : '#adb5bd',
+                    fontSize: '14px',
+                    marginLeft: '12px',
+                    flex: 1,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    {formVersion.arquivo ? formVersion.arquivo.name : 'Selecionar arquivo...'}
+                  </span>
+                  <button 
+                    type="button"
+                    className="btn btn-outline-light btn-sm"
+                    style={{
+                      margin: '4px',
+                      padding: '6px 12px',
+                      fontSize: '12px',
+                      pointerEvents: 'none',
+                      borderColor: '#6c757d',
+                      color: '#adb5bd'
+                    }}
+                  >
+                    Procurar
+                  </button>
+                </div>
+              </div>
+              <div style={{minHeight: '24px', marginTop: '8px'}}>
+                {formVersion.arquivo ? (
+                  <small className="ms-3" style={{color: '#28a745', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                    <span style={{fontSize: '16px'}}>✓</span>
+                    <span>Arquivo selecionado</span>
+                  </small>
+                ) : (
+                  <small className="ms-3" style={{color: '#dc3545', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                    <span style={{fontSize: '16px'}}>⚠</span>
+                    <span>Arquivo obrigatório</span>
+                  </small>
+                )}
+              </div>
             </div>
             <div className="ms-3 d-flex flex-column mt-3" style={{ width: '98%' }}>
               <button type="button" className="btn btn-success align-self-end" style={{ width: 'auto' }} onClick={handleSaveRegisterVersion} disabled={!isFormValid() || isSaving}>
@@ -333,7 +401,10 @@ export default function ContractHistoryVersion({ contractId }: any) {
               <input type="text" className="form-control input-create input-date bg-dark-custom" placeholder="Digite..." name="observacao" style={{ height: '45px' }} value={formVersion.observacao} onChange={handleInputChangeVersion} />
             </div>
             <div className="d-flex flex-column w-100 mt-3">
-              <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Arquivo (PDF, JPG, JPEG, PNG — máx. 10MB)</label>
+              <label className="ms-3" style={{color: 'white', fontSize: '18px', marginBottom: '8px'}}>
+                Arquivo * 
+                <small style={{color: '#adb5bd', fontSize: '14px'}}> (Max: 10MB)</small>
+              </label>
               {formVersion.arquivo_url && (
                 <p className="ms-3 mt-1" style={{ color: '#aaa', fontSize: '14px' }}>
                   Arquivo atual disponível.{' '}
@@ -342,7 +413,72 @@ export default function ContractHistoryVersion({ contractId }: any) {
                   </span>
                 </p>
               )}
-              <input type="file" className="form-control input-create bg-dark-custom" accept=".pdf,.jpg,.jpeg,.png" style={{ height: '45px' }} onChange={handleFileChangeVersion} />
+              <div style={{position: 'relative'}}>
+                <input 
+                  type="file" 
+                  name="arquivo" 
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={handleFileChangeVersion}
+                  style={{
+                    position: 'absolute',
+                    opacity: 0,
+                    width: '100%',
+                    height: '45px',
+                    cursor: 'pointer',
+                    zIndex: 2
+                  }}
+                />
+                <div 
+                  className="form-control input-create input-date bg-dark-custom d-flex align-items-center justify-content-between"
+                  style={{
+                    height:'45px', 
+                    cursor: 'pointer',
+                    border: '1px solid #495057',
+                    borderRadius: '8px',
+                    position: 'relative',
+                    zIndex: 1
+                  }}
+                >
+                  <span style={{
+                    color: formVersion.arquivo ? '#ffffff' : '#adb5bd',
+                    fontSize: '14px',
+                    marginLeft: '12px',
+                    flex: 1,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    {formVersion.arquivo ? formVersion.arquivo.name : 'Selecionar arquivo...'}
+                  </span>
+                  <button 
+                    type="button"
+                    className="btn btn-outline-light btn-sm"
+                    style={{
+                      margin: '4px',
+                      padding: '6px 12px',
+                      fontSize: '12px',
+                      pointerEvents: 'none',
+                      borderColor: '#6c757d',
+                      color: '#adb5bd'
+                    }}
+                  >
+                    Procurar
+                  </button>
+                </div>
+              </div>
+              <div style={{minHeight: '24px', marginTop: '8px'}}>
+                {formVersion.arquivo ? (
+                  <small className="ms-3" style={{color: '#28a745', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                    <span style={{fontSize: '16px'}}>✓</span>
+                    <span>Arquivo selecionado</span>
+                  </small>
+                ) : (
+                  <small className="ms-3" style={{color: '#dc3545', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                    <span style={{fontSize: '16px'}}>⚠</span>
+                    <span>Arquivo obrigatório</span>
+                  </small>
+                )}
+              </div>
             </div>
             <div className="ms-3 d-flex flex-column mt-3" style={{ width: '98%' }}>
               <button type="button" className="btn btn-success align-self-end" style={{ width: 'auto' }} onClick={handleSaveEditVersion} disabled={!isFormValid() || isSaving}>
