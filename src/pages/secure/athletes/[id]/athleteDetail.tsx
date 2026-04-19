@@ -11,7 +11,9 @@ import { createAthleteRelationship, createSupportControl, deleteSupportControl, 
 import Subtitle from '@/components/Subtitle';
 import { getObservations, saveObservations } from '@/lib/http-service/observations';
 import  Performance  from '@/components/Performance'
-import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { showSuccessToast, showErrorToast, showWarningToast } from '@/lib/toast-error';
 import moment from 'moment';
 import Loading from 'react-loading';
 import Image from "next/image";
@@ -104,27 +106,22 @@ const styleSupportControl = {
 
 export default function AthleteDetail() {
   const effectRan = useRef(false);
-  const { query, push, back } = useRouter();
+  const { query } = useRouter();
   const athleteId = query?.id as string;
   const [tabAtual, setTabAtual] = useState<string>('relationship')
-  const [loading, setLoading] = useState(true); // Estado de carregamento
-
+  const [loading, setLoading] = useState(true);
   const [athlete, setAthlete] = useState<AthleteDetailType>();
   const [pageRalationship, setPageRalationship] = useState(1);
   const [pageSupportControl, setPageSupportControl] = useState(1);
-    const [displayedDataRelationShip, setDisplayedDataRelationShip] = useState<Relationship[]>([]);
-    const [displayedDataSupportControl, setDisplayedDataSupportControl] = useState<SupportControl[]>([]);
-    const [displayedTotalValueSupportControl, setDisplayedTotalValueSupportControl] = useState<string>();
-  const [totalPages, setTotalPages] = useState(1);
+  const [displayedDataRelationShip, setDisplayedDataRelationShip] = useState<Relationship[]>([]);
+  const [displayedDataSupportControl, setDisplayedDataSupportControl] = useState<SupportControl[]>([]);
+  const [displayedTotalValueSupportControl, setDisplayedTotalValueSupportControl] = useState<string>();
   const [openCreateQuestionaryRelationship, setOpenCreateQuestionaryRelationship] = useState(false);
   const [openCreateSupportControl, setOpenCreateSupportControl] = useState(false);
   const [openSideBar, setOpenSideBar] = useState(false);
   const [totalRowRelationship, setTotalRowRelationship] = useState<number>(1);
   const [totalRowSupportControl, setTotalRowSupportControl] = useState<number>(1);
-    const [permissions, setPermissions] = useState<UserPermissions>({
-      relationship: false,
-      performance: false
-    });
+  const [permissions, setPermissions] = useState<UserPermissions>({relationship: false, performance: false});
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -175,24 +172,16 @@ export default function AthleteDetail() {
       const response = await deleteSupportControl(formSupportControlSelected.controle.controle_id)
       if (response) {
         setPageSupportControl(1)
-        // await getSupportControl(athleteId, pageSupportControl);
         const supportControl = await getSupportControl(athleteId, pageSupportControl);
         setDisplayedDataSupportControl(supportControl?.data.data.controles);
         setTotalRowSupportControl(supportControl?.data.total);
         setDisplayedTotalValueSupportControl(supportControl?.data.data.total.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}));
-        toast.success(`${formSupportControlSelected.controle.nome} foi deletado com sucesso`, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'colored',
-          transition: Bounce,
-          });
+        handleCloseConfirmDeleteControl();
+        showSuccessToast(`${formSupportControlSelected.controle.nome} foi deletado com sucesso`);
       } 
+    } catch (error: any) {
       handleCloseConfirmDeleteControl();
-    } catch (error) {
+      showErrorToast(error?.response?.data?.errors?.[0]?.message || 'Erro ao deletar o registro. Tente novamente.');
       console.log(error);
     }
   }
@@ -240,16 +229,7 @@ export default function AthleteDetail() {
             }
   
           } catch (error:any) {
-            toast.error('Dados do atleta temporariamente indisponível', {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-              transition: Bounce,
-              });
+            showErrorToast('Dados do atleta temporariamente indisponível');
             console.error('Error fetching athletes:', error);
           } finally{
             setLoading(false);
@@ -258,8 +238,19 @@ export default function AthleteDetail() {
       };
 
       fetchAthletesData();
+      effectRan.current = true;
     }
   }, [athleteId, pageRalationship, pageSupportControl]);
+
+  // Update atleta_id in formDataSupportControl when athleteId becomes available
+  useEffect(() => {
+    if (athleteId) {
+      setFormDataSupportControl(prevState => ({
+        ...prevState,
+        atleta_id: athleteId
+      }));
+    }
+  }, [athleteId]);
 
   // Relacionamento
   const handleChangePageRalationship = (_event: React.ChangeEvent<unknown>, newPage: number) => {
@@ -280,24 +271,19 @@ export default function AthleteDetail() {
       data_avaliacao: ''
     });
   }
-  const replaceEmptyStrings = (obj: any) => {
-    Object.keys(obj).forEach(key => {
-      if (obj[key] === "") {
-        obj[key] = '0';
-      }
-    });
-    return obj;
-  };
+
+  const [isSavingRelationship, setIsSavingRelationship] = useState(false);
 
   const handleSalvarClickRelationShip = async () => {
-    setLoading(true);
+    setIsSavingRelationship(true);
     try {
-      formDataRelationship['atleta_id'] = athleteId
-      formDataRelationship['pendencia_empresa'] = formDataRelationship['pendencia_empresa'] == 'true' ? true : false
-      formDataRelationship['pendencia_clube'] = formDataRelationship['pendencia_clube'] == 'true' ? true : false
-
-      const form = replaceEmptyStrings({...formDataRelationship})
-      const response = await createAthleteRelationship(form);
+      const form = {
+        ...formDataRelationship,
+        atleta_id: athleteId,
+        pendencia_empresa: formDataRelationship['pendencia_empresa'] === 'true',
+        pendencia_clube: formDataRelationship['pendencia_clube'] === 'true',
+      };
+      await createAthleteRelationship(form as any);
       handleCloseCreateQuestionaryRelationship();
       setFormDataRelationship({
         atleta_id: athleteId,
@@ -313,21 +299,13 @@ export default function AthleteDetail() {
       const relationship = await getAthleteRelationship(athleteId, 1);
       setDisplayedDataRelationShip(relationship?.data.data);
       setTotalRowRelationship(relationship?.data.total);
-      setPageRalationship(1)
+      setPageRalationship(1);
+      showSuccessToast('Relacionamento criado com sucesso!');
     } catch (error:any) {
       console.error('Error:', error);
-      toast.error(error.response.data.errors[0].message, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: Bounce,
-        });
+      showErrorToast(error?.response?.data?.errors?.[0]?.message || 'Erro ao salvar relacionamento. Tente novamente.');
     } finally {
-      setLoading(false);
+      setIsSavingRelationship(false);
     }
   };
 
@@ -397,7 +375,7 @@ export default function AthleteDetail() {
         link.click();
         document.body.removeChild(link);
         
-        toast.success('Download iniciado com sucesso!');
+        showSuccessToast('Download iniciado com sucesso!');
       } else if (supportControl?.id) {
         // If we need to fetch from an API endpoint
         const response = await fetch(`/api/support-control/${supportControl.id}/download`);
@@ -413,16 +391,16 @@ export default function AthleteDetail() {
           document.body.removeChild(link);
           window.URL.revokeObjectURL(url);
           
-          toast.success('Download concluído com sucesso!');
+          showSuccessToast('Download concluído com sucesso!');
         } else {
-          toast.error('Erro ao baixar o arquivo. Tente novamente.');
+          showErrorToast('Erro ao baixar o arquivo. Tente novamente.');
         }
       } else {
-        toast.warning('Arquivo não disponível para download.');
+        showWarningToast('Arquivo não disponível para download.');
       }
     } catch (error) {
       console.error('Erro ao baixar arquivo:', error);
-      toast.error('Erro ao baixar o arquivo. Verifique sua conexão e tente novamente.');
+      showErrorToast('Erro ao baixar o arquivo. Verifique sua conexão e tente novamente.');
     }
   };
 
@@ -475,16 +453,24 @@ export default function AthleteDetail() {
       // Check file size (limit to 10MB)
       const maxSize = 10 * 1024 * 1024; // 10MB in bytes
       if (file.size > maxSize) {
-        toast.error('Arquivo muito grande. Tamanho máximo: 10MB');
+        showErrorToast('Arquivo muito grande. Tamanho máximo: 10MB');
         event.target.value = ''; // Clear the input
+        setFormDataSupportControl((prevState) => ({
+          ...prevState,
+          arquivo: null,
+        }));
         return;
       }
       
       // Check file type
       const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
       if (!allowedTypes.includes(file.type)) {
-        toast.error('Tipo de arquivo não suportado. Use apenas PDF, JPG, JPEG ou PNG');
+        showErrorToast('Tipo de arquivo não suportado. Use apenas PDF, JPG, JPEG ou PNG');
         event.target.value = ''; // Clear the input
+        setFormDataSupportControl((prevState) => ({
+          ...prevState,
+          arquivo: null,
+        }));
         return;
       }
     }
@@ -495,15 +481,16 @@ export default function AthleteDetail() {
         }));
   };
 
+  const [isSavingSupportControl, setIsSavingSupportControl] = useState(false);
+
   const handleSalvarClickSupportControl = async () => {
     if (!isFormValidSupportControl()) {
-      toast.error('Por favor, preencha todos os campos obrigatórios, incluindo o arquivo.');
+      showErrorToast('Por favor, preencha todos os campos obrigatórios, incluindo o arquivo.');
       return;
     }
 
-    setLoading(true);
+    setIsSavingSupportControl(true);
     try {
-      // Create FormData for file upload
       const formData = new FormData();
       formData.append('atleta_id', athleteId?.toString() || '');
       formData.append('nome', formDataSupportControl.nome);
@@ -513,25 +500,9 @@ export default function AthleteDetail() {
       formData.append('arquivo', formDataSupportControl.arquivo);
 
       const response = await createSupportControl(formData);
-      
-      // Show success message before closing modal
-      toast.success('Controle de suporte criado com sucesso!', {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: Bounce,
-      });
-      
-      // Small delay to ensure toast appears before modal closes
-      setTimeout(() => {
-        handleCloseCreateSupportControl();
-      }, 100);
-      
-      // Don't call handleCloseCreateSupportControl() immediately
+
+      handleCloseCreateSupportControl();
+
       setFormDataSupportControl({
         atleta_id: athleteId,
         nome: '',
@@ -540,43 +511,28 @@ export default function AthleteDetail() {
         data_controle: '',
         arquivo: null,
       });
-      setPageSupportControl(1)
-      // await getSupportControl(athleteId, pageSupportControl);
+      setPageSupportControl(1);
       const supportControl = await getSupportControl(athleteId, pageSupportControl);
       setDisplayedDataSupportControl(supportControl?.data.data.controles);
       setTotalRowSupportControl(supportControl?.data.total);
       setDisplayedTotalValueSupportControl(supportControl?.data.data.total.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}));
 
-      
+      showSuccessToast('Controle de suporte criado com sucesso!');
     } catch (error:any) {
       console.error('Error:', error);
-      
-      // Extract error message with fallback handling
+
       let errorMessage = 'Erro ao criar controle de suporte. Tente novamente.';
-      
-      if (error?.response?.data?.errors && Array.isArray(error.response.data.errors) && error.response.data.errors.length > 0) {
+      if (error?.response?.data?.errors?.[0]?.message) {
         errorMessage = error.response.data.errors[0].message;
       } else if (error?.response?.data?.message) {
         errorMessage = error.response.data.message;
       } else if (error?.message) {
         errorMessage = error.message;
       }
-      
-      toast.error(errorMessage, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: Bounce,
-      });
-      
-      // Don't close modal on error - let user try again
-      return;
+
+      showErrorToast(errorMessage);
     } finally {
-      setLoading(false);
+      setIsSavingSupportControl(false);
     }
   };
 
@@ -602,28 +558,17 @@ export default function AthleteDetail() {
   };
 
   const handleSaveObservation = async () => {
-    setLoading(true);
     try {
       const request: Observation = {
         atleta_id: athleteId,
         tipo: "relacionamento" as const,
         descricao: observacao
       }
-      const response = await saveObservations(request);
+      await saveObservations(request);
+      showSuccessToast('Observação salva com sucesso!');
     } catch (error:any) {
-      toast.error(error.response.data.errors[0].message, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: Bounce,
-        });
+      showErrorToast(error?.response?.data?.errors?.[0]?.message || 'Erro ao salvar observação. Tente novamente.');
       console.error('Error:', error);
-    } finally{
-      setLoading(false);
     }
   };
 
@@ -657,16 +602,7 @@ export default function AthleteDetail() {
         setAthlete(athleteData?.data as AthleteDetailType);
 
       } catch (error:any) {
-        toast.error('Dados do atleta temporariamente indisponível', {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Bounce,
-          });
+        showErrorToast('Dados do atleta temporariamente indisponível');
         console.error('Error fetching athletes:', error);
       } finally{
         setLoading(false);
@@ -885,7 +821,7 @@ export default function AthleteDetail() {
                     <Subtitle subtitle='Observações' />
                     <textarea onChange={handleInputObservation} value={observacao} rows={6} style={{ width: '100%' }}/>
                   </label>
-                  <button type="button" className="btn btn-success align-self-end" style={{ width: '170px' }} onClick={handleSaveObservation}>Salvar Observações</button>
+                  <button type="button" className="btn btn-success align-self-end" style={{ width: '170px' }} onClick={handleSaveObservation} disabled={!observacao.trim()}>Salvar Observações</button>
                 </div>
               </div>
             </div>
@@ -907,7 +843,6 @@ export default function AthleteDetail() {
           </div>
           }
 
-          {/* Relationship */}
           
         </div>
       </div>
@@ -932,14 +867,10 @@ export default function AthleteDetail() {
                   <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Data</label>
                       <input type="date" className="form-control input-create input-date bg-dark-custom " placeholder="selecione a data" name="data_avaliacao" style={{height:'45px'}} value={formDataRelationship.data_avaliacao} onChange={handleInputChangeRelationship}/>
                 </div>
-                {/* <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Receptividade Contrato</label>
-                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="receptividade_contrato" style={{height:'45px'}} value={formDataRelationship.receptividade_contrato} onChange={handleInputChangeRelationship}/>
-                </div> */}
                 <div className="d-flex flex-column w-100 mt-3">
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Receptividade Contrato</label>
                     <select className="form-select" name="receptividade_contrato" value={formDataRelationship.receptividade_contrato} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.receptividade_contrato ? '#fff' : '#999'}}>
-                      <option value={0} style={{color: '#fff'}}>0</option>
+                      <option value="" disabled hidden style={{color: '#999'}}>Selecione</option>
                       <option value={1} style={{color: '#fff'}}>1</option>
                       <option value={2} style={{color: '#fff'}}>2</option>
                       <option value={3} style={{color: '#fff'}}>3</option>
@@ -948,16 +879,11 @@ export default function AthleteDetail() {
                     </select>
                 </div>
 
-
-                {/* <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Satisfação Empresa</label>
-                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="satisfacao_empresa" style={{height:'45px'}} value={formDataRelationship.satisfacao_empresa} onChange={handleInputChangeRelationship}/>
-                </div> */}
 
                 <div className="d-flex flex-column w-100 mt-3">
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Satisfação Empresa</label>
                     <select className="form-select" name="satisfacao_empresa" value={formDataRelationship.satisfacao_empresa} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.satisfacao_empresa ? '#fff' : '#999'}}>
-                      <option value={0} style={{color: '#fff'}}>0</option>
+                      <option value="" disabled hidden style={{color: '#999'}}>Selecione</option>
                       <option value={1} style={{color: '#fff'}}>1</option>
                       <option value={2} style={{color: '#fff'}}>2</option>
                       <option value={3} style={{color: '#fff'}}>3</option>
@@ -966,14 +892,10 @@ export default function AthleteDetail() {
                     </select>
                 </div>
 
-                {/* <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Satisfação Clube</label>
-                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="satisfacao_clube" style={{height:'45px'}} value={formDataRelationship.satisfacao_clube} onChange={handleInputChangeRelationship}/>
-                </div> */}
                 <div className="d-flex flex-column w-100 mt-3">
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Satisfação Clube</label>
                     <select className="form-select" name="satisfacao_clube" value={formDataRelationship.satisfacao_clube} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.satisfacao_clube ? '#fff' : '#999'}}>
-                      <option value={0} style={{color: '#fff'}}>0</option>
+                      <option value="" disabled hidden style={{color: '#999'}}>Selecione</option>
                       <option value={1} style={{color: '#fff'}}>1</option>
                       <option value={2} style={{color: '#fff'}}>2</option>
                       <option value={3} style={{color: '#fff'}}>3</option>
@@ -983,14 +905,10 @@ export default function AthleteDetail() {
                 </div>
               </div>
               <div className='col-md-6'>
-                {/* <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Relação Familiares</label>
-                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="relacao_familiares" style={{height:'45px'}} value={formDataRelationship.relacao_familiares} onChange={handleInputChangeRelationship}/>
-                </div> */}
               <div className="d-flex flex-column w-100 mt-3">
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Relação Familiares</label>
                     <select className="form-select" name="relacao_familiares" value={formDataRelationship.relacao_familiares} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.relacao_familiares ? '#fff' : '#999'}}>
-                      <option value={0} style={{color: '#fff'}}>0</option>
+                      <option value="" disabled hidden style={{color: '#999'}}>Selecione</option>
                       <option value={1} style={{color: '#fff'}}>1</option>
                       <option value={2} style={{color: '#fff'}}>2</option>
                       <option value={3} style={{color: '#fff'}}>3</option>
@@ -998,14 +916,10 @@ export default function AthleteDetail() {
                       <option value={5} style={{color: '#fff'}}>5</option>
                     </select>
                 </div>
-                {/* <div className="d-flex flex-column w-100 mt-3">
-                  <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Influencia Externa</label>
-                      <input type="number" className="form-control input-create input-date bg-dark-custom " placeholder="Digite..." name="influencias_externas" style={{height:'45px'}} value={formDataRelationship.influencias_externas} onChange={handleInputChangeRelationship}/>
-                </div> */}
                 <div className="d-flex flex-column w-100 mt-3">
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Influencia Externa</label>
                     <select className="form-select" name="influencias_externas" value={formDataRelationship.influencias_externas} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.influencias_externas ? '#fff' : '#999'}}>
-                      <option value={0} style={{color: '#fff'}}>0</option>
+                      <option value="" disabled hidden style={{color: '#999'}}>Selecione</option>
                       <option value={1} style={{color: '#fff'}}>1</option>
                       <option value={2} style={{color: '#fff'}}>2</option>
                       <option value={3} style={{color: '#fff'}}>3</option>
@@ -1016,25 +930,27 @@ export default function AthleteDetail() {
                 <div className="d-flex flex-column w-100 mt-3">
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Pendências Empresa</label>
                     <select className="form-select" name="pendencia_empresa" value={formDataRelationship.pendencia_empresa} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.pendencia_empresa ? '#fff' : '#999'}}>
-                      {/* <option value="" disabled hidden>Selecione</option> */}
-                      <option value="true" selected style={{color: '#fff'}}>Sim</option>
+                      <option value="" disabled hidden style={{color: '#999'}}>Selecione</option>
+                      <option value="true" style={{color: '#fff'}}>Sim</option>
                       <option value="false" style={{color: '#fff'}}>Não</option>
                     </select>
                 </div>
                 <div className="d-flex flex-column w-100 mt-3">
                     <label className="ms-3" style={{color: 'white', fontSize: '20px'}}>Pendência Clube</label>
                     <select className="form-select" name="pendencia_clube" value={formDataRelationship.pendencia_clube} onChange={handleInputChangeRelationship} style={{height:'45px', color: formDataRelationship.pendencia_clube ? '#fff' : '#999'}}>
-                      <option value="true" selected style={{color: '#fff'}}>Sim</option>
+                      <option value="" disabled hidden style={{color: '#999'}}>Selecione</option>
+                      <option value="true" style={{color: '#fff'}}>Sim</option>
                       <option value="false" style={{color: '#fff'}}>Não</option>
                     </select>
                 </div>
               </div>
           <div className='ms-3 d-flex flex-column mt-3' style={{width: '98%'}}>
-            <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickRelationShip}>Salvar</button>
+            <button type="button" className="btn btn-success align-self-end" style={{width:'auto'}} onClick={handleSalvarClickRelationShip} disabled={!isFormValidRelationship() || isSavingRelationship}>
+              {isSavingRelationship ? 'Salvando...' : 'Salvar'}
+            </button>
           </div>
             </div>
 
-        <ToastContainer />
         </Box>
       </Modal>
       {/* Controle de Suporte */}
@@ -1201,12 +1117,11 @@ export default function AthleteDetail() {
               className="btn btn-success" 
               style={{minWidth: '120px', padding: '12px 24px'}} 
               onClick={handleSalvarClickSupportControl}
-              disabled={!isFormValidSupportControl}
+              disabled={!isFormValidSupportControl() || isSavingSupportControl}
             >
-              Salvar
+              {isSavingSupportControl ? 'Salvando...' : 'Salvar'}
             </button>
           </div>
-        <ToastContainer />
         </Box>
       </Modal>
         {/* SideBar Responsivo */}
@@ -1252,7 +1167,16 @@ export default function AthleteDetail() {
           </div>
         </Box>
       </Modal>
-      <ToastContainer />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        draggable
+        theme="dark"
+        style={{ zIndex: 9999 }}
+      />
     </>
   )
 }

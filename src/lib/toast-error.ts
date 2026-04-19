@@ -1,16 +1,23 @@
 import { Bounce, toast } from 'react-toastify';
 
-const defaultToastConfig = {
+const baseConfig = {
   position: "top-center" as const,
-  autoClose: 5000,
   hideProgressBar: false,
   closeOnClick: true,
   draggable: true,
   progress: undefined,
-  theme: 'colored' as const,
+  theme: 'dark' as const,
   transition: Bounce,
 };
 
+export function showSuccessToast(message: string) {
+  toast.success(message, { ...baseConfig, autoClose: 3000 });
+}
+
 export function showErrorToast(message: string) {
-  toast.error(message, defaultToastConfig);
+  toast.error(message, { ...baseConfig, autoClose: 5000 });
+}
+
+export function showWarningToast(message: string) {
+  toast.warning(message, { ...baseConfig, autoClose: 5000 });
 }

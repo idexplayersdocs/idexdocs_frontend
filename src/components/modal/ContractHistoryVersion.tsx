@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Checkbox, Modal, Pagination } from '@mui/material';
+import { Box, Modal, Pagination } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faPenSquare, faX } from '@fortawesome/free-solid-svg-icons';
 import Subtitle from '../Subtitle';
 import AddButton from '../AddButton';
 import Loading from 'react-loading';
-import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { showErrorToast, showSuccessToast, showWarningToast } from '@/lib/toast-error';
 import moment from 'moment';
 import { createContractVersion, editContractVersion, getContractVersion } from '@/lib/http-service/contract';
 
@@ -29,8 +29,9 @@ export default function ContractHistoryVersion({ contractId }: any) {
   const [page, setPage] = useState(1);
   const [totalRow, setTotalRow] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [contractHistoryVersion, setContractHistoryVersion] = useState<any[]>([]);
-
   const [openRegisterVersion, setOpenRegisterVersion] = useState(false);
   const [openEditVersion, setOpenEditVersion] = useState(false);
 
@@ -44,22 +45,31 @@ export default function ContractHistoryVersion({ contractId }: any) {
     arquivo_url: '',
   });
 
-  const fetchVersions = async (targetPage: number) => {
-    setLoading(true);
+  const isFormValid = () =>
+    formVersion.data_inicio.trim() !== '' &&
+    formVersion.data_termino.trim() !== '' &&
+    formVersion.observacao.trim() !== '';
+
+  const fetchVersions = async (targetPage: number, silent = false) => {
+    if (!silent) setLoading(true);
+    else setIsRefreshing(true);
     try {
       const result = await getContractVersion(contractId, targetPage);
       setContractHistoryVersion(result?.data ?? []);
       setTotalRow(result?.total ?? 0);
     } catch (error: any) {
+      showErrorToast('Erro ao carregar versões do contrato.');
       console.error('Error:', error);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
+      else setIsRefreshing(false);
     }
   };
 
   useEffect(() => {
     if (!effectRan.current) {
       fetchVersions(page);
+      effectRan.current = true;
     }
   }, [contractId, page]);
 
@@ -107,33 +117,17 @@ export default function ContractHistoryVersion({ contractId }: any) {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 10 * 1024 * 1024;
     const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
 
     if (file.size > maxSize) {
-      toast.error('Arquivo muito grande. O tamanho máximo permitido é 10MB.', {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        theme: 'dark',
-        transition: Bounce,
-      });
+      showErrorToast('Arquivo muito grande. O tamanho máximo permitido é 10MB.');
       event.target.value = '';
       return;
     }
 
     if (!allowedTypes.includes(file.type)) {
-      toast.error('Tipo de arquivo inválido. São permitidos apenas PDF, JPG, JPEG e PNG.', {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        theme: 'dark',
-        transition: Bounce,
-      });
+      showWarningToast('Tipo de arquivo inválido. São permitidos apenas PDF, JPG, JPEG e PNG.');
       event.target.value = '';
       return;
     }
@@ -142,7 +136,7 @@ export default function ContractHistoryVersion({ contractId }: any) {
   };
 
   const handleSaveRegisterVersion = async () => {
-    setLoading(true);
+    setIsSaving(true);
     try {
       const formData = new FormData();
       formData.append('contrato_id', String(formVersion.contrato_id));
@@ -154,26 +148,20 @@ export default function ContractHistoryVersion({ contractId }: any) {
       const response = await createContractVersion(formData);
       if (response) {
         handleCloseRegisterVersion();
+        showSuccessToast('Versão registrada com sucesso!');
         setPage(1);
-        await fetchVersions(1);
+        await fetchVersions(1, true);
       }
     } catch (error: any) {
-      toast.error('Erro ao registrar versão', {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        theme: 'dark',
-        transition: Bounce,
-      });
+      showErrorToast(error?.response?.data?.errors?.[0]?.message || 'Erro ao registrar versão. Tente novamente.');
+      console.error(error);
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
   const handleSaveEditVersion = async () => {
-    setLoading(true);
+    setIsSaving(true);
     try {
       const formData = new FormData();
       formData.append('versao_id', String(formVersion.versao_id));
@@ -184,32 +172,24 @@ export default function ContractHistoryVersion({ contractId }: any) {
 
       await editContractVersion(formData);
       handleCloseEditVersion();
+      showSuccessToast('Versão atualizada com sucesso!');
       setPage(1);
-      await fetchVersions(1);
+      await fetchVersions(1, true);
     } catch (error: any) {
-      toast.error('Erro ao editar versão', {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-        theme: 'dark',
-        transition: Bounce,
-      });
+      showErrorToast(error?.response?.data?.errors?.[0]?.message || 'Erro ao editar versão. Tente novamente.');
+      console.error(error);
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
   const handleDownloadVersionFile = (url: string) => {
-    if (url) {
-      window.open(url, '_blank');
-    }
+    if (url) window.open(url, '_blank');
   };
 
   const handleChangePageContractHistoryVersion = (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
-    fetchVersions(newPage);
+    fetchVersions(newPage, true);
   };
 
   if (loading) {
@@ -225,7 +205,7 @@ export default function ContractHistoryVersion({ contractId }: any) {
       <div className='d-flex justify-content-end mb-3' onClick={handleOpenRegisterVersion}>
         <AddButton />
       </div>
-      <div className="" style={{ overflow: 'auto' }}>
+      <div style={{ overflow: 'auto' }}>
         <table className="table table-striped">
           <thead>
             <tr>
@@ -239,7 +219,6 @@ export default function ContractHistoryVersion({ contractId }: any) {
           </thead>
           <tbody>
             {contractHistoryVersion.length > 0 ? (
-              Array.isArray(contractHistoryVersion) &&
               contractHistoryVersion.map((version, index: number) => (
                 <tr key={index}>
                   <td className="table-dark text-center">{version.versao}</td>
@@ -249,23 +228,13 @@ export default function ContractHistoryVersion({ contractId }: any) {
                   <td className="table-dark text-center">
                     {version.arquivo_url && (
                       <div style={{ display: 'inline-block' }} onClick={() => handleDownloadVersionFile(version.arquivo_url)}>
-                        <FontAwesomeIcon
-                          className="ms-2 me-2"
-                          icon={faDownload}
-                          style={{ color: 'white', cursor: 'pointer' }}
-                          size="xl"
-                        />
+                        <FontAwesomeIcon className="ms-2 me-2" icon={faDownload} style={{ color: 'white', cursor: 'pointer' }} size="xl" />
                       </div>
                     )}
                   </td>
                   <td className="table-dark text-end" style={{ whiteSpace: 'nowrap' }}>
                     <div style={{ display: 'inline-block' }} onClick={() => handleOpenEditVersion(version)}>
-                      <FontAwesomeIcon
-                        className="ms-2 me-2"
-                        icon={faPenSquare}
-                        style={{ color: 'white', cursor: 'pointer' }}
-                        size="xl"
-                      />
+                      <FontAwesomeIcon className="ms-2 me-2" icon={faPenSquare} style={{ color: 'white', cursor: 'pointer' }} size="xl" />
                     </div>
                   </td>
                 </tr>
@@ -296,7 +265,7 @@ export default function ContractHistoryVersion({ contractId }: any) {
         )}
       </div>
 
-      {/* Modal: Registrar Versão */}
+      {/* Registrar Versão */}
       <Modal
         open={openRegisterVersion}
         onClose={handleCloseRegisterVersion}
@@ -311,65 +280,32 @@ export default function ContractHistoryVersion({ contractId }: any) {
           <div className="row" style={{ height: 'auto' }}>
             <div className="col-md">
               <div className="d-flex flex-column w-100 mt-3">
-                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data Início</label>
-                <input
-                  type="date"
-                  className="form-control input-create input-date bg-dark-custom"
-                  name="data_inicio"
-                  style={{ height: '45px' }}
-                  value={formVersion.data_inicio}
-                  onChange={handleInputChangeVersion}
-                />
+                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data Início *</label>
+                <input type="date" className="form-control input-create input-date bg-dark-custom" name="data_inicio" style={{ height: '45px' }} value={formVersion.data_inicio} onChange={handleInputChangeVersion} />
               </div>
               <div className="d-flex flex-column w-100 mt-3">
-                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data Término</label>
-                <input
-                  type="date"
-                  className="form-control input-create input-date bg-dark-custom"
-                  name="data_termino"
-                  style={{ height: '45px' }}
-                  value={formVersion.data_termino}
-                  onChange={handleInputChangeVersion}
-                />
+                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data Término *</label>
+                <input type="date" className="form-control input-create input-date bg-dark-custom" name="data_termino" style={{ height: '45px' }} value={formVersion.data_termino} onChange={handleInputChangeVersion} />
               </div>
             </div>
             <div className="d-flex flex-column w-100 mt-3">
-              <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Observação</label>
-              <input
-                type="text"
-                className="form-control input-create input-date bg-dark-custom"
-                placeholder="Digite..."
-                name="observacao"
-                style={{ height: '45px' }}
-                value={formVersion.observacao}
-                onChange={handleInputChangeVersion}
-              />
+              <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Observação *</label>
+              <input type="text" className="form-control input-create input-date bg-dark-custom" placeholder="Digite..." name="observacao" style={{ height: '45px' }} value={formVersion.observacao} onChange={handleInputChangeVersion} />
             </div>
             <div className="d-flex flex-column w-100 mt-3">
               <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Arquivo (PDF, JPG, JPEG, PNG — máx. 10MB)</label>
-              <input
-                type="file"
-                className="form-control input-create bg-dark-custom"
-                accept=".pdf,.jpg,.jpeg,.png"
-                style={{ height: '45px' }}
-                onChange={handleFileChangeVersion}
-              />
+              <input type="file" className="form-control input-create bg-dark-custom" accept=".pdf,.jpg,.jpeg,.png" style={{ height: '45px' }} onChange={handleFileChangeVersion} />
             </div>
             <div className="ms-3 d-flex flex-column mt-3" style={{ width: '98%' }}>
-              <button
-                type="button"
-                className="btn btn-success align-self-end"
-                style={{ width: 'auto' }}
-                onClick={handleSaveRegisterVersion}>
-                Salvar
+              <button type="button" className="btn btn-success align-self-end" style={{ width: 'auto' }} onClick={handleSaveRegisterVersion} disabled={!isFormValid() || isSaving}>
+                {isSaving ? 'Salvando...' : 'Salvar'}
               </button>
             </div>
           </div>
-          <ToastContainer />
         </Box>
       </Modal>
 
-      {/* Modal: Editar Versão */}
+      {/* Editar Versão */}
       <Modal
         open={openEditVersion}
         onClose={handleCloseEditVersion}
@@ -384,75 +320,38 @@ export default function ContractHistoryVersion({ contractId }: any) {
           <div className="row" style={{ height: 'auto' }}>
             <div className="col-md">
               <div className="d-flex flex-column w-100 mt-3">
-                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data Início</label>
-                <input
-                  type="date"
-                  className="form-control input-create input-date bg-dark-custom"
-                  name="data_inicio"
-                  style={{ height: '45px' }}
-                  value={formVersion.data_inicio}
-                  onChange={handleInputChangeVersion}
-                />
+                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data Início *</label>
+                <input type="date" className="form-control input-create input-date bg-dark-custom" name="data_inicio" style={{ height: '45px' }} value={formVersion.data_inicio} onChange={handleInputChangeVersion} />
               </div>
               <div className="d-flex flex-column w-100 mt-3">
-                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data Término</label>
-                <input
-                  type="date"
-                  className="form-control input-create input-date bg-dark-custom"
-                  name="data_termino"
-                  style={{ height: '45px' }}
-                  value={formVersion.data_termino}
-                  onChange={handleInputChangeVersion}
-                />
+                <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Data Término *</label>
+                <input type="date" className="form-control input-create input-date bg-dark-custom" name="data_termino" style={{ height: '45px' }} value={formVersion.data_termino} onChange={handleInputChangeVersion} />
               </div>
             </div>
             <div className="d-flex flex-column w-100 mt-3">
-              <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Observação</label>
-              <input
-                type="text"
-                className="form-control input-create input-date bg-dark-custom"
-                placeholder="Digite..."
-                name="observacao"
-                style={{ height: '45px' }}
-                value={formVersion.observacao}
-                onChange={handleInputChangeVersion}
-              />
+              <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Observação *</label>
+              <input type="text" className="form-control input-create input-date bg-dark-custom" placeholder="Digite..." name="observacao" style={{ height: '45px' }} value={formVersion.observacao} onChange={handleInputChangeVersion} />
             </div>
             <div className="d-flex flex-column w-100 mt-3">
               <label className="ms-3" style={{ color: 'white', fontSize: '20px' }}>Arquivo (PDF, JPG, JPEG, PNG — máx. 10MB)</label>
               {formVersion.arquivo_url && (
                 <p className="ms-3 mt-1" style={{ color: '#aaa', fontSize: '14px' }}>
                   Arquivo atual disponível.{' '}
-                  <span
-                    style={{ color: 'var(--bg-ternary-color)', cursor: 'pointer' }}
-                    onClick={() => handleDownloadVersionFile(formVersion.arquivo_url)}>
+                  <span style={{ color: 'var(--bg-ternary-color)', cursor: 'pointer' }} onClick={() => handleDownloadVersionFile(formVersion.arquivo_url)}>
                     Baixar
                   </span>
                 </p>
               )}
-              <input
-                type="file"
-                className="form-control input-create bg-dark-custom"
-                accept=".pdf,.jpg,.jpeg,.png"
-                style={{ height: '45px' }}
-                onChange={handleFileChangeVersion}
-              />
+              <input type="file" className="form-control input-create bg-dark-custom" accept=".pdf,.jpg,.jpeg,.png" style={{ height: '45px' }} onChange={handleFileChangeVersion} />
             </div>
             <div className="ms-3 d-flex flex-column mt-3" style={{ width: '98%' }}>
-              <button
-                type="button"
-                className="btn btn-success align-self-end"
-                style={{ width: 'auto' }}
-                onClick={handleSaveEditVersion}>
-                Salvar
+              <button type="button" className="btn btn-success align-self-end" style={{ width: 'auto' }} onClick={handleSaveEditVersion} disabled={!isFormValid() || isSaving}>
+                {isSaving ? 'Salvando...' : 'Salvar'}
               </button>
             </div>
           </div>
-          <ToastContainer />
         </Box>
       </Modal>
-
-      <ToastContainer />
     </>
   );
 }

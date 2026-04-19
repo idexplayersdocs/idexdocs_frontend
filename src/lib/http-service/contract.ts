@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { showErrorToast } from '@/lib/toast-error';
 import type { PaginatedResponse, Contract, ContractVersion } from '@/types';
 
 const apiURL = process.env.API_URL;
@@ -10,7 +9,6 @@ export const getContract = async (athleteId: number | string, page: number): Pro
       const response = await axios.get(`${apiURL}/contrato/atleta/${athleteId}?page=${page}&per_page=${6}`);
       return response.data;
     } catch (error) {
-      showErrorToast('Erro ao abrir os contratos');
       throw error;
     }
   }
@@ -21,7 +19,6 @@ export const createContract = async (request: FormData | Partial<Contract>) => {
     const response = await axios.post(`${apiURL}/create/contrato`, request);
     return response.data;
   } catch (error) {
-    showErrorToast('Erro ao criar o contrato');
     throw error;
   }
 };
@@ -31,7 +28,6 @@ export const editContract = async (request: FormData | Partial<Contract>) => {
     const response = await axios.put(`${apiURL}/update/contrato`, request);
     return response.data;
   } catch (error) {
-    showErrorToast('Erro ao editar o Contrato');
     throw error;
   }
 };
@@ -42,7 +38,6 @@ export const getContractVersion = async (athleteId: number | string, page: numbe
       const response = await axios.get(`${apiURL}/contrato/versao/${athleteId}?page=${page}&per_page=${6}`);
       return response.data;
     } catch (error) {
-      showErrorToast('Erro ao abrir as versões do contrato');
       throw error;
     }
   }
@@ -53,7 +48,6 @@ export const createContractVersion = async (request: FormData | Partial<Contract
     const response = await axios.post(`${apiURL}/create/contrato/versao`, request);
     return response.data;
   } catch (error) {
-    showErrorToast('Erro ao criar a versão do contrato');
     throw error;
   }
 };
@@ -63,7 +57,6 @@ export const editContractVersion = async (request: FormData | Partial<ContractVe
     const response = await axios.put(`${apiURL}/update/contrato/versao`, request);
     return response.data;
   } catch (error) {
-    showErrorToast('Erro ao editar a versão do contrato');
     throw error;
   }
 };
