@@ -2,6 +2,7 @@
 
 # agents
 .claude
+.kiro/settings
 
 # dependencies
 /node_modules

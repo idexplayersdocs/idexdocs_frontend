@@ -186,7 +186,7 @@ export default function Header() {
         <div className="d-flex align-items-center">
           <div className="p-2 me-3">
             <Image
-              src="/images/logo-arabe.png"
+              src="/images/logo-arabe-circle.png"
               width={78}
               height={78}
               alt="company logo"
