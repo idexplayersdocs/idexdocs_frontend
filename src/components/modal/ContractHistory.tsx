@@ -64,23 +64,23 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
   const [alterou, setAlterou] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!effectRan.current) {
-      const fetchAthletesData = async () => {
+    const fetchAthletesData = async () => {
+      if (!effectRan.current) {
         setLoading(true);
-        try {
-          const contractHistoryList = await getContract(athleteId, page);
-          setContractHistory(contractHistoryList?.data ?? []);
-          setTotalRow(contractHistoryList?.total ?? 0);
-        } catch (error: any) {
-          showErrorToast('Erro ao carregar contratos. Tente novamente.');
-          console.error('Error:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchAthletesData();
-      effectRan.current = true;
-    }
+      }
+      try {
+        const contractHistoryList = await getContract(athleteId, page);
+        setContractHistory(contractHistoryList?.data ?? []);
+        setTotalRow(contractHistoryList?.total ?? 0);
+      } catch (error: any) {
+        showErrorToast('Erro ao carregar contratos. Tente novamente.');
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+        effectRan.current = true;
+      }
+    };
+    fetchAthletesData();
   }, [athleteId, page]);
 
   const handleOpenRegisterContractHistory = () => setOpenRegisterContractHistory(true);

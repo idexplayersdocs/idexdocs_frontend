@@ -5,6 +5,8 @@ import { faDownload, faPenSquare, faX } from '@fortawesome/free-solid-svg-icons'
 import Subtitle from '../Subtitle';
 import AddButton from '../AddButton';
 import Loading from 'react-loading';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { showErrorToast, showSuccessToast, showWarningToast } from '@/lib/toast-error';
 import moment from 'moment';
 import { createContractVersion, editContractVersion, getContractVersion } from '@/lib/http-service/contract';
@@ -488,6 +490,17 @@ export default function ContractHistoryVersion({ contractId }: any) {
           </div>
         </Box>
       </Modal>
+
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        draggable
+        theme="dark"
+        style={{ zIndex: 99999 }}
+      />
     </>
   );
 }
