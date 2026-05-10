@@ -100,7 +100,7 @@ const MyDocumentReport = ({ data }: { data: PDFInfoResponseDTO }) => {
         />
         <h1 className={styles.title}>{t("report")}</h1>
         <Image
-          src="/images/logo-arabe.png"
+          src="/images/logo-arabe-circle.png"
           width={100}
           height={50}
           className={styles.logo}

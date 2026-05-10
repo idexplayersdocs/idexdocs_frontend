@@ -61,7 +61,7 @@ const MyDocument = ({ data }: { data: PDFInfoResponseDTO }) => {
         <View style={styles.headerContainer}>
           <Image src={"/images/logo-fort-house.png"} style={styles.logo} />
           <Text style={styles.title}>{t("report")}</Text>
-          <Image src={"/images/logo-arabe.png"} style={styles.logo} />
+          <Image src={"/images/logo-arabe-circle.png"} style={styles.logo} />
         </View>
         <HorizontalLine />
         {/* Athlete info */}

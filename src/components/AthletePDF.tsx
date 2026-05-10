@@ -88,7 +88,7 @@ export default function AthletePDF({ info, onLoading, urlFoto }: AthletaInfo) {
             <h1 className="fw-bold h3  text-dark text-center">Relatório desempenho com atletas representados</h1>
             <Image
               objectFit="contain"
-              src="/images/logo-arabe.png"
+              src="/images/logo-arabe-circle.png"
               alt="Logo Fort House"
               width={0}
               height={0}
