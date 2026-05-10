@@ -65,9 +65,7 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
 
   useEffect(() => {
     const fetchAthletesData = async () => {
-      if (!effectRan.current) {
-        setLoading(true);
-      }
+      setLoading(true);
       try {
         const contractHistoryList = await getContract(athleteId, page);
         setContractHistory(contractHistoryList?.data ?? []);
@@ -77,11 +75,24 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
         console.error('Error:', error);
       } finally {
         setLoading(false);
-        effectRan.current = true;
       }
     };
-    fetchAthletesData();
-  }, [athleteId, page]);
+    if (!effectRan.current) {
+      fetchAthletesData();
+      effectRan.current = true;
+    }
+  }, [athleteId]);
+
+  const fetchContracts = async (targetPage: number) => {
+    try {
+      const contractHistoryList = await getContract(athleteId, targetPage);
+      setContractHistory(contractHistoryList?.data ?? []);
+      setTotalRow(contractHistoryList?.total ?? 0);
+    } catch (error: any) {
+      showErrorToast('Erro ao carregar contratos. Tente novamente.');
+      console.error('Error:', error);
+    }
+  };
 
   const handleOpenRegisterContractHistory = () => setOpenRegisterContractHistory(true);
   const handleCloseRegisterContractHistory = () => {
@@ -150,12 +161,10 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
       const response = await createContract(formRegisterContractHistory);
       if (response) {
         handleCloseRegisterContractHistory();
-        showSuccessToast('Contrato cadastrado com sucesso!');
         setAlterou(true);
         setPage(1);
-        const contractHistoryList = await getContract(athleteId, 1);
-        setContractHistory(contractHistoryList?.data ?? []);
-        setTotalRow(contractHistoryList?.total ?? 0);
+        await fetchContracts(1);
+        showSuccessToast('Contrato cadastrado com sucesso!');
       }
     } catch (error: any) {
       showErrorToast(error?.response?.data?.errors?.[0]?.message || 'Erro ao cadastrar contrato. Tente novamente.');
@@ -170,12 +179,10 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
     try {
       await editContract(formRegisterContractHistory);
       handleCloseEditContract();
-      showSuccessToast('Contrato atualizado com sucesso!');
       setAlterou(true);
       setPage(1);
-      const contractHistoryList = await getContract(athleteId, 1);
-      setContractHistory(contractHistoryList?.data ?? []);
-      setTotalRow(contractHistoryList?.total ?? 0);
+      await fetchContracts(1);
+      showSuccessToast('Contrato atualizado com sucesso!');
     } catch (error: any) {
       showErrorToast(error?.response?.data?.errors?.[0]?.message || 'Erro ao editar contrato. Tente novamente.');
       console.error(error);
@@ -184,8 +191,9 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
     }
   };
 
-  const handleChangePageContractHistory = (_event: React.ChangeEvent<unknown>, newPage: number) => {
+  const handleChangePageContractHistory = async (_event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
+    await fetchContracts(newPage);
   };
 
   const handleCloseModal = () => {
@@ -259,15 +267,17 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
           </tbody>
         </table>
         {totalRow > 6 &&
-          <Pagination
-            className="pagination-bar"
-            count={Math.ceil(totalRow / 6)}
-            page={page}
-            onChange={handleChangePageContractHistory}
-            variant="outlined"
-            size="large"
-            sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
-          />
+          <div className='d-flex justify-content-center mt-2 mb-3'>
+            <Pagination
+              className="pagination-bar"
+              count={Math.ceil(totalRow / 6)}
+              page={page}
+              onChange={handleChangePageContractHistory}
+              variant="outlined"
+              size="large"
+              sx={{ '& .MuiPaginationItem-page.Mui-selected': { backgroundColor: 'var(--bg-ternary-color)', color: 'white' }, '& .MuiPaginationItem-page': {color: 'white'}, '& .MuiPaginationItem-icon': {color: 'white'} }}
+            />
+          </div>
         }
       </div>
 
@@ -401,7 +411,7 @@ export default function ContractHistory({closeModal, athleteId, closeModalUpdate
         closeOnClick
         draggable
         theme="dark"
-        style={{ zIndex: 9999 }}
+        style={{ zIndex: 99999 }}
       />
     </>
   );

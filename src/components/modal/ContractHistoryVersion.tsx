@@ -5,11 +5,51 @@ import { faDownload, faPenSquare, faX } from '@fortawesome/free-solid-svg-icons'
 import Subtitle from '../Subtitle';
 import AddButton from '../AddButton';
 import Loading from 'react-loading';
-import { ToastContainer } from 'react-toastify';
+import { toast, Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { showErrorToast, showSuccessToast, showWarningToast } from '@/lib/toast-error';
 import moment from 'moment';
 import { createContractVersion, editContractVersion, getContractVersion } from '@/lib/http-service/contract';
+
+const VERSION_TOAST_CONTAINER_ID = 'contract-version-toast';
+
+const showVersionSuccessToast = (message: string) => {
+  toast.success(message, {
+    position: 'top-center',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    draggable: true,
+    theme: 'dark',
+    transition: Bounce,
+    containerId: VERSION_TOAST_CONTAINER_ID,
+  });
+};
+
+const showVersionErrorToast = (message: string) => {
+  toast.error(message, {
+    position: 'top-center',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    draggable: true,
+    theme: 'dark',
+    transition: Bounce,
+    containerId: VERSION_TOAST_CONTAINER_ID,
+  });
+};
+
+const showVersionWarningToast = (message: string) => {
+  toast.warning(message, {
+    position: 'top-center',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    draggable: true,
+    theme: 'dark',
+    transition: Bounce,
+    containerId: VERSION_TOAST_CONTAINER_ID,
+  });
+};
 
 const styleForm = {
   position: 'absolute' as 'absolute',
@@ -60,7 +100,7 @@ export default function ContractHistoryVersion({ contractId }: any) {
       setContractHistoryVersion(result?.data ?? []);
       setTotalRow(result?.total ?? 0);
     } catch (error: any) {
-      showErrorToast('Erro ao carregar versões do contrato.');
+      showVersionErrorToast('Erro ao carregar versões do contrato.');
       console.error('Error:', error);
     } finally {
       if (!silent) setLoading(false);
@@ -123,13 +163,13 @@ export default function ContractHistoryVersion({ contractId }: any) {
     const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
 
     if (file.size > maxSize) {
-      showErrorToast('Arquivo muito grande. O tamanho máximo permitido é 10MB.');
+      showVersionErrorToast('Arquivo muito grande. O tamanho máximo permitido é 10MB.');
       event.target.value = '';
       return;
     }
 
     if (!allowedTypes.includes(file.type)) {
-      showWarningToast('Tipo de arquivo inválido. São permitidos apenas PDF, JPG, JPEG e PNG.');
+      showVersionWarningToast('Tipo de arquivo inválido. São permitidos apenas PDF, JPG, JPEG e PNG.');
       event.target.value = '';
       return;
     }
@@ -150,12 +190,12 @@ export default function ContractHistoryVersion({ contractId }: any) {
       const response = await createContractVersion(formData);
       if (response) {
         handleCloseRegisterVersion();
-        showSuccessToast('Versão registrada com sucesso!');
+        showVersionSuccessToast('Versão registrada com sucesso!');
         setPage(1);
         await fetchVersions(1, true);
       }
     } catch (error: any) {
-      showErrorToast(error?.response?.data?.errors?.[0]?.message || 'Erro ao registrar versão. Tente novamente.');
+      showVersionErrorToast(error?.response?.data?.errors?.[0]?.message || 'Erro ao registrar versão. Tente novamente.');
       console.error(error);
     } finally {
       setIsSaving(false);
@@ -174,11 +214,11 @@ export default function ContractHistoryVersion({ contractId }: any) {
 
       await editContractVersion(formData);
       handleCloseEditVersion();
-      showSuccessToast('Versão atualizada com sucesso!');
+      showVersionSuccessToast('Versão atualizada com sucesso!');
       setPage(1);
       await fetchVersions(1, true);
     } catch (error: any) {
-      showErrorToast(error?.response?.data?.errors?.[0]?.message || 'Erro ao editar versão. Tente novamente.');
+      showVersionErrorToast(error?.response?.data?.errors?.[0]?.message || 'Erro ao editar versão. Tente novamente.');
       console.error(error);
     } finally {
       setIsSaving(false);
@@ -492,6 +532,7 @@ export default function ContractHistoryVersion({ contractId }: any) {
       </Modal>
 
       <ToastContainer
+        containerId={VERSION_TOAST_CONTAINER_ID}
         position="top-center"
         autoClose={5000}
         hideProgressBar={false}
