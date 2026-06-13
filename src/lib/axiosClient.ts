@@ -1,36 +1,23 @@
 import axios from "axios";
-// import { apiURL } from "./api";
+import { getStoredToken } from "./auth/getStoredToken";
 
 const apiURL = process.env.API_URL;
 
-const getToken = (): string | null => {
-
-  if(typeof window !== "undefined") {
-
-    const token = localStorage.getItem("token");
-    return token;
-  }
-
-  return null;
-};
-
 export const axiosClient = axios.create({
   baseURL: apiURL,
-  headers: {
-    Authorization: "Bearer " + getToken(),
-  },
 });
 
 axiosClient.interceptors.request.use(
   (config) => {
-    const token = getToken();
-
+    // Always read the latest token from storage to ensure requests
+    // use the most current token (handles storage updates after login)
+    const token = getStoredToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error) => {
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 );

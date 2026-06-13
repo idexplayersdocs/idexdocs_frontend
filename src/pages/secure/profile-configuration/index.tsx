@@ -267,7 +267,8 @@ const setValueModalUpdate = (key: any, value: any) => {
   };
 
   const setDataUser = (): void => {
-    const token = localStorage.getItem("token");
+    const { getStoredToken } = require("@/lib/auth");
+    const token = getStoredToken();
     const decoded: any = jwtDecode(token!);
 
     setValueUpdateProfile("nome", decoded.user_name);

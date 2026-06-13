@@ -28,7 +28,8 @@ export default function Header() {
   // const decoded: any = jwtDecode(token!);
   React.useEffect(() => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
+      const { getStoredToken } = require("@/lib/auth");
+      const token = getStoredToken();
       if (token) {
         const decodedToken = jwtDecode<DecodedToken>(token);
         setDecoded(decodedToken);
@@ -45,8 +46,9 @@ export default function Header() {
 
   const onClickLogout = (): void => {
     setAnchorEl(null);
-    localStorage.removeItem("token");
-    router.push("/public/login");
+    const { createAuthService } = require("@/lib/auth");
+    const authService = createAuthService();
+    authService.logout();
   };
   const onClickHome = (): void => {
     router.push("/secure/athletes");

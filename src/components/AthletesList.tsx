@@ -94,9 +94,10 @@ export default function AthletesList({
   const [athleteToShow, setAthleteToShow] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const decoded = jwtDecode<DecodedToken>(token!);
+    const { getStoredToken } = require("@/lib/auth");
+    const token = getStoredToken();
     if (token) {
+      const decoded = jwtDecode<DecodedToken>(token);
       setPermissions({
         relationship: decoded.permissions.includes("create_relacionamento"),
         performance: decoded.permissions.includes("create_desempenho"),
@@ -112,10 +113,7 @@ export default function AthletesList({
         setTotalRow(athletesData.total);
       } catch (error: any) {
         console.error("Error fetching athletes:", error);
-        if (error.response.status == 401) {
-          window.localStorage.removeItem("token");
-          router.push("/public/login");
-        }
+        // 401 handling is now done by the response interceptor in _app.tsx
       } finally {
         setIsLoading(false);
       }

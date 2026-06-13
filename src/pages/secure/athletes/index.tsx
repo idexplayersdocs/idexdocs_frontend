@@ -65,9 +65,13 @@ export default function Athletes() {
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const decoded = jwtDecode<DecodedToken>(token!);
+    // Read token from new auth storage, with legacy fallback
+    const preference = localStorage.getItem("storage_preference");
+    const token = preference === "session"
+      ? sessionStorage.getItem("access_token")
+      : localStorage.getItem("access_token") || sessionStorage.getItem("access_token") || localStorage.getItem("token");
     if (token) {
+      const decoded = jwtDecode<DecodedToken>(token!);
       setRoles(decoded.roles[0]);
     }
   }, []);

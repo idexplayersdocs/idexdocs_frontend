@@ -88,16 +88,17 @@ export default function AthleteDetail() {
   const [permissions, setPermissions] = useState<UserPermissions>({relationship: false, performance: false});
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-        const decoded = jwtDecode<DecodedToken>(token!);
-        if (token) {
+    const { getStoredToken } = require("@/lib/auth");
+    const token = getStoredToken();
+    if (token) {
+      const decoded = jwtDecode<DecodedToken>(token);
       setPermissions({
         relationship: decoded.permissions.includes("create_relacionamento"),
         performance: decoded.permissions.includes("create_desempenho")
       });
-    }
-    if(!decoded.permissions.includes("create_relacionamento")){
-      setTabAtual('performance')
+      if(!decoded.permissions.includes("create_relacionamento")){
+        setTabAtual('performance')
+      }
     }
   }, []);
 
