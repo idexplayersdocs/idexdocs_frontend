@@ -5,10 +5,15 @@ import styles from "../../../styles/Login.module.css";
 import { LoginRequestDTO } from "@/lib/http-service/tokenService/dto";
 import React from "react";
 import Loading from "react-loading";
-import { LoginUser } from "@/lib/http-service/tokenService";
 import { useRouter } from "next/router";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { createAuthService } from "@/lib/auth";
+import PasswordInput from "@/components/PasswordInput";
+
+interface LoginFormData extends LoginRequestDTO {
+  rememberMe: boolean;
+}
 
 export default function Login() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -18,18 +23,26 @@ export default function Login() {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm<LoginRequestDTO>();
+  } = useForm<LoginFormData>({
+    defaultValues: {
+      rememberMe: false,
+    },
+  });
 
-  const onSubmit: SubmitHandler<LoginRequestDTO> = async (data) => {
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     setIsLoading(true);
     try {
-      const res = await LoginUser({ email: data.email, password: data.password });
-      localStorage.setItem("token", res.access_token);
+      const authService = createAuthService();
+      await authService.login(data.email, data.password, data.rememberMe);
       router.push("/secure/athletes");
     } catch (e: unknown | any) {
-      let errorMessage = "An unexpected error occurred. Please try again.";
-      if (e.response && e.response.data && e.response.data.errors) {
+      let errorMessage: string;
+      if (e.message === "Unable to complete login") {
+        errorMessage = "Não foi possível completar o login";
+      } else if (e.response && e.response.data && e.response.data.errors) {
         errorMessage = e.response.data.errors[0].message;
+      } else {
+        errorMessage = "An unexpected error occurred. Please try again.";
       }
       toast.error(errorMessage, {
         position: "top-center",
@@ -40,7 +53,7 @@ export default function Login() {
         progress: undefined,
         theme: "dark",
         transition: Bounce,
-        icon: false,  // Disable the default icon to avoid the large exclamation mark
+        icon: false,
       });
     } finally {
       setIsLoading(false);
@@ -48,7 +61,11 @@ export default function Login() {
   };
 
   React.useEffect(() => {
-    const token = localStorage.getItem("token");
+    // Check new auth storage keys first, fall back to legacy "token" key
+    const preference = localStorage.getItem("storage_preference");
+    const token = preference === "session"
+      ? sessionStorage.getItem("access_token")
+      : localStorage.getItem("access_token") || sessionStorage.getItem("access_token") || localStorage.getItem("token");
 
     if (token) {
       router.push("/secure/athletes");
@@ -85,15 +102,31 @@ export default function Login() {
               <label htmlFor="password" className="text-white d-block mb-1 fw-bold">
                 Senha
               </label>
-              <input
-                type="password"
-                id="password"
-                className="w-100 p-2 bg-white rounded-4 border border-0"
-                {...register("password", {
+              {(() => {
+                const { ref, ...rest } = register("password", {
                   required: "Password is a required field",
-                })}
-              />
+                });
+                return (
+                  <PasswordInput
+                    id="password"
+                    className="w-100 p-2 bg-white rounded-4 border border-0"
+                    inputRef={ref}
+                    {...rest}
+                  />
+                );
+              })()}
               {errors.password && <span className="text-danger mt-1 d-block">{errors.password.message}</span>}
+            </div>
+            <div className="w-100 mb-3 d-flex align-items-center">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                className="me-2"
+                {...register("rememberMe")}
+              />
+              <label htmlFor="rememberMe" className="text-white">
+                Manter logado
+              </label>
             </div>
             <div className="w-100">
               <button className="fw-bol btn bg-success text-white w-100" type="submit">
