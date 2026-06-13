@@ -137,6 +137,29 @@ export function createAuthService(): AuthService {
     },
 
     /**
+     * Clears all tokens and headers without redirecting.
+     * Use when the caller handles navigation (e.g., via Next.js router).
+     */
+    logoutWithoutRedirect(): void {
+      refreshService = null;
+
+      if (!tokenStorage) {
+        const storagePreference = detectStoragePreference();
+        tokenStorage = createTokenStorage(storagePreference);
+      }
+
+      try {
+        tokenStorage.clearTokens();
+      } catch {
+        // Best-effort
+      }
+
+      clearAuthorizationHeader();
+      authenticated = false;
+      tokenStorage = null;
+    },
+
+    /**
      * Validates the current session by checking stored tokens.
      * - If access token is valid: sets header and returns true
      * - If access token is expired and refresh token exists: attempts refresh

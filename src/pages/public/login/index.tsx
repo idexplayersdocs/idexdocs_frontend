@@ -130,14 +130,15 @@ export default function Login() {
             </div>
             <div className="w-100">
               <button className="fw-bol btn bg-success text-white w-100" type="submit">
-                Log in <FontAwesomeIcon icon={faRightToBracket} />
+                Entrar <FontAwesomeIcon icon={faRightToBracket} />
               </button>
             </div>
           </form>
         </main>
         {isLoading ? (
           <div
-            className={`d-flex justify-content-center align-items-center w-100 min-vh-100 z-3 position-absolute top-0 left-0 ${styles.overlay}`}
+            className={`d-flex justify-content-center align-items-center ${styles.overlay}`}
+            style={{ position: "fixed", inset: 0 }}
           >
             <Loading type="bars" color="var(--bg-ternary-color)" width={100} />
           </div>

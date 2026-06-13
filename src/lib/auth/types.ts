@@ -18,6 +18,7 @@ export interface TokenStorageService {
 export interface AuthService {
   login(email: string, password: string, rememberMe: boolean): Promise<void>;
   logout(): void;
+  logoutWithoutRedirect(): void;
   validateSession(): Promise<boolean>;
   getAccessToken(): string | null;
   isAuthenticated(): boolean;

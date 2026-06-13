@@ -48,7 +48,10 @@ export default function Header() {
     setAnchorEl(null);
     const { createAuthService } = require("@/lib/auth");
     const authService = createAuthService();
-    authService.logout();
+    // Clear tokens and headers without triggering the hard redirect
+    // so we can use Next.js router for a smooth client-side navigation
+    authService.logoutWithoutRedirect();
+    router.push("/public/login");
   };
   const onClickHome = (): void => {
     router.push("/secure/athletes");
@@ -68,9 +71,9 @@ export default function Header() {
     <>
       <div className="mt-4 text-center">
         <Box
-          sx={{ display: "flex", justifyContent: "space-between", paddingX: 2 }}
+          sx={{ display: "flex", alignItems: "center", paddingX: 2 }}
         >
-          <h2 style={{ color: "white", fontSize: "20px" }}>
+          <h2 style={{ color: "white", fontSize: "20px", flex: 1, textAlign: "center" }}>
             Olá!{" "}
             <span style={{ color: "var(--bg-ternary-color)" }}>
               {decoded?.user_name}
@@ -78,9 +81,6 @@ export default function Header() {
           </h2>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            {/* <Button onClick={() => setLanguage("pt")}>🇧🇷</Button>
-            <Button onClick={() => setLanguage("en")}>🇺🇸</Button>
-            <Button onClick={() => setLanguage("es")}>🇪🇸</Button> */}
             <Select
               onChange={(e) => setLanguage(e.target.value)}
               defaultValue={i18n.language}
@@ -104,23 +104,6 @@ export default function Header() {
             </Select>
           </Box>
         </Box>
-        {/* <select
-          style={{
-            background: "none",
-            border: "none",
-            fontSize: "1.5rem",
-            color: "white",
-            outline: "none",
-          }}
-          onChange={(e) => () => {
-            console.log(`changeLanguage`, e.target.value);
-            i18n.changeLanguage(e.target.value);
-          }}
-        >
-          <option value="pt">🇧🇷</option>
-          <option value="en">🇺🇸</option>
-          <option value="es">🇪🇸</option>
-        </select> */}
       </div>
       <div className="d-flex justify-content-between align-items-center m-3">
         <div className="p-2">
@@ -194,53 +177,6 @@ export default function Header() {
               alt="company logo"
             />
           </div>
-          <Dropdown className="container-menu-nav" align={{ lg: "start" }}>
-            <Dropdown.Toggle
-              variant="link"
-              id="dropdown-basic"
-              style={{ color: "var(--bg-primary-color)" }}
-            >
-              <FontAwesomeIcon
-                icon={faBars}
-                size="2xl"
-                style={{ color: "var(--bg-ternary-color)", cursor: "pointer" }}
-              />
-            </Dropdown.Toggle>
-            <Dropdown.Menu
-              style={{ backgroundColor: "var(--bg-secondary-color)" }}
-            >
-              <Dropdown.Item
-                onClick={() => onClickHome()}
-                className="menu-item"
-              >
-                <p className="mb-1 menu-item-text" style={{ color: "white" }}>
-                  {" "}
-                  Home
-                  <FontAwesomeIcon icon={faHouse} className="ms-2" />
-                </p>
-              </Dropdown.Item>
-              <Dropdown.Item
-                className="menu-item"
-                onClick={() => onClickConfiguration()}
-              >
-                <p className="mb-1 menu-item-text" style={{ color: "white" }}>
-                  {" "}
-                  Configurações
-                  <FontAwesomeIcon icon={faGear} className="ms-2" />
-                </p>
-              </Dropdown.Item>
-              <Dropdown.Item
-                className="menu-item"
-                onClick={() => onClickLogout()}
-              >
-                <p className="mb-1 menu-item-text" style={{ color: "white" }}>
-                  {" "}
-                  Sair
-                  <FontAwesomeIcon icon={faRightFromBracket} className="ms-2" />
-                </p>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
         </div>
       </div>
       <hr />
